@@ -1,8 +1,17 @@
 import Link from "next/link";
+import { Toaster } from "@/components/ui/sonner";
 import { requireEditor, roleOf } from "@/lib/auth-guards";
 import { SignOutButton } from "./sign-out-button";
 
-const NAV = [{ href: "/admin", label: "仪表盘" }] as const;
+const NAV = [
+  { href: "/admin", label: "仪表盘" },
+  { href: "/admin/films", label: "影片" },
+  { href: "/admin/directors", label: "导演" },
+  { href: "/admin/lists", label: "片单" },
+  { href: "/admin/media", label: "媒体库" },
+  { href: "/admin/users", label: "用户", adminOnly: true },
+  { href: "/admin/invites", label: "邀请", adminOnly: true },
+] as const;
 
 export default async function AdminLayout({
   children,
@@ -20,7 +29,11 @@ export default async function AdminLayout({
           八部半 · 编辑部
         </Link>
         <nav className="mt-8 flex flex-1 flex-col gap-1">
-          {NAV.map(({ href, label }) => (
+          {NAV.filter(
+            (item) =>
+              !("adminOnly" in item && item.adminOnly) ||
+              roleOf(session) === "admin",
+          ).map(({ href, label }) => (
             <Link
               key={href}
               href={href}
@@ -38,6 +51,7 @@ export default async function AdminLayout({
         </div>
       </aside>
       <div className="flex-1 px-8 py-6">{children}</div>
+      <Toaster position="top-center" />
     </div>
   );
 }
