@@ -1,9 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
-import { AcademyFrame } from "@/components/site/academy-frame";
+import { FilmCard } from "@/components/site/film-card";
+import { getHomeData, posterOf } from "@/db/queries/public";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { featured, lists, recentFilms } = await getHomeData();
+
   return (
     <div className="animate-fade-up">
       {/* Hero — the only surface that carries grain */}
@@ -28,24 +32,76 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured lists — placeholder until editorial content lands */}
-      <section className="mx-auto max-w-5xl px-6 pt-20">
-        <TitleCard eyebrow="Curated Lists" title="精选片单" />
-        <div className="mx-auto mt-10 max-w-2xl text-center text-ink-muted">
-          <p className="leading-[1.9]">
-            片单是八部半的核心：一个主题、一篇引言、每部影片的入选理由，
-            以及经过斟酌的排列顺序。首批片单正在撰写中。
-          </p>
-        </div>
-      </section>
+      {featured && (
+        <section className="mx-auto max-w-3xl px-6 pt-20">
+          <TitleCard eyebrow="Featured List" title="本期片单" />
+          <Link
+            href={`/list/${featured.slug}`}
+            className="group mt-8 block border border-line bg-card transition-colors hover:border-brand"
+          >
+            {featured.cover && (
+              <div className="relative aspect-[137/60] overflow-hidden bg-ink">
+                <Image
+                  src={featured.cover.url}
+                  alt={featured.cover.alt ?? featured.title}
+                  fill
+                  sizes="(min-width: 768px) 768px, 100vw"
+                  className="object-cover grayscale transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </div>
+            )}
+            <div className="p-6 text-center">
+              <h2 className="text-xl font-bold tracking-[0.1em] transition-colors group-hover:text-brand">
+                {featured.title}
+              </h2>
+              {featured.theme && (
+                <p className="mt-2 text-sm text-ink-muted">{featured.theme}</p>
+              )}
+              <p className="mt-3 font-display text-xs tracking-[0.3em] text-ink-muted">
+                {featured.items.length} FILMS
+              </p>
+            </div>
+          </Link>
+          {lists.length > 1 && (
+            <p className="mt-4 text-center">
+              <Link
+                href="/lists"
+                className="text-sm tracking-[0.2em] text-ink-muted transition-colors hover:text-brand"
+              >
+                全部片单 →
+              </Link>
+            </p>
+          )}
+        </section>
+      )}
 
-      {/* Recent films — placeholder until editorial content lands */}
-      <section className="mx-auto max-w-5xl px-6 pt-20">
+      <section className="mx-auto max-w-3xl px-6 pt-20 pb-4">
         <TitleCard eyebrow="Recently Curated" title="近期收录" />
-        <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-8 sm:grid-cols-2">
-          <AcademyFrame alt="虚位以待" caption="虚位以待" />
-          <AcademyFrame alt="虚位以待" caption="虚位以待" />
-        </div>
+        {recentFilms.length > 0 ? (
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {recentFilms.map((film) => {
+              const poster = posterOf(film.media);
+              return (
+                <FilmCard
+                  key={film.id}
+                  slug={film.slug}
+                  titleZh={film.titleZh}
+                  titleOriginal={film.titleOriginal}
+                  year={film.year}
+                  directors={film.filmDirectors.map(
+                    (fd) => fd.director.nameZh ?? fd.director.name,
+                  )}
+                  imageUrl={poster?.url}
+                  imageAlt={poster?.alt}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <p className="mx-auto mt-8 max-w-2xl text-center leading-[1.9] text-ink-muted">
+            首批影片正在撰写编辑札记。收录即推荐——我们不做数据库。
+          </p>
+        )}
       </section>
     </div>
   );
