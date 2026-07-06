@@ -1,0 +1,174 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Babuban (八部半) design tokens.
+ *
+ * Monochrome print-magazine base — warm paper, near-black ink — with a
+ * single theater-curtain deep red accent. The accent is exposed as
+ * `brand` (not `accent`) because shadcn already claims `--color-accent`
+ * for its hover-surface token; the red must only ever appear on links,
+ * buttons and hover states.
+ */
+@theme {
+  --color-paper: #faf8f4;
+  --color-ink: #1a1a18;
+  --color-ink-muted: #6b6b66;
+  --color-line: #d9d5cc;
+  --color-brand: #8b2e2e;
+
+  --font-sans: ui-sans-serif, system-ui, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+  --font-body: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --font-display: "Playfair Display", "Noto Serif SC", "Songti SC", serif;
+
+  --animate-fade-up: fade-up 0.7s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #faf8f4;
+  --foreground: #1a1a18;
+  --card: #fffefb;
+  --card-foreground: #1a1a18;
+  --popover: #fffefb;
+  --popover-foreground: #1a1a18;
+  --primary: #1a1a18;
+  --primary-foreground: #faf8f4;
+  --secondary: #f0ede6;
+  --secondary-foreground: #1a1a18;
+  --muted: #f0ede6;
+  --muted-foreground: #6b6b66;
+  --accent: #f0ede6;
+  --accent-foreground: #1a1a18;
+  --destructive: #a03030;
+  --border: #d9d5cc;
+  --input: #d9d5cc;
+  --ring: #8b2e2e;
+  --chart-1: #d9d5cc;
+  --chart-2: #6b6b66;
+  --chart-3: #4a4a46;
+  --chart-4: #33332f;
+  --chart-5: #1a1a18;
+  --radius: 0.125rem;
+  --sidebar: #f5f2ec;
+  --sidebar-foreground: #1a1a18;
+  --sidebar-primary: #1a1a18;
+  --sidebar-primary-foreground: #faf8f4;
+  --sidebar-accent: #eae6dd;
+  --sidebar-accent-foreground: #1a1a18;
+  --sidebar-border: #d9d5cc;
+  --sidebar-ring: #8b2e2e;
+}
+
+.dark {
+  --background: #141412;
+  --foreground: #f2efe9;
+  --card: #1c1c1a;
+  --card-foreground: #f2efe9;
+  --popover: #1c1c1a;
+  --popover-foreground: #f2efe9;
+  --primary: #f2efe9;
+  --primary-foreground: #1a1a18;
+  --secondary: #262624;
+  --secondary-foreground: #f2efe9;
+  --muted: #262624;
+  --muted-foreground: #a5a29b;
+  --accent: #262624;
+  --accent-foreground: #f2efe9;
+  --destructive: #c25454;
+  --border: #ffffff1a;
+  --input: #ffffff26;
+  --ring: #b06a5a;
+  --chart-1: #d9d5cc;
+  --chart-2: #a5a29b;
+  --chart-3: #6b6b66;
+  --chart-4: #4a4a46;
+  --chart-5: #262624;
+  --sidebar: #1c1c1a;
+  --sidebar-foreground: #f2efe9;
+  --sidebar-primary: #f2efe9;
+  --sidebar-primary-foreground: #1a1a18;
+  --sidebar-accent: #262624;
+  --sidebar-accent-foreground: #f2efe9;
+  --sidebar-border: #ffffff1a;
+  --sidebar-ring: #b06a5a;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-body;
+  }
+  body {
+    @apply bg-paper text-ink;
+  }
+  ::selection {
+    background-color: color-mix(in srgb, #8b2e2e 18%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    animation: none;
+  }
+}
