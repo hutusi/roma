@@ -29,10 +29,12 @@
 
   --animate-fade-up: fade-up 0.7s ease-out both;
 
+  /* Starts partially visible: content that begins at opacity 0 does not
+     count as painted, wrecking FCP/LCP on throttled connections. */
   @keyframes fade-up {
     from {
-      opacity: 0;
-      transform: translateY(0.75rem);
+      opacity: 0.4;
+      transform: translateY(0.5rem);
     }
     to {
       opacity: 1;

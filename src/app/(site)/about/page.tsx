@@ -32,6 +32,18 @@ export default function AboutPage() {
           八部半由几位编辑维护，更新不快，但每一次更新都经过讨论。
           如果一部电影出现在这里，那是因为有人愿意为它署名担保。
         </p>
+        <p className="border-t border-line pt-6 text-sm text-ink-muted">
+          剧照与海报的来源标注在图片下方；部分影片元数据来自
+          <a
+            href="https://www.themoviedb.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mx-1 text-brand hover:underline"
+          >
+            TMDB
+          </a>
+          （本站未经 TMDB 认可或认证）。观看渠道由编辑手工维护。
+        </p>
       </div>
     </article>
   );

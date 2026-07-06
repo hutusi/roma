@@ -6,6 +6,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { saveFilm } from "@/actions/films";
+import { importFromTmdb } from "@/actions/tmdb";
 import { filmFormSchema, type FilmFormValues } from "@/lib/validators/film";
 import { NoteCounter, TiptapEditor, type MediaOption } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
@@ -37,11 +38,13 @@ export function FilmForm({
   defaultValues,
   directors,
   media,
+  tmdbEnabled = false,
 }: {
   filmId: string | null;
   defaultValues: FilmFormValues;
   directors: DirectorOption[];
   media: MediaOption[];
+  tmdbEnabled?: boolean;
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -50,6 +53,8 @@ export function FilmForm({
     control,
     handleSubmit,
     watch,
+    reset,
+    getValues,
     formState: { errors },
   } = useForm<FilmFormValues>({
     resolver: zodResolver(filmFormSchema),
@@ -77,6 +82,43 @@ export function FilmForm({
 
   return (
     <form onSubmit={onSubmit} className="max-w-3xl space-y-6 pb-24">
+      {tmdbEnabled && !filmId && (
+        <div className="border border-line bg-card p-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              const id = window.prompt("TMDB 影片 ID（数字）");
+              if (!id) return;
+              const result = await importFromTmdb(id);
+              if (!result.ok) {
+                toast.error(result.error);
+                return;
+              }
+              const d = result.data;
+              reset({
+                ...getValues(),
+                titleZh: d.titleZh ?? getValues("titleZh"),
+                titleZhHk: d.titleZhHk ?? "",
+                titleZhTw: d.titleZhTw ?? "",
+                titleOriginal: d.titleOriginal,
+                titleEn: d.titleEn ?? "",
+                year: d.year ?? getValues("year"),
+                runtimeMinutes: d.runtimeMinutes ?? "",
+                countries: d.countries,
+                cast: d.cast.map((m) => ({ ...m, zhName: "" })),
+              });
+              toast.success("已从 TMDB 预填，请核对并补写编辑札记");
+            }}
+          >
+            从 TMDB 导入元数据
+          </Button>
+          <span className="ml-3 text-xs text-ink-muted">
+            仅预填资料，不导入图片；札记始终手写。
+          </span>
+        </div>
+      )}
       <Section title="译名与原名">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">

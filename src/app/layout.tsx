@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site";
 
 // Fonts are self-hosted via Fontsource: Google Fonts' CDN is unreachable
 // from mainland China, and next/font/google needs it at build time. The
@@ -11,6 +12,7 @@ import "@fontsource/playfair-display/700.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "八部半 — 经典电影策展",
     template: "%s — 八部半",

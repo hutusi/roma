@@ -61,6 +61,10 @@ export function SignInForm() {
         <Link href="/sign-up" className="ml-1 text-brand hover:underline">
           注册
         </Link>
+        <span className="mx-2">·</span>
+        <Link href="/forgot-password" className="text-brand hover:underline">
+          忘记密码
+        </Link>
       </p>
     </div>
   );

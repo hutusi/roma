@@ -14,6 +14,30 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      // Resend in production; in dev (no key) the URL lands in the
+      // server log so the flow stays testable without credentials.
+      if (!process.env.RESEND_API_KEY) {
+        console.log(`[dev] password reset for ${user.email}: ${url}`);
+        return;
+      }
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: process.env.EMAIL_FROM ?? "八部半 <noreply@babuban.com>",
+          to: user.email,
+          subject: "八部半 · 重置密码",
+          text: `你好，\n\n点击以下链接重置密码（1 小时内有效）：\n${url}\n\n如果这不是你的操作，请忽略这封邮件。\n\n—— 八部半 babuban.com`,
+        }),
+      });
+      if (!response.ok) {
+        console.error("Resend error:", await response.text());
+      }
+    },
   },
   plugins: [
     admin({ defaultRole: "user", adminRoles: ["admin"] }),

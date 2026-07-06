@@ -28,6 +28,7 @@ export default async function NewFilmPage() {
           filmId={null}
           directors={directorRows}
           media={mediaRows}
+          tmdbEnabled={Boolean(process.env.TMDB_API_TOKEN)}
           defaultValues={{
             slug: "",
             titleZh: "",
