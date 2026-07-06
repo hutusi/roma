@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FilmPage } from "@/components/film/film-page";
+import { MarkButtons } from "@/components/site/mark-buttons";
 import {
   getPublishedFilmBySlug,
   getPublishedFilmSlugs,
@@ -33,5 +34,5 @@ export default async function PublicFilmPage({
   const { slug } = await params;
   const film = await getPublishedFilmBySlug(slug);
   if (!film) notFound();
-  return <FilmPage film={film} />;
+  return <FilmPage film={film} actions={<MarkButtons filmId={film.id} />} />;
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AuthMenu } from "./auth-menu";
 
 const NAV = [
   { href: "/lists", label: "片单" },
@@ -26,6 +27,7 @@ export function SiteHeader() {
               {label}
             </Link>
           ))}
+          <AuthMenu />
         </nav>
       </div>
     </header>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ListPage } from "@/components/list/list-page";
+import { FollowButton } from "@/components/site/follow-button";
 import {
   getPublishedListBySlug,
   getPublishedListSlugs,
@@ -33,5 +34,5 @@ export default async function PublicListPage({
   const { slug } = await params;
   const list = await getPublishedListBySlug(slug);
   if (!list) notFound();
-  return <ListPage list={list} />;
+  return <ListPage list={list} actions={<FollowButton listId={list.id} />} />;
 }
