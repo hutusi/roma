@@ -26,10 +26,7 @@ test.describe("admin", () => {
     await expect(page.getByText("草稿").first()).toBeVisible();
   });
 
-  test("invite flow: guest becomes editor with editor-scoped access", async ({
-    page,
-    browser,
-  }) => {
+  test("invite flow: guest becomes editor with editor-scoped access", async ({ page, browser }) => {
     await page.goto("/admin/invites");
     await page.fill('input[type="email"]', "guest@e2e.test");
     await page.getByRole("button", { name: "创建邀请" }).click();

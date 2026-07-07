@@ -19,9 +19,7 @@ test("publish gate: short 札记 blocked with count, then publish goes live with
   await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
 
   await page.getByRole("button", { name: "发布", exact: true }).click();
-  await expect(
-    page.locator("[data-sonner-toast]", { hasText: "编辑札记需 200" }),
-  ).toBeVisible();
+  await expect(page.locator("[data-sonner-toast]", { hasText: "编辑札记需 200" })).toBeVisible();
 
   await page.locator("textarea").fill(NOTE_200);
   await page.getByRole("button", { name: /^保存/ }).click();
@@ -49,9 +47,7 @@ test("draft film: 404 publicly, full render in editor preview", async ({ page })
   await expect(page.locator("blockquote")).toContainText("这段只有编辑能看见");
 });
 
-test("essay renders through the shared extension contract on the public page", async ({
-  page,
-}) => {
+test("essay renders through the shared extension contract on the public page", async ({ page }) => {
   await page.goto("/film/otto-e-mezzo");
   await expect(page.getByRole("heading", { name: "为什么是黑白版" })).toBeVisible();
   await expect(page.locator("blockquote")).toContainText("告别本来就不该匆忙");

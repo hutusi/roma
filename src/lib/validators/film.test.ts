@@ -84,20 +84,20 @@ describe("filmFormSchema", () => {
   });
 
   test("caps the editorial note at 500 code points but allows drafts below 200", () => {
-    expect(
-      filmFormSchema.safeParse({ ...valid, editorialNote: "短".repeat(50) }).success,
-    ).toBe(true);
-    expect(
-      filmFormSchema.safeParse({ ...valid, editorialNote: "长".repeat(501) }).success,
-    ).toBe(false);
+    expect(filmFormSchema.safeParse({ ...valid, editorialNote: "短".repeat(50) }).success).toBe(
+      true,
+    );
+    expect(filmFormSchema.safeParse({ ...valid, editorialNote: "长".repeat(501) }).success).toBe(
+      false,
+    );
   });
 });
 
 describe("watchLinkSchema", () => {
   test("allows empty url but rejects malformed ones", () => {
-    expect(
-      watchLinkSchema.safeParse({ platform: "CC", region: "INTL", url: "" }).success,
-    ).toBe(true);
+    expect(watchLinkSchema.safeParse({ platform: "CC", region: "INTL", url: "" }).success).toBe(
+      true,
+    );
     expect(
       watchLinkSchema.safeParse({ platform: "CC", region: "INTL", url: "not-a-url" }).success,
     ).toBe(false);

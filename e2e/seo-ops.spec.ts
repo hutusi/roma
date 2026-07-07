@@ -22,10 +22,7 @@ test("OG images render as PNG for home and films", async ({ page, request }) => 
 
   // Dynamic routes mount OG images at hashed paths — read the page's meta.
   await page.goto("/film/otto-e-mezzo");
-  const ogUrl = await page
-    .locator('meta[property="og:image"]')
-    .first()
-    .getAttribute("content");
+  const ogUrl = await page.locator('meta[property="og:image"]').first().getAttribute("content");
   expect(ogUrl).toBeTruthy();
   const local = (ogUrl as string).replace("https://babuban.com", "");
   const image = await request.get(local);
@@ -52,11 +49,7 @@ test("password reset loop completes against the production build", async ({ page
     expect(log).toContain("user@e2e.test");
   }).toPass({ timeout: 10_000 });
   const log = await readFile("e2e/.auth/reset-urls.log", "utf8");
-  const resetUrl = log
-    .trim()
-    .split("\n")
-    .at(-1)
-    ?.split(" ")[1];
+  const resetUrl = log.trim().split("\n").at(-1)?.split(" ")[1];
   expect(resetUrl).toBeTruthy();
 
   await page.goto(resetUrl as string);

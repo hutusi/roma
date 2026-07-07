@@ -37,15 +37,8 @@ if (migrate.status !== 0) process.exit(migrate.status ?? 1);
 // Import lazily — src/db builds its pool from env at import time, and the
 // database has to exist first.
 const { db } = await import("@/db");
-const {
-  curatedListItems,
-  curatedLists,
-  directors,
-  filmDirectors,
-  films,
-  filmWatchLinks,
-  users,
-} = await import("@/db/schema");
+const { curatedListItems, curatedLists, directors, filmDirectors, films, filmWatchLinks, users } =
+  await import("@/db/schema");
 const { auth } = await import("@/lib/auth");
 const { eq } = await import("drizzle-orm");
 
@@ -110,7 +103,11 @@ const filmRows = await db
       aspectRatio: "1.85:1",
       isBlackAndWhite: true,
       editorialNote: NOTE,
-      essay: doc([h2("为什么是黑白版"), p("光影承担了原本属于色彩的全部叙事责任。"), quote("告别本来就不该匆忙。")]),
+      essay: doc([
+        h2("为什么是黑白版"),
+        p("光影承担了原本属于色彩的全部叙事责任。"),
+        quote("告别本来就不该匆忙。"),
+      ]),
       castJson: [{ name: "Marcello Mastroianni", zhName: "马塞洛·马斯楚安尼", character: "Guido" }],
       status: "published",
       publishedAt: new Date(),
@@ -155,9 +152,9 @@ const filmRows = await db
 
 const bySlug = Object.fromEntries(filmRows.map((f) => [f.slug, f]));
 
-await db.insert(filmDirectors).values(
-  filmRows.map((film) => ({ filmId: film.id, directorId: fellini.id, position: 0 })),
-);
+await db
+  .insert(filmDirectors)
+  .values(filmRows.map((film) => ({ filmId: film.id, directorId: fellini.id, position: 0 })));
 
 await db.insert(filmWatchLinks).values({
   filmId: bySlug["otto-e-mezzo"].id,

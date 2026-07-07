@@ -47,9 +47,7 @@ test("per-film reasoning saves from the expanded row", async ({ page }) => {
   await page.locator('[contenteditable="true"]').last().click();
   await page.keyboard.type("入选理由：从这里能看到转折。");
   await page.getByRole("button", { name: "保存理由" }).click();
-  await expect(
-    page.locator("[data-sonner-toast]", { hasText: "入选理由已保存" }),
-  ).toBeVisible();
+  await expect(page.locator("[data-sonner-toast]", { hasText: "入选理由已保存" })).toBeVisible();
 });
 
 test("public list hides draft films; preview shows them", async ({ page }) => {
