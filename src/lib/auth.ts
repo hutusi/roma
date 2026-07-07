@@ -20,10 +20,18 @@ export const auth = betterAuth({
       // production a missing key must fail loudly — never log a live
       // reset token there.
       if (!process.env.RESEND_API_KEY) {
-        if (process.env.NODE_ENV === "production") {
+        // E2E_ALLOW_LOG_RESET is set only by the Playwright webServer so
+        // the reset loop stays testable against a production build; the
+        // production guard below is otherwise untouched.
+        if (process.env.NODE_ENV === "production" && !process.env.E2E_ALLOW_LOG_RESET) {
           throw new Error("RESEND_API_KEY is not configured");
         }
         console.log(`[dev] password reset for ${user.email}: ${url}`);
+        if (process.env.E2E_ALLOW_LOG_RESET) {
+          const { appendFile, mkdir } = await import("node:fs/promises");
+          await mkdir("e2e/.auth", { recursive: true });
+          await appendFile("e2e/.auth/reset-urls.log", `${user.email} ${url}\n`);
+        }
         return;
       }
       const response = await fetch("https://api.resend.com/emails", {
