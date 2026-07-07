@@ -30,6 +30,16 @@ export async function saveDirector(
     bio: v.bio || null,
     careerEssay: (v.careerEssay as TiptapDoc) ?? null,
   };
+  // A slug change must also refresh the page cached under the old slug.
+  const previousSlug = id
+    ? (
+        await db.query.directors.findFirst({
+          where: eq(directors.id, id),
+          columns: { slug: true },
+        })
+      )?.slug
+    : undefined;
+
   try {
     let targetId = id;
     if (targetId) {
@@ -42,6 +52,7 @@ export async function saveDirector(
       targetId = created.id;
     }
     revalidateDirector(v.slug);
+    if (previousSlug && previousSlug !== v.slug) revalidateDirector(previousSlug);
     return ok({ id: targetId });
   } catch (error) {
     if (

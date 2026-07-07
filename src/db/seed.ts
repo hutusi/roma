@@ -9,7 +9,15 @@ import { users } from "./schema";
 import { auth } from "../lib/auth";
 
 const email = process.env.SEED_ADMIN_EMAIL ?? "admin@babuban.com";
-const password = process.env.SEED_ADMIN_PASSWORD ?? "babuban-dev-admin";
+
+// The dev fallback is public knowledge (it's in this file) — never let
+// it become an admin password on a non-local database.
+const isLocalDb = /localhost|127\.0\.0\.1/.test(process.env.DATABASE_URL ?? "");
+const password = process.env.SEED_ADMIN_PASSWORD ?? (isLocalDb ? "babuban-dev-admin" : null);
+if (!password) {
+  console.error("SEED_ADMIN_PASSWORD is required when seeding a non-local database.");
+  process.exit(1);
+}
 
 const existing = await db.query.users.findFirst({
   where: eq(users.email, email),

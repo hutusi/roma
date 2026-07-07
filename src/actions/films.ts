@@ -51,6 +51,16 @@ export async function saveFilm(
     castJson: v.cast,
   };
 
+  // A slug change must also refresh the page cached under the old slug.
+  const previousSlug = id
+    ? (
+        await db.query.films.findFirst({
+          where: eq(films.id, id),
+          columns: { slug: true },
+        })
+      )?.slug
+    : undefined;
+
   try {
     const filmId = await db.transaction(async (tx) => {
       let targetId = id;
@@ -86,6 +96,7 @@ export async function saveFilm(
       return targetId;
     });
     revalidateFilm(v.slug);
+    if (previousSlug && previousSlug !== v.slug) revalidateFilm(previousSlug);
     return ok({ id: filmId });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);

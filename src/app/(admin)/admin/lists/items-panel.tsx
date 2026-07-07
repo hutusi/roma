@@ -43,6 +43,16 @@ export function ItemsPanel({
   const [drafts, setDrafts] = useState<Record<string, Record<string, unknown>>>({});
   const [pending, startTransition] = useTransition();
 
+  // router.refresh() re-renders the server parent with fresh
+  // initialItems, but useState only seeds on mount — adopt the new
+  // server truth (e.g. a film just added) whenever the prop changes.
+  // State-during-render reset, per React docs (not an effect).
+  const [prevInitialItems, setPrevInitialItems] = useState(initialItems);
+  if (prevInitialItems !== initialItems) {
+    setPrevInitialItems(initialItems);
+    setItems(initialItems);
+  }
+
   const available = filmOptions.filter(
     (f) => !items.some((item) => item.filmId === f.id),
   );
@@ -89,13 +99,17 @@ export function ItemsPanel({
         <SortableList
           items={items}
           onReorder={(next) => {
+            const previous = items;
             setItems(next);
             startTransition(async () => {
               const result = await reorderListItems(
                 listId,
                 next.map((item) => item.id),
               );
-              if (!result.ok) toast.error(result.error);
+              if (!result.ok) {
+                setItems(previous);
+                toast.error(result.error);
+              }
             });
           }}
           renderItem={(item, index) => (

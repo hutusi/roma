@@ -63,15 +63,19 @@ export async function addFilmToUserList(
 ): Promise<ActionResult> {
   const list = await ownedList(listId);
   if (!list) return fail("片单不存在或无权限");
-  const [{ maxPos }] = await db
-    .select({ maxPos: max(userListItems.position) })
-    .from(userListItems)
-    .where(eq(userListItems.listId, listId));
   try {
-    await db.insert(userListItems).values({
-      listId,
-      filmId,
-      position: (maxPos ?? -1) + 1,
+    // max()+insert in one transaction so concurrent adds can't compute
+    // the same position.
+    await db.transaction(async (tx) => {
+      const [{ maxPos }] = await tx
+        .select({ maxPos: max(userListItems.position) })
+        .from(userListItems)
+        .where(eq(userListItems.listId, listId));
+      await tx.insert(userListItems).values({
+        listId,
+        filmId,
+        position: (maxPos ?? -1) + 1,
+      });
     });
   } catch (error) {
     if (

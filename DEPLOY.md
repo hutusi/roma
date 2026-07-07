@@ -18,7 +18,7 @@ Dashboard → Storage → Create → **Blob**, attach to the project. This injec
 
 ## 4. Remaining env vars (Production)
 
-```
+```bash
 BETTER_AUTH_SECRET   # openssl rand -base64 32
 BETTER_AUTH_URL      # https://babuban.com
 NEXT_PUBLIC_SITE_URL # https://babuban.com

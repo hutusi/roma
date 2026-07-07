@@ -4,6 +4,16 @@ import path from "node:path";
 import { del, put } from "@vercel/blob";
 import { nanoid } from "nanoid";
 
+// Extension derives from the validated MIME type, never from the
+// client-supplied filename — the public/uploads fallback serves these
+// as public assets and must not persist attacker-chosen extensions.
+const EXT_BY_MIME: Record<string, string> = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/avif": ".avif",
+};
+
 /**
  * Image storage with one switch: Vercel Blob when BLOB_READ_WRITE_TOKEN
  * is set (production), otherwise public/uploads on disk so local dev
@@ -18,7 +28,8 @@ export async function storeImage(
   file: File,
   prefix: string,
 ): Promise<StoredImage> {
-  const ext = path.extname(file.name) || ".jpg";
+  const ext = EXT_BY_MIME[file.type];
+  if (!ext) throw new Error(`Unsupported image type: ${file.type}`);
   const pathname = `${prefix}/${nanoid(10)}${ext}`;
 
   if (hasBlob()) {

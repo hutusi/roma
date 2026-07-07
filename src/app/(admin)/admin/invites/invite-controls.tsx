@@ -74,8 +74,12 @@ export function InviteControls({
           className="text-brand hover:underline"
           onClick={async () => {
             const url = `${window.location.origin}/invite/${token}`;
-            await navigator.clipboard.writeText(url);
-            toast.success("链接已复制");
+            try {
+              await navigator.clipboard.writeText(url);
+              toast.success("链接已复制");
+            } catch {
+              window.prompt("复制失败，请手动复制：", url);
+            }
           }}
         >
           复制链接

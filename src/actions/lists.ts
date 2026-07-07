@@ -34,6 +34,9 @@ export async function saveListMeta(
     intro: (v.intro as TiptapDoc) ?? null,
     sortOrder: v.sortOrder,
   };
+  // A slug change must also refresh the page cached under the old slug.
+  const previousSlug = id ? await listSlug(id) : undefined;
+
   try {
     let targetId = id;
     if (targetId) {
@@ -46,6 +49,7 @@ export async function saveListMeta(
       targetId = created.id;
     }
     revalidateList(v.slug);
+    if (previousSlug && previousSlug !== v.slug) revalidateList(previousSlug);
     return ok({ id: targetId });
   } catch (error) {
     if (
@@ -65,15 +69,19 @@ export async function addFilmToList(
   filmId: string,
 ): Promise<ActionResult> {
   await requireEditor();
-  const [{ maxPos }] = await db
-    .select({ maxPos: max(curatedListItems.position) })
-    .from(curatedListItems)
-    .where(eq(curatedListItems.listId, listId));
   try {
-    await db.insert(curatedListItems).values({
-      listId,
-      filmId,
-      position: (maxPos ?? -1) + 1,
+    // max()+insert in one transaction so concurrent adds can't compute
+    // the same position.
+    await db.transaction(async (tx) => {
+      const [{ maxPos }] = await tx
+        .select({ maxPos: max(curatedListItems.position) })
+        .from(curatedListItems)
+        .where(eq(curatedListItems.listId, listId));
+      await tx.insert(curatedListItems).values({
+        listId,
+        filmId,
+        position: (maxPos ?? -1) + 1,
+      });
     });
   } catch (error) {
     if (

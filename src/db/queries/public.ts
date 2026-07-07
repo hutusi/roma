@@ -168,7 +168,7 @@ export async function getPublishedListBySlug(slug: string) {
     where: and(eq(curatedLists.slug, slug), eq(curatedLists.status, "published")),
     with: listRelations,
   });
-  return list ? normalizeList(list) : null;
+  return list ? normalizeList(list, { publishedFilmsOnly: true }) : null;
 }
 
 export async function getListForPreview(id: string) {
@@ -176,13 +176,19 @@ export async function getListForPreview(id: string) {
     where: eq(curatedLists.id, id),
     with: listRelations,
   });
-  return list ? normalizeList(list) : null;
+  // Preview keeps draft films: editors need the full picture.
+  return list ? normalizeList(list, { publishedFilmsOnly: false }) : null;
 }
 
-function normalizeList(list: NonNullable<Awaited<ReturnType<typeof rawList>>>) {
+function normalizeList(
+  list: NonNullable<Awaited<ReturnType<typeof rawList>>>,
+  { publishedFilmsOnly }: { publishedFilmsOnly: boolean },
+) {
   return {
     ...list,
-    items: [...list.items].sort((a, b) => a.position - b.position),
+    items: [...list.items]
+      .filter((item) => !publishedFilmsOnly || item.film.status === "published")
+      .sort((a, b) => a.position - b.position),
   };
 }
 
@@ -196,9 +202,19 @@ export async function getPublishedLists() {
   const lists = await db.query.curatedLists.findMany({
     where: eq(curatedLists.status, "published"),
     orderBy: [asc(curatedLists.sortOrder), desc(curatedLists.publishedAt)],
-    with: { items: { columns: { id: true } }, cover: true },
+    with: {
+      items: {
+        columns: { id: true },
+        with: { film: { columns: { status: true } } },
+      },
+      cover: true,
+    },
   });
-  return lists;
+  // Draft films don't render on list pages, so don't count them either.
+  return lists.map((list) => ({
+    ...list,
+    items: list.items.filter((item) => item.film.status === "published"),
+  }));
 }
 
 export type PublicListSummary = Awaited<ReturnType<typeof getPublishedLists>>[number];

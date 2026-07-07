@@ -14,9 +14,18 @@ import * as schema from "./schema";
  */
 const globalForDb = globalThis as unknown as { dbPool?: Pool };
 
-const pool =
-  globalForDb.dbPool ??
-  new Pool({ connectionString: process.env.DATABASE_URL, max: 10 });
+function createPool() {
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 10 });
+  // Without a listener, an idle-client disconnect (backend restart,
+  // pooler timeout) emits an unhandled 'error' event and kills the
+  // process. The pool discards the broken client; log and move on.
+  pool.on("error", (error) => {
+    console.error("Postgres pool idle-client error:", error);
+  });
+  return pool;
+}
+
+const pool = globalForDb.dbPool ?? createPool();
 
 if (process.env.NODE_ENV !== "production") globalForDb.dbPool = pool;
 

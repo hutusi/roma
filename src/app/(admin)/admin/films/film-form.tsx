@@ -64,18 +64,23 @@ export function FilmForm({
   const linksArray = useFieldArray({ control, name: "watchLinks" });
   const note = watch("editorialNote") ?? "";
 
-  const onSubmit = handleSubmit(async (values) => {
-    setSubmitting(true);
-    const result = await saveFilm(filmId, values);
-    setSubmitting(false);
-    if (!result.ok) {
-      toast.error(result.error);
-      return;
-    }
-    toast.success("已保存");
-    if (!filmId) router.push(`/admin/films/${result.data.id}`);
-    router.refresh();
-  });
+  const onSubmit = handleSubmit(
+    async (values) => {
+      setSubmitting(true);
+      const result = await saveFilm(filmId, values);
+      setSubmitting(false);
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
+      toast.success("已保存");
+      if (!filmId) router.push(`/admin/films/${result.data.id}`);
+      router.refresh();
+    },
+    // Some fields (array rows, selects) may lack inline error slots;
+    // never let a blocked submit look like a dead button.
+    () => toast.error("表单有未通过校验的字段，请检查标红项"),
+  );
 
   const fieldError = (message?: string) =>
     message ? <p className="text-xs text-destructive">{message}</p> : null;
@@ -161,6 +166,7 @@ export function FilmForm({
           <div className="space-y-1.5">
             <Label htmlFor="runtimeMinutes">片长（分钟）</Label>
             <Input id="runtimeMinutes" type="number" {...register("runtimeMinutes")} />
+            {fieldError(errors.runtimeMinutes?.message)}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="aspectRatio">画幅</Label>
@@ -244,13 +250,16 @@ export function FilmForm({
 
       <Section title="演员表">
         {castArray.fields.map((field, i) => (
-          <div key={field.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2">
-            <Input placeholder="姓名（原文）" {...register(`cast.${i}.name`)} />
-            <Input placeholder="中文名" {...register(`cast.${i}.zhName`)} />
-            <Input placeholder="角色" {...register(`cast.${i}.character`)} />
-            <Button type="button" variant="ghost" onClick={() => castArray.remove(i)}>
-              删除
-            </Button>
+          <div key={field.id}>
+            <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2">
+              <Input placeholder="姓名（原文）" {...register(`cast.${i}.name`)} />
+              <Input placeholder="中文名" {...register(`cast.${i}.zhName`)} />
+              <Input placeholder="角色" {...register(`cast.${i}.character`)} />
+              <Button type="button" variant="ghost" onClick={() => castArray.remove(i)}>
+                删除
+              </Button>
+            </div>
+            {fieldError(errors.cast?.[i]?.name?.message)}
           </div>
         ))}
         <Button
@@ -264,23 +273,29 @@ export function FilmForm({
 
       <Section title="哪里能看">
         {linksArray.fields.map((field, i) => (
-          <div key={field.id} className="grid grid-cols-[1fr_auto_2fr_1fr_auto] gap-2">
-            <Input placeholder="平台" {...register(`watchLinks.${i}.platform`)} />
-            <select
-              className="h-9 border border-input bg-transparent px-2 text-sm"
-              {...register(`watchLinks.${i}.region`)}
-            >
-              {REGIONS.map((r) => (
-                <option key={r.value} value={r.value}>
-                  {r.label}
-                </option>
-              ))}
-            </select>
-            <Input placeholder="链接（可选）" {...register(`watchLinks.${i}.url`)} />
-            <Input placeholder="备注" {...register(`watchLinks.${i}.note`)} />
-            <Button type="button" variant="ghost" onClick={() => linksArray.remove(i)}>
-              删除
-            </Button>
+          <div key={field.id}>
+            <div className="grid grid-cols-[1fr_auto_2fr_1fr_auto] gap-2">
+              <Input placeholder="平台" {...register(`watchLinks.${i}.platform`)} />
+              <select
+                className="h-9 border border-input bg-transparent px-2 text-sm"
+                {...register(`watchLinks.${i}.region`)}
+              >
+                {REGIONS.map((r) => (
+                  <option key={r.value} value={r.value}>
+                    {r.label}
+                  </option>
+                ))}
+              </select>
+              <Input placeholder="链接（可选）" {...register(`watchLinks.${i}.url`)} />
+              <Input placeholder="备注" {...register(`watchLinks.${i}.note`)} />
+              <Button type="button" variant="ghost" onClick={() => linksArray.remove(i)}>
+                删除
+              </Button>
+            </div>
+            {fieldError(
+              errors.watchLinks?.[i]?.platform?.message ??
+                errors.watchLinks?.[i]?.url?.message,
+            )}
           </div>
         ))}
         <Button

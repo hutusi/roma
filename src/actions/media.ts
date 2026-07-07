@@ -83,7 +83,9 @@ export async function deleteMedia(id: string): Promise<ActionResult> {
   await requireEditor();
   const row = await db.query.media.findFirst({ where: eq(media.id, id) });
   if (!row) return fail("图片不存在");
-  await deleteImage(row.pathname);
+  // Row first, blob second: an orphaned blob is invisible garbage, but
+  // a surviving row pointing at a deleted blob renders broken images.
   await db.delete(media).where(eq(media.id, id));
+  await deleteImage(row.pathname);
   return ok();
 }

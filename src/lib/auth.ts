@@ -16,8 +16,13 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       // Resend in production; in dev (no key) the URL lands in the
-      // server log so the flow stays testable without credentials.
+      // server log so the flow stays testable without credentials. In
+      // production a missing key must fail loudly — never log a live
+      // reset token there.
       if (!process.env.RESEND_API_KEY) {
+        if (process.env.NODE_ENV === "production") {
+          throw new Error("RESEND_API_KEY is not configured");
+        }
         console.log(`[dev] password reset for ${user.email}: ${url}`);
         return;
       }
@@ -33,9 +38,10 @@ export const auth = betterAuth({
           subject: "八部半 · 重置密码",
           text: `你好，\n\n点击以下链接重置密码（1 小时内有效）：\n${url}\n\n如果这不是你的操作，请忽略这封邮件。\n\n—— 八部半 babuban.com`,
         }),
+        signal: AbortSignal.timeout(10_000),
       });
       if (!response.ok) {
-        console.error("Resend error:", await response.text());
+        throw new Error(`Resend responded ${response.status}: ${await response.text()}`);
       }
     },
   },

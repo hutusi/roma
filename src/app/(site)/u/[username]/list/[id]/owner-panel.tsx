@@ -38,6 +38,15 @@ export function OwnerPanel({
   const [editing, setEditing] = useState(false);
   const [pending, startTransition] = useTransition();
 
+  // Adopt fresh server data after router.refresh() (e.g. a film just
+  // added) — useState alone only seeds on mount. State-during-render
+  // reset, per React docs (not an effect).
+  const [prevInitialItems, setPrevInitialItems] = useState(initialItems);
+  if (prevInitialItems !== initialItems) {
+    setPrevInitialItems(initialItems);
+    setItems(initialItems);
+  }
+
   const available = filmOptions.filter(
     (f) => !items.some((item) => item.filmId === f.id),
   );
@@ -150,14 +159,19 @@ export function OwnerPanel({
           <SortableList
             items={items}
             onReorder={(next) => {
+              const previous = items;
               setItems(next);
               startTransition(async () => {
                 const result = await reorderUserListItems(
                   listId,
                   next.map((item) => item.id),
                 );
-                if (!result.ok) toast.error(result.error);
-                else router.refresh();
+                if (!result.ok) {
+                  setItems(previous);
+                  toast.error(result.error);
+                  return;
+                }
+                router.refresh();
               });
             }}
             renderItem={(item, index) => (

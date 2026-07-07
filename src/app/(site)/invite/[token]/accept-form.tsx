@@ -19,19 +19,24 @@ export function AcceptInviteForm({ token }: { token: string }) {
     setError(null);
     setPending(true);
     const form = new FormData(event.currentTarget);
-    const result = await acceptInvite(token, {
-      name: String(form.get("name")),
-      username: String(form.get("username")),
-      password: String(form.get("password")),
-    });
-    setPending(false);
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    try {
+      const result = await acceptInvite(token, {
+        name: String(form.get("name")),
+        username: String(form.get("username")),
+        password: String(form.get("password")),
+      });
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      toast.success("欢迎加入编辑部");
+      router.push("/admin");
+      router.refresh();
+    } catch {
+      setError("出了点问题，请稍后再试。");
+    } finally {
+      setPending(false);
     }
-    toast.success("欢迎加入编辑部");
-    router.push("/admin");
-    router.refresh();
   }
 
   return (
