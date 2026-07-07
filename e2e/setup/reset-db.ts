@@ -15,8 +15,11 @@ await rm("e2e/.auth/reset-urls.log", { force: true });
 
 const dbUrl = new URL(process.env.DATABASE_URL ?? "");
 const dbName = dbUrl.pathname.slice(1);
-if (!dbName.endsWith("_test")) {
-  console.error(`Refusing to reset non-test database "${dbName}".`);
+// Identifiers can't be parameterized in DDL, so the name gets
+// interpolated — restrict it to a strict identifier shape AND the
+// _test suffix before running destructive statements.
+if (!/^[a-z][a-z0-9_]*_test$/.test(dbName)) {
+  console.error(`Refusing to reset database "${dbName}" (must match ^[a-z][a-z0-9_]*_test$).`);
   process.exit(1);
 }
 

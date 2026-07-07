@@ -16,9 +16,9 @@ describe("storeImage", () => {
   test("rejects files whose MIME type has no mapping, regardless of filename", async () => {
     // A .jpg filename must not smuggle in a non-image type.
     const svg = new File(["<svg/>"], "innocent.jpg", { type: "image/svg+xml" });
-    expect(storeImage(svg, "media")).rejects.toThrow("Unsupported image type");
+    await expect(storeImage(svg, "media")).rejects.toThrow("Unsupported image type");
 
     const html = new File(["<html/>"], "still.png", { type: "text/html" });
-    expect(storeImage(html, "media")).rejects.toThrow("Unsupported image type");
+    await expect(storeImage(html, "media")).rejects.toThrow("Unsupported image type");
   });
 });

@@ -29,7 +29,9 @@ export function SignInForm() {
       return;
     }
     const next = searchParams.get("next");
-    router.push(next?.startsWith("/") ? next : "/");
+    // Same-origin paths only: "//evil.com" passes startsWith("/") but
+    // navigates cross-origin (open redirect).
+    router.push(next?.startsWith("/") && !next.startsWith("//") ? next : "/");
     router.refresh();
   }
 
