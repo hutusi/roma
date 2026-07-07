@@ -40,9 +40,7 @@ export function ViewingOrderPanel({
     setDirty(true);
   };
 
-  const available = filmOptions.filter(
-    (f) => !items.some((item) => item.filmId === f.id),
-  );
+  const available = filmOptions.filter((f) => !items.some((item) => item.filmId === f.id));
 
   const save = () =>
     startTransition(async () => {
@@ -59,7 +57,7 @@ export function ViewingOrderPanel({
     });
 
   return (
-    <section className="mt-10 max-w-3xl border-t border-line pt-6">
+    <section className="mt-10 max-w-3xl border-line border-t pt-6">
       <div className="flex items-center justify-between">
         <h2 className="font-bold">建议观看顺序</h2>
         <Button size="sm" onClick={save} disabled={pending || !dirty}>
@@ -110,28 +108,24 @@ export function ViewingOrderPanel({
           onReorder={update}
           renderItem={(item, index) => (
             <div className="flex items-center gap-3">
-              <span className="w-6 text-right font-display text-ink-muted">
-                {index + 1}
-              </span>
+              <span className="w-6 text-right font-display text-ink-muted">{index + 1}</span>
               <span className="shrink-0">
                 {item.title}
-                <span className="ml-1 text-xs text-ink-muted">{item.year}</span>
+                <span className="ml-1 text-ink-muted text-xs">{item.year}</span>
               </span>
               <Input
                 placeholder="备注（为什么排在这里）"
                 value={item.note}
                 onChange={(e) =>
                   update(
-                    items.map((it) =>
-                      it.id === item.id ? { ...it, note: e.target.value } : it,
-                    ),
+                    items.map((it) => (it.id === item.id ? { ...it, note: e.target.value } : it)),
                   )
                 }
                 className="h-8 flex-1"
               />
               <button
                 type="button"
-                className="text-sm text-ink-muted hover:text-destructive"
+                className="text-ink-muted text-sm hover:text-destructive"
                 onClick={() => update(items.filter((it) => it.id !== item.id))}
               >
                 移除
@@ -140,9 +134,7 @@ export function ViewingOrderPanel({
           )}
         />
         {items.length === 0 && (
-          <p className="mt-2 text-sm text-ink-muted">
-            还没有影片——从上方加入并拖动排序。
-          </p>
+          <p className="mt-2 text-ink-muted text-sm">还没有影片——从上方加入并拖动排序。</p>
         )}
       </div>
     </section>

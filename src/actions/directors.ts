@@ -2,16 +2,16 @@
 
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { directors, directorViewingItems } from "@/db/schema";
 import type { TiptapDoc } from "@/db/schema";
+import { directors, directorViewingItems } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateDirector } from "@/lib/revalidate";
 import {
+  type DirectorFormValues,
   directorFormSchema,
   viewingOrderSchema,
-  type DirectorFormValues,
 } from "@/lib/validators/director";
-import { fail, ok, type ActionResult } from "./result";
+import { type ActionResult, fail, ok } from "./result";
 
 export async function saveDirector(
   id: string | null,
@@ -45,10 +45,7 @@ export async function saveDirector(
     if (targetId) {
       await db.update(directors).set(row).where(eq(directors.id, targetId));
     } else {
-      const [created] = await db
-        .insert(directors)
-        .values(row)
-        .returning({ id: directors.id });
+      const [created] = await db.insert(directors).values(row).returning({ id: directors.id });
       targetId = created.id;
     }
     revalidateDirector(v.slug);
@@ -79,9 +76,7 @@ export async function setViewingOrder(
   });
   if (!director) return fail("导演不存在");
   await db.transaction(async (tx) => {
-    await tx
-      .delete(directorViewingItems)
-      .where(eq(directorViewingItems.directorId, directorId));
+    await tx.delete(directorViewingItems).where(eq(directorViewingItems.directorId, directorId));
     if (parsed.data.length) {
       await tx.insert(directorViewingItems).values(
         parsed.data.map((item, i) => ({

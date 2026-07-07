@@ -2,12 +2,12 @@
 
 import { and, count, eq, max } from "drizzle-orm";
 import { db } from "@/db";
-import { curatedListItems, curatedLists } from "@/db/schema";
 import type { TiptapDoc } from "@/db/schema";
+import { curatedListItems, curatedLists } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateList } from "@/lib/revalidate";
-import { listFormSchema, type ListFormValues } from "@/lib/validators/list";
-import { fail, ok, type ActionResult } from "./result";
+import { type ListFormValues, listFormSchema } from "@/lib/validators/list";
+import { type ActionResult, fail, ok } from "./result";
 
 async function listSlug(listId: string): Promise<string | null> {
   const list = await db.query.curatedLists.findFirst({
@@ -64,10 +64,7 @@ export async function saveListMeta(
   }
 }
 
-export async function addFilmToList(
-  listId: string,
-  filmId: string,
-): Promise<ActionResult> {
+export async function addFilmToList(listId: string, filmId: string): Promise<ActionResult> {
   await requireEditor();
   try {
     // max()+insert in one transaction so concurrent adds can't compute
@@ -122,12 +119,7 @@ export async function reorderListItems(
       await tx
         .update(curatedListItems)
         .set({ position: i })
-        .where(
-          and(
-            eq(curatedListItems.id, itemId),
-            eq(curatedListItems.listId, listId),
-          ),
-        );
+        .where(and(eq(curatedListItems.id, itemId), eq(curatedListItems.listId, listId)));
     }
   });
   const slug = await listSlug(listId);

@@ -4,7 +4,7 @@ import { and, eq, max } from "drizzle-orm";
 import { db } from "@/db";
 import { userListItems, userLists } from "@/db/schema";
 import { requireUser } from "@/lib/auth-guards";
-import { fail, ok, type ActionResult } from "./result";
+import { type ActionResult, fail, ok } from "./result";
 
 /** Every mutation first proves the list belongs to the caller. */
 async function ownedList(listId: string) {
@@ -57,10 +57,7 @@ export async function deleteUserList(listId: string): Promise<ActionResult> {
   return ok();
 }
 
-export async function addFilmToUserList(
-  listId: string,
-  filmId: string,
-): Promise<ActionResult> {
+export async function addFilmToUserList(listId: string, filmId: string): Promise<ActionResult> {
   const list = await ownedList(listId);
   if (!list) return fail("片单不存在或无权限");
   try {
@@ -91,10 +88,7 @@ export async function addFilmToUserList(
   return ok();
 }
 
-export async function removeUserListItem(
-  listId: string,
-  itemId: string,
-): Promise<ActionResult> {
+export async function removeUserListItem(listId: string, itemId: string): Promise<ActionResult> {
   const list = await ownedList(listId);
   if (!list) return fail("片单不存在或无权限");
   await db
@@ -114,9 +108,7 @@ export async function reorderUserListItems(
       await tx
         .update(userListItems)
         .set({ position: i })
-        .where(
-          and(eq(userListItems.id, itemId), eq(userListItems.listId, listId)),
-        );
+        .where(and(eq(userListItems.id, itemId), eq(userListItems.listId, listId)));
     }
   });
   return ok();

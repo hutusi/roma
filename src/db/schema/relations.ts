@@ -1,21 +1,11 @@
 import { relations } from "drizzle-orm";
 import { users } from "./auth";
 import { directors } from "./directors";
-import {
-  directorViewingItems,
-  filmDirectors,
-  films,
-  filmWatchLinks,
-} from "./films";
+import { directorViewingItems, filmDirectors, films, filmWatchLinks } from "./films";
 import { invitations } from "./invitations";
 import { curatedListItems, curatedLists } from "./lists";
 import { media } from "./media";
-import {
-  listFollows,
-  userListItems,
-  userLists,
-  userMarks,
-} from "./user-content";
+import { listFollows, userListItems, userLists, userMarks } from "./user-content";
 
 export const filmsRelations = relations(films, ({ many }) => ({
   filmDirectors: many(filmDirectors),
@@ -41,29 +31,23 @@ export const filmDirectorsRelations = relations(filmDirectors, ({ one }) => ({
   }),
 }));
 
-export const filmWatchLinksRelations = relations(
-  filmWatchLinks,
-  ({ one }) => ({
-    film: one(films, {
-      fields: [filmWatchLinks.filmId],
-      references: [films.id],
-    }),
+export const filmWatchLinksRelations = relations(filmWatchLinks, ({ one }) => ({
+  film: one(films, {
+    fields: [filmWatchLinks.filmId],
+    references: [films.id],
   }),
-);
+}));
 
-export const directorViewingItemsRelations = relations(
-  directorViewingItems,
-  ({ one }) => ({
-    director: one(directors, {
-      fields: [directorViewingItems.directorId],
-      references: [directors.id],
-    }),
-    film: one(films, {
-      fields: [directorViewingItems.filmId],
-      references: [films.id],
-    }),
+export const directorViewingItemsRelations = relations(directorViewingItems, ({ one }) => ({
+  director: one(directors, {
+    fields: [directorViewingItems.directorId],
+    references: [directors.id],
   }),
-);
+  film: one(films, {
+    fields: [directorViewingItems.filmId],
+    references: [films.id],
+  }),
+}));
 
 export const mediaRelations = relations(media, ({ one }) => ({
   film: one(films, { fields: [media.filmId], references: [films.id] }),
@@ -73,31 +57,25 @@ export const mediaRelations = relations(media, ({ one }) => ({
   }),
 }));
 
-export const curatedListsRelations = relations(
-  curatedLists,
-  ({ one, many }) => ({
-    items: many(curatedListItems),
-    cover: one(media, {
-      fields: [curatedLists.coverMediaId],
-      references: [media.id],
-    }),
-    followers: many(listFollows),
+export const curatedListsRelations = relations(curatedLists, ({ one, many }) => ({
+  items: many(curatedListItems),
+  cover: one(media, {
+    fields: [curatedLists.coverMediaId],
+    references: [media.id],
   }),
-);
+  followers: many(listFollows),
+}));
 
-export const curatedListItemsRelations = relations(
-  curatedListItems,
-  ({ one }) => ({
-    list: one(curatedLists, {
-      fields: [curatedListItems.listId],
-      references: [curatedLists.id],
-    }),
-    film: one(films, {
-      fields: [curatedListItems.filmId],
-      references: [films.id],
-    }),
+export const curatedListItemsRelations = relations(curatedListItems, ({ one }) => ({
+  list: one(curatedLists, {
+    fields: [curatedListItems.listId],
+    references: [curatedLists.id],
   }),
-);
+  film: one(films, {
+    fields: [curatedListItems.filmId],
+    references: [films.id],
+  }),
+}));
 
 export const userMarksRelations = relations(userMarks, ({ one }) => ({
   user: one(users, { fields: [userMarks.userId], references: [users.id] }),

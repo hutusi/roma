@@ -1,4 +1,4 @@
-import { ogCard, OG_SIZE } from "@/lib/og";
+import { OG_SIZE, ogCard } from "@/lib/og";
 
 export const alt = "八部半 — 经典电影策展";
 export const size = OG_SIZE;

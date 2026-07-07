@@ -1,18 +1,18 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { saveFilm } from "@/actions/films";
 import { importFromTmdb } from "@/actions/tmdb";
-import { filmFormSchema, type FilmFormValues } from "@/lib/validators/film";
-import { NoteCounter, TiptapEditor, type MediaOption } from "@/components/tiptap/editor";
+import { type MediaOption, NoteCounter, TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { type FilmFormValues, filmFormSchema } from "@/lib/validators/film";
 
 export type DirectorOption = { id: string; name: string; nameZh: string | null };
 
@@ -26,7 +26,7 @@ const REGIONS = [
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="border-t border-line pt-6">
+    <section className="border-line border-t pt-6">
       <h2 className="mb-4 font-bold">{title}</h2>
       <div className="space-y-4">{children}</div>
     </section>
@@ -83,7 +83,7 @@ export function FilmForm({
   );
 
   const fieldError = (message?: string) =>
-    message ? <p className="text-xs text-destructive">{message}</p> : null;
+    message ? <p className="text-destructive text-xs">{message}</p> : null;
 
   return (
     <form onSubmit={onSubmit} className="max-w-3xl space-y-6 pb-24">
@@ -119,7 +119,7 @@ export function FilmForm({
           >
             从 TMDB 导入元数据
           </Button>
-          <span className="ml-3 text-xs text-ink-muted">
+          <span className="ml-3 text-ink-muted text-xs">
             仅预填资料，不导入图片；札记始终手写。
           </span>
         </div>
@@ -201,9 +201,7 @@ export function FilmForm({
             render={({ field }) => (
               <div className="flex flex-wrap gap-3 border border-line bg-card p-3">
                 {directors.length === 0 && (
-                  <p className="text-sm text-ink-muted">
-                    还没有导演条目——请先在「导演」中创建。
-                  </p>
+                  <p className="text-ink-muted text-sm">还没有导演条目——请先在「导演」中创建。</p>
                 )}
                 {directors.map((d) => (
                   <label key={d.id} className="flex items-center gap-1.5 text-sm">
@@ -293,23 +291,20 @@ export function FilmForm({
               </Button>
             </div>
             {fieldError(
-              errors.watchLinks?.[i]?.platform?.message ??
-                errors.watchLinks?.[i]?.url?.message,
+              errors.watchLinks?.[i]?.platform?.message ?? errors.watchLinks?.[i]?.url?.message,
             )}
           </div>
         ))}
         <Button
           type="button"
           variant="outline"
-          onClick={() =>
-            linksArray.append({ platform: "", region: "CN", url: "", note: "" })
-          }
+          onClick={() => linksArray.append({ platform: "", region: "CN", url: "", note: "" })}
         >
           添加观看渠道
         </Button>
       </Section>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-line bg-paper/95 py-3 backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 border-line border-t bg-paper/95 py-3 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-end gap-3 px-8">
           <Button type="submit" disabled={submitting} className="tracking-[0.2em]">
             {submitting ? "保存中…" : "保存"}

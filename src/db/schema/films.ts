@@ -9,9 +9,9 @@ import {
   timestamp,
   unique,
 } from "drizzle-orm/pg-core";
+import { directors } from "./directors";
 import { contentStatus } from "./enums";
 import { createdAt, primaryId, updatedAt } from "./helpers";
-import { directors } from "./directors";
 import type { CastMember, TiptapDoc } from "./types";
 
 export const films = pgTable(
@@ -47,10 +47,7 @@ export const films = pgTable(
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
-  (t) => [
-    index("films_status_idx").on(t.status),
-    index("films_year_idx").on(t.year),
-  ],
+  (t) => [index("films_status_idx").on(t.status), index("films_year_idx").on(t.year)],
 );
 
 /** Junction rather than a single FK: co-directed classics exist. */

@@ -37,21 +37,17 @@ export default async function ListsIndexPage() {
               </div>
             )}
             <div className="p-6 text-center">
-              <h2 className="text-xl font-bold tracking-[0.1em] transition-colors group-hover:text-brand">
+              <h2 className="font-bold text-xl tracking-[0.1em] transition-colors group-hover:text-brand">
                 {list.title}
               </h2>
-              {list.theme && (
-                <p className="mt-2 text-sm text-ink-muted">{list.theme}</p>
-              )}
-              <p className="mt-3 font-display text-xs tracking-[0.3em] text-ink-muted">
+              {list.theme && <p className="mt-2 text-ink-muted text-sm">{list.theme}</p>}
+              <p className="mt-3 font-display text-ink-muted text-xs tracking-[0.3em]">
                 {list.items.length} FILMS
               </p>
             </div>
           </Link>
         ))}
-        {lists.length === 0 && (
-          <p className="text-center text-ink-muted">首批片单正在撰写中。</p>
-        )}
+        {lists.length === 0 && <p className="text-center text-ink-muted">首批片单正在撰写中。</p>}
       </div>
     </div>
   );

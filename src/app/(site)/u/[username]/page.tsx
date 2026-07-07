@@ -1,13 +1,13 @@
+import { desc, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { desc, eq } from "drizzle-orm";
-import { db } from "@/db";
-import { userLists, userMarks, users } from "@/db/schema";
-import { getSession } from "@/lib/auth-guards";
-import { posterOf } from "@/db/queries/public";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
+import { db } from "@/db";
+import { posterOf } from "@/db/queries/public";
+import { userLists, userMarks, users } from "@/db/schema";
+import { getSession } from "@/lib/auth-guards";
 import { CreateListButton } from "./create-list-button";
 
 export const dynamic = "force-dynamic";
@@ -36,7 +36,7 @@ export default async function ProfilePage({
 }) {
   const { username } = await params;
   const { tab: tabParam } = await searchParams;
-  const tab = TABS.some((t) => t.key === tabParam) ? tabParam! : "watched";
+  const tab = TABS.find((t) => t.key === tabParam)?.key ?? "watched";
 
   const user = await db.query.users.findFirst({
     where: eq(users.username, username),
@@ -65,26 +65,22 @@ export default async function ProfilePage({
     }),
   ]);
 
-  const visibleMarks = marks.filter(
-    (m) => m.status === tab && m.film.status === "published",
-  );
+  const visibleMarks = marks.filter((m) => m.status === tab && m.film.status === "published");
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
       <TitleCard eyebrow="Profile" title={user.name} />
-      <p className="mt-3 text-center font-display text-sm text-ink-muted">
-        @{user.username}
-      </p>
+      <p className="mt-3 text-center font-display text-ink-muted text-sm">@{user.username}</p>
 
-      <nav className="mt-10 flex justify-center gap-6 border-b border-line pb-3 text-sm">
+      <nav className="mt-10 flex justify-center gap-6 border-line border-b pb-3 text-sm">
         {TABS.map((t) => (
           <Link
             key={t.key}
             href={`/u/${username}?tab=${t.key}`}
             className={
               tab === t.key
-                ? "tracking-[0.2em] text-brand"
-                : "tracking-[0.2em] text-ink-muted transition-colors hover:text-brand"
+                ? "text-brand tracking-[0.2em]"
+                : "text-ink-muted tracking-[0.2em] transition-colors hover:text-brand"
             }
           >
             {t.label}
@@ -134,12 +130,10 @@ export default async function ProfilePage({
                   {list.title}
                 </span>
                 {list.description && (
-                  <span className="ml-3 text-sm text-ink-muted">
-                    {list.description}
-                  </span>
+                  <span className="ml-3 text-ink-muted text-sm">{list.description}</span>
                 )}
               </span>
-              <span className="font-display text-xs tracking-[0.3em] text-ink-muted">
+              <span className="font-display text-ink-muted text-xs tracking-[0.3em]">
                 {list.items.length} FILMS
               </span>
             </Link>

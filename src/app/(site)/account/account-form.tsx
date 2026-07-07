@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
+import { authClient } from "@/lib/auth-client";
 
 export function AccountForm({
   name,
@@ -71,7 +71,7 @@ export function AccountForm({
       </form>
 
       <form
-        className="space-y-4 border-t border-line pt-8"
+        className="space-y-4 border-line border-t pt-8"
         onSubmit={async (e) => {
           e.preventDefault();
           const form = e.currentTarget;

@@ -1,6 +1,4 @@
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { requireAdmin } from "@/lib/auth-guards";
 import {
   Table,
   TableBody,
@@ -9,6 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { auth } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth-guards";
 import { UserRowControls } from "./user-row-controls";
 
 export const metadata = { title: "用户管理" };
@@ -22,7 +22,7 @@ export default async function AdminUsersPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold">用户</h1>
+      <h1 className="font-bold text-xl">用户</h1>
       <Table className="mt-6">
         <TableHeader>
           <TableRow>
@@ -39,9 +39,7 @@ export default async function AdminUsersPage() {
               <TableCell className="font-medium">
                 {user.name}
                 {"username" in user && user.username ? (
-                  <span className="ml-2 text-xs text-ink-muted">
-                    @{String(user.username)}
-                  </span>
+                  <span className="ml-2 text-ink-muted text-xs">@{String(user.username)}</span>
                 ) : null}
               </TableCell>
               <TableCell className="text-ink-muted">{user.email}</TableCell>

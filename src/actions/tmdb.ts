@@ -1,7 +1,7 @@
 "use server";
 
 import { requireEditor } from "@/lib/auth-guards";
-import { fail, ok, type ActionResult } from "./result";
+import { type ActionResult, fail, ok } from "./result";
 
 /**
  * Prefills the film form from TMDB — metadata only, editors curate and
@@ -22,9 +22,7 @@ export type TmdbPrefill = {
 
 const TMDB = "https://api.themoviedb.org/3";
 
-export async function importFromTmdb(
-  tmdbId: string,
-): Promise<ActionResult<TmdbPrefill>> {
+export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbPrefill>> {
   await requireEditor();
   const token = process.env.TMDB_API_TOKEN;
   if (!token) return fail("未配置 TMDB_API_TOKEN");
@@ -54,8 +52,7 @@ export async function importFromTmdb(
           iso_639_1: string;
           data: { title?: string };
         }[]
-      ).find((t) => t.iso_3166_1 === iso3166 && t.iso_639_1 === iso639)?.data
-        .title || undefined;
+      ).find((t) => t.iso_3166_1 === iso3166 && t.iso_639_1 === iso639)?.data.title || undefined;
 
     return ok({
       titleZh: movie.title !== movie.original_title ? movie.title : findTitle("CN"),
@@ -63,20 +60,16 @@ export async function importFromTmdb(
       titleZhTw: findTitle("TW"),
       titleOriginal: movie.original_title,
       titleEn: findTitle("US", "en"),
-      year: movie.release_date
-        ? Number(movie.release_date.slice(0, 4))
-        : undefined,
+      year: movie.release_date ? Number(movie.release_date.slice(0, 4)) : undefined,
       runtimeMinutes: movie.runtime || undefined,
-      countries: (
-        movie.production_countries as { name: string }[] | undefined
-      )
-        ?.map((c) => c.name)
-        .join("、") ?? "",
-      cast: (
-        credits.cast as { name: string; character?: string }[] | undefined
-      )
-        ?.slice(0, 8)
-        .map((m) => ({ name: m.name, character: m.character || undefined })) ?? [],
+      countries:
+        (movie.production_countries as { name: string }[] | undefined)
+          ?.map((c) => c.name)
+          .join("、") ?? "",
+      cast:
+        (credits.cast as { name: string; character?: string }[] | undefined)
+          ?.slice(0, 8)
+          .map((m) => ({ name: m.name, character: m.character || undefined })) ?? [],
     });
   } catch (error) {
     return fail(

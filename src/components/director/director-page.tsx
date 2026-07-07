@@ -1,21 +1,18 @@
 import Link from "next/link";
 import { AcademyFrame } from "@/components/site/academy-frame";
+import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
-import { FilmCard } from "@/components/site/film-card";
-import { posterOf, type PublicDirector } from "@/db/queries/public";
+import { type PublicDirector, posterOf } from "@/db/queries/public";
 
 export function DirectorPage({ director }: { director: PublicDirector }) {
-  const portrait =
-    director.media.find((m) => m.kind === "portrait") ?? director.media[0] ?? null;
+  const portrait = director.media.find((m) => m.kind === "portrait") ?? director.media[0] ?? null;
 
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       <header className="text-center">
-        <h1 className="text-4xl font-bold tracking-[0.15em]">
-          {director.nameZh ?? director.name}
-        </h1>
-        <p className="mt-3 font-display text-lg text-ink-muted">{director.name}</p>
+        <h1 className="font-bold text-4xl tracking-[0.15em]">{director.nameZh ?? director.name}</h1>
+        <p className="mt-3 font-display text-ink-muted text-lg">{director.name}</p>
       </header>
 
       {portrait && (
@@ -29,7 +26,7 @@ export function DirectorPage({ director }: { director: PublicDirector }) {
       )}
 
       {director.bio && (
-        <p className="mx-auto mt-10 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em] text-ink-muted">
+        <p className="mx-auto mt-10 max-w-[70ch] text-[17px] text-ink-muted leading-[1.9] tracking-[0.02em]">
           {director.bio}
         </p>
       )}
@@ -37,10 +34,7 @@ export function DirectorPage({ director }: { director: PublicDirector }) {
       {director.careerEssay && (
         <section className="mt-14">
           <TitleCard eyebrow="Career" title="创作历程" />
-          <TiptapContent
-            doc={director.careerEssay}
-            className="mx-auto mt-8 max-w-[70ch]"
-          />
+          <TiptapContent doc={director.careerEssay} className="mx-auto mt-8 max-w-[70ch]" />
         </section>
       )}
 
@@ -53,14 +47,11 @@ export function DirectorPage({ director }: { director: PublicDirector }) {
                 <span className="font-display text-2xl text-ink-muted">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <div className="min-w-0 border-b border-line pb-5">
+                <div className="min-w-0 border-line border-b pb-5">
                   {item.film.status === "published" ? (
-                    <Link
-                      href={`/film/${item.film.slug}`}
-                      className="font-bold hover:text-brand"
-                    >
+                    <Link href={`/film/${item.film.slug}`} className="font-bold hover:text-brand">
                       {item.film.titleZh}
-                      <span className="ml-2 font-display text-sm font-normal text-ink-muted">
+                      <span className="ml-2 font-display font-normal text-ink-muted text-sm">
                         {item.film.year}
                       </span>
                     </Link>
@@ -68,9 +59,7 @@ export function DirectorPage({ director }: { director: PublicDirector }) {
                     <span className="font-bold">{item.film.titleZh}</span>
                   )}
                   {item.note && (
-                    <p className="mt-1.5 text-[15px] leading-[1.8] text-ink-muted">
-                      {item.note}
-                    </p>
+                    <p className="mt-1.5 text-[15px] text-ink-muted leading-[1.8]">{item.note}</p>
                   )}
                 </div>
               </li>

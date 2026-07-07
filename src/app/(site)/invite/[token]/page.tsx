@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
 import { eq } from "drizzle-orm";
+import type { Metadata } from "next";
+import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
 import { invitations } from "@/db/schema";
-import { TitleCard } from "@/components/site/title-card";
 import { AcceptInviteForm } from "./accept-form";
 
 export const metadata: Metadata = {
@@ -10,11 +10,7 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default async function InvitePage({
-  params,
-}: {
-  params: Promise<{ token: string }>;
-}) {
+export default async function InvitePage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const invite = await db.query.invitations.findFirst({
     where: eq(invitations.token, token),
@@ -31,13 +27,13 @@ export default async function InvitePage({
   return (
     <div className="mx-auto max-w-sm animate-fade-up px-6 pt-20">
       <TitleCard eyebrow="Invitation" title="加入编辑部" />
-      {problem ? (
+      {!invite || problem ? (
         <p className="mt-8 text-center text-ink-muted">{problem}</p>
       ) : (
         <>
-          <p className="mt-6 text-center text-sm text-ink-muted">
-            你被邀请以{invite!.role === "admin" ? "管理员" : "编辑"}身份加入
-            八部半（{invite!.email}）。
+          <p className="mt-6 text-center text-ink-muted text-sm">
+            你被邀请以{invite.role === "admin" ? "管理员" : "编辑"}身份加入 八部半（{invite.email}
+            ）。
           </p>
           <AcceptInviteForm token={token} />
         </>

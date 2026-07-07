@@ -1,8 +1,5 @@
-import Link from "next/link";
 import { desc } from "drizzle-orm";
-import { db } from "@/db";
-import { directors } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { db } from "@/db";
+import { directors } from "@/db/schema";
+import { requireEditor } from "@/lib/auth-guards";
 
 export const metadata = { title: "导演管理" };
 
@@ -26,7 +26,7 @@ export default async function AdminDirectorsPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">导演</h1>
+        <h1 className="font-bold text-xl">导演</h1>
         <Button asChild>
           <Link href="/admin/directors/new">新建导演</Link>
         </Button>
@@ -44,13 +44,10 @@ export default async function AdminDirectorsPage() {
           {rows.map((d) => (
             <TableRow key={d.id}>
               <TableCell>
-                <Link
-                  href={`/admin/directors/${d.id}`}
-                  className="font-medium hover:text-brand"
-                >
+                <Link href={`/admin/directors/${d.id}`} className="font-medium hover:text-brand">
                   {d.nameZh ?? d.name}
                 </Link>
-                <span className="ml-2 text-xs text-ink-muted">{d.name}</span>
+                <span className="ml-2 text-ink-muted text-xs">{d.name}</span>
               </TableCell>
               <TableCell className="text-ink-muted">{d.slug}</TableCell>
               <TableCell>

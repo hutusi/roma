@@ -1,5 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
 import { and, eq } from "drizzle-orm";
+import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { listFollows, userMarks } from "@/db/schema";
 import { getSession } from "@/lib/auth-guards";
@@ -24,18 +24,12 @@ export async function GET(request: NextRequest) {
   const [mark, follow] = await Promise.all([
     filmId
       ? db.query.userMarks.findFirst({
-          where: and(
-            eq(userMarks.userId, session.user.id),
-            eq(userMarks.filmId, filmId),
-          ),
+          where: and(eq(userMarks.userId, session.user.id), eq(userMarks.filmId, filmId)),
         })
       : null,
     listId
       ? db.query.listFollows.findFirst({
-          where: and(
-            eq(listFollows.userId, session.user.id),
-            eq(listFollows.listId, listId),
-          ),
+          where: and(eq(listFollows.userId, session.user.id), eq(listFollows.listId, listId)),
         })
       : null,
   ]);

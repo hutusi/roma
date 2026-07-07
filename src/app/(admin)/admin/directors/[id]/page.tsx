@@ -1,25 +1,17 @@
+import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { asc, desc, eq } from "drizzle-orm";
+import { deleteDirector, publishDirector, unpublishDirector } from "@/actions/directors";
 import { db } from "@/db";
 import { directors, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
-import {
-  deleteDirector,
-  publishDirector,
-  unpublishDirector,
-} from "@/actions/directors";
 import { PublishControls } from "../../films/publish-controls";
 import { DirectorForm } from "../director-form";
 import { ViewingOrderPanel } from "../viewing-order-panel";
 
 export const metadata = { title: "编辑导演" };
 
-export default async function EditDirectorPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditDirectorPage({ params }: { params: Promise<{ id: string }> }) {
   await requireEditor();
   const { id } = await params;
   const director = await db.query.directors.findFirst({
@@ -47,11 +39,11 @@ export default async function EditDirectorPage({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">
+        <h1 className="font-bold text-xl">
           编辑导演 · {director.nameZh ?? director.name}
           <Link
             href={`/admin/preview/director/${director.id}`}
-            className="ml-3 text-sm font-normal text-brand hover:underline"
+            className="ml-3 font-normal text-brand text-sm hover:underline"
           >
             预览
           </Link>

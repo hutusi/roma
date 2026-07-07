@@ -1,21 +1,17 @@
-import Link from "next/link";
-import Image from "next/image";
-import { notFound } from "next/navigation";
 import { asc, desc, eq } from "drizzle-orm";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { deleteFilm, publishFilm, unpublishFilm } from "@/actions/films";
 import { db } from "@/db";
 import { directors, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
-import { deleteFilm, publishFilm, unpublishFilm } from "@/actions/films";
 import { FilmForm } from "../film-form";
 import { PublishControls } from "../publish-controls";
 
 export const metadata = { title: "编辑影片" };
 
-export default async function EditFilmPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditFilmPage({ params }: { params: Promise<{ id: string }> }) {
   await requireEditor();
   const { id } = await params;
   const film = await db.query.films.findFirst({
@@ -43,11 +39,11 @@ export default async function EditFilmPage({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">
+        <h1 className="font-bold text-xl">
           编辑影片 · {film.titleZh}
           <Link
             href={`/admin/preview/film/${film.id}`}
-            className="ml-3 text-sm font-normal text-brand hover:underline"
+            className="ml-3 font-normal text-brand text-sm hover:underline"
           >
             预览
           </Link>
@@ -66,18 +62,12 @@ export default async function EditFilmPage({
         <div className="mt-4 flex gap-2">
           {film.media.slice(0, 6).map((m) => (
             <div key={m.id} className="relative h-16 w-24 bg-ink">
-              <Image
-                src={m.url}
-                alt={m.alt ?? ""}
-                fill
-                sizes="96px"
-                className="object-contain"
-              />
+              <Image src={m.url} alt={m.alt ?? ""} fill sizes="96px" className="object-contain" />
             </div>
           ))}
           <Link
             href={`/admin/media?filmId=${film.id}`}
-            className="self-center text-sm text-brand hover:underline"
+            className="self-center text-brand text-sm hover:underline"
           >
             管理图片 →
           </Link>

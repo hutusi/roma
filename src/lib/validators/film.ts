@@ -19,9 +19,7 @@ export const castMemberSchema = z.object({
 export const watchLinkSchema = z.object({
   platform: z.string().min(1, "平台不能为空"),
   region: z.enum(["CN", "HK", "TW", "INTL"]),
-  url: z
-    .union([z.literal(""), z.string().url("链接格式不正确")])
-    .optional(),
+  url: z.union([z.literal(""), z.string().url("链接格式不正确")]).optional(),
   note: z.string().optional(),
 });
 
@@ -65,9 +63,7 @@ export function publishProblems(film: {
   const note = film.editorialNote ?? "";
   const len = codePointLength(note);
   if (len < EDITORIAL_NOTE_MIN || len > EDITORIAL_NOTE_MAX) {
-    problems.push(
-      `编辑札记需 ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX} 字（当前 ${len} 字）`,
-    );
+    problems.push(`编辑札记需 ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX} 字（当前 ${len} 字）`);
   }
   if (film.directorCount === 0) problems.push("至少关联一位导演");
   return problems;

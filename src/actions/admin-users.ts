@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { requireAdmin } from "@/lib/auth-guards";
-import { fail, ok, type ActionResult } from "./result";
+import { type ActionResult, fail, ok } from "./result";
 
 /**
  * Role is written directly: better-auth's setRole only knows the
@@ -24,10 +24,7 @@ export async function setUserRole(
   return ok();
 }
 
-export async function banUser(
-  userId: string,
-  reason: string,
-): Promise<ActionResult> {
+export async function banUser(userId: string, reason: string): Promise<ActionResult> {
   const session = await requireAdmin();
   if (session.user.id === userId) return fail("不能封禁自己");
   await auth.api.banUser({

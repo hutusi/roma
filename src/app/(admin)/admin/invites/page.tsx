@@ -1,7 +1,4 @@
 import { desc } from "drizzle-orm";
-import { db } from "@/db";
-import { invitations } from "@/db/schema";
-import { requireAdmin } from "@/lib/auth-guards";
 import {
   Table,
   TableBody,
@@ -10,6 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { db } from "@/db";
+import { invitations } from "@/db/schema";
+import { requireAdmin } from "@/lib/auth-guards";
 import { InviteControls, InviteCreateForm } from "./invite-controls";
 
 export const metadata = { title: "编辑邀请" };
@@ -29,7 +29,7 @@ export default async function AdminInvitesPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold">邀请客座编辑</h1>
+      <h1 className="font-bold text-xl">邀请客座编辑</h1>
       <div className="mt-6 max-w-xl">
         <InviteCreateForm />
       </div>
@@ -49,9 +49,7 @@ export default async function AdminInvitesPage() {
               <TableCell className="font-medium">{invite.email}</TableCell>
               <TableCell>{invite.role === "admin" ? "管理员" : "编辑"}</TableCell>
               <TableCell className="text-ink-muted">{statusOf(invite)}</TableCell>
-              <TableCell className="text-ink-muted">
-                {invite.inviter?.name ?? "—"}
-              </TableCell>
+              <TableCell className="text-ink-muted">{invite.inviter?.name ?? "—"}</TableCell>
               <TableCell>
                 <InviteControls
                   inviteId={invite.id}

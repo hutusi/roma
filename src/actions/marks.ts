@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { userMarks } from "@/db/schema";
 import { requireUser } from "@/lib/auth-guards";
-import { fail, ok, type ActionResult } from "./result";
+import { type ActionResult, fail, ok } from "./result";
 
 /**
  * One mark per user+film: setting watched overwrites want and vice
@@ -20,9 +20,7 @@ export async function setMark(
   if (status === null) {
     await db
       .delete(userMarks)
-      .where(
-        and(eq(userMarks.userId, session.user.id), eq(userMarks.filmId, filmId)),
-      );
+      .where(and(eq(userMarks.userId, session.user.id), eq(userMarks.filmId, filmId)));
     return ok();
   }
   if (status !== "watched" && status !== "want") return fail("无效的标记");

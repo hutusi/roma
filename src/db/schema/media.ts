@@ -1,8 +1,8 @@
 import { index, integer, pgTable, text } from "drizzle-orm/pg-core";
-import { mediaKind } from "./enums";
-import { createdAt, primaryId } from "./helpers";
-import { films } from "./films";
 import { directors } from "./directors";
+import { mediaKind } from "./enums";
+import { films } from "./films";
+import { createdAt, primaryId } from "./helpers";
 
 /**
  * Uploaded images (Vercel Blob). A film's poster is its first
@@ -30,8 +30,5 @@ export const media = pgTable(
     sortOrder: integer().notNull().default(0),
     createdAt: createdAt(),
   },
-  (t) => [
-    index("media_film_idx").on(t.filmId),
-    index("media_director_idx").on(t.directorId),
-  ],
+  (t) => [index("media_film_idx").on(t.filmId), index("media_director_idx").on(t.directorId)],
 );

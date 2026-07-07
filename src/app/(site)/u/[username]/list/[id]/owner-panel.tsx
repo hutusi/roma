@@ -47,14 +47,12 @@ export function OwnerPanel({
     setItems(initialItems);
   }
 
-  const available = filmOptions.filter(
-    (f) => !items.some((item) => item.filmId === f.id),
-  );
+  const available = filmOptions.filter((f) => !items.some((item) => item.filmId === f.id));
 
   return (
     <section className="mt-8 border border-line bg-card p-4 font-sans text-[15px]">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-ink-muted">这是你的片单</p>
+        <p className="text-ink-muted text-sm">这是你的片单</p>
         <div className="flex gap-3 text-sm">
           <button
             type="button"
@@ -106,12 +104,7 @@ export function OwnerPanel({
           }}
         >
           <Input name="title" defaultValue={title} required maxLength={60} />
-          <Input
-            name="description"
-            defaultValue={description}
-            placeholder="简介"
-            maxLength={140}
-          />
+          <Input name="description" defaultValue={description} placeholder="简介" maxLength={140} />
           <Button type="submit" size="sm" disabled={pending}>
             保存
           </Button>
@@ -155,7 +148,7 @@ export function OwnerPanel({
 
       {items.length > 1 && (
         <div className="mt-4">
-          <p className="mb-2 text-xs text-ink-muted">拖动排序（自动保存）：</p>
+          <p className="mb-2 text-ink-muted text-xs">拖动排序（自动保存）：</p>
           <SortableList
             items={items}
             onReorder={(next) => {
@@ -176,16 +169,14 @@ export function OwnerPanel({
             }}
             renderItem={(item, index) => (
               <div className="flex items-center gap-2">
-                <span className="w-5 text-right font-display text-ink-muted">
-                  {index + 1}
-                </span>
+                <span className="w-5 text-right font-display text-ink-muted">{index + 1}</span>
                 <span className="flex-1">
                   {item.title}
-                  <span className="ml-1 text-xs text-ink-muted">{item.year}</span>
+                  <span className="ml-1 text-ink-muted text-xs">{item.year}</span>
                 </span>
                 <button
                   type="button"
-                  className="text-xs text-ink-muted hover:text-destructive"
+                  className="text-ink-muted text-xs hover:text-destructive"
                   onClick={() =>
                     startTransition(async () => {
                       const result = await removeUserListItem(listId, item.id);

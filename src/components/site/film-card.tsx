@@ -46,14 +46,12 @@ export function FilmCard({
         )}
       </div>
       <div className="min-w-0 self-center">
-        <p className="font-bold transition-colors group-hover:text-brand">
-          {titleZh}
-        </p>
-        <p className="mt-0.5 truncate font-display text-sm text-ink-muted">
+        <p className="font-bold transition-colors group-hover:text-brand">{titleZh}</p>
+        <p className="mt-0.5 truncate font-display text-ink-muted text-sm">
           {titleOriginal} · {year}
         </p>
         {directors.length > 0 && (
-          <p className="mt-1 text-sm text-ink-muted">{directors.join("、")}</p>
+          <p className="mt-1 text-ink-muted text-sm">{directors.join("、")}</p>
         )}
       </div>
     </Link>

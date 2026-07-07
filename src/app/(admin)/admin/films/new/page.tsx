@@ -22,7 +22,7 @@ export default async function NewFilmPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold">新建影片</h1>
+      <h1 className="font-bold text-xl">新建影片</h1>
       <div className="mt-6">
         <FilmForm
           filmId={null}
