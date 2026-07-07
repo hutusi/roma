@@ -21,9 +21,13 @@ export const auth = betterAuth({
       // reset token there.
       if (!process.env.RESEND_API_KEY) {
         // E2E_ALLOW_LOG_RESET is set only by the Playwright webServer so
-        // the reset loop stays testable against a production build; the
-        // production guard below is otherwise untouched.
-        if (process.env.NODE_ENV === "production" && !process.env.E2E_ALLOW_LOG_RESET) {
+        // the reset loop stays testable against a production build. It
+        // is additionally bound to a localhost origin so a copy-pasted
+        // env file can't disable the production guard on a real host.
+        const e2eEscape =
+          process.env.E2E_ALLOW_LOG_RESET &&
+          process.env.BETTER_AUTH_URL?.startsWith("http://localhost");
+        if (process.env.NODE_ENV === "production" && !e2eEscape) {
           throw new Error("RESEND_API_KEY is not configured");
         }
         console.log(`[dev] password reset for ${user.email}: ${url}`);

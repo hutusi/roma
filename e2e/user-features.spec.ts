@@ -59,7 +59,7 @@ test.describe("reader", () => {
     await page.waitForURL(/\/u\/e2euser\/list\/[^/]+$/);
     const listUrl = page.url();
 
-    await page.locator("select").first().selectOption({ index: 1 });
+    await page.locator("select").first().selectOption({ label: "大路（1954）" });
     await page.getByRole("button", { name: "加入" }).click();
     await expect(page.locator('a[href^="/film/"]').first()).toBeVisible({ timeout: 15_000 });
 
