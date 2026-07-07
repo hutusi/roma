@@ -7,7 +7,7 @@ import { nanoid } from "nanoid";
 // Extension derives from the validated MIME type, never from the
 // client-supplied filename — the public/uploads fallback serves these
 // as public assets and must not persist attacker-chosen extensions.
-const EXT_BY_MIME: Record<string, string> = {
+export const EXT_BY_MIME: Record<string, string> = {
   "image/jpeg": ".jpg",
   "image/png": ".png",
   "image/webp": ".webp",
