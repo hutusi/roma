@@ -35,6 +35,9 @@ jobs:
       - name: Unit tests
         run: bun test src
 
+      - name: Portability guard (Cloudflare-exit constraints, ADR 0008)
+        run: bun run check:portability
+
       - name: Migration drift check
         env:
           # drizzle.config.ts dereferences env at load; `generate` itself

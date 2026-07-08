@@ -6,5 +6,6 @@ export * from "./invitations";
 export * from "./lists";
 export * from "./media";
 export * from "./relations";
+export * from "./rum";
 export * from "./types";
 export * from "./user-content";
