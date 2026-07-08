@@ -13,6 +13,12 @@ import { rumEvents } from "@/db/schema";
  * `x-vercel-ip-country` is Vercel's geo header; on a future Cloudflare
  * deploy this becomes `request.cf.country`. It's a header we read, not a
  * platform SDK, so it doesn't deepen lock-in (ADR 0008 constraint 3).
+ *
+ * Abuse protection lives at the platform edge (Vercel WAF/BotID), not
+ * here: a mainland audience sits behind heavy CGNAT, so a per-IP limit
+ * in-app would silently drop the very China samples we're trying to
+ * count. Skew from a flood is further bounded by robust percentiles and
+ * the min-sample gate in ADR 0009. Values are clamped below.
  */
 const beaconSchema = z.object({
   name: z.enum(["TTFB", "FCP", "LCP", "CLS", "INP"]),
@@ -44,14 +50,21 @@ export async function POST(request: NextRequest) {
   }
 
   const country = request.headers.get("x-vercel-ip-country");
-  await db.insert(rumEvents).values({
-    metric: parsed.data.name,
-    value: parsed.data.value,
-    rating: parsed.data.rating,
-    path: parsed.data.path,
-    country,
-    isChina: country === "CN",
-  });
+  try {
+    await db.insert(rumEvents).values({
+      metric: parsed.data.name,
+      value: parsed.data.value,
+      rating: parsed.data.rating,
+      path: parsed.data.path,
+      country,
+      isChina: country === "CN",
+    });
+  } catch (error) {
+    // Fire-and-forget beacon: a DB hiccup shouldn't surface as a 500 with
+    // a full stack per request. Log once and shed the write.
+    console.error("rum ingest insert failed:", error);
+    return new NextResponse(null, { status: 503, headers: { "Cache-Control": "no-store" } });
+  }
 
   return new NextResponse(null, { status: 204, headers: { "Cache-Control": "no-store" } });
 }
