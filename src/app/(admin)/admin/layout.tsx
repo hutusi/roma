@@ -11,6 +11,7 @@ const NAV = [
   { href: "/admin/media", label: "媒体库" },
   { href: "/admin/users", label: "用户", adminOnly: true },
   { href: "/admin/invites", label: "邀请", adminOnly: true },
+  { href: "/admin/metrics", label: "性能", adminOnly: true },
   { href: "/admin/handbook", label: "编辑手册" },
 ] as const;
 
