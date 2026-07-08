@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check .",
+    "check:portability": "bun run scripts/check-portability.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
