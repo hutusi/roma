@@ -16,7 +16,7 @@ egress cost clears the R2-equivalent by a clear margin for two months).
 R2 pricing: **$0 egress** + **~$0.015/GB-month storage** + minor Class A/B
 operation fees. So the swap pays off roughly when:
 
-```
+```text
 monthly Blob egress cost  >  ~$0.015 × (stored GB)  +  R2 operation fees
 ```
 
