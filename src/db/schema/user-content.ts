@@ -1,17 +1,10 @@
-import {
-  index,
-  integer,
-  pgTable,
-  primaryKey,
-  text,
-  unique,
-} from "drizzle-orm/pg-core";
+import { index, integer, pgTable, primaryKey, text, unique } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
-import { markStatus } from "./enums";
-import { createdAt, primaryId, updatedAt } from "./helpers";
-import { films } from "./films";
-import { curatedLists } from "./lists";
 import { users } from "./auth";
+import { markStatus } from "./enums";
+import { films } from "./films";
+import { createdAt, primaryId, updatedAt } from "./helpers";
+import { curatedLists } from "./lists";
 
 /**
  * 看过 / 想看 — one row per user+film; marking one status overwrites the
@@ -30,10 +23,7 @@ export const userMarks = pgTable(
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
-  (t) => [
-    primaryKey({ columns: [t.userId, t.filmId] }),
-    index("user_marks_film_idx").on(t.filmId),
-  ],
+  (t) => [primaryKey({ columns: [t.userId, t.filmId] }), index("user_marks_film_idx").on(t.filmId)],
 );
 
 /**

@@ -1,7 +1,7 @@
 import "server-only";
 import { and, arrayContains, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { db } from "@/db";
-import { curatedLists, directors, films, media } from "@/db/schema";
+import { curatedLists, directors, films, type media } from "@/db/schema";
 
 /**
  * Read layer for the public site and the admin draft preview. The
@@ -38,9 +38,7 @@ export async function getFilmForPreview(id: string) {
   return normalizeFilm(film);
 }
 
-function normalizeFilm(
-  film: NonNullable<Awaited<ReturnType<typeof rawFilm>>>,
-) {
+function normalizeFilm(film: NonNullable<Awaited<ReturnType<typeof rawFilm>>>) {
   return {
     ...film,
     filmDirectors: [...film.filmDirectors].sort((a, b) => a.position - b.position),
@@ -66,10 +64,7 @@ async function rawFilm() {
 
 export type PublicFilm = NonNullable<Awaited<ReturnType<typeof getPublishedFilmBySlug>>>;
 
-export async function getPublishedFilms(filters?: {
-  decade?: number;
-  country?: string;
-}) {
+export async function getPublishedFilms(filters?: { decade?: number; country?: string }) {
   const conditions = [eq(films.status, "published")];
   if (filters?.decade) {
     conditions.push(gte(films.year, filters.decade));
@@ -91,10 +86,7 @@ export async function getPublishedFilms(filters?: {
 export type PublicFilmListItem = Awaited<ReturnType<typeof getPublishedFilms>>[number];
 
 export async function getPublishedFilmSlugs() {
-  return db
-    .select({ slug: films.slug })
-    .from(films)
-    .where(eq(films.status, "published"));
+  return db.select({ slug: films.slug }).from(films).where(eq(films.status, "published"));
 }
 
 export async function getPublishedDirectorBySlug(slug: string) {
@@ -119,9 +111,7 @@ const directorRelations = {
   media: true,
 } as const;
 
-function normalizeDirector(
-  director: NonNullable<Awaited<ReturnType<typeof rawDirector>>>,
-) {
+function normalizeDirector(director: NonNullable<Awaited<ReturnType<typeof rawDirector>>>) {
   return {
     ...director,
     viewingItems: [...director.viewingItems]
@@ -138,9 +128,7 @@ async function rawDirector() {
   return db.query.directors.findFirst({ with: directorRelations });
 }
 
-export type PublicDirector = NonNullable<
-  Awaited<ReturnType<typeof getPublishedDirectorBySlug>>
->;
+export type PublicDirector = NonNullable<Awaited<ReturnType<typeof getPublishedDirectorBySlug>>>;
 
 export async function getPublishedDirectorSlugs() {
   return db

@@ -1,8 +1,8 @@
-import Image from "next/image";
 import type { JSONContent } from "@tiptap/core";
 import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
-import { essayExtensions } from "./extensions";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { essayExtensions } from "./extensions";
 
 /**
  * The only way Tiptap JSON reaches public HTML. Renders through the
@@ -74,7 +74,7 @@ export function TiptapContent({
         "prose-p:leading-[1.9] prose-p:tracking-[0.02em]",
         "prose-headings:font-bold prose-headings:tracking-[0.1em]",
         "prose-a:text-brand prose-a:no-underline hover:prose-a:underline",
-        "prose-blockquote:border-l-line prose-blockquote:font-normal prose-blockquote:not-italic prose-blockquote:text-ink-muted",
+        "prose-blockquote:border-l-line prose-blockquote:font-normal prose-blockquote:text-ink-muted prose-blockquote:not-italic",
         className,
       )}
     >

@@ -16,7 +16,8 @@ export default async function FilmsIndexPage({
   searchParams: Promise<{ decade?: string; country?: string }>;
 }) {
   const { decade: decadeParam, country } = await searchParams;
-  const decade = decadeParam ? Number(decadeParam) : undefined;
+  const parsedDecade = Number(decadeParam);
+  const decade = decadeParam && Number.isFinite(parsedDecade) ? parsedDecade : undefined;
 
   // One query; facet values and filtering both derive from it — the
   // catalogue is curated (hundreds at most), not a database.
@@ -24,7 +25,7 @@ export default async function FilmsIndexPage({
   const countries = Array.from(new Set(allFilms.flatMap((f) => f.countries))).sort();
   const films = allFilms.filter(
     (f) =>
-      (!Number.isFinite(decade) || (f.year >= decade! && f.year <= decade! + 9)) &&
+      (decade === undefined || (f.year >= decade && f.year <= decade + 9)) &&
       (!country || f.countries.includes(country)),
   );
 
@@ -78,18 +79,14 @@ export default async function FilmsIndexPage({
               titleZh={film.titleZh}
               titleOriginal={film.titleOriginal}
               year={film.year}
-              directors={film.filmDirectors.map(
-                (fd) => fd.director.nameZh ?? fd.director.name,
-              )}
+              directors={film.filmDirectors.map((fd) => fd.director.nameZh ?? fd.director.name)}
               imageUrl={poster?.url}
               imageAlt={poster?.alt}
             />
           );
         })}
         {films.length === 0 && (
-          <p className="col-span-full text-center text-ink-muted">
-            没有符合条件的影片。
-          </p>
+          <p className="col-span-full text-center text-ink-muted">没有符合条件的影片。</p>
         )}
       </div>
     </div>

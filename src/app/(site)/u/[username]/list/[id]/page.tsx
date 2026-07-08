@@ -1,12 +1,12 @@
+import { asc, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { asc, eq } from "drizzle-orm";
-import { db } from "@/db";
-import { films, userLists } from "@/db/schema";
-import { getSession } from "@/lib/auth-guards";
-import { posterOf } from "@/db/queries/public";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
+import { db } from "@/db";
+import { posterOf } from "@/db/queries/public";
+import { films, userLists } from "@/db/schema";
+import { getSession } from "@/lib/auth-guards";
 import { OwnerPanel } from "./owner-panel";
 
 export const dynamic = "force-dynamic";
@@ -54,9 +54,7 @@ export default async function UserListPage({
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
       <TitleCard eyebrow={`@${username} 的片单`} title={list.title} />
       {list.description && (
-        <p className="mt-4 text-center text-sm text-ink-muted">
-          {list.description}
-        </p>
+        <p className="mt-4 text-center text-ink-muted text-sm">{list.description}</p>
       )}
 
       {isOwner ? (
@@ -80,7 +78,7 @@ export default async function UserListPage({
           const poster = posterOf(item.film.media);
           return (
             <div key={item.id} className="flex items-start gap-3">
-              <span className="mt-6 w-8 shrink-0 text-right font-display text-xl text-ink-muted">
+              <span className="mt-6 w-8 shrink-0 text-right font-display text-ink-muted text-xl">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0 flex-1">

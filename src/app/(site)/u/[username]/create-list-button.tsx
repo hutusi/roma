@@ -58,7 +58,7 @@ export function CreateListButton({ username }: { username: string }) {
             <Label htmlFor="description">简介（可选）</Label>
             <Input id="description" name="description" maxLength={140} />
           </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-destructive text-sm">{error}</p>}
           <Button type="submit" disabled={pending}>
             {pending ? "创建中…" : "创建"}
           </Button>

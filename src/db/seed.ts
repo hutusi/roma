@@ -4,9 +4,9 @@
  * Override SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD for non-dev use.
  */
 import { eq } from "drizzle-orm";
+import { auth } from "../lib/auth";
 import { db } from "./index";
 import { users } from "./schema";
-import { auth } from "../lib/auth";
 
 const email = process.env.SEED_ADMIN_EMAIL ?? "admin@babuban.com";
 

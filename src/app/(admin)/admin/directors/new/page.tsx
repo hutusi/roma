@@ -16,7 +16,7 @@ export default async function NewDirectorPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold">新建导演</h1>
+      <h1 className="font-bold text-xl">新建导演</h1>
       <div className="mt-6">
         <DirectorForm
           directorId={null}

@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { invitations, users } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { requireAdmin } from "@/lib/auth-guards";
-import { fail, ok, type ActionResult } from "./result";
+import { type ActionResult, fail, ok } from "./result";
 
 const INVITE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -67,10 +67,7 @@ export async function acceptInvite(
   if (error) return fail(error);
 
   await db.transaction(async (tx) => {
-    await tx
-      .update(users)
-      .set({ role: invite.role })
-      .where(eq(users.email, invite.email));
+    await tx.update(users).set({ role: invite.role }).where(eq(users.email, invite.email));
     await tx
       .update(invitations)
       .set({ acceptedAt: new Date() })

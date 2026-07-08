@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DirectorPage } from "@/components/director/director-page";
-import {
-  getPublishedDirectorBySlug,
-  getPublishedDirectorSlugs,
-} from "@/db/queries/public";
+import { getPublishedDirectorBySlug, getPublishedDirectorSlugs } from "@/db/queries/public";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedDirectorSlugs();

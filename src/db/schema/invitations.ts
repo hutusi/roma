@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { createdAt, primaryId } from "./helpers";
 import { users } from "./auth";
+import { createdAt, primaryId } from "./helpers";
 
 /**
  * Guest-editor invitations. The admin copies /invite/[token] to the

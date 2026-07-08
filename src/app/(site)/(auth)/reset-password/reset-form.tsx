@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -17,9 +17,9 @@ export function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <div className="border-y border-line py-10 text-center">
-        <h1 className="text-2xl font-bold tracking-[0.2em]">链接无效</h1>
-        <p className="mt-4 text-sm text-ink-muted">
+      <div className="border-line border-y py-10 text-center">
+        <h1 className="font-bold text-2xl tracking-[0.2em]">链接无效</h1>
+        <p className="mt-4 text-ink-muted text-sm">
           重置链接缺失或已过期，请
           <Link href="/forgot-password" className="mx-1 text-brand hover:underline">
             重新申请
@@ -31,10 +31,8 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <div className="border-y border-line py-10">
-      <h1 className="text-center text-2xl font-bold tracking-[0.2em]">
-        重置密码
-      </h1>
+    <div className="border-line border-y py-10">
+      <h1 className="text-center font-bold text-2xl tracking-[0.2em]">重置密码</h1>
       <form
         className="mt-8 space-y-5"
         onSubmit={async (e) => {
@@ -65,7 +63,7 @@ export function ResetPasswordForm() {
             autoComplete="new-password"
           />
         </div>
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && <p className="text-destructive text-sm">{error}</p>}
         <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
           {pending ? "重置中…" : "重置密码"}
         </Button>

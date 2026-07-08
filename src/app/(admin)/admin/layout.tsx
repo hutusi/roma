@@ -11,6 +11,7 @@ const NAV = [
   { href: "/admin/media", label: "媒体库" },
   { href: "/admin/users", label: "用户", adminOnly: true },
   { href: "/admin/invites", label: "邀请", adminOnly: true },
+  { href: "/admin/handbook", label: "编辑手册" },
 ] as const;
 
 export default async function AdminLayout({
@@ -24,15 +25,13 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-full flex-1 font-sans text-[15px]">
-      <aside className="flex w-52 shrink-0 flex-col border-r border-line bg-secondary/40 px-4 py-6">
+      <aside className="flex w-52 shrink-0 flex-col border-line border-r bg-secondary/40 px-4 py-6">
         <Link href="/admin" className="px-2 font-bold tracking-[0.2em]">
           八部半 · 编辑部
         </Link>
         <nav className="mt-8 flex flex-1 flex-col gap-1">
           {NAV.filter(
-            (item) =>
-              !("adminOnly" in item && item.adminOnly) ||
-              roleOf(session) === "admin",
+            (item) => !("adminOnly" in item && item.adminOnly) || roleOf(session) === "admin",
           ).map(({ href, label }) => (
             <Link
               key={href}
@@ -43,7 +42,7 @@ export default async function AdminLayout({
             </Link>
           ))}
         </nav>
-        <div className="border-t border-line pt-4 text-sm">
+        <div className="border-line border-t pt-4 text-sm">
           <p className="truncate px-2 text-ink-muted">
             {session.user.name}（{roleOf(session) === "admin" ? "管理员" : "编辑"}）
           </p>

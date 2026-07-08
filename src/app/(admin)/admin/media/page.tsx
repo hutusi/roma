@@ -19,10 +19,7 @@ export default async function AdminMediaPage({
       orderBy: desc(media.createdAt),
       limit: 300,
     }),
-    db
-      .select({ id: films.id, title: films.titleZh })
-      .from(films)
-      .orderBy(asc(films.titleZh)),
+    db.select({ id: films.id, title: films.titleZh }).from(films).orderBy(asc(films.titleZh)),
     db
       .select({ id: directors.id, name: directors.name, nameZh: directors.nameZh })
       .from(directors)
@@ -31,7 +28,7 @@ export default async function AdminMediaPage({
 
   return (
     <div>
-      <h1 className="text-xl font-bold">媒体库</h1>
+      <h1 className="font-bold text-xl">媒体库</h1>
       <MediaManager
         rows={rows.map((m) => ({
           id: m.id,

@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FilmPage } from "@/components/film/film-page";
 import { MarkButtons } from "@/components/site/mark-buttons";
-import {
-  getPublishedFilmBySlug,
-  getPublishedFilmSlugs,
-} from "@/db/queries/public";
+import { getPublishedFilmBySlug, getPublishedFilmSlugs } from "@/db/queries/public";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedFilmSlugs();
@@ -26,11 +23,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function PublicFilmPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function PublicFilmPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const film = await getPublishedFilmBySlug(slug);
   if (!film) notFound();

@@ -31,10 +31,7 @@ export function UserRowControls({
         disabled={pending}
         onChange={(e) =>
           startTransition(async () => {
-            const result = await setUserRole(
-              userId,
-              e.target.value as "admin" | "editor" | "user",
-            );
+            const result = await setUserRole(userId, e.target.value as "admin" | "editor" | "user");
             if (!result.ok) {
               toast.error(result.error);
               return;
@@ -51,7 +48,7 @@ export function UserRowControls({
       <button
         type="button"
         disabled={pending}
-        className="text-xs text-ink-muted hover:text-destructive"
+        className="text-ink-muted text-xs hover:text-destructive"
         onClick={() => {
           if (banned) {
             startTransition(async () => {

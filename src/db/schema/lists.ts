@@ -1,17 +1,9 @@
-import {
-  index,
-  integer,
-  jsonb,
-  pgTable,
-  text,
-  timestamp,
-  unique,
-} from "drizzle-orm/pg-core";
-import { contentStatus } from "./enums";
-import { createdAt, primaryId, updatedAt } from "./helpers";
-import { films } from "./films";
-import { media } from "./media";
+import { index, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { users } from "./auth";
+import { contentStatus } from "./enums";
+import { films } from "./films";
+import { createdAt, primaryId, updatedAt } from "./helpers";
+import { media } from "./media";
 import type { TiptapDoc } from "./types";
 
 /**

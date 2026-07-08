@@ -39,7 +39,7 @@ export function MarkButtons({ filmId }: { filmId: string }) {
     return (
       <Link
         href="/sign-in"
-        className="text-sm tracking-[0.2em] text-ink-muted transition-colors hover:text-brand"
+        className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
       >
         登录后可标记「看过 / 想看」
       </Link>

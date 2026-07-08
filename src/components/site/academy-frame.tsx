@@ -40,14 +40,14 @@ export function AcademyFrame({
         ) : (
           <div
             aria-hidden
-            className="flex h-full items-center justify-center font-display text-sm tracking-[0.3em] text-paper/30"
+            className="flex h-full items-center justify-center font-display text-paper/30 text-sm tracking-[0.3em]"
           >
             1.37 : 1
           </div>
         )}
       </div>
       {(caption || credit) && (
-        <figcaption className="mt-2 flex items-baseline justify-between gap-4 text-xs text-ink-muted">
+        <figcaption className="mt-2 flex items-baseline justify-between gap-4 text-ink-muted text-xs">
           <span>{caption}</span>
           {credit && <span className="shrink-0">图片来源：{credit}</span>}
         </figcaption>

@@ -7,7 +7,7 @@ import { nanoid } from "nanoid";
 // Extension derives from the validated MIME type, never from the
 // client-supplied filename — the public/uploads fallback serves these
 // as public assets and must not persist attacker-chosen extensions.
-const EXT_BY_MIME: Record<string, string> = {
+export const EXT_BY_MIME: Record<string, string> = {
   "image/jpeg": ".jpg",
   "image/png": ".png",
   "image/webp": ".webp",
@@ -24,10 +24,7 @@ export type StoredImage = { url: string; pathname: string };
 
 const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
-export async function storeImage(
-  file: File,
-  prefix: string,
-): Promise<StoredImage> {
+export async function storeImage(file: File, prefix: string): Promise<StoredImage> {
   const ext = EXT_BY_MIME[file.type];
   if (!ext) throw new Error(`Unsupported image type: ${file.type}`);
   const pathname = `${prefix}/${nanoid(10)}${ext}`;
@@ -48,7 +45,5 @@ export async function deleteImage(pathname: string): Promise<void> {
     await del(pathname);
     return;
   }
-  await unlink(path.join(process.cwd(), "public", "uploads", pathname)).catch(
-    () => {},
-  );
+  await unlink(path.join(process.cwd(), "public", "uploads", pathname)).catch(() => {});
 }

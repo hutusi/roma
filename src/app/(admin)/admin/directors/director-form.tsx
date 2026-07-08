@@ -1,20 +1,17 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { saveDirector } from "@/actions/directors";
-import {
-  directorFormSchema,
-  type DirectorFormValues,
-} from "@/lib/validators/director";
-import { TiptapEditor, type MediaOption } from "@/components/tiptap/editor";
+import { type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { type DirectorFormValues, directorFormSchema } from "@/lib/validators/director";
 
 export function DirectorForm({
   directorId,
@@ -56,9 +53,7 @@ export function DirectorForm({
         <div className="space-y-1.5">
           <Label htmlFor="name">姓名（原文）*</Label>
           <Input id="name" {...register("name")} />
-          {errors.name && (
-            <p className="text-xs text-destructive">{errors.name.message}</p>
-          )}
+          {errors.name && <p className="text-destructive text-xs">{errors.name.message}</p>}
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="nameZh">中文名</Label>
@@ -68,9 +63,7 @@ export function DirectorForm({
       <div className="space-y-1.5">
         <Label htmlFor="slug">slug *</Label>
         <Input id="slug" placeholder="federico-fellini" {...register("slug")} />
-        {errors.slug && (
-          <p className="text-xs text-destructive">{errors.slug.message}</p>
-        )}
+        {errors.slug && <p className="text-destructive text-xs">{errors.slug.message}</p>}
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="bio">简介（纯文本）</Label>

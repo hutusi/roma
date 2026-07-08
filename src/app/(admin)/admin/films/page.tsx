@@ -1,8 +1,5 @@
-import Link from "next/link";
 import { desc, ilike, or } from "drizzle-orm";
-import { db } from "@/db";
-import { films } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { db } from "@/db";
+import { films } from "@/db/schema";
+import { requireEditor } from "@/lib/auth-guards";
 
 export const metadata = { title: "影片管理" };
 
@@ -40,7 +40,7 @@ export default async function AdminFilmsPage({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">影片</h1>
+        <h1 className="font-bold text-xl">影片</h1>
         <Button asChild>
           <Link href="/admin/films/new">新建影片</Link>
         </Button>
@@ -62,21 +62,14 @@ export default async function AdminFilmsPage({
           {rows.map((film) => (
             <TableRow key={film.id}>
               <TableCell>
-                <Link
-                  href={`/admin/films/${film.id}`}
-                  className="font-medium hover:text-brand"
-                >
+                <Link href={`/admin/films/${film.id}`} className="font-medium hover:text-brand">
                   {film.titleZh}
                 </Link>
-                <span className="ml-2 text-xs text-ink-muted">
-                  {film.titleOriginal}
-                </span>
+                <span className="ml-2 text-ink-muted text-xs">{film.titleOriginal}</span>
               </TableCell>
               <TableCell>{film.year}</TableCell>
               <TableCell className="text-ink-muted">
-                {film.filmDirectors
-                  .map((fd) => fd.director.nameZh ?? fd.director.name)
-                  .join("、")}
+                {film.filmDirectors.map((fd) => fd.director.nameZh ?? fd.director.name).join("、")}
               </TableCell>
               <TableCell>
                 <Badge variant={film.status === "published" ? "default" : "secondary"}>

@@ -8,8 +8,7 @@ export const primaryId = () =>
     .primaryKey()
     .$defaultFn(() => nanoid());
 
-export const createdAt = () =>
-  timestamp({ withTimezone: true }).notNull().defaultNow();
+export const createdAt = () => timestamp({ withTimezone: true }).notNull().defaultNow();
 
 export const updatedAt = () =>
   timestamp({ withTimezone: true })

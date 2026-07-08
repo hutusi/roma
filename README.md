@@ -22,10 +22,17 @@ bun dev
 |---|---|
 | `bun dev` | Dev server |
 | `bun run build` | Production build |
-| `bun run lint` | ESLint |
+| `bun run lint` / `lint:fix` / `format` | Biome (lint + format) |
+| `bun run typecheck` | `next typegen && tsc --noEmit` |
+| `bun test src` | Unit tests (pure logic) |
+| `bun run test:e2e` | Playwright vs a production build on an ephemeral `roma_test` DB |
 | `bun run db:generate` | Generate SQL migrations from schema changes |
 | `bun run db:migrate` | Apply migrations |
 | `bun run db:seed` | Seed the first admin user |
+
+## QA & docs
+
+CI runs cheap checks (`checks.yml`) on every PR and the full browser suite (`e2e.yml`) on pushes to `main` — a red main run is fixed forward, never reverted or silenced. Architecture context lives in [`docs/CONTEXT.md`](docs/CONTEXT.md) and decision records in [`docs/adr/`](docs/adr/); the editor-facing handbook is inside the app at `/admin/handbook`.
 
 ## Structure
 

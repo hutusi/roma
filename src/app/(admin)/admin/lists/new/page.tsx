@@ -16,7 +16,7 @@ export default async function NewListPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold">新建片单</h1>
+      <h1 className="font-bold text-xl">新建片单</h1>
       <div className="mt-6">
         <ListForm
           listId={null}

@@ -1,7 +1,7 @@
 import "server-only";
-import { cache } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { auth } from "@/lib/auth";
 
 export type Role = "admin" | "editor" | "user";
@@ -12,13 +12,9 @@ export type Role = "admin" | "editor" | "user";
  * every mutating server action. proxy.ts only does a cookie-existence
  * redirect for UX, and layouts don't re-run on soft navigation.
  */
-export const getSession = cache(async () =>
-  auth.api.getSession({ headers: await headers() }),
-);
+export const getSession = cache(async () => auth.api.getSession({ headers: await headers() }));
 
-export function roleOf(
-  session: Awaited<ReturnType<typeof getSession>>,
-): Role {
+export function roleOf(session: Awaited<ReturnType<typeof getSession>>): Role {
   const role = session?.user?.role;
   return role === "admin" || role === "editor" ? role : "user";
 }

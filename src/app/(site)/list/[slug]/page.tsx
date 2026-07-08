@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ListPage } from "@/components/list/list-page";
 import { FollowButton } from "@/components/site/follow-button";
-import {
-  getPublishedListBySlug,
-  getPublishedListSlugs,
-} from "@/db/queries/public";
+import { getPublishedListBySlug, getPublishedListSlugs } from "@/db/queries/public";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedListSlugs();
@@ -26,11 +23,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function PublicListPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function PublicListPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const list = await getPublishedListBySlug(slug);
   if (!list) notFound();

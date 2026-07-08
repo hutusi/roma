@@ -6,8 +6,9 @@ export default defineConfig({
   dialect: "postgresql",
   dbCredentials: {
     // Migrations must bypass the connection pooler; locally there is only
-    // one URL, so fall back to it.
-    url: process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL!,
+    // one URL, so fall back to it. Empty string only when neither is set
+    // (e.g. `generate` in CI, which never connects).
+    url: process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL ?? "",
   },
   casing: "snake_case",
 });

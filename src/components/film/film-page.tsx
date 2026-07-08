@@ -16,13 +16,7 @@ const REGION_LABELS: Record<string, string> = {
  * page (published only) and the editor-gated draft preview, so both
  * always look identical.
  */
-export function FilmPage({
-  film,
-  actions,
-}: {
-  film: PublicFilm;
-  actions?: React.ReactNode;
-}) {
+export function FilmPage({ film, actions }: { film: PublicFilm; actions?: React.ReactNode }) {
   const hero = heroOf(film.media);
   const directorNames = film.filmDirectors.map((fd) => ({
     slug: fd.director.slug,
@@ -47,7 +41,8 @@ export function FilmPage({
 
   const watchByRegion = Object.entries(
     film.watchLinks.reduce<Record<string, typeof film.watchLinks>>((acc, link) => {
-      (acc[link.region] ??= []).push(link);
+      acc[link.region] ??= [];
+      acc[link.region].push(link);
       return acc;
     }, {}),
   );
@@ -55,33 +50,21 @@ export function FilmPage({
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       {hero && (
-        <AcademyFrame
-          src={hero.url}
-          alt={hero.alt ?? film.titleZh}
-          credit={hero.credit}
-          priority
-        />
+        <AcademyFrame src={hero.url} alt={hero.alt ?? film.titleZh} credit={hero.credit} priority />
       )}
 
       <header className="mt-10 text-center">
-        <h1 className="text-4xl font-bold tracking-[0.15em]">{film.titleZh}</h1>
-        <p className="mt-3 font-display text-lg text-ink-muted">
-          {film.titleOriginal}
-        </p>
-        <p className="mt-4 text-sm tracking-[0.2em] text-ink-muted">
-          {facts.join(" · ")}
-        </p>
+        <h1 className="font-bold text-4xl tracking-[0.15em]">{film.titleZh}</h1>
+        <p className="mt-3 font-display text-ink-muted text-lg">{film.titleOriginal}</p>
+        <p className="mt-4 text-ink-muted text-sm tracking-[0.2em]">{facts.join(" · ")}</p>
         {directorNames.length > 0 && (
-          <p className="mt-2 text-sm text-ink-muted">
+          <p className="mt-2 text-ink-muted text-sm">
             导演：
             {directorNames.map((d, i) => (
               <span key={d.slug}>
                 {i > 0 && "、"}
                 {d.published ? (
-                  <Link
-                    href={`/director/${d.slug}`}
-                    className="text-brand hover:underline"
-                  >
+                  <Link href={`/director/${d.slug}`} className="text-brand hover:underline">
                     {d.label}
                   </Link>
                 ) : (
@@ -116,7 +99,7 @@ export function FilmPage({
             {translations.map((t) => (
               <div
                 key={t.label}
-                className="flex justify-between border-b border-line py-2.5 text-[15px]"
+                className="flex justify-between border-line border-b py-2.5 text-[15px]"
               >
                 <dt className="text-ink-muted">{t.label}</dt>
                 <dd>{t.value}</dd>
@@ -135,18 +118,14 @@ export function FilmPage({
           <TitleCard eyebrow="Cast" title="主演" />
           <ul className="mx-auto mt-8 max-w-md space-y-2 text-[15px]">
             {film.castJson.slice(0, 10).map((member) => (
-              <li key={member.name} className="flex justify-between border-b border-line py-1.5">
+              <li key={member.name} className="flex justify-between border-line border-b py-1.5">
                 <span>
                   {member.zhName ?? member.name}
                   {member.zhName && (
-                    <span className="ml-2 font-display text-sm text-ink-muted">
-                      {member.name}
-                    </span>
+                    <span className="ml-2 font-display text-ink-muted text-sm">{member.name}</span>
                   )}
                 </span>
-                {member.character && (
-                  <span className="text-ink-muted">饰 {member.character}</span>
-                )}
+                {member.character && <span className="text-ink-muted">饰 {member.character}</span>}
               </li>
             ))}
           </ul>
@@ -159,12 +138,15 @@ export function FilmPage({
           <div className="mx-auto mt-8 max-w-md space-y-4">
             {watchByRegion.map(([region, links]) => (
               <div key={region}>
-                <p className="text-sm tracking-[0.2em] text-ink-muted">
+                <p className="text-ink-muted text-sm tracking-[0.2em]">
                   {REGION_LABELS[region] ?? region}
                 </p>
                 <ul className="mt-1 space-y-1">
                   {links.map((link) => (
-                    <li key={link.id} className="flex justify-between border-b border-line py-1.5 text-[15px]">
+                    <li
+                      key={link.id}
+                      className="flex justify-between border-line border-b py-1.5 text-[15px]"
+                    >
                       {link.url ? (
                         <a
                           href={link.url}
@@ -184,7 +166,7 @@ export function FilmPage({
               </div>
             ))}
           </div>
-          <p className="mx-auto mt-3 max-w-md text-xs text-ink-muted">
+          <p className="mx-auto mt-3 max-w-md text-ink-muted text-xs">
             观看渠道由编辑手工维护，可能随平台下架而失效。
           </p>
         </section>
@@ -198,15 +180,13 @@ export function FilmPage({
               <li key={list.id}>
                 <Link
                   href={`/list/${list.slug}`}
-                  className="group flex items-baseline justify-between border-b border-line py-2.5"
+                  className="group flex items-baseline justify-between border-line border-b py-2.5"
                 >
                   <span className="font-bold transition-colors group-hover:text-brand">
                     {list.title}
                   </span>
                   {list.theme && (
-                    <span className="ml-4 truncate text-sm text-ink-muted">
-                      {list.theme}
-                    </span>
+                    <span className="ml-4 truncate text-ink-muted text-sm">{list.theme}</span>
                   )}
                 </Link>
               </li>

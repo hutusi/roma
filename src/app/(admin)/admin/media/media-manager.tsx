@@ -207,7 +207,7 @@ export function MediaManager({
               <button
                 type="button"
                 disabled={pending}
-                className="text-xs text-ink-muted hover:text-destructive"
+                className="text-ink-muted text-xs hover:text-destructive"
                 onClick={() => {
                   if (!window.confirm("删除这张图片？文件也会被移除。")) return;
                   startTransition(async () => {
@@ -225,9 +225,7 @@ export function MediaManager({
             </div>
           </div>
         ))}
-        {rows.length === 0 && (
-          <p className="col-span-full text-sm text-ink-muted">媒体库为空。</p>
-        )}
+        {rows.length === 0 && <p className="col-span-full text-ink-muted text-sm">媒体库为空。</p>}
       </div>
     </div>
   );

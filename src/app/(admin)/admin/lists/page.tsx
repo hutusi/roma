@@ -1,8 +1,5 @@
-import Link from "next/link";
 import { asc } from "drizzle-orm";
-import { db } from "@/db";
-import { curatedLists } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { db } from "@/db";
+import { curatedLists } from "@/db/schema";
+import { requireEditor } from "@/lib/auth-guards";
 
 export const metadata = { title: "片单管理" };
 
@@ -26,7 +26,7 @@ export default async function AdminListsPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">片单</h1>
+        <h1 className="font-bold text-xl">片单</h1>
         <Button asChild>
           <Link href="/admin/lists/new">新建片单</Link>
         </Button>
@@ -45,15 +45,10 @@ export default async function AdminListsPage() {
           {rows.map((list) => (
             <TableRow key={list.id}>
               <TableCell>
-                <Link
-                  href={`/admin/lists/${list.id}`}
-                  className="font-medium hover:text-brand"
-                >
+                <Link href={`/admin/lists/${list.id}`} className="font-medium hover:text-brand">
                   {list.title}
                 </Link>
-                {list.theme && (
-                  <span className="ml-2 text-xs text-ink-muted">{list.theme}</span>
-                )}
+                {list.theme && <span className="ml-2 text-ink-muted text-xs">{list.theme}</span>}
               </TableCell>
               <TableCell>{list.items.length}</TableCell>
               <TableCell className="text-ink-muted">{list.sortOrder}</TableCell>

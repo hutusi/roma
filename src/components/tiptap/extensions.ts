@@ -1,5 +1,5 @@
-import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import StarterKit from "@tiptap/starter-kit";
 
 /**
  * THE shared contract between the admin editor and the public renderer.

@@ -1,0 +1,5 @@
+[test]
+# Playwright specs are not bun tests — executing them under `bun test`
+# throws. Requires Bun >= 1.3.11.
+pathIgnorePatterns = ["e2e/**"]
+preload = ["./test/setup.ts"]

@@ -1,21 +1,17 @@
+import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { asc, desc, eq } from "drizzle-orm";
+import { deleteList, publishList, unpublishList } from "@/actions/lists";
 import { db } from "@/db";
 import { curatedLists, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
-import { deleteList, publishList, unpublishList } from "@/actions/lists";
 import { PublishControls } from "../../films/publish-controls";
 import { ItemsPanel } from "../items-panel";
 import { ListForm } from "../list-form";
 
 export const metadata = { title: "编辑片单" };
 
-export default async function EditListPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditListPage({ params }: { params: Promise<{ id: string }> }) {
   await requireEditor();
   const { id } = await params;
   const list = await db.query.curatedLists.findFirst({
@@ -44,11 +40,11 @@ export default async function EditListPage({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">
+        <h1 className="font-bold text-xl">
           编辑片单 · {list.title}
           <Link
             href={`/admin/preview/list/${list.id}`}
-            className="ml-3 text-sm font-normal text-brand hover:underline"
+            className="ml-3 font-normal text-brand text-sm hover:underline"
           >
             预览
           </Link>

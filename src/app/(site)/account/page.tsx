@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { requireUser } from "@/lib/auth-guards";
 import { TitleCard } from "@/components/site/title-card";
+import { requireUser } from "@/lib/auth-guards";
 import { AccountForm } from "./account-form";
 
 export const dynamic = "force-dynamic";

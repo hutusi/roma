@@ -5,7 +5,7 @@ import { db } from "@/db";
 import { media, mediaKind } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { deleteImage, storeImage } from "@/lib/storage";
-import { fail, ok, type ActionResult } from "./result";
+import { type ActionResult, fail, ok } from "./result";
 
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // Vercel request-body ceiling is 4.5MB
 const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);

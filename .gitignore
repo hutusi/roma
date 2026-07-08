@@ -43,3 +43,8 @@ next-env.d.ts
 
 # local dev image uploads (Blob storage fallback)
 /public/uploads
+
+# e2e artifacts
+/e2e/.auth/
+/test-results/
+/playwright-report/

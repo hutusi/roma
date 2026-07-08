@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth-client";
 
 /**
  * Header auth entry. A client island using the client-side session so
@@ -23,10 +23,7 @@ export function AuthMenu() {
 
   if (!session) {
     return (
-      <Link
-        href="/sign-in"
-        className="text-sm tracking-[0.2em] transition-colors hover:text-brand"
-      >
+      <Link href="/sign-in" className="text-sm tracking-[0.2em] transition-colors hover:text-brand">
         登录
       </Link>
     );

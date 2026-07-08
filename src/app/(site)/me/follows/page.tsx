@@ -1,11 +1,11 @@
+import { desc, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { desc, eq } from "drizzle-orm";
+import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
 import { listFollows } from "@/db/schema";
 import { requireUser } from "@/lib/auth-guards";
-import { TitleCard } from "@/components/site/title-card";
 
 export const dynamic = "force-dynamic";
 
@@ -24,9 +24,7 @@ export default async function MyFollowsPage() {
     },
   });
 
-  const lists = follows
-    .map((f) => f.list)
-    .filter((list) => list.status === "published");
+  const lists = follows.map((f) => f.list).filter((list) => list.status === "published");
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
@@ -53,10 +51,8 @@ export default async function MyFollowsPage() {
               <h2 className="font-bold tracking-[0.1em] transition-colors group-hover:text-brand">
                 {list.title}
               </h2>
-              {list.theme && (
-                <p className="mt-1.5 text-sm text-ink-muted">{list.theme}</p>
-              )}
-              <p className="mt-2 font-display text-xs tracking-[0.3em] text-ink-muted">
+              {list.theme && <p className="mt-1.5 text-ink-muted text-sm">{list.theme}</p>}
+              <p className="mt-2 font-display text-ink-muted text-xs tracking-[0.3em]">
                 {list.items.length} FILMS
               </p>
             </div>
