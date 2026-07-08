@@ -38,6 +38,7 @@ test("beacon from elsewhere is stored but not is_china", async ({ request }) => 
     "select is_china, country from rum_events where path = $1 order by created_at desc limit 1",
     ["/e2e/rum-global"],
   );
+  expect(row).not.toBeNull();
   expect(row?.is_china).toBe(false);
   expect(row?.country).toBe("US");
 });
