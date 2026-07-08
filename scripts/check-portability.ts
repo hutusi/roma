@@ -13,8 +13,12 @@ import { fileURLToPath } from "node:url";
 
 const root = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const STORAGE_SEAM = "lib/storage.ts";
-// import ... from "@vercel/x"  or  require("@vercel/x")
-const VERCEL_IMPORT = /(?:from\s+|require\(\s*)["']@vercel\/[^"']+["']/;
+// Static `from "@vercel/x"`, `require("@vercel/x")`, and dynamic
+// `import("@vercel/x")`. A regex over source (not an AST) can be fooled
+// by a @vercel/* mention inside a comment/string, but that fails safe
+// (a false positive blocks CI, never a false pass) and keeps this guard
+// dependency-free.
+const VERCEL_IMPORT = /(?:from\s+|require\(\s*|import\(\s*)["']@vercel\/[^"']+["']/;
 
 const violations: string[] = [];
 
