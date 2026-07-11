@@ -24,7 +24,7 @@
  * The `--conditions=react-server` flag matches `db:seed:content`: it makes the
  * `server-only` import (reached transitively) resolve to its no-op variant.
  */
-import { and, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, eq, inArray, isNotNull, isNull, sql } from "drizzle-orm";
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import { db } from "./index";
 import { curatedListItems, curatedLists, directors, films } from "./schema";
@@ -100,6 +100,7 @@ async function main() {
     const cur = directorCur.get(d.slug);
     return cur && cur.statusEn === "draft" && cur.bioEn == null;
   });
+  const directorsMissing = directorSeeds.filter((d) => !directorCur.has(d.slug));
 
   // ── Lists: en-authored ⇔ titleEn present ────────────────────────────────
   const listSeeds = seedLists.filter((l) => l.titleEn);
@@ -123,6 +124,7 @@ async function main() {
     const cur = listCur.get(l.slug);
     return cur && cur.statusEn === "draft" && cur.titleEn == null;
   });
+  const listsMissing = listSeeds.filter((l) => !listCur.has(l.slug));
 
   // Resolve ids for the per-item reasoningEn backfill.
   const allListSlugs = seedLists.map((l) => l.slug);
@@ -153,21 +155,44 @@ async function main() {
       return listId && filmId ? [{ listId, filmId, reasoningEn: it.reasoningEn }] : [];
     }),
   );
+  // True pending count: exclude items whose reasoningEn is already set (like the
+  // film/director sections), so the dry-run report reflects DB state, not seed.
+  const listIds = [...listIdBySlug.values()];
+  const itemsFilled = new Set(
+    (listIds.length
+      ? await db
+          .select({ listId: curatedListItems.listId, filmId: curatedListItems.filmId })
+          .from(curatedListItems)
+          .where(
+            and(inArray(curatedListItems.listId, listIds), isNotNull(curatedListItems.reasoningEn)),
+          )
+      : []
+    ).map((r) => `${r.listId}:${r.filmId}`),
+  );
+  const itemsPending = itemBackfills.filter((it) => !itemsFilled.has(`${it.listId}:${it.filmId}`));
 
   // ── Report ──────────────────────────────────────────────────────────────
+  const missingSuffix = (n: number) => (n ? ` (⚠ ${n} slug(s) not found in DB)` : "");
   console.log(
-    `Films      — en-authored: ${filmSeeds.length}, to publish now: ${filmsPending.length}` +
-      (filmsMissing.length ? ` (⚠ ${filmsMissing.length} slug(s) not found in DB)` : ""),
+    `Films      — en-authored: ${filmSeeds.length}, to publish now: ${filmsPending.length}${missingSuffix(filmsMissing.length)}`,
   );
   console.log(
-    `Directors  — en-authored: ${directorSeeds.length}, to publish now: ${directorsPending.length}`,
+    `Directors  — en-authored: ${directorSeeds.length}, to publish now: ${directorsPending.length}${missingSuffix(directorsMissing.length)}`,
   );
   console.log(
-    `Lists      — en-authored: ${listSeeds.length}, to publish now: ${listsPending.length}`,
+    `Lists      — en-authored: ${listSeeds.length}, to publish now: ${listsPending.length}${missingSuffix(listsMissing.length)}`,
   );
-  console.log(`List items — reasoningEn to fill (guarded by NULL): ${itemBackfills.length}`);
+  console.log(
+    `List items — reasoningEn to fill: ${itemsPending.length} of ${itemBackfills.length}`,
+  );
   if (filmsMissing.length) {
     console.log(`  missing film slugs: ${filmsMissing.map(({ f }) => f.slug).join(", ")}`);
+  }
+  if (directorsMissing.length) {
+    console.log(`  missing director slugs: ${directorsMissing.map((d) => d.slug).join(", ")}`);
+  }
+  if (listsMissing.length) {
+    console.log(`  missing list slugs: ${listsMissing.map((l) => l.slug).join(", ")}`);
   }
 
   if (!APPLY) {
@@ -175,81 +200,87 @@ async function main() {
     process.exit(0);
   }
 
-  // ── Apply (guards make each statement idempotent) ───────────────────────
-  let films_ = 0;
-  for (const { f } of filmSeeds) {
-    const res = await db
-      .update(films)
-      .set({
-        editorialNoteEn: f.editorialNoteEn ?? null,
-        essayEn: f.essayEn ?? null,
-        statusEn: "published",
-        publishedEnAt: publishedEnAt(films.publishedAt),
-      })
-      .where(
-        and(eq(films.slug, f.slug), eq(films.statusEn, "draft"), isNull(films.editorialNoteEn)),
-      )
-      .returning({ slug: films.slug });
-    films_ += res.length;
-  }
+  // ── Apply: one transaction so a mid-run crash can't leave /en half-published.
+  //    Each guard (statusEn='draft' AND <enField> IS NULL) keeps it idempotent.
+  const applied = await db.transaction(async (tx) => {
+    let filmsN = 0;
+    for (const { f } of filmSeeds) {
+      const res = await tx
+        .update(films)
+        .set({
+          titleEn: f.titleEn ?? null,
+          editorialNoteEn: f.editorialNoteEn ?? null,
+          essayEn: f.essayEn ?? null,
+          statusEn: "published",
+          publishedEnAt: publishedEnAt(films.publishedAt),
+        })
+        .where(
+          and(eq(films.slug, f.slug), eq(films.statusEn, "draft"), isNull(films.editorialNoteEn)),
+        )
+        .returning({ slug: films.slug });
+      filmsN += res.length;
+    }
 
-  let directors_ = 0;
-  for (const d of directorSeeds) {
-    const res = await db
-      .update(directors)
-      .set({
-        bioEn: d.bioEn ?? null,
-        careerEssayEn: d.careerEssayEn ?? null,
-        statusEn: "published",
-        publishedEnAt: publishedEnAt(directors.publishedAt),
-      })
-      .where(
-        and(eq(directors.slug, d.slug), eq(directors.statusEn, "draft"), isNull(directors.bioEn)),
-      )
-      .returning({ slug: directors.slug });
-    directors_ += res.length;
-  }
+    let directorsN = 0;
+    for (const d of directorSeeds) {
+      const res = await tx
+        .update(directors)
+        .set({
+          bioEn: d.bioEn ?? null,
+          careerEssayEn: d.careerEssayEn ?? null,
+          statusEn: "published",
+          publishedEnAt: publishedEnAt(directors.publishedAt),
+        })
+        .where(
+          and(eq(directors.slug, d.slug), eq(directors.statusEn, "draft"), isNull(directors.bioEn)),
+        )
+        .returning({ slug: directors.slug });
+      directorsN += res.length;
+    }
 
-  let lists_ = 0;
-  for (const l of listSeeds) {
-    const res = await db
-      .update(curatedLists)
-      .set({
-        titleEn: l.titleEn ?? null,
-        themeEn: l.themeEn ?? null,
-        introEn: l.introEn ?? null,
-        statusEn: "published",
-        publishedEnAt: publishedEnAt(curatedLists.publishedAt),
-      })
-      .where(
-        and(
-          eq(curatedLists.slug, l.slug),
-          eq(curatedLists.statusEn, "draft"),
-          isNull(curatedLists.titleEn),
-        ),
-      )
-      .returning({ slug: curatedLists.slug });
-    lists_ += res.length;
-  }
+    let listsN = 0;
+    for (const l of listSeeds) {
+      const res = await tx
+        .update(curatedLists)
+        .set({
+          titleEn: l.titleEn ?? null,
+          themeEn: l.themeEn ?? null,
+          introEn: l.introEn ?? null,
+          statusEn: "published",
+          publishedEnAt: publishedEnAt(curatedLists.publishedAt),
+        })
+        .where(
+          and(
+            eq(curatedLists.slug, l.slug),
+            eq(curatedLists.statusEn, "draft"),
+            isNull(curatedLists.titleEn),
+          ),
+        )
+        .returning({ slug: curatedLists.slug });
+      listsN += res.length;
+    }
 
-  let items_ = 0;
-  for (const it of itemBackfills) {
-    const res = await db
-      .update(curatedListItems)
-      .set({ reasoningEn: it.reasoningEn })
-      .where(
-        and(
-          eq(curatedListItems.listId, it.listId),
-          eq(curatedListItems.filmId, it.filmId),
-          isNull(curatedListItems.reasoningEn),
-        ),
-      )
-      .returning({ id: curatedListItems.id });
-    items_ += res.length;
-  }
+    let itemsN = 0;
+    for (const it of itemBackfills) {
+      const res = await tx
+        .update(curatedListItems)
+        .set({ reasoningEn: it.reasoningEn })
+        .where(
+          and(
+            eq(curatedListItems.listId, it.listId),
+            eq(curatedListItems.filmId, it.filmId),
+            isNull(curatedListItems.reasoningEn),
+          ),
+        )
+        .returning({ id: curatedListItems.id });
+      itemsN += res.length;
+    }
+
+    return { filmsN, directorsN, listsN, itemsN };
+  });
 
   console.log(
-    `\nApplied — films:${films_} directors:${directors_} lists:${lists_} listItems:${items_}.`,
+    `\nApplied — films:${applied.filmsN} directors:${applied.directorsN} lists:${applied.listsN} listItems:${applied.itemsN}.`,
   );
   process.exit(0);
 }
