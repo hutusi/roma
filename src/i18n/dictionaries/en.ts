@@ -10,6 +10,7 @@ export const en = {
     tagline: "Babuban — a curatorial handbook for black-and-white cinema",
     aboutLink: "About",
   },
+  imageCredit: "Source: ",
   authMenu: {
     signIn: "Sign in",
     myPage: "My page",

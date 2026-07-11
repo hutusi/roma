@@ -75,7 +75,13 @@ export function FilmPage({
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       {hero && (
-        <AcademyFrame src={hero.url} alt={hero.alt ?? displayTitle} credit={hero.credit} priority />
+        <AcademyFrame
+          src={hero.url}
+          alt={hero.alt ?? displayTitle}
+          credit={hero.credit}
+          locale={locale}
+          priority
+        />
       )}
 
       <header className="mt-10 text-center">

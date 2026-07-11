@@ -15,6 +15,7 @@ export const zh = {
     tagline: "八部半 —— 献给黑白电影的策展手册",
     aboutLink: "关于本站",
   },
+  imageCredit: "图片来源：",
   authMenu: {
     signIn: "登录",
     myPage: "我的主页",

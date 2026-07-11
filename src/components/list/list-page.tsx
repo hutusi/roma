@@ -44,6 +44,7 @@ export function ListPage({
             src={list.cover.url}
             alt={list.cover.alt ?? title}
             credit={list.cover.credit}
+            locale={locale}
             priority
           />
         </div>

@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { getDict } from "@/i18n/dict";
+import type { Locale } from "@/i18n/locales";
 import { cn } from "@/lib/utils";
 
 /**
@@ -13,6 +15,7 @@ export function AcademyFrame({
   alt,
   caption,
   credit,
+  locale = "zh",
   sizes = "(min-width: 1024px) 896px, 100vw",
   priority = false,
   className,
@@ -21,6 +24,7 @@ export function AcademyFrame({
   alt: string;
   caption?: string;
   credit?: string | null;
+  locale?: Locale;
   sizes?: string;
   priority?: boolean;
   className?: string;
@@ -49,7 +53,12 @@ export function AcademyFrame({
       {(caption || credit) && (
         <figcaption className="mt-2 flex items-baseline justify-between gap-4 text-ink-muted text-xs">
           <span>{caption}</span>
-          {credit && <span className="shrink-0">图片来源：{credit}</span>}
+          {credit && (
+            <span className="shrink-0">
+              {getDict(locale).imageCredit}
+              {credit}
+            </span>
+          )}
         </figcaption>
       )}
     </figure>

@@ -48,6 +48,7 @@ export function DirectorPage({
             src={portrait.url}
             alt={portrait.alt ?? director.name}
             credit={portrait.credit}
+            locale={locale}
           />
         </div>
       )}
