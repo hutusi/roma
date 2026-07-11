@@ -72,9 +72,12 @@ export default async function AdminFilmsPage({
                 {film.filmDirectors.map((fd) => fd.director.nameZh ?? fd.director.name).join("、")}
               </TableCell>
               <TableCell>
-                <Badge variant={film.status === "published" ? "default" : "secondary"}>
-                  {film.status === "published" ? "已发布" : "草稿"}
-                </Badge>
+                <span className="flex gap-1.5">
+                  <Badge variant={film.status === "published" ? "default" : "secondary"}>
+                    {film.status === "published" ? "已发布" : "草稿"}
+                  </Badge>
+                  {film.statusEn === "published" && <Badge variant="outline">EN</Badge>}
+                </span>
               </TableCell>
               <TableCell className="text-ink-muted">
                 {film.updatedAt.toLocaleDateString("zh-CN")}

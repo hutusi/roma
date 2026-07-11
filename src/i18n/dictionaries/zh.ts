@@ -23,6 +23,38 @@ export const zh = {
     editorial: "编辑部",
     signOut: "退出登录",
   },
+  markButtons: {
+    signInPrompt: "登录后可标记「看过 / 想看」",
+    watched: "看过",
+    want: "想看",
+  },
+  film: {
+    directedBy: "导演：",
+    nameSeparator: "、",
+    runtime: (minutes: number) => `${minutes} 分钟`,
+    blackAndWhite: "黑白",
+    color: "彩色",
+    castAs: (character: string) => `饰 ${character}`,
+    editorialNote: "编辑札记",
+    titles: "译名",
+    cast: "主演",
+    watch: "哪里能看",
+    relatedLists: "相关片单",
+    titleLabels: {
+      mainland: "大陆",
+      hongkong: "香港",
+      taiwan: "台湾",
+      english: "英文",
+      original: "原名",
+    },
+    regions: {
+      CN: "大陆",
+      HK: "香港",
+      TW: "台湾",
+      INTL: "海外",
+    },
+    watchDisclaimer: "观看渠道由编辑手工维护，可能随平台下架而失效。",
+  },
 };
 
 export type Dictionary = typeof zh;

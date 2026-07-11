@@ -10,8 +10,7 @@ const baseURL = `http://localhost:${PORT}`;
 // a user-less URL would silently target prod credentials. CI passes an
 // explicit E2E_DATABASE_URL and never has the file.
 const TEST_DATABASE_URL =
-  process.env.E2E_DATABASE_URL ??
-  `postgres://${userInfo().username}@localhost:5432/roma_test`;
+  process.env.E2E_DATABASE_URL ?? `postgres://${userInfo().username}@localhost:5432/roma_test`;
 
 export default defineConfig({
   testDir: "./e2e",

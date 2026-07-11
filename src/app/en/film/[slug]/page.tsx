@@ -6,7 +6,7 @@ import { getPublishedFilmBySlug, getPublishedFilmSlugs } from "@/db/queries/publ
 import { getDict } from "@/i18n/dict";
 
 export async function generateStaticParams() {
-  const slugs = await getPublishedFilmSlugs();
+  const slugs = await getPublishedFilmSlugs("en");
   return slugs.map(({ slug }) => ({ slug }));
 }
 
@@ -16,22 +16,25 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const film = await getPublishedFilmBySlug(slug);
+  const film = await getPublishedFilmBySlug(slug, "en");
   if (!film) return {};
   return {
-    title: `${film.titleZh}（${film.year}）`,
-    description: film.editorialNote?.slice(0, 120) ?? film.titleOriginal,
+    title: `${film.titleEn ?? film.titleOriginal} (${film.year})`,
+    description: film.editorialNoteEn?.slice(0, 160) ?? film.titleOriginal,
   };
 }
 
-export default async function PublicFilmPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EnPublicFilmPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const film = await getPublishedFilmBySlug(slug);
+  const film = await getPublishedFilmBySlug(slug, "en");
   if (!film) notFound();
   return (
     <FilmPage
       film={film}
-      actions={<MarkButtons filmId={film.id} labels={getDict("zh").markButtons} />}
+      locale="en"
+      actions={
+        <MarkButtons filmId={film.id} labels={getDict("en").markButtons} signInHref="/en/sign-in" />
+      }
     />
   );
 }

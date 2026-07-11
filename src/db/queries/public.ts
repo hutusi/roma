@@ -2,17 +2,32 @@ import "server-only";
 import { and, arrayContains, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { db } from "@/db";
 import { curatedLists, directors, films, type media } from "@/db/schema";
+import type { Locale } from "@/i18n/locales";
 
 /**
  * Read layer for the public site and the admin draft preview. The
  * `*BySlug` functions only ever return published rows (public pages 404
  * on drafts); the `*ForPreview` functions fetch by id with no status
  * filter and sit behind requireEditor().
+ *
+ * The locale parameter carries the subset rule: en-visible ⇔ published
+ * in zh AND en (so /en can never show what zh doesn't), and it must be
+ * applied here — cached pages can't rely on request-time checks.
  */
 
-export async function getPublishedFilmBySlug(slug: string) {
+/** True when a row is visible in the given locale. Rows must carry both status columns. */
+function visibleIn(row: { status: string; statusEn: string }, locale: Locale): boolean {
+  return row.status === "published" && (locale !== "en" || row.statusEn === "published");
+}
+
+const filmStatusConds = (locale: Locale) =>
+  locale === "en"
+    ? [eq(films.status, "published"), eq(films.statusEn, "published")]
+    : [eq(films.status, "published")];
+
+export async function getPublishedFilmBySlug(slug: string, locale: Locale = "zh") {
   const film = await db.query.films.findFirst({
-    where: and(eq(films.slug, slug), eq(films.status, "published")),
+    where: and(eq(films.slug, slug), ...filmStatusConds(locale)),
     with: {
       filmDirectors: { with: { director: true } },
       watchLinks: true,
@@ -21,7 +36,7 @@ export async function getPublishedFilmBySlug(slug: string) {
     },
   });
   if (!film) return null;
-  return normalizeFilm(film);
+  return normalizeFilm(film, locale);
 }
 
 export async function getFilmForPreview(id: string) {
@@ -38,15 +53,16 @@ export async function getFilmForPreview(id: string) {
   return normalizeFilm(film);
 }
 
-function normalizeFilm(film: NonNullable<Awaited<ReturnType<typeof rawFilm>>>) {
+function normalizeFilm(
+  film: NonNullable<Awaited<ReturnType<typeof rawFilm>>>,
+  locale: Locale = "zh",
+) {
   return {
     ...film,
     filmDirectors: [...film.filmDirectors].sort((a, b) => a.position - b.position),
     watchLinks: [...film.watchLinks].sort((a, b) => a.sortOrder - b.sortOrder),
     media: [...film.media].sort((a, b) => a.sortOrder - b.sortOrder),
-    relatedLists: film.listItems
-      .map((item) => item.list)
-      .filter((list) => list.status === "published"),
+    relatedLists: film.listItems.map((item) => item.list).filter((list) => visibleIn(list, locale)),
   };
 }
 
@@ -64,8 +80,11 @@ async function rawFilm() {
 
 export type PublicFilm = NonNullable<Awaited<ReturnType<typeof getPublishedFilmBySlug>>>;
 
-export async function getPublishedFilms(filters?: { decade?: number; country?: string }) {
-  const conditions = [eq(films.status, "published")];
+export async function getPublishedFilms(
+  filters?: { decade?: number; country?: string },
+  locale: Locale = "zh",
+) {
+  const conditions = filmStatusConds(locale);
   if (filters?.decade) {
     conditions.push(gte(films.year, filters.decade));
     conditions.push(lte(films.year, filters.decade + 9));
@@ -85,8 +104,11 @@ export async function getPublishedFilms(filters?: { decade?: number; country?: s
 
 export type PublicFilmListItem = Awaited<ReturnType<typeof getPublishedFilms>>[number];
 
-export async function getPublishedFilmSlugs() {
-  return db.select({ slug: films.slug }).from(films).where(eq(films.status, "published"));
+export async function getPublishedFilmSlugs(locale: Locale = "zh") {
+  return db
+    .select({ slug: films.slug })
+    .from(films)
+    .where(and(...filmStatusConds(locale)));
 }
 
 export async function getPublishedDirectorBySlug(slug: string) {
@@ -214,12 +236,12 @@ export async function getPublishedListSlugs() {
     .where(eq(curatedLists.status, "published"));
 }
 
-export async function getHomeData() {
-  const [lists, recentFilms] = await Promise.all([
+export async function getHomeData(locale: Locale = "zh") {
+  const [allLists, recentFilms] = await Promise.all([
     getPublishedLists(),
     db.query.films.findMany({
-      where: eq(films.status, "published"),
-      orderBy: desc(films.publishedAt),
+      where: and(...filmStatusConds(locale)),
+      orderBy: desc(locale === "en" ? films.publishedEnAt : films.publishedAt),
       limit: 4,
       with: {
         filmDirectors: { with: { director: true } },
@@ -227,6 +249,7 @@ export async function getHomeData() {
       },
     }),
   ]);
+  const lists = allLists.filter((list) => visibleIn(list, locale));
   return {
     featured: lists[0] ?? null,
     lists: lists.slice(0, 4),

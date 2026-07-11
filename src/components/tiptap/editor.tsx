@@ -219,3 +219,14 @@ export function NoteCounter({ text }: { text: string }) {
     </p>
   );
 }
+
+/** English notes measure in words (see EDITORIAL_NOTE_EN_* in the validator). */
+export function NoteCounterEn({ text }: { text: string }) {
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  const inRange = words >= 120 && words <= 350;
+  return (
+    <p className={cn("text-right text-xs", inRange ? "text-ink-muted" : "text-destructive")}>
+      {words} / 120–350 词
+    </p>
+  );
+}

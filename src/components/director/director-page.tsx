@@ -77,11 +77,10 @@ export function DirectorPage({ director }: { director: PublicDirector }) {
               return (
                 <FilmCard
                   key={film.id}
-                  slug={film.slug}
-                  titleZh={film.titleZh}
-                  titleOriginal={film.titleOriginal}
+                  href={`/film/${film.slug}`}
+                  title={film.titleZh}
+                  subtitle={film.titleOriginal}
                   year={film.year}
-                  directors={[]}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
                 />

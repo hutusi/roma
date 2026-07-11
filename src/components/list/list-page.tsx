@@ -42,13 +42,13 @@ export function ListPage({ list, actions }: { list: PublicList; actions?: React.
                 <span className="h-px flex-1 bg-line" />
               </div>
               <FilmCard
-                slug={item.film.slug}
-                titleZh={item.film.titleZh}
-                titleOriginal={item.film.titleOriginal}
+                href={`/film/${item.film.slug}`}
+                title={item.film.titleZh}
+                subtitle={item.film.titleOriginal}
                 year={item.film.year}
-                directors={item.film.filmDirectors.map(
-                  (fd) => fd.director.nameZh ?? fd.director.name,
-                )}
+                directorsLabel={item.film.filmDirectors
+                  .map((fd) => fd.director.nameZh ?? fd.director.name)
+                  .join("、")}
                 imageUrl={poster?.url}
                 imageAlt={poster?.alt}
               />

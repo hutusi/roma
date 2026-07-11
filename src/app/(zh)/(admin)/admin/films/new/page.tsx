@@ -43,6 +43,8 @@ export default async function NewFilmPage() {
             isBlackAndWhite: true,
             editorialNote: "",
             essay: null,
+            editorialNoteEn: "",
+            essayEn: null,
             cast: [],
             watchLinks: [],
             directorIds: [],

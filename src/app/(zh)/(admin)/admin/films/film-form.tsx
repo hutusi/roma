@@ -7,7 +7,12 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { saveFilm } from "@/actions/films";
 import { importFromTmdb } from "@/actions/tmdb";
-import { type MediaOption, NoteCounter, TiptapEditor } from "@/components/tiptap/editor";
+import {
+  type MediaOption,
+  NoteCounter,
+  NoteCounterEn,
+  TiptapEditor,
+} from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,6 +68,7 @@ export function FilmForm({
   const castArray = useFieldArray({ control, name: "cast" });
   const linksArray = useFieldArray({ control, name: "watchLinks" });
   const note = watch("editorialNote") ?? "";
+  const noteEn = watch("editorialNoteEn") ?? "";
 
   const onSubmit = handleSubmit(
     async (values) => {
@@ -246,6 +252,33 @@ export function FilmForm({
         />
       </Section>
 
+      <Section title="英文版 · English Edition">
+        <p className="text-ink-muted text-xs">
+          发布英文版需要英文名与 120–350 词英文札记；英文页只显示英文内容，不回退中文。
+        </p>
+        <div className="space-y-1.5">
+          <Label htmlFor="editorialNoteEn">英文札记 · Editorial note</Label>
+          <Textarea id="editorialNoteEn" rows={8} {...register("editorialNoteEn")} />
+          <NoteCounterEn text={noteEn} />
+          {fieldError(errors.editorialNoteEn?.message)}
+        </div>
+        <div className="space-y-1.5">
+          <Label>英文长文（可选）· Essay</Label>
+          <Controller
+            control={control}
+            name="essayEn"
+            render={({ field }) => (
+              <TiptapEditor
+                value={field.value as Record<string, unknown> | null}
+                onChange={field.onChange}
+                media={media}
+                placeholder="More to say about this film…"
+              />
+            )}
+          />
+        </div>
+      </Section>
+
       <Section title="演员表">
         {castArray.fields.map((field, i) => (
           <div key={field.id}>
@@ -272,7 +305,7 @@ export function FilmForm({
       <Section title="哪里能看">
         {linksArray.fields.map((field, i) => (
           <div key={field.id}>
-            <div className="grid grid-cols-[1fr_auto_2fr_1fr_auto] gap-2">
+            <div className="grid grid-cols-[1fr_auto_2fr_1fr_1fr_auto] gap-2">
               <Input placeholder="平台" {...register(`watchLinks.${i}.platform`)} />
               <select
                 className="h-9 border border-input bg-transparent px-2 text-sm"
@@ -286,6 +319,7 @@ export function FilmForm({
               </select>
               <Input placeholder="链接（可选）" {...register(`watchLinks.${i}.url`)} />
               <Input placeholder="备注" {...register(`watchLinks.${i}.note`)} />
+              <Input placeholder="英文备注" {...register(`watchLinks.${i}.noteEn`)} />
               <Button type="button" variant="ghost" onClick={() => linksArray.remove(i)}>
                 删除
               </Button>
@@ -298,7 +332,9 @@ export function FilmForm({
         <Button
           type="button"
           variant="outline"
-          onClick={() => linksArray.append({ platform: "", region: "CN", url: "", note: "" })}
+          onClick={() =>
+            linksArray.append({ platform: "", region: "CN", url: "", note: "", noteEn: "" })
+          }
         >
           添加观看渠道
         </Button>

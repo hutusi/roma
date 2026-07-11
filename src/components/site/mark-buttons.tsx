@@ -3,15 +3,25 @@
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { setMark } from "@/actions/marks";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { cn } from "@/lib/utils";
 
 type MarkStatus = "watched" | "want" | null;
 
 /**
  * Client island on the (SSG-cached) film page: fetches its own state so
- * cached HTML stays user-free.
+ * cached HTML stays user-free. Labels arrive as props — dictionaries
+ * are server-only.
  */
-export function MarkButtons({ filmId }: { filmId: string }) {
+export function MarkButtons({
+  filmId,
+  labels,
+  signInHref = "/sign-in",
+}: {
+  filmId: string;
+  labels: Dictionary["markButtons"];
+  signInHref?: string;
+}) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [mark, setMarkState] = useState<MarkStatus>(null);
   const [pending, startTransition] = useTransition();
@@ -38,10 +48,10 @@ export function MarkButtons({ filmId }: { filmId: string }) {
   if (!signedIn) {
     return (
       <Link
-        href="/sign-in"
+        href={signInHref}
         className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
       >
-        登录后可标记「看过 / 想看」
+        {labels.signInPrompt}
       </Link>
     );
   }
@@ -72,7 +82,7 @@ export function MarkButtons({ filmId }: { filmId: string }) {
         className={buttonClass(mark === "watched")}
         onClick={() => toggle("watched")}
       >
-        看过
+        {labels.watched}
       </button>
       <button
         type="button"
@@ -80,7 +90,7 @@ export function MarkButtons({ filmId }: { filmId: string }) {
         className={buttonClass(mark === "want")}
         onClick={() => toggle("want")}
       >
-        想看
+        {labels.want}
       </button>
     </div>
   );

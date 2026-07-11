@@ -80,11 +80,13 @@ export default async function HomePage() {
               return (
                 <FilmCard
                   key={film.id}
-                  slug={film.slug}
-                  titleZh={film.titleZh}
-                  titleOriginal={film.titleOriginal}
+                  href={`/film/${film.slug}`}
+                  title={film.titleZh}
+                  subtitle={film.titleOriginal}
                   year={film.year}
-                  directors={film.filmDirectors.map((fd) => fd.director.nameZh ?? fd.director.name)}
+                  directorsLabel={film.filmDirectors
+                    .map((fd) => fd.director.nameZh ?? fd.director.name)
+                    .join("、")}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
                 />

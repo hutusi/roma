@@ -2,7 +2,13 @@ import { asc, desc, eq } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { deleteFilm, publishFilm, unpublishFilm } from "@/actions/films";
+import {
+  deleteFilm,
+  publishFilm,
+  publishFilmEn,
+  unpublishFilm,
+  unpublishFilmEn,
+} from "@/actions/films";
 import { db } from "@/db";
 import { directors, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -47,15 +53,29 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
           >
             预览
           </Link>
+          <Link
+            href={`/admin/preview/film/${film.id}?locale=en`}
+            className="ml-2 font-normal text-brand text-sm hover:underline"
+          >
+            EN 预览
+          </Link>
         </h1>
-        <PublishControls
-          status={film.status}
-          onPublish={publishFilm.bind(null, film.id)}
-          onUnpublish={unpublishFilm.bind(null, film.id)}
-          onDelete={deleteFilm.bind(null, film.id)}
-          deleteConfirmText={`确定删除《${film.titleZh}》？该操作不可撤销。`}
-          afterDeleteHref="/admin/films"
-        />
+        <div className="flex items-center gap-6">
+          <PublishControls
+            status={film.status}
+            onPublish={publishFilm.bind(null, film.id)}
+            onUnpublish={unpublishFilm.bind(null, film.id)}
+            onDelete={deleteFilm.bind(null, film.id)}
+            deleteConfirmText={`确定删除《${film.titleZh}》？该操作不可撤销。`}
+            afterDeleteHref="/admin/films"
+          />
+          <PublishControls
+            status={film.statusEn}
+            label="英文版"
+            onPublish={publishFilmEn.bind(null, film.id)}
+            onUnpublish={unpublishFilmEn.bind(null, film.id)}
+          />
+        </div>
       </div>
 
       {film.media.length > 0 && (
@@ -93,12 +113,15 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             isBlackAndWhite: film.isBlackAndWhite,
             editorialNote: film.editorialNote ?? "",
             essay: film.essay ?? null,
+            editorialNoteEn: film.editorialNoteEn ?? "",
+            essayEn: film.essayEn ?? null,
             cast: film.castJson ?? [],
             watchLinks: film.watchLinks.map((l) => ({
               platform: l.platform,
               region: l.region as "CN" | "HK" | "TW" | "INTL",
               url: l.url ?? "",
               note: l.note ?? "",
+              noteEn: l.noteEn ?? "",
             })),
             directorIds: film.filmDirectors
               .sort((a, b) => a.position - b.position)

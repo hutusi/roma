@@ -1,12 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
+import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
+import { TitleCard } from "@/components/site/title-card";
+import { getHomeData, posterOf } from "@/db/queries/public";
 
 /**
- * English home. Data sections (featured list, recent films) arrive with
- * the locale-parametrized queries; until entities carry published
- * English editions the subset is empty by definition.
+ * English home — same shape as the zh home, over the en-published
+ * subset. Sections render only when the subset has content, so the
+ * page degrades gracefully while translations roll out.
  */
-export default function EnHomePage() {
+export default async function EnHomePage() {
+  const { featured, lists, recentFilms } = await getHomeData("en");
+
   return (
     <div className="animate-fade-up">
       <section className="relative overflow-hidden border-line border-b bg-paper">
@@ -29,11 +35,76 @@ export default function EnHomePage() {
         </div>
       </section>
 
+      {featured && (
+        <section className="mx-auto max-w-3xl px-6 pt-20">
+          <TitleCard title="Featured List" />
+          <Link
+            href={`/en/list/${featured.slug}`}
+            className="group mt-8 block border border-line bg-card transition-colors hover:border-brand"
+          >
+            {featured.cover && (
+              <div className="relative aspect-[137/60] overflow-hidden bg-ink">
+                <Image
+                  src={featured.cover.url}
+                  alt={featured.cover.alt ?? featured.titleEn ?? featured.title}
+                  fill
+                  sizes="(min-width: 768px) 768px, 100vw"
+                  className="object-cover grayscale transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </div>
+            )}
+            <div className="p-6 text-center">
+              <h2 className="font-bold text-xl tracking-[0.1em] transition-colors group-hover:text-brand">
+                {featured.titleEn ?? featured.title}
+              </h2>
+              {featured.themeEn && (
+                <p className="mt-2 text-ink-muted text-sm">{featured.themeEn}</p>
+              )}
+              <p className="mt-3 font-display text-ink-muted text-xs tracking-[0.3em]">
+                {featured.items.length} FILMS
+              </p>
+            </div>
+          </Link>
+          {lists.length > 1 && (
+            <p className="mt-4 text-center">
+              <Link
+                href="/en/lists"
+                className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
+              >
+                All lists →
+              </Link>
+            </p>
+          )}
+        </section>
+      )}
+
       <section className="mx-auto max-w-3xl px-6 pt-20 pb-4">
-        <p className="mx-auto max-w-2xl text-center text-ink-muted leading-[1.9]">
-          The first English editions are being written. Inclusion is the recommendation — this is
-          not a database.
-        </p>
+        <TitleCard title="Recently Curated" />
+        {recentFilms.length > 0 ? (
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {recentFilms.map((film) => {
+              const poster = posterOf(film.media);
+              const title = film.titleEn ?? film.titleOriginal;
+              return (
+                <FilmCard
+                  key={film.id}
+                  href={`/en/film/${film.slug}`}
+                  title={title}
+                  subtitle={film.titleOriginal !== title ? film.titleOriginal : null}
+                  year={film.year}
+                  directorsLabel={film.filmDirectors.map((fd) => fd.director.name).join(", ")}
+                  imageUrl={poster?.url}
+                  imageAlt={poster?.alt}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <p className="mx-auto mt-8 max-w-2xl text-center text-ink-muted leading-[1.9]">
+            The first English editions are being written. Inclusion is the recommendation — this is
+            not a database.
+          </p>
+        )}
       </section>
     </div>
   );
