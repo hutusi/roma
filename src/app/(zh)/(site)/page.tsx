@@ -8,7 +8,7 @@ import { getHomeData, posterOf } from "@/db/queries/public";
 import { languageAlternates } from "@/i18n/alternates";
 
 export const metadata: Metadata = {
-  alternates: { languages: languageAlternates("/") },
+  alternates: { languages: languageAlternates("/", { en: true }) },
 };
 
 export default async function HomePage() {

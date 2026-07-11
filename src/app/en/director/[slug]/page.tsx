@@ -20,7 +20,7 @@ export async function generateMetadata({
   return {
     title: director.name,
     description: director.bioEn?.slice(0, 160) ?? director.name,
-    alternates: { languages: languageAlternates(`/director/${slug}`) },
+    alternates: { languages: languageAlternates(`/director/${slug}`, { en: true }) },
   };
 }
 

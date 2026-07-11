@@ -7,7 +7,7 @@ import { languageAlternates } from "@/i18n/alternates";
 export const metadata: Metadata = {
   title: "影片",
   description: "八部半收录的全部影片——收录即推荐。",
-  alternates: { languages: languageAlternates("/films") },
+  alternates: { languages: languageAlternates("/films", { en: true }) },
 };
 
 const DECADES = [1920, 1930, 1940, 1950, 1960, 1970, 1980];

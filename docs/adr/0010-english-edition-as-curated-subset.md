@@ -21,4 +21,4 @@ The product is a Chinese-language curatorial site (ADR 0002's audience), but we 
 - Every new public route must be added to both trees; every article carries an optional-but-forever English translation cost. This is the accepted price of a real English audience.
 - Static page count roughly doubles as translations land (trivial at this scale).
 - Users have no stored locale preference yet; the reset email is bilingual. Recorded follow-up if English readership materializes: per-user locale, localized transactional email, an English RSS feed.
-- User areas (`/u`, `/me`, `/account`) and the admin stay zh-only in v1.
+- User areas (`/u`, `/me`, `/account`), the invite flow (`/invite/[token]` — invitations come from the zh editorial team), and the admin stay zh-only in v1.

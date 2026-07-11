@@ -51,7 +51,8 @@ export function FilmCard({
       <div className="min-w-0 self-center">
         <p className="font-bold transition-colors group-hover:text-brand">{title}</p>
         <p className="mt-0.5 truncate font-display text-ink-muted text-sm">
-          {subtitle ? `${subtitle} · ${year}` : year}
+          {/* Dedupe here so no caller can render the title twice. */}
+          {subtitle && subtitle !== title ? `${subtitle} · ${year}` : year}
         </p>
         {directorsLabel && <p className="mt-1 text-ink-muted text-sm">{directorsLabel}</p>}
       </div>

@@ -8,7 +8,7 @@ import { languageAlternates } from "@/i18n/alternates";
 export const metadata: Metadata = {
   title: "Lists",
   description: "Babuban's curated lists: a theme, an introduction, films in a deliberate order.",
-  alternates: { languages: languageAlternates("/lists") },
+  alternates: { languages: languageAlternates("/lists", { en: true }) },
 };
 
 export default async function EnListsIndexPage() {

@@ -22,7 +22,7 @@ export async function generateMetadata({
   return {
     title: list.titleEn ?? list.title,
     description: list.themeEn ?? `${list.items.length} films`,
-    alternates: { languages: languageAlternates(`/list/${slug}`) },
+    alternates: { languages: languageAlternates(`/list/${slug}`, { en: true }) },
   };
 }
 

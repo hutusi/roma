@@ -37,13 +37,18 @@ export function ForgotPasswordForm({
           e.preventDefault();
           const form = new FormData(e.currentTarget);
           setPending(true);
-          await authClient.requestPasswordReset({
-            email: String(form.get("email")),
-            redirectTo: localePath(locale, "/reset-password"),
-          });
-          setPending(false);
-          // Always report success — don't reveal which emails exist.
-          setSent(true);
+          try {
+            await authClient.requestPasswordReset({
+              email: String(form.get("email")),
+              redirectTo: localePath(locale, "/reset-password"),
+            });
+          } catch {
+            // Swallow: reporting a failure would reveal which emails exist.
+          } finally {
+            setPending(false);
+            // Always report success — same reason.
+            setSent(true);
+          }
         }}
       >
         <div className="space-y-2">

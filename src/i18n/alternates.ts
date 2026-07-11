@@ -7,7 +7,7 @@ import { localePath } from "./locales";
  * worse than none. Paths are relative: metadata composes them with
  * metadataBase, and the sitemap prefixes SITE_URL itself.
  */
-export function languageAlternates(path: string, options: { en: boolean } = { en: true }) {
+export function languageAlternates(path: string, options: { en: boolean }) {
   return {
     "zh-CN": path,
     ...(options.en ? { en: localePath("en", path) } : {}),

@@ -71,7 +71,7 @@ export function PublishControls({
           disabled={pending}
           className="text-destructive hover:text-destructive"
           onClick={() => {
-            if (!window.confirm(deleteConfirmText)) return;
+            if (!window.confirm(deleteConfirmText ?? "确定删除？该操作不可撤销。")) return;
             startTransition(async () => {
               const result = await onDelete();
               if (!result.ok) {

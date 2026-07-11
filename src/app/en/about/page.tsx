@@ -5,7 +5,7 @@ import { languageAlternates } from "@/i18n/alternates";
 export const metadata: Metadata = {
   title: "About",
   description: "What Babuban is, and why it exists.",
-  alternates: { languages: languageAlternates("/about") },
+  alternates: { languages: languageAlternates("/about", { en: true }) },
 };
 
 export default function EnAboutPage() {

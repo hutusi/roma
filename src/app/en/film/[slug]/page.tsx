@@ -22,7 +22,7 @@ export async function generateMetadata({
   return {
     title: `${film.titleEn ?? film.titleOriginal} (${film.year})`,
     description: film.editorialNoteEn?.slice(0, 160) ?? film.titleOriginal,
-    alternates: { languages: languageAlternates(`/film/${slug}`) },
+    alternates: { languages: languageAlternates(`/film/${slug}`, { en: true }) },
   };
 }
 

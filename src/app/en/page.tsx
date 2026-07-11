@@ -13,7 +13,7 @@ import { languageAlternates } from "@/i18n/alternates";
  * page degrades gracefully while translations roll out.
  */
 export const metadata: Metadata = {
-  alternates: { languages: languageAlternates("/") },
+  alternates: { languages: languageAlternates("/", { en: true }) },
 };
 
 export default async function EnHomePage() {

@@ -8,7 +8,7 @@ import { languageAlternates } from "@/i18n/alternates";
 export const metadata: Metadata = {
   title: "片单",
   description: "八部半的策展片单：一个主题、一篇引言、一组按顺序排列的电影。",
-  alternates: { languages: languageAlternates("/lists") },
+  alternates: { languages: languageAlternates("/lists", { en: true }) },
 };
 
 export default async function ListsIndexPage() {
