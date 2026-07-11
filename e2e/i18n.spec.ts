@@ -14,6 +14,21 @@ test("en film page renders the English edition with lang=en", async ({ page }) =
   await expect(page.getByText("编辑札记")).toHaveCount(0);
 });
 
+test("image-credit caption is localized (no zh 图片来源 on /en)", async ({ page }) => {
+  // zh keeps the Chinese caption…
+  await page.goto("/film/otto-e-mezzo");
+  await expect(page.getByText("图片来源")).toBeVisible();
+
+  // …and /en shows the English one, never the zh label.
+  await page.goto("/en/film/otto-e-mezzo");
+  await expect(page.getByText("图片来源")).toHaveCount(0);
+  await expect(page.getByText("Source: TMDB")).toBeVisible();
+
+  // The director page shares AcademyFrame — verify the fix there too.
+  await page.goto("/en/director/federico-fellini");
+  await expect(page.getByText("图片来源")).toHaveCount(0);
+});
+
 test("subset rule: zh-only film 404s on /en but stays live on zh", async ({ page }) => {
   const en = await page.goto("/en/film/la-strada");
   expect(en?.status()).toBe(404);
@@ -105,4 +120,32 @@ test("en auth pages render in English", async ({ page }) => {
   await page.goto("/en/sign-in");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});
+
+test("en about page renders in English", async ({ page }) => {
+  const response = await page.goto("/en/about");
+  expect(response?.status()).toBe(200);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.getByRole("heading", { name: "About Babuban" })).toBeVisible();
+});
+
+test("unknown /en path 404s with the styled en page", async ({ page }) => {
+  const response = await page.goto("/en/does-not-exist");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByText("Lost to time")).toBeVisible();
+});
+
+test("x-default hreflang points at the zh root", async ({ page }) => {
+  await page.goto("/film/otto-e-mezzo");
+  await expect(
+    page.locator('link[rel="alternate"][hreflang="x-default"][href$="/film/otto-e-mezzo"]'),
+  ).toHaveCount(1);
+});
+
+test("en pages carry an English OG alt, not the zh root one", async ({ page }) => {
+  await page.goto("/en");
+  const alt = await page.locator('meta[property="og:image:alt"]').first().getAttribute("content");
+  expect(alt).toBeTruthy();
+  expect(alt).not.toContain("经典电影策展"); // the zh root alt
+  expect(alt).toContain("Babuban");
 });

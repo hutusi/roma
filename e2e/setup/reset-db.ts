@@ -40,8 +40,16 @@ if (migrate.status !== 0) process.exit(migrate.status ?? 1);
 // Import lazily — src/db builds its pool from env at import time, and the
 // database has to exist first.
 const { db } = await import("@/db");
-const { curatedListItems, curatedLists, directors, filmDirectors, films, filmWatchLinks, users } =
-  await import("@/db/schema");
+const {
+  curatedListItems,
+  curatedLists,
+  directors,
+  filmDirectors,
+  films,
+  filmWatchLinks,
+  media,
+  users,
+} = await import("@/db/schema");
 const { auth } = await import("@/lib/auth");
 const { eq } = await import("drizzle-orm");
 
@@ -178,6 +186,31 @@ await db.insert(filmWatchLinks).values({
   url: "https://www.criterionchannel.com/",
   sortOrder: 0,
 });
+
+// Credited images so the image-credit caption renders — it's the only
+// shared string that used to leak zh onto /en. Host must match
+// next.config remotePatterns; the URL need not resolve (Next emits the
+// <img> + figcaption at prerender without fetching).
+await db.insert(media).values([
+  {
+    url: "https://test.public.blob.vercel-storage.com/otto-still.jpg",
+    pathname: "seed/otto-still.jpg",
+    alt: "8½ still",
+    credit: "TMDB",
+    kind: "still",
+    filmId: bySlug["otto-e-mezzo"].id,
+    sortOrder: 0,
+  },
+  {
+    url: "https://test.public.blob.vercel-storage.com/fellini-portrait.jpg",
+    pathname: "seed/fellini-portrait.jpg",
+    alt: "Federico Fellini",
+    credit: "TMDB",
+    kind: "portrait",
+    directorId: fellini.id,
+    sortOrder: 0,
+  },
+]);
 
 const [primer] = await db
   .insert(curatedLists)
