@@ -27,6 +27,8 @@ export default async function NewDirectorPage() {
             nameZh: "",
             bio: "",
             careerEssay: null,
+            bioEn: "",
+            careerEssayEn: null,
           }}
         />
       </div>

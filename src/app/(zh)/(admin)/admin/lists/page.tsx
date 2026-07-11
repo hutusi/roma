@@ -53,9 +53,12 @@ export default async function AdminListsPage() {
               <TableCell>{list.items.length}</TableCell>
               <TableCell className="text-ink-muted">{list.sortOrder}</TableCell>
               <TableCell>
-                <Badge variant={list.status === "published" ? "default" : "secondary"}>
-                  {list.status === "published" ? "已发布" : "草稿"}
-                </Badge>
+                <span className="flex gap-1.5">
+                  <Badge variant={list.status === "published" ? "default" : "secondary"}>
+                    {list.status === "published" ? "已发布" : "草稿"}
+                  </Badge>
+                  {list.statusEn === "published" && <Badge variant="outline">EN</Badge>}
+                </span>
               </TableCell>
               <TableCell className="text-ink-muted">
                 {list.updatedAt.toLocaleDateString("zh-CN")}

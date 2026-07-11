@@ -51,9 +51,12 @@ export default async function AdminDirectorsPage() {
               </TableCell>
               <TableCell className="text-ink-muted">{d.slug}</TableCell>
               <TableCell>
-                <Badge variant={d.status === "published" ? "default" : "secondary"}>
-                  {d.status === "published" ? "已发布" : "草稿"}
-                </Badge>
+                <span className="flex gap-1.5">
+                  <Badge variant={d.status === "published" ? "default" : "secondary"}>
+                    {d.status === "published" ? "已发布" : "草稿"}
+                  </Badge>
+                  {d.statusEn === "published" && <Badge variant="outline">EN</Badge>}
+                </span>
               </TableCell>
               <TableCell className="text-ink-muted">
                 {d.updatedAt.toLocaleDateString("zh-CN")}

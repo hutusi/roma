@@ -1,7 +1,13 @@
 import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { deleteDirector, publishDirector, unpublishDirector } from "@/actions/directors";
+import {
+  deleteDirector,
+  publishDirector,
+  publishDirectorEn,
+  unpublishDirector,
+  unpublishDirectorEn,
+} from "@/actions/directors";
 import { db } from "@/db";
 import { directors, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -47,15 +53,29 @@ export default async function EditDirectorPage({ params }: { params: Promise<{ i
           >
             预览
           </Link>
+          <Link
+            href={`/admin/preview/director/${director.id}?locale=en`}
+            className="ml-2 font-normal text-brand text-sm hover:underline"
+          >
+            EN 预览
+          </Link>
         </h1>
-        <PublishControls
-          status={director.status}
-          onPublish={publishDirector.bind(null, director.id)}
-          onUnpublish={unpublishDirector.bind(null, director.id)}
-          onDelete={deleteDirector.bind(null, director.id)}
-          deleteConfirmText={`确定删除「${director.nameZh ?? director.name}」？该操作不可撤销。`}
-          afterDeleteHref="/admin/directors"
-        />
+        <div className="flex items-center gap-6">
+          <PublishControls
+            status={director.status}
+            onPublish={publishDirector.bind(null, director.id)}
+            onUnpublish={unpublishDirector.bind(null, director.id)}
+            onDelete={deleteDirector.bind(null, director.id)}
+            deleteConfirmText={`确定删除「${director.nameZh ?? director.name}」？该操作不可撤销。`}
+            afterDeleteHref="/admin/directors"
+          />
+          <PublishControls
+            status={director.statusEn}
+            label="英文版"
+            onPublish={publishDirectorEn.bind(null, director.id)}
+            onUnpublish={unpublishDirectorEn.bind(null, director.id)}
+          />
+        </div>
       </div>
       <div className="mt-6">
         <DirectorForm
@@ -67,6 +87,8 @@ export default async function EditDirectorPage({ params }: { params: Promise<{ i
             nameZh: director.nameZh ?? "",
             bio: director.bio ?? "",
             careerEssay: director.careerEssay ?? null,
+            bioEn: director.bioEn ?? "",
+            careerEssayEn: director.careerEssayEn ?? null,
           }}
         />
       </div>
@@ -79,6 +101,7 @@ export default async function EditDirectorPage({ params }: { params: Promise<{ i
           title: item.film.titleZh,
           year: item.film.year,
           note: item.note ?? "",
+          noteEn: item.noteEn ?? "",
         }))}
       />
     </div>

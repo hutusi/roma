@@ -84,6 +84,29 @@ export function DirectorForm({
           )}
         />
       </div>
+      <section className="space-y-5 border-line border-t pt-5">
+        <h2 className="font-bold">英文版 · English Edition</h2>
+        <p className="text-ink-muted text-xs">发布英文版需要英文简介；英文页只显示英文内容。</p>
+        <div className="space-y-1.5">
+          <Label htmlFor="bioEn">英文简介 · Bio</Label>
+          <Textarea id="bioEn" rows={4} {...register("bioEn")} />
+        </div>
+        <div className="space-y-1.5">
+          <Label>英文创作历程（可选）· Career essay</Label>
+          <Controller
+            control={control}
+            name="careerEssayEn"
+            render={({ field }) => (
+              <TiptapEditor
+                value={field.value as Record<string, unknown> | null}
+                onChange={field.onChange}
+                media={media}
+                placeholder="Starting from the early work…"
+              />
+            )}
+          />
+        </div>
+      </section>
       <Button type="submit" disabled={submitting} className="tracking-[0.2em]">
         {submitting ? "保存中…" : "保存"}
       </Button>

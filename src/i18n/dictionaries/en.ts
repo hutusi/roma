@@ -23,6 +23,11 @@ export const en = {
     watched: "Watched",
     want: "Want to see",
   },
+  followButton: {
+    signInPrompt: "Sign in to follow this list",
+    follow: "Follow list",
+    following: "Following",
+  },
   film: {
     directedBy: "Directed by ",
     nameSeparator: ", ",
@@ -50,5 +55,10 @@ export const en = {
     },
     watchDisclaimer:
       "Where-to-watch links are maintained by hand and may lapse as platforms change.",
+  },
+  director: {
+    career: "Career",
+    suggestedOrder: "Suggested Viewing Order",
+    films: "Films",
   },
 } satisfies Dictionary;

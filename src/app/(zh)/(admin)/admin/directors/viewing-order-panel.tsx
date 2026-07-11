@@ -13,6 +13,7 @@ export type ViewingItem = {
   title: string;
   year: number;
   note: string;
+  noteEn: string;
 };
 
 export type FilmOption = { id: string; title: string; year: number };
@@ -46,7 +47,11 @@ export function ViewingOrderPanel({
     startTransition(async () => {
       const result = await setViewingOrder(
         directorId,
-        items.map(({ filmId, note }) => ({ filmId, note: note || undefined })),
+        items.map(({ filmId, note, noteEn }) => ({
+          filmId,
+          note: note || undefined,
+          noteEn: noteEn || undefined,
+        })),
       );
       if (!result.ok) {
         toast.error(result.error);
@@ -93,6 +98,7 @@ export function ViewingOrderPanel({
                 title: film.title,
                 year: film.year,
                 note: "",
+                noteEn: "",
               },
             ]);
             setSelectedFilm("");
@@ -119,6 +125,16 @@ export function ViewingOrderPanel({
                 onChange={(e) =>
                   update(
                     items.map((it) => (it.id === item.id ? { ...it, note: e.target.value } : it)),
+                  )
+                }
+                className="h-8 flex-1"
+              />
+              <Input
+                placeholder="英文备注"
+                value={item.noteEn}
+                onChange={(e) =>
+                  update(
+                    items.map((it) => (it.id === item.id ? { ...it, noteEn: e.target.value } : it)),
                   )
                 }
                 className="h-8 flex-1"

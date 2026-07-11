@@ -28,6 +28,11 @@ export const zh = {
     watched: "看过",
     want: "想看",
   },
+  followButton: {
+    signInPrompt: "登录后可关注片单",
+    follow: "关注片单",
+    following: "已关注",
+  },
   film: {
     directedBy: "导演：",
     nameSeparator: "、",
@@ -54,6 +59,11 @@ export const zh = {
       INTL: "海外",
     },
     watchDisclaimer: "观看渠道由编辑手工维护，可能随平台下架而失效。",
+  },
+  director: {
+    career: "创作历程",
+    suggestedOrder: "建议观看顺序",
+    films: "收录影片",
   },
 };
 

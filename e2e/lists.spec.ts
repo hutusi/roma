@@ -44,9 +44,15 @@ test("keyboard drag-reorder persists across reload", async ({ page }) => {
 test("per-film reasoning saves from the expanded row", async ({ page }) => {
   await page.goto(`/admin/lists/${await primerId()}`);
   await page.getByText("缺入选理由").first().click();
-  await page.locator('[contenteditable="true"]').last().click();
+  // The expanded row holds a zh and an en editor — pick the zh one by
+  // its (still-empty) placeholder.
+  await page
+    .locator('[contenteditable="true"]', {
+      has: page.locator('[data-placeholder*="这部影片为什么在这份片单里"]'),
+    })
+    .click();
   await page.keyboard.type("入选理由：从这里能看到转折。");
-  await page.getByRole("button", { name: "保存理由" }).click();
+  await page.getByRole("button", { name: "保存理由", exact: true }).click();
   await expect(page.locator("[data-sonner-toast]", { hasText: "入选理由已保存" })).toBeVisible();
 });
 

@@ -21,7 +21,16 @@ export default async function NewListPage() {
         <ListForm
           listId={null}
           media={mediaRows}
-          defaultValues={{ slug: "", title: "", theme: "", intro: null, sortOrder: 0 }}
+          defaultValues={{
+            slug: "",
+            title: "",
+            theme: "",
+            intro: null,
+            titleEn: "",
+            themeEn: "",
+            introEn: null,
+            sortOrder: 0,
+          }}
         />
       </div>
     </div>

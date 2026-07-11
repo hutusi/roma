@@ -83,6 +83,37 @@ export function ListForm({
           )}
         />
       </div>
+      <section className="space-y-5 border-line border-t pt-5">
+        <h2 className="font-bold">英文版 · English Edition</h2>
+        <p className="text-ink-muted text-xs">
+          发布英文版需要英文标题；未翻译的影片在英文页降级为不可点击的条目。
+        </p>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="titleEn">英文标题 · Title</Label>
+            <Input id="titleEn" {...register("titleEn")} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="themeEn">英文主题 · Theme</Label>
+            <Input id="themeEn" {...register("themeEn")} />
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <Label>英文引言 · Intro</Label>
+          <Controller
+            control={control}
+            name="introEn"
+            render={({ field }) => (
+              <TiptapEditor
+                value={field.value as Record<string, unknown> | null}
+                onChange={field.onChange}
+                media={media}
+                placeholder="Why this list exists…"
+              />
+            )}
+          />
+        </div>
+      </section>
       <Button type="submit" disabled={submitting} className="tracking-[0.2em]">
         {submitting ? "保存中…" : "保存"}
       </Button>

@@ -6,7 +6,7 @@ import { getPublishedListBySlug, getPublishedListSlugs } from "@/db/queries/publ
 import { getDict } from "@/i18n/dict";
 
 export async function generateStaticParams() {
-  const slugs = await getPublishedListSlugs();
+  const slugs = await getPublishedListSlugs("en");
   return slugs.map(({ slug }) => ({ slug }));
 }
 
@@ -16,22 +16,29 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const list = await getPublishedListBySlug(slug);
+  const list = await getPublishedListBySlug(slug, "en");
   if (!list) return {};
   return {
-    title: list.title,
-    description: list.theme ?? `${list.items.length} 部影片`,
+    title: list.titleEn ?? list.title,
+    description: list.themeEn ?? `${list.items.length} films`,
   };
 }
 
-export default async function PublicListPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EnPublicListPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const list = await getPublishedListBySlug(slug);
+  const list = await getPublishedListBySlug(slug, "en");
   if (!list) notFound();
   return (
     <ListPage
       list={list}
-      actions={<FollowButton listId={list.id} labels={getDict("zh").followButton} />}
+      locale="en"
+      actions={
+        <FollowButton
+          listId={list.id}
+          labels={getDict("en").followButton}
+          signInHref="/en/sign-in"
+        />
+      }
     />
   );
 }

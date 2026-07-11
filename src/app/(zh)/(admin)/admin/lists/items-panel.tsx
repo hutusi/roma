@@ -19,6 +19,7 @@ export type ListItem = {
   title: string;
   year: number;
   reasoning: Record<string, unknown> | null;
+  reasoningEn: Record<string, unknown> | null;
 };
 
 export type FilmOption = { id: string; title: string; year: number };
@@ -41,6 +42,7 @@ export function ItemsPanel({
   const [selectedFilm, setSelectedFilm] = useState("");
   const [expanded, setExpanded] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, Record<string, unknown>>>({});
+  const [draftsEn, setDraftsEn] = useState<Record<string, Record<string, unknown>>>({});
   const [pending, startTransition] = useTransition();
 
   // router.refresh() re-renders the server parent with fresh
@@ -180,6 +182,34 @@ export function ItemsPanel({
                     }
                   >
                     保存理由
+                  </Button>
+                  <p className="pt-2 text-ink-muted text-xs">英文入选理由 · Reasoning (EN)</p>
+                  <TiptapEditor
+                    value={draftsEn[item.id] ?? item.reasoningEn}
+                    onChange={(doc) => setDraftsEn((d) => ({ ...d, [item.id]: doc }))}
+                    placeholder="Why this film belongs here, in this position…"
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={pending || !draftsEn[item.id]}
+                    onClick={() =>
+                      startTransition(async () => {
+                        const result = await updateItemReasoning(item.id, draftsEn[item.id], "en");
+                        if (!result.ok) {
+                          toast.error(result.error);
+                          return;
+                        }
+                        setItems(
+                          items.map((it) =>
+                            it.id === item.id ? { ...it, reasoningEn: draftsEn[item.id] } : it,
+                          ),
+                        );
+                        toast.success("英文理由已保存");
+                      })
+                    }
+                  >
+                    保存英文理由
                   </Button>
                 </div>
               )}

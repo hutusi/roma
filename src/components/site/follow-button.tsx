@@ -3,10 +3,22 @@
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { setFollow } from "@/actions/follows";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { cn } from "@/lib/utils";
 
-/** Client island on the (SSG-cached) list page — fetches its own state. */
-export function FollowButton({ listId }: { listId: string }) {
+/**
+ * Client island on the (SSG-cached) list page — fetches its own state.
+ * Labels arrive as props (dictionaries are server-only).
+ */
+export function FollowButton({
+  listId,
+  labels,
+  signInHref = "/sign-in",
+}: {
+  listId: string;
+  labels: Dictionary["followButton"];
+  signInHref?: string;
+}) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [following, setFollowing] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -31,10 +43,10 @@ export function FollowButton({ listId }: { listId: string }) {
   if (!signedIn) {
     return (
       <Link
-        href="/sign-in"
+        href={signInHref}
         className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
       >
-        登录后可关注片单
+        {labels.signInPrompt}
       </Link>
     );
   }
@@ -58,7 +70,7 @@ export function FollowButton({ listId }: { listId: string }) {
         });
       }}
     >
-      {following ? "已关注" : "关注片单"}
+      {following ? labels.following : labels.follow}
     </button>
   );
 }

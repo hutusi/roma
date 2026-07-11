@@ -1,7 +1,13 @@
 import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { deleteList, publishList, unpublishList } from "@/actions/lists";
+import {
+  deleteList,
+  publishList,
+  publishListEn,
+  unpublishList,
+  unpublishListEn,
+} from "@/actions/lists";
 import { db } from "@/db";
 import { curatedLists, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -48,15 +54,29 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
           >
             预览
           </Link>
+          <Link
+            href={`/admin/preview/list/${list.id}?locale=en`}
+            className="ml-2 font-normal text-brand text-sm hover:underline"
+          >
+            EN 预览
+          </Link>
         </h1>
-        <PublishControls
-          status={list.status}
-          onPublish={publishList.bind(null, list.id)}
-          onUnpublish={unpublishList.bind(null, list.id)}
-          onDelete={deleteList.bind(null, list.id)}
-          deleteConfirmText={`确定删除片单「${list.title}」？该操作不可撤销。`}
-          afterDeleteHref="/admin/lists"
-        />
+        <div className="flex items-center gap-6">
+          <PublishControls
+            status={list.status}
+            onPublish={publishList.bind(null, list.id)}
+            onUnpublish={unpublishList.bind(null, list.id)}
+            onDelete={deleteList.bind(null, list.id)}
+            deleteConfirmText={`确定删除片单「${list.title}」？该操作不可撤销。`}
+            afterDeleteHref="/admin/lists"
+          />
+          <PublishControls
+            status={list.statusEn}
+            label="英文版"
+            onPublish={publishListEn.bind(null, list.id)}
+            onUnpublish={unpublishListEn.bind(null, list.id)}
+          />
+        </div>
       </div>
       <div className="mt-6">
         <ListForm
@@ -67,6 +87,9 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
             title: list.title,
             theme: list.theme ?? "",
             intro: list.intro ?? null,
+            titleEn: list.titleEn ?? "",
+            themeEn: list.themeEn ?? "",
+            introEn: list.introEn ?? null,
             sortOrder: list.sortOrder,
           }}
         />
@@ -80,6 +103,7 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
           title: item.film.titleZh,
           year: item.film.year,
           reasoning: item.reasoning ?? null,
+          reasoningEn: item.reasoningEn ?? null,
         }))}
       />
     </div>
