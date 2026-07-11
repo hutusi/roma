@@ -3,8 +3,10 @@ import {
   codePointLength,
   filmFormSchema,
   parseCountries,
+  publishEnProblems,
   publishProblems,
   watchLinkSchema,
+  wordCount,
 } from "./film";
 
 describe("codePointLength", () => {
@@ -40,6 +42,33 @@ describe("publishProblems", () => {
   test("requires at least one director", () => {
     const problems = publishProblems({ editorialNote: note(300), directorCount: 0 });
     expect(problems.join()).toContain("导演");
+  });
+});
+
+describe("wordCount", () => {
+  test("splits on any whitespace run and ignores surrounding space", () => {
+    expect(wordCount("a quiet, black-and-white masterpiece")).toBe(4);
+    expect(wordCount("  two\n words \t here ")).toBe(3);
+    expect(wordCount("")).toBe(0);
+    expect(wordCount("   ")).toBe(0);
+  });
+});
+
+describe("publishEnProblems", () => {
+  const noteEn = (n: number) => Array.from({ length: n }, () => "word").join(" ");
+
+  test("rejects 119, accepts 120 and 350, rejects 351 words", () => {
+    const base = { titleEn: "8½" };
+    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(119) })).not.toEqual([]);
+    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(120) })).toEqual([]);
+    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(350) })).toEqual([]);
+    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(351) })).not.toEqual([]);
+  });
+
+  test("requires an English title and reports the current word count", () => {
+    const problems = publishEnProblems({ titleEn: "  ", editorialNoteEn: null });
+    expect(problems.join()).toContain("titleEn");
+    expect(problems.join()).toContain("0 词");
   });
 });
 

@@ -15,6 +15,9 @@ export type SeedDirector = {
   bio: string;
   /** 创作历程 — long-form essay. */
   careerEssay?: TiptapDoc;
+  /** English edition; a seeded bioEn marks the director en-published. */
+  bioEn?: string;
+  careerEssayEn?: TiptapDoc;
   /** Optional explicit TMDB person id; otherwise resolved by name search. */
   tmdbPersonId?: number;
 };
@@ -24,6 +27,7 @@ export type SeedWatchLink = {
   region: "CN" | "HK" | "TW" | "INTL";
   url?: string;
   note?: string;
+  noteEn?: string;
 };
 
 export type SeedFilm = {
@@ -46,6 +50,12 @@ export type SeedFilm = {
   /** 编辑札记 — plain text, must be 200–500 code points to publish. */
   editorialNote: string;
   essay?: TiptapDoc;
+  /**
+   * English edition — 120–350 words to publish; a seeded editorialNoteEn
+   * (with titleEn) marks the film en-published.
+   */
+  editorialNoteEn?: string;
+  essayEn?: TiptapDoc;
   cast?: CastMember[];
   /** Director slugs, ordered (co-directors keep their order). */
   directorSlugs: string[];
@@ -58,6 +68,7 @@ export type SeedListItem = {
   filmSlug: string;
   /** 入选理由 — per-film reasoning. */
   reasoning?: TiptapDoc;
+  reasoningEn?: TiptapDoc;
 };
 
 export type SeedList = {
@@ -66,6 +77,10 @@ export type SeedList = {
   /** One-line tagline. */
   theme?: string;
   intro?: TiptapDoc;
+  /** English edition; a seeded titleEn marks the list en-published. */
+  titleEn?: string;
+  themeEn?: string;
+  introEn?: TiptapDoc;
   /** Lower sorts first; the list at 0 becomes the homepage featured list. */
   sortOrder: number;
   /** Film whose hero/poster image is reused as this list's cover. */

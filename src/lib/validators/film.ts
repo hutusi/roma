@@ -5,8 +5,14 @@ import { z } from "zod";
  */
 export const codePointLength = (s: string) => Array.from(s).length;
 
+/** English prose measures in words, not code points. */
+export const wordCount = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
+
 export const EDITORIAL_NOTE_MIN = 200;
 export const EDITORIAL_NOTE_MAX = 500;
+/** ≈ the zh 200–500 code-point band, converted to English words. */
+export const EDITORIAL_NOTE_EN_MIN = 120;
+export const EDITORIAL_NOTE_EN_MAX = 350;
 
 const tiptapDoc = z.record(z.string(), z.unknown()).nullable().optional();
 
@@ -21,6 +27,7 @@ export const watchLinkSchema = z.object({
   region: z.enum(["CN", "HK", "TW", "INTL"]),
   url: z.union([z.literal(""), z.string().url("链接格式不正确")]).optional(),
   note: z.string().optional(),
+  noteEn: z.string().optional(),
 });
 
 export const filmFormSchema = z.object({
@@ -47,6 +54,14 @@ export const filmFormSchema = z.object({
       `编辑札记不能超过 ${EDITORIAL_NOTE_MAX} 字`,
     ),
   essay: tiptapDoc,
+  editorialNoteEn: z
+    .string()
+    .optional()
+    .refine(
+      (s) => !s || wordCount(s) <= EDITORIAL_NOTE_EN_MAX,
+      `英文札记不能超过 ${EDITORIAL_NOTE_EN_MAX} 词`,
+    ),
+  essayEn: tiptapDoc,
   cast: z.array(castMemberSchema),
   watchLinks: z.array(watchLinkSchema),
   directorIds: z.array(z.string()),
@@ -66,6 +81,26 @@ export function publishProblems(film: {
     problems.push(`编辑札记需 ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX} 字（当前 ${len} 字）`);
   }
   if (film.directorCount === 0) problems.push("至少关联一位导演");
+  return problems;
+}
+
+/**
+ * Gate for the English edition. Content-only: an editor may publish it
+ * before the zh edition — /en visibility still requires both (enforced
+ * in the public query layer).
+ */
+export function publishEnProblems(film: {
+  titleEn: string | null;
+  editorialNoteEn: string | null;
+}): string[] {
+  const problems: string[] = [];
+  if (!film.titleEn?.trim()) problems.push("缺少英文片名（titleEn）");
+  const words = wordCount(film.editorialNoteEn ?? "");
+  if (words < EDITORIAL_NOTE_EN_MIN || words > EDITORIAL_NOTE_EN_MAX) {
+    problems.push(
+      `英文札记需 ${EDITORIAL_NOTE_EN_MIN}–${EDITORIAL_NOTE_EN_MAX} 词（当前 ${words} 词）`,
+    );
+  }
   return problems;
 }
 
