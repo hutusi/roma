@@ -51,7 +51,7 @@ export const seedDirectors: SeedDirector[] = [
       "Swedish director, 1918–2007. A pastor's son who spent his life interrogating a silent God, driving faith, death, and the fault lines of marriage into the close-up of a human face.",
     careerEssayEn: doc([
       p(
-        "Almost every Bergman film unfolds among just two or three people, and yet each one shoulders the largest question there is: whether God exists, and if He does not, how a person is to go on living. The Seventh Seal sets a knight down to play chess with Death and casts that question as a parable, plain enough to see.",
+        "Almost every Bergman film unfolds among just two or three people, and yet each one shoulders the largest question there is: whether God exists, and if He does not, how a person is to go on living. The Seventh Seal sets a knight down to play chess with Death and casts that question as a parable.",
       ),
       p(
         "By Persona the parable has been stripped away, leaving only two women's faces seeping into and consuming one another. From there on he needed the Middle Ages and its symbols less and less; a summer house, a single marriage, was enough to make silence deafening. The light of his cinematographer Sven Nykvist was the surgical lamp he trained on the human face.",
@@ -116,7 +116,7 @@ export const seedDirectors: SeedDirector[] = [
         "塔可夫斯基把电影称作“雕刻时光”。他的长镜头不是炫技，而是要求观众放弃日常的时间感，进入一种近乎祈祷的凝视——雨水浸透废墟，火焰缓缓吞噬木屋。",
       ),
       p(
-        "从《伊万的童年》到《安德烈·卢布廖夫》，他反复追问艺术家在暴力与怀疑中如何保持创造的信念。流亡西方后拍的《乡愁》与《牺牲》，把这份追问推向了殉道般的顶点。",
+        "从《伊万的童年》到《安德烈·卢布廖夫》，他反复追问艺术家在暴力与怀疑中如何保持创造的信念。西方时期的《乡愁》与《牺牲》，把这份追问推向了殉道般的顶点。",
       ),
     ]),
     bioEn:
@@ -126,7 +126,7 @@ export const seedDirectors: SeedDirector[] = [
         'Tarkovsky called cinema "sculpting in time." His long takes are never a display of virtuosity; they ask you to give up your everyday sense of time and settle into something close to prayer — rain soaking through ruins, fire creeping slowly through a wooden house.',
       ),
       p(
-        "From Ivan's Childhood to Andrei Rublev, he returned again and again to a single question: how the artist keeps faith in the act of creation amid violence and doubt. Nostalghia and The Sacrifice, made after his exile to the West, carry that question to a martyr's pitch.",
+        "From Ivan's Childhood to Andrei Rublev, he returned again and again to a single question: how the artist keeps faith in the act of creation amid violence and doubt. Nostalghia and The Sacrifice, the films of his final years working in the West, carry that question to a martyr's pitch.",
       ),
     ]),
   },
@@ -308,7 +308,7 @@ export const seedDirectors: SeedDirector[] = [
         "沟口偏爱“一场一镜”，让摄影机像卷轴般缓缓横移，把人物置于命运的全景之中而不轻易切近。这份距离里藏着最深的悲悯。",
       ),
       p(
-        "他一生反复拍摄被出卖、被牺牲的女性——《雨月物语》的幽灵妻子、《山椒大夫》里卖身守护弟弟的姐姐。美与残酷在他镜头里从不分离，苦难被拍得越是优雅，越是叫人心碎。",
+        "他一生反复拍摄被出卖、被牺牲的女性——《雨月物语》的幽灵妻子、《山椒大夫》里投水守护手足的安寿。美与残酷在他镜头里从不分离，苦难被拍得越是优雅，越是叫人心碎。",
       ),
     ]),
     bioEn:
@@ -318,7 +318,7 @@ export const seedDirectors: SeedDirector[] = [
         "Mizoguchi favored one scene, one shot: he let the camera glide sideways like an unrolling scroll, holding his figures within the full panorama of their fate rather than cutting in close. It is in that very distance that his deepest compassion hides.",
       ),
       p(
-        "All his life he returned again and again to women who are betrayed and sacrificed — the ghost wife of Ugetsu, the elder sister in Sansho the Bailiff who gives herself up to shield her younger brother. In his frames beauty and cruelty are never parted; the more gracefully he films their suffering, the more it breaks your heart.",
+        "All his life he returned again and again to women who are betrayed and sacrificed — the ghost wife of Ugetsu, Anju in Sansho the Bailiff, who drowns herself to shield her brother. In his frames beauty and cruelty are never parted; the more gracefully he films their suffering, the more it breaks your heart.",
       ),
     ]),
   },
@@ -555,7 +555,7 @@ export const seedDirectors: SeedDirector[] = [
       "A French director (1906–1996) and the defining figure of poetic realism, who, working with the screenwriter Jacques Prévert, staged love as destiny beneath the streetlamps of the studio backlot.",
     careerEssayEn: doc([
       p(
-        "Carné's partnership with the poet Jacques Prévert distilled the melancholy of 1930s France into what came to be called poetic realism: fog, streetlamps, the quays of the harbor, and a love doomed to fail, all of it playing out on streets built by hand for the camera. Nothing here is found and everything is composed, and that is precisely why the fatalism lands — these lovers move through a world constructed expressly to undo them.",
+        "Carné's partnership with the poet Jacques Prévert distilled the melancholy of 1930s France into what came to be called poetic realism: fog, streetlamps, the quays of the harbor, and a love doomed to fail, all of it playing out on streets built by hand for the camera. Nothing here is found; everything is composed — fate itself conjured whole on the backlot.",
       ),
       p(
         "Children of Paradise, shot under the Nazi occupation, is the swan song of that style — a sprawling work about the theater, about performance, and about a love that can never be possessed, which many in France have long claimed as the pride of their national cinema.",
