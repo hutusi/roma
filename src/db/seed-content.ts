@@ -325,13 +325,21 @@ async function seedImages(
     if (!directorId) continue;
     if (await db.query.media.findFirst({ where: eq(media.directorId, directorId) })) continue;
     try {
-      const person = d.tmdbPersonId
-        ? await tmdbGet(`/person/${d.tmdbPersonId}`, token)
-        : (
-            (await tmdbGet(`/search/person?query=${encodeURIComponent(d.name)}`, token)).results as
-              | Record<string, unknown>[]
-              | undefined
-          )?.[0];
+      let person: Record<string, unknown> | undefined;
+      if (d.tmdbPersonId) {
+        person = await tmdbGet(`/person/${d.tmdbPersonId}`, token);
+      } else {
+        // Namesakes are common (a director and an actor share a name). Prefer
+        // a directing credit that actually has a photo before falling back.
+        const results = (await tmdbGet(`/search/person?query=${encodeURIComponent(d.name)}`, token))
+          .results as Record<string, unknown>[] | undefined;
+        person =
+          results?.find(
+            (r) => r.known_for_department === "Directing" && typeof r.profile_path === "string",
+          ) ??
+          results?.find((r) => typeof r.profile_path === "string") ??
+          results?.[0];
+      }
       const profile = person?.profile_path;
       if (typeof profile !== "string") {
         counts.imagesSkipped++;

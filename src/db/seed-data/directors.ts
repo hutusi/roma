@@ -26,6 +26,8 @@ export const seedDirectors: SeedDirector[] = [
     slug: "ingmar-bergman",
     name: "Ingmar Bergman",
     nameZh: "英格玛·伯格曼",
+    // Pinned: TMDB person search surfaces an actor namesake first (no photo).
+    tmdbPersonId: 6648,
     bio: "瑞典导演，1918–2007。牧师之子，一生向沉默的上帝提问，把信仰、死亡与婚姻的裂缝逼到人脸的特写里。",
     careerEssay: doc([
       p(
