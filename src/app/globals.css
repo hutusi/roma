@@ -161,6 +161,11 @@
   html {
     @apply font-body;
   }
+  /* English body text gets a Latin text serif (Playfair is display-only);
+     CJK glyphs on /en still fall through to Noto Serif SC. */
+  html:lang(en) {
+    --font-body: "Source Serif 4", "Noto Serif SC", "Songti SC", "SimSun", serif;
+  }
   body {
     @apply bg-paper text-ink;
   }

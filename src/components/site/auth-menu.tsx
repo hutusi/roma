@@ -9,13 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
+import type { Locale } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
 
 /**
  * Header auth entry. A client island using the client-side session so
- * the header can live on fully static pages.
+ * the header can live on fully static pages. Labels arrive as props
+ * (dictionaries are server-only); user areas (/u, /me, /account,
+ * /admin) are zh-only in v1, so only sign-in is locale-prefixed.
  */
-export function AuthMenu() {
+export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionary["authMenu"] }) {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
@@ -23,8 +27,11 @@ export function AuthMenu() {
 
   if (!session) {
     return (
-      <Link href="/sign-in" className="text-sm tracking-[0.2em] transition-colors hover:text-brand">
-        登录
+      <Link
+        href={locale === "en" ? "/en/sign-in" : "/sign-in"}
+        className="text-sm tracking-[0.2em] transition-colors hover:text-brand"
+      >
+        {labels.signIn}
       </Link>
     );
   }
@@ -40,20 +47,20 @@ export function AuthMenu() {
       <DropdownMenuContent align="end" className="font-sans">
         {username && (
           <DropdownMenuItem asChild>
-            <Link href={`/u/${username}`}>我的主页</Link>
+            <Link href={`/u/${username}`}>{labels.myPage}</Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem asChild>
-          <Link href="/me/follows">关注的片单</Link>
+          <Link href="/me/follows">{labels.follows}</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/account">账号设置</Link>
+          <Link href="/account">{labels.account}</Link>
         </DropdownMenuItem>
         {(role === "admin" || role === "editor") && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/admin">编辑部</Link>
+              <Link href="/admin">{labels.editorial}</Link>
             </DropdownMenuItem>
           </>
         )}
@@ -64,7 +71,7 @@ export function AuthMenu() {
             router.refresh();
           }}
         >
-          退出登录
+          {labels.signOut}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

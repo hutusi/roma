@@ -9,6 +9,7 @@ import { revalidateDirector } from "@/lib/revalidate";
 import {
   type DirectorFormValues,
   directorFormSchema,
+  publishEnProblems,
   viewingOrderSchema,
 } from "@/lib/validators/director";
 import { type ActionResult, fail, ok } from "./result";
@@ -29,6 +30,8 @@ export async function saveDirector(
     nameZh: v.nameZh || null,
     bio: v.bio || null,
     careerEssay: (v.careerEssay as TiptapDoc) ?? null,
+    bioEn: v.bioEn || null,
+    careerEssayEn: (v.careerEssayEn as TiptapDoc) ?? null,
   };
   // A slug change must also refresh the page cached under the old slug.
   const previousSlug = id
@@ -66,7 +69,7 @@ export async function saveDirector(
 
 export async function setViewingOrder(
   directorId: string,
-  items: { filmId: string; note?: string }[],
+  items: { filmId: string; note?: string; noteEn?: string }[],
 ): Promise<ActionResult> {
   await requireEditor();
   const parsed = viewingOrderSchema.safeParse(items);
@@ -83,6 +86,7 @@ export async function setViewingOrder(
           directorId,
           filmId: item.filmId,
           note: item.note || null,
+          noteEn: item.noteEn || null,
           position: i,
         })),
       );
@@ -108,6 +112,36 @@ export async function publishDirector(id: string): Promise<ActionResult> {
       publishedAt: director.publishedAt ?? new Date(),
     })
     .where(eq(directors.id, id));
+  revalidateDirector(director.slug);
+  return ok();
+}
+
+export async function publishDirectorEn(id: string): Promise<ActionResult> {
+  await requireEditor();
+  const director = await db.query.directors.findFirst({
+    where: eq(directors.id, id),
+  });
+  if (!director) return fail("导演不存在");
+  const problems = publishEnProblems({ bioEn: director.bioEn });
+  if (problems.length) return fail(problems.join("；"));
+  await db
+    .update(directors)
+    .set({
+      statusEn: "published",
+      publishedEnAt: director.publishedEnAt ?? new Date(),
+    })
+    .where(eq(directors.id, id));
+  revalidateDirector(director.slug);
+  return ok();
+}
+
+export async function unpublishDirectorEn(id: string): Promise<ActionResult> {
+  await requireEditor();
+  const director = await db.query.directors.findFirst({
+    where: eq(directors.id, id),
+  });
+  if (!director) return fail("导演不存在");
+  await db.update(directors).set({ statusEn: "draft" }).where(eq(directors.id, id));
   revalidateDirector(director.slug);
   return ok();
 }

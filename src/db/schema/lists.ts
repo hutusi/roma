@@ -18,9 +18,15 @@ export const curatedLists = pgTable("curated_lists", {
   theme: text(),
   /** Intro essay (Tiptap JSON). */
   intro: jsonb().$type<TiptapDoc>(),
+  titleEn: text(),
+  themeEn: text(),
+  introEn: jsonb().$type<TiptapDoc>(),
   coverMediaId: text().references(() => media.id, { onDelete: "set null" }),
   status: contentStatus().notNull().default("draft"),
+  /** English edition on the same row; en-visible via this flag alone. */
+  statusEn: contentStatus().notNull().default("draft"),
   publishedAt: timestamp({ withTimezone: true }),
+  publishedEnAt: timestamp({ withTimezone: true }),
   /** Deliberate ordering of the /lists index. */
   sortOrder: integer().notNull().default(0),
   createdBy: text().references(() => users.id, { onDelete: "set null" }),
@@ -41,6 +47,7 @@ export const curatedListItems = pgTable(
     position: integer().notNull(),
     /** 入选理由 — per-film reasoning (Tiptap JSON). */
     reasoning: jsonb().$type<TiptapDoc>(),
+    reasoningEn: jsonb().$type<TiptapDoc>(),
   },
   (t) => [
     unique("curated_list_items_unique").on(t.listId, t.filmId),

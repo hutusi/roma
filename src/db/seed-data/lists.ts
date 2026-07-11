@@ -88,6 +88,13 @@ export const seedLists: SeedList[] = [
     slug: "fellini-primer",
     title: "费里尼入门",
     theme: "从马戏团到罗马：一位导演如何长出翅膀",
+    titleEn: "A Fellini Primer",
+    themeEn: "From the circus to Rome: how a director grew wings",
+    introEn: doc([
+      p(
+        "Fellini's films are one dream that keeps getting bigger. Watched in this order, they show him setting out from the streets of neorealism and flying, step by step, toward the circus-ring confession that belongs to him alone. Three are enough \u2014 after that you will want the rest on your own.",
+      ),
+    ]),
     sortOrder: 1,
     coverFilmSlug: "otto-e-mezzo",
     intro: doc([
@@ -103,6 +110,11 @@ export const seedLists: SeedList[] = [
             "从这里开始：费里尼尚未离开新现实主义，却已长出翅膀。一个傻姑娘与一个粗汉，是他日后所有梦境的种子。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Start here: Fellini has not yet left neorealism, but the wings are already growing. A simple girl and a brute \u2014 the seed of every dream he would film later.",
+          ),
+        ]),
       },
       {
         filmSlug: "le-notti-di-cabiria",
@@ -111,12 +123,22 @@ export const seedLists: SeedList[] = [
             "再看他如何在苦难里种下希望。卡比利亚破碎又倔强的微笑，是费里尼对人类韧性的第一次礼赞。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Then watch him plant hope inside hardship. Cabiria's broken, stubborn smile is Fellini's first tribute to human resilience.",
+          ),
+        ]),
       },
       {
         filmSlug: "otto-e-mezzo",
         reasoning: doc([
           p(
             "终点也是顶点。当他终于敢把“拍不出电影”的困境本身拍成电影，梦境与现实再无边界，翅膀彻底张开。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "The end point is also the summit. When he finally dared to film the impossibility of making a film, dream and reality lost their border \u2014 and the wings opened all the way.",
           ),
         ]),
       },

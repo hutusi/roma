@@ -17,11 +17,13 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 | User list | Deliberately thinner (title, description, ordered films) at `/u/[username]/list/[id]` — never under `/list/`. |
 | 看过 / 想看 | User marks; one row per (user, film), each overwrites the other. |
 | Roles | `admin` > `editor` > `user`. "editor" is app-level (our guards), not a better-auth access-control role. |
+| 英文版 (English edition) | Per-entity `*En` fields + `statusEn`. `/en` is a curated subset: en-visible ⇔ published in zh AND en; untranslated list members render unlinked (ADR 0010). English notes gate on 120–350 words. |
 
 ## System map
 
-- `src/app/(site)` — public site. Editorial pages are **fully SSG**; per-user state only ever arrives through client islands fetching `/api/me/state` (no-store). Drafts 404.
-- `src/app/(admin)/admin` — custom admin (no CMS). Guarded by `requireEditor/requireAdmin` on **every page and every mutating server action**; `src/proxy.ts` is a UX-only cookie redirect.
+- `src/app/(zh)` — the Chinese site (root URLs, unchanged since launch): `(site)` public pages + `(admin)/admin`. Editorial pages are **fully SSG**; per-user state only ever arrives through client islands fetching `/api/me/state` (no-store). Drafts 404.
+- `src/app/en` — the English edition: a second root-layout tree (NOT a `[lang]` segment — no proxy in the editorial serving path). Renders the en-published subset only; shared components take a `locale` prop, shared chrome reads `src/i18n` dictionaries (server-only; islands get labels as props).
+- Admin is custom (no CMS), guarded by `requireEditor/requireAdmin` on **every page and every mutating server action**; `src/proxy.ts` is a UX-only cookie redirect. Editors dual-author the 英文版 in the same forms.
 - `src/db/schema` — source of truth. Migrations: `db:generate` → review SQL → `db:migrate`; `db:push` is dev-only. CI fails if schema and `drizzle/` drift.
 - `src/components/tiptap/extensions.ts` — the **contract** between the admin editor and the public static renderer. Extend both sides together or not at all.
 - `src/lib/revalidate.ts` — the single map from entity → cache invalidation. Publish actions call it; readers see changes without redeploys.

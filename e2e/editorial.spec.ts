@@ -14,14 +14,14 @@ test("publish gate: short 札记 blocked with count, then publish goes live with
   await page.fill("#slug", "publish-flow-film");
   await page.fill("#year", "1960");
   await page.getByLabel("费德里科·费里尼").check();
-  await page.locator("textarea").fill("太短。");
+  await page.locator('textarea[name="editorialNote"]').fill("太短。");
   await page.click("button[type=submit]");
   await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
 
   await page.getByRole("button", { name: "发布", exact: true }).click();
   await expect(page.locator("[data-sonner-toast]", { hasText: "编辑札记需 200" })).toBeVisible();
 
-  await page.locator("textarea").fill(NOTE_200);
+  await page.locator('textarea[name="editorialNote"]').fill(NOTE_200);
   await page.getByRole("button", { name: /^保存/ }).click();
   await expect(page.locator("[data-sonner-toast]", { hasText: "已保存" })).toBeVisible();
   await page.getByRole("button", { name: "发布", exact: true }).click();

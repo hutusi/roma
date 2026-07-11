@@ -13,8 +13,16 @@ export const directors = pgTable("directors", {
   bio: text(),
   /** 创作历程 — long-form essay (Tiptap JSON). */
   careerEssay: jsonb().$type<TiptapDoc>(),
+  bioEn: text(),
+  careerEssayEn: jsonb().$type<TiptapDoc>(),
   status: contentStatus().notNull().default("draft"),
+  /**
+   * English edition on the same row; a director is en-visible only via
+   * this flag (editorial call), never derived from their films.
+   */
+  statusEn: contentStatus().notNull().default("draft"),
   publishedAt: timestamp({ withTimezone: true }),
+  publishedEnAt: timestamp({ withTimezone: true }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

@@ -77,6 +77,9 @@ const quote = (text: string) => ({ type: "blockquote", content: [p(text)] });
 const NOTE =
   "费里尼在这部影片里把创作的困境本身拍成了电影：一个拍不出电影的导演，被记忆、欲望与负疚缠绕，最终在马戏团式的圆圈舞里与自己的人生和解。它是关于艺术家中年危机的最诚实的自白，也是电影语言的一次彻底解放——梦境、回忆与现实在同一个镜头里自由换场，不需要任何过渡的借口。黑白摄影在这里不是怀旧，而是让光成为叙事者：吉迪的白衬衫、修女的黑袍、浴场的蒸汽，都是心理的直接显影。半个多世纪过去，所有关于创作者自我怀疑的电影都活在它的阴影里。如果你只看一部费里尼，看这一部；如果你看过所有费里尼，再看一遍这一部。";
 
+// 130 filler words — clears the 120–350 en publish gate without prose.
+const NOTE_EN = Array.from({ length: 130 }, (_, i) => `word${i + 1}`).join(" ");
+
 const [fellini] = await db
   .insert(directors)
   .values({
@@ -85,8 +88,11 @@ const [fellini] = await db
     nameZh: "费德里科·费里尼",
     bio: "意大利导演，1920–1993。从新现实主义出发，走向梦境。",
     careerEssay: doc([p("从《大路》到《八部半》，费里尼用二十年走完了从写实到自白的路。")]),
+    bioEn: "Italian director, 1920–1993. From neorealism into dreams.",
     status: "published",
+    statusEn: "published",
     publishedAt: new Date(),
+    publishedEnAt: new Date(),
   })
   .returning();
 
@@ -112,8 +118,14 @@ const filmRows = await db
         quote("告别本来就不该匆忙。"),
       ]),
       castJson: [{ name: "Marcello Mastroianni", zhName: "马塞洛·马斯楚安尼", character: "Guido" }],
+      // The en edition of the e2e corpus: la-strada below stays zh-only
+      // so the subset 404 is testable.
+      editorialNoteEn: NOTE_EN,
+      essayEn: doc([h2("Why black and white"), p("Light carries the whole story.")]),
       status: "published",
+      statusEn: "published",
       publishedAt: new Date(),
+      publishedEnAt: new Date(),
     },
     {
       slug: "la-strada",
@@ -174,8 +186,13 @@ const [primer] = await db
     title: "费里尼入门",
     theme: "从马戏团到罗马：费里尼的入口",
     intro: doc([p("按这个顺序看，你会看到一位导演如何长出翅膀。")]),
+    titleEn: "A Fellini Primer",
+    themeEn: "From the circus to Rome",
+    introEn: doc([p("Watched in this order, a director grows wings.")]),
     status: "published",
+    statusEn: "published",
     publishedAt: new Date(),
+    publishedEnAt: new Date(),
     sortOrder: 0,
   })
   .returning();
@@ -187,7 +204,12 @@ await db.insert(curatedListItems).values([
     position: 0,
     reasoning: doc([p("从这部开始：费里尼尚未离开新现实主义，却已长出翅膀。")]),
   },
-  { listId: primer.id, filmId: bySlug["otto-e-mezzo"].id, position: 1 },
+  {
+    listId: primer.id,
+    filmId: bySlug["otto-e-mezzo"].id,
+    position: 1,
+    reasoningEn: doc([p("The summit: the impossibility of making a film, filmed.")]),
+  },
   // Draft film inside a published list — the leak regression fixture.
   { listId: primer.id, filmId: bySlug["il-bidone"].id, position: 2 },
 ]);

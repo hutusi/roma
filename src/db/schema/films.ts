@@ -41,13 +41,30 @@ export const films = pgTable(
     editorialNote: text(),
     /** Optional long-form essay (Tiptap JSON). */
     essay: jsonb().$type<TiptapDoc>(),
+    /**
+     * English edition of the editorial note. Publishing the English
+     * edition requires 120–350 words (word-based, not code points).
+     */
+    editorialNoteEn: text(),
+    essayEn: jsonb().$type<TiptapDoc>(),
     castJson: jsonb().$type<CastMember[]>(),
     status: contentStatus().notNull().default("draft"),
+    /**
+     * English edition lives on the same row (house style: explicit
+     * columns, not a locale table). en-visible ⇔ status AND statusEn
+     * are both published, so /en can never show what zh doesn't.
+     */
+    statusEn: contentStatus().notNull().default("draft"),
     publishedAt: timestamp({ withTimezone: true }),
+    publishedEnAt: timestamp({ withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
-  (t) => [index("films_status_idx").on(t.status), index("films_year_idx").on(t.year)],
+  (t) => [
+    index("films_status_idx").on(t.status),
+    index("films_status_en_idx").on(t.statusEn),
+    index("films_year_idx").on(t.year),
+  ],
 );
 
 /** Junction rather than a single FK: co-directed classics exist. */
@@ -81,6 +98,7 @@ export const filmWatchLinks = pgTable(
     region: text().notNull(),
     url: text(),
     note: text(),
+    noteEn: text(),
     sortOrder: integer().notNull().default(0),
   },
   (t) => [index("film_watch_links_film_idx").on(t.filmId)],
@@ -102,6 +120,7 @@ export const directorViewingItems = pgTable(
       .references(() => films.id, { onDelete: "cascade" }),
     position: integer().notNull(),
     note: text(),
+    noteEn: text(),
   },
   (t) => [
     unique("director_viewing_unique").on(t.directorId, t.filmId),

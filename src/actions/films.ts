@@ -10,6 +10,7 @@ import {
   type FilmFormValues,
   filmFormSchema,
   parseCountries,
+  publishEnProblems,
   publishProblems,
 } from "@/lib/validators/film";
 import { type ActionResult, fail, ok } from "./result";
@@ -48,6 +49,8 @@ export async function saveFilm(
     isBlackAndWhite: v.isBlackAndWhite,
     editorialNote: v.editorialNote || null,
     essay: (v.essay as TiptapDoc) ?? null,
+    editorialNoteEn: v.editorialNoteEn || null,
+    essayEn: (v.essayEn as TiptapDoc) ?? null,
     castJson: v.cast,
   };
 
@@ -80,6 +83,7 @@ export async function saveFilm(
             region: link.region,
             url: link.url || null,
             note: link.note || null,
+            noteEn: link.noteEn || null,
             sortOrder: i,
           })),
         );
@@ -121,6 +125,32 @@ export async function publishFilm(id: string): Promise<ActionResult> {
     .update(films)
     .set({ status: "published", publishedAt: film.publishedAt ?? new Date() })
     .where(eq(films.id, id));
+  revalidateFilm(film.slug);
+  return ok();
+}
+
+export async function publishFilmEn(id: string): Promise<ActionResult> {
+  await requireEditor();
+  const film = await db.query.films.findFirst({ where: eq(films.id, id) });
+  if (!film) return fail("影片不存在");
+  const problems = publishEnProblems({
+    titleEn: film.titleEn,
+    editorialNoteEn: film.editorialNoteEn,
+  });
+  if (problems.length) return fail(problems.join("；"));
+  await db
+    .update(films)
+    .set({ statusEn: "published", publishedEnAt: film.publishedEnAt ?? new Date() })
+    .where(eq(films.id, id));
+  revalidateFilm(film.slug);
+  return ok();
+}
+
+export async function unpublishFilmEn(id: string): Promise<ActionResult> {
+  await requireEditor();
+  const film = await db.query.films.findFirst({ where: eq(films.id, id) });
+  if (!film) return fail("影片不存在");
+  await db.update(films).set({ statusEn: "draft" }).where(eq(films.id, id));
   revalidateFilm(film.slug);
   return ok();
 }

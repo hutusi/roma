@@ -6,7 +6,7 @@ import type { TiptapDoc } from "@/db/schema";
 import { curatedListItems, curatedLists } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateList } from "@/lib/revalidate";
-import { type ListFormValues, listFormSchema } from "@/lib/validators/list";
+import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
 import { type ActionResult, fail, ok } from "./result";
 
 async function listSlug(listId: string): Promise<string | null> {
@@ -32,6 +32,9 @@ export async function saveListMeta(
     title: v.title,
     theme: v.theme || null,
     intro: (v.intro as TiptapDoc) ?? null,
+    titleEn: v.titleEn || null,
+    themeEn: v.themeEn || null,
+    introEn: (v.introEn as TiptapDoc) ?? null,
     sortOrder: v.sortOrder,
   };
   // A slug change must also refresh the page cached under the old slug.
@@ -130,6 +133,7 @@ export async function reorderListItems(
 export async function updateItemReasoning(
   itemId: string,
   reasoning: Record<string, unknown> | null,
+  locale: "zh" | "en" = "zh",
 ): Promise<ActionResult> {
   await requireEditor();
   const item = await db.query.curatedListItems.findFirst({
@@ -138,7 +142,11 @@ export async function updateItemReasoning(
   if (!item) return fail("条目不存在");
   await db
     .update(curatedListItems)
-    .set({ reasoning: reasoning as TiptapDoc })
+    .set(
+      locale === "en"
+        ? { reasoningEn: reasoning as TiptapDoc }
+        : { reasoning: reasoning as TiptapDoc },
+    )
     .where(eq(curatedListItems.id, itemId));
   const slug = await listSlug(item.listId);
   if (slug) revalidateList(slug);
@@ -160,6 +168,33 @@ export async function publishList(id: string): Promise<ActionResult> {
     .update(curatedLists)
     .set({ status: "published", publishedAt: list.publishedAt ?? new Date() })
     .where(eq(curatedLists.id, id));
+  revalidateList(list.slug);
+  return ok();
+}
+
+export async function publishListEn(id: string): Promise<ActionResult> {
+  await requireEditor();
+  const list = await db.query.curatedLists.findFirst({
+    where: eq(curatedLists.id, id),
+  });
+  if (!list) return fail("片单不存在");
+  const problems = publishEnProblems({ titleEn: list.titleEn });
+  if (problems.length) return fail(problems.join("；"));
+  await db
+    .update(curatedLists)
+    .set({ statusEn: "published", publishedEnAt: list.publishedEnAt ?? new Date() })
+    .where(eq(curatedLists.id, id));
+  revalidateList(list.slug);
+  return ok();
+}
+
+export async function unpublishListEn(id: string): Promise<ActionResult> {
+  await requireEditor();
+  const list = await db.query.curatedLists.findFirst({
+    where: eq(curatedLists.id, id),
+  });
+  if (!list) return fail("片单不存在");
+  await db.update(curatedLists).set({ statusEn: "draft" }).where(eq(curatedLists.id, id));
   revalidateList(list.slug);
   return ok();
 }
