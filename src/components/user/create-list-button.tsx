@@ -13,8 +13,18 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
+import { type Locale, localePath } from "@/i18n/locales";
 
-export function CreateListButton({ username }: { username: string }) {
+export function CreateListButton({
+  username,
+  locale,
+  labels,
+}: {
+  username: string;
+  locale: Locale;
+  labels: Dictionary["userList"];
+}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,12 +34,12 @@ export function CreateListButton({ username }: { username: string }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full tracking-[0.2em]">
-          新建片单
+          {labels.newList}
         </Button>
       </DialogTrigger>
       <DialogContent className="font-sans">
         <DialogHeader>
-          <DialogTitle>新建片单</DialogTitle>
+          <DialogTitle>{labels.newList}</DialogTitle>
         </DialogHeader>
         <form
           className="space-y-4"
@@ -42,25 +52,25 @@ export function CreateListButton({ username }: { username: string }) {
                 description: String(form.get("description") || ""),
               });
               if (!result.ok) {
-                setError(result.error);
+                setError(labels.errors[result.error as keyof typeof labels.errors] ?? result.error);
                 return;
               }
               setOpen(false);
-              router.push(`/u/${username}/list/${result.data.id}`);
+              router.push(localePath(locale, `/u/${username}/list/${result.data.id}`));
             });
           }}
         >
           <div className="space-y-1.5">
-            <Label htmlFor="title">标题</Label>
+            <Label htmlFor="title">{labels.titleLabel}</Label>
             <Input id="title" name="title" required maxLength={60} />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="description">简介（可选）</Label>
+            <Label htmlFor="description">{labels.introLabel}</Label>
             <Input id="description" name="description" maxLength={140} />
           </div>
           {error && <p className="text-destructive text-sm">{error}</p>}
           <Button type="submit" disabled={pending}>
-            {pending ? "创建中…" : "创建"}
+            {pending ? labels.creating : labels.create}
           </Button>
         </form>
       </DialogContent>

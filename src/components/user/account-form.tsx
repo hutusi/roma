@@ -7,16 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { authClient } from "@/lib/auth-client";
 
 export function AccountForm({
   name,
   username,
   email,
+  labels,
 }: {
   name: string;
   username: string;
   email: string;
+  labels: Dictionary["account"];
 }) {
   const router = useRouter();
   const [savingProfile, setSavingProfile] = useState(false);
@@ -38,35 +41,35 @@ export function AccountForm({
           });
           setSavingProfile(false);
           if (error) {
-            toast.error(error.message ?? "保存失败");
+            toast.error(error.message ?? labels.saveFailed);
             return;
           }
-          toast.success("资料已更新");
+          toast.success(labels.profileSaved);
           router.refresh();
         }}
       >
-        <h2 className="font-bold">基本资料</h2>
+        <h2 className="font-bold">{labels.basicInfo}</h2>
         <div className="space-y-1.5">
-          <Label>邮箱（不可修改）</Label>
+          <Label>{labels.emailLabel}</Label>
           <Input value={email} disabled />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="name">显示名</Label>
+          <Label htmlFor="name">{labels.displayName}</Label>
           <Input id="name" name="name" defaultValue={name} required />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="username">用户名（个人主页地址）</Label>
+          <Label htmlFor="username">{labels.usernameLabel}</Label>
           <Input
             id="username"
             name="username"
             defaultValue={username}
             required
             pattern="[a-zA-Z0-9_.-]{3,30}"
-            title="3–30 位字母、数字或 _ . -"
+            title={labels.usernameTitle}
           />
         </div>
         <Button type="submit" disabled={savingProfile}>
-          {savingProfile ? "保存中…" : "保存资料"}
+          {savingProfile ? labels.savingProfile : labels.saveProfile}
         </Button>
       </form>
 
@@ -84,16 +87,16 @@ export function AccountForm({
           });
           setSavingPassword(false);
           if (error) {
-            toast.error(error.message ?? "当前密码不正确");
+            toast.error(error.message ?? labels.wrongPassword);
             return;
           }
-          toast.success("密码已修改，其他设备已退出登录");
+          toast.success(labels.passwordChanged);
           form.reset();
         }}
       >
-        <h2 className="font-bold">修改密码</h2>
+        <h2 className="font-bold">{labels.changePassword}</h2>
         <div className="space-y-1.5">
-          <Label htmlFor="currentPassword">当前密码</Label>
+          <Label htmlFor="currentPassword">{labels.currentPassword}</Label>
           <Input
             id="currentPassword"
             name="currentPassword"
@@ -103,7 +106,7 @@ export function AccountForm({
           />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="newPassword">新密码</Label>
+          <Label htmlFor="newPassword">{labels.newPassword}</Label>
           <Input
             id="newPassword"
             name="newPassword"
@@ -114,7 +117,7 @@ export function AccountForm({
           />
         </div>
         <Button type="submit" disabled={savingPassword}>
-          {savingPassword ? "修改中…" : "修改密码"}
+          {savingPassword ? labels.savingPassword : labels.changePassword}
         </Button>
       </form>
       <Toaster position="top-center" />
