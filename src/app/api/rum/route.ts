@@ -13,6 +13,10 @@ import { rumEvents } from "@/db/schema";
  * `x-vercel-ip-country` is Vercel's geo header; on a future Cloudflare
  * deploy this becomes `request.cf.country`. It's a header we read, not a
  * platform SDK, so it doesn't deepen lock-in (ADR 0008 constraint 3).
+ * This header only stays authoritative while we serve directly from
+ * Vercel — putting Cloudflare in proxied (orange-cloud) mode in front
+ * would make it report the PoP, zeroing the China segment. ADR 0011
+ * keeps the domain DNS-only until the country signal is re-sourced.
  *
  * Abuse protection lives at the platform edge (Vercel WAF/BotID), not
  * here: a mainland audience sits behind heavy CGNAT, so a per-IP limit
