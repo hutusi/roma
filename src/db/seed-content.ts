@@ -21,7 +21,14 @@
  */
 import { and, eq, inArray } from "drizzle-orm";
 import { storeImage } from "../lib/storage";
-import { codePointLength, EDITORIAL_NOTE_MAX, EDITORIAL_NOTE_MIN } from "../lib/validators/film";
+import {
+  codePointLength,
+  EDITORIAL_NOTE_EN_MAX,
+  EDITORIAL_NOTE_EN_MIN,
+  EDITORIAL_NOTE_MAX,
+  EDITORIAL_NOTE_MIN,
+  wordCount,
+} from "../lib/validators/film";
 import { db } from "./index";
 import {
   curatedListItems,
@@ -79,8 +86,13 @@ async function main() {
         nameZh: d.nameZh,
         bio: d.bio,
         careerEssay: d.careerEssay ?? null,
+        bioEn: d.bioEn ?? null,
+        careerEssayEn: d.careerEssayEn ?? null,
+        // A seeded English edition publishes with the zh one.
+        statusEn: (d.bioEn ? "published" : "draft") as "published" | "draft",
         status: "published" as const,
         publishedAt: new Date(NOW),
+        publishedEnAt: d.bioEn ? new Date(NOW) : null,
       })),
     )
     .onConflictDoNothing({ target: directors.slug })
@@ -116,9 +128,13 @@ async function main() {
         isBlackAndWhite: f.isBlackAndWhite ?? true,
         editorialNote: f.editorialNote,
         essay: f.essay ?? null,
+        editorialNoteEn: f.editorialNoteEn ?? null,
+        essayEn: f.essayEn ?? null,
         castJson: f.cast ?? null,
         status: "published" as const,
+        statusEn: (f.editorialNoteEn && f.titleEn ? "published" : "draft") as "published" | "draft",
         publishedAt: publishedAtFor(i),
+        publishedEnAt: f.editorialNoteEn && f.titleEn ? publishedAtFor(i) : null,
       })),
     )
     .onConflictDoNothing({ target: films.slug })
@@ -157,6 +173,7 @@ async function main() {
         region: w.region,
         url: w.url ?? null,
         note: w.note ?? null,
+        noteEn: w.noteEn ?? null,
         sortOrder,
       })),
     );
@@ -186,8 +203,13 @@ async function main() {
         title: l.title,
         theme: l.theme ?? null,
         intro: l.intro ?? null,
+        titleEn: l.titleEn ?? null,
+        themeEn: l.themeEn ?? null,
+        introEn: l.introEn ?? null,
         status: "published" as const,
+        statusEn: (l.titleEn ? "published" : "draft") as "published" | "draft",
         publishedAt: new Date(NOW),
+        publishedEnAt: l.titleEn ? new Date(NOW) : null,
         sortOrder: l.sortOrder,
         createdBy,
       })),
@@ -212,7 +234,15 @@ async function main() {
       const listId = listIdBySlug.get(l.slug);
       const filmId = filmIdBySlug.get(it.filmSlug);
       return listId && filmId
-        ? [{ listId, filmId, position, reasoning: it.reasoning ?? null }]
+        ? [
+            {
+              listId,
+              filmId,
+              position,
+              reasoning: it.reasoning ?? null,
+              reasoningEn: it.reasoningEn ?? null,
+            },
+          ]
         : [];
     }),
   );
@@ -404,6 +434,15 @@ async function assertPublishable(filmIdBySlug: Map<string, string>) {
       problems.push(
         `film ${f.slug}: editorial note ${len} code points (need ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX})`,
       );
+    }
+    if (f.editorialNoteEn) {
+      const words = wordCount(f.editorialNoteEn);
+      if (words < EDITORIAL_NOTE_EN_MIN || words > EDITORIAL_NOTE_EN_MAX) {
+        problems.push(
+          `film ${f.slug}: English note ${words} words (need ${EDITORIAL_NOTE_EN_MIN}–${EDITORIAL_NOTE_EN_MAX})`,
+        );
+      }
+      if (!f.titleEn) problems.push(`film ${f.slug}: English note without titleEn`);
     }
   }
 

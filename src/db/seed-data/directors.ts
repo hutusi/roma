@@ -21,6 +21,16 @@ export const seedDirectors: SeedDirector[] = [
         "《八部半》是分水岭。从这里开始，他不再假装摄影机是客观的：回忆、欲望、白日梦挤进同一个画面，谁也不必让路。晚期的《阿玛柯德》与《船续前行》干脆把整个世界搭成布景，因为对费里尼来说，真实从来都是被记忆重新导演过的。",
       ),
     ]),
+    bioEn:
+      "Italian director, 1920\u20131993. He set out from the streets of neorealism and walked into dreams and circus rings, filming private memory until it became public myth.",
+    careerEssayEn: doc([
+      p(
+        "The first half of Fellini's career belonged to neorealism. La strada still carries the dust and hunger of postwar Italy, but the strongman Zampano's tears are already less a social question than a question of the soul.",
+      ),
+      p(
+        "8\u00bd is the watershed. From there on he stopped pretending the camera was objective: memory, desire, and daydream crowd into the same frame, and none of them yields. In the late films \u2014 Amarcord, And the Ship Sails On \u2014 he simply built the whole world as a set, because for Fellini the real was always something memory had already re-directed.",
+      ),
+    ]),
   },
   {
     slug: "ingmar-bergman",

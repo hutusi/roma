@@ -23,6 +23,8 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.85:1",
     editorialNote:
       "费里尼把创作的困境本身拍成了电影：一个拍不出电影的导演，被记忆、欲望与负疚缠绕，最终在马戏团式的圆圈舞里与自己的人生和解。它是关于艺术家中年危机最诚实的自白，也是电影语言的一次彻底解放——梦境、回忆与现实在同一个镜头里自由换场，不需要任何过渡的借口。黑白摄影在这里不是怀旧，而是让光成为叙事者：吉迪的白衬衫、修女的黑袍、浴场的蒸汽，都是心理的直接显影。半个多世纪过去，几乎所有关于创作者自我怀疑的电影都活在它的阴影里。如果你只看一部费里尼，看这一部。",
+    editorialNoteEn:
+      "Fellini turned the crisis of making a film into the film itself: a director who cannot make his movie, besieged by memory, desire, and guilt, until a circus-ring dance reconciles him with everything his life has been. It remains the most honest confession of an artist's midlife doubt ever put on screen, and a wholesale liberation of film language \u2014 dream, memory, and the present tense trade places within a single shot and never ask permission. The black-and-white photography here is not nostalgia; it makes light itself the narrator: Guido's white shirt, the nuns' black habits, the steam of the spa are psychology made directly visible. More than half a century on, nearly every film about a creator's self-doubt still lives in its shadow. If you watch only one Fellini, watch this one; if you have watched them all, watch this one again.",
     essay: doc([
       h2("困境如何成为形式"),
       p(
@@ -56,6 +58,8 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     editorialNote:
       "费里尼尚未离开新现实主义，却已长出翅膀。《大路》讲一个被卖给流浪艺人的傻姑娘杰索米娜，跟着粗暴的赞巴诺卖艺为生，直到死亡才让这个铁石心肠的男人明白自己失去了什么。朱丽叶塔·马西纳用小丑般的脸演出了近乎圣愚的天真，让最卑微的生命也闪着神性的光。这不是一部愤怒控诉社会的电影，而是一则关于爱与孤独的寓言：我们常常在失去之后，才认得出曾拥有的东西。结尾赞巴诺在海边的恸哭，是电影史上最沉重的一次迟到的觉悟。",
+    editorialNoteEn:
+      "Fellini had not yet left neorealism, but the wings were already growing. La strada follows Gelsomina, a simple-hearted girl sold to the traveling strongman Zampano, who bullies her across the roads of postwar Italy until death finally teaches this stone of a man what he has lost. Giulietta Masina plays her with a clown's face and a holy fool's innocence, letting the humblest of lives shine with something close to grace. This is not a film of social protest; it is a parable about love and loneliness \u2014 we tend to recognize what we had only after it is gone. Zampano's sobbing collapse on the beach in the final scene is one of cinema's heaviest arrivals of understanding, and it arrives, as understanding usually does, too late.",
     cast: [
       { name: "Giulietta Masina", zhName: "朱丽叶塔·马西纳", character: "Gelsomina" },
       { name: "Anthony Quinn", zhName: "安东尼·奎因", character: "Zampanò" },
@@ -74,6 +78,8 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     editorialNote:
       "一个罗马街头的妓女卡比利亚，一次次被欺骗、被抢劫、被抛弃，却一次次重新相信爱情。费里尼与马西纳这对夫妻，把一个最容易被写成悲剧的题材，拍成了对人类韧性的礼赞。影片最后那个著名的长镜头——卡比利亚刚被未婚夫骗走全部积蓄，眼含泪水走在路上，一群年轻人载歌载舞地经过，她抬起头，对着镜头几乎是对着我们，露出一个破碎又倔强的微笑。那一刻，绝望与希望同时在场。马西纳凭这个角色摘得戛纳影后，她那张仿佛不谙世事的脸，把苦难与天真同时写尽。这是电影送给所有跌倒又爬起的人的一封情书。",
+    editorialNoteEn:
+      "A Roman streetwalker named Cabiria is cheated, robbed, and abandoned, over and over \u2014 and over and over she decides to believe in love again. Fellini and Masina, husband and wife, took a subject that invites easy tragedy and made a tribute to human resilience instead. In the famous final shot, Cabiria \u2014 freshly swindled out of her savings by the fiance she trusted \u2014 walks down a road with tears in her eyes as a band of young revelers passes around her; she lifts her head and gives the camera, gives us, a broken and stubborn smile. Despair and hope stand in the same frame. Masina won Best Actress at Cannes for the role; her seemingly guileless face carries suffering and innocence in a single expression. This is cinema's love letter to everyone who has fallen down and gotten up again.",
     cast: [{ name: "Giulietta Masina", zhName: "朱丽叶塔·马西纳", character: "Cabiria" }],
     directorSlugs: ["federico-fellini"],
   },
