@@ -25,8 +25,19 @@ export function InviteCreateForm() {
             return;
           }
           const url = `${window.location.origin}/invite/${result.data.token}`;
-          await navigator.clipboard.writeText(url).catch(() => {});
-          toast.success("邀请已创建，链接已复制到剪贴板", { duration: 6000 });
+          let copied = true;
+          try {
+            await navigator.clipboard.writeText(url);
+          } catch {
+            copied = false;
+          }
+          // Don't claim "已复制" when the clipboard write failed; surface
+          // the link so the invite is still usable.
+          if (copied) {
+            toast.success("邀请已创建，链接已复制到剪贴板", { duration: 6000 });
+          } else {
+            toast.success("邀请已创建", { description: url, duration: 10000 });
+          }
           setEmail("");
           router.refresh();
         });
