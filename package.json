@@ -13,6 +13,7 @@
     "db:push": "drizzle-kit push",
     "db:seed": "bun run src/db/seed.ts",
     "db:seed:content": "bun --conditions=react-server run src/db/seed-content.ts",
+    "backfill:en": "bun --conditions=react-server run src/db/backfill-en.ts",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
     "typecheck": "next typegen && tsc --noEmit",
