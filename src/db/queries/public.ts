@@ -3,6 +3,7 @@ import { and, arrayContains, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { db } from "@/db";
 import { curatedLists, directors, films, type media } from "@/db/schema";
 import type { Locale } from "@/i18n/locales";
+import { visibleIn } from "./visibility";
 
 /**
  * Read layer for the public site and the admin draft preview. The
@@ -14,11 +15,6 @@ import type { Locale } from "@/i18n/locales";
  * in zh AND en (so /en can never show what zh doesn't), and it must be
  * applied here — cached pages can't rely on request-time checks.
  */
-
-/** True when a row is visible in the given locale. Rows must carry both status columns. */
-function visibleIn(row: { status: string; statusEn: string }, locale: Locale): boolean {
-  return row.status === "published" && (locale !== "en" || row.statusEn === "published");
-}
 
 const filmStatusConds = (locale: Locale) =>
   locale === "en"
