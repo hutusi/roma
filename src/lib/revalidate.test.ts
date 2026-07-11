@@ -30,9 +30,9 @@ function expectTags(expected: string[]) {
 }
 
 describe("revalidateFilm", () => {
-  test("invalidates the film, index, and home in both locales", () => {
+  test("invalidates the film, index, feed, and home in both locales", () => {
     revalidateFilm("solaris");
-    expectBothLocales(["/film/solaris", "/films", "/"]);
+    expectBothLocales(["/film/solaris", "/films", "/rss.xml", "/"]);
     expectTags(["film:solaris", "films", "home"]);
   });
 });

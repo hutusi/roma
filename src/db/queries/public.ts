@@ -107,6 +107,16 @@ export async function getPublishedFilmSlugs(locale: Locale = "zh") {
     .where(and(...filmStatusConds(locale)));
 }
 
+/** Most-recently-published films for the locale, newest first — feeds the RSS route. */
+export async function getRecentPublishedFilms(locale: Locale = "zh", limit = 30) {
+  return db.query.films.findMany({
+    where: and(...filmStatusConds(locale)),
+    orderBy: desc(locale === "en" ? films.publishedEnAt : films.publishedAt),
+    limit,
+    with: { filmDirectors: { with: { director: true } }, media: true },
+  });
+}
+
 const directorStatusConds = (locale: Locale) =>
   locale === "en"
     ? [eq(directors.status, "published"), eq(directors.statusEn, "published")]
