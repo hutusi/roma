@@ -31,7 +31,7 @@ export default function AboutPage() {
           如果一部电影出现在这里，那是因为有人愿意为它署名担保。
         </p>
         <p className="border-line border-t pt-6 text-ink-muted text-sm">
-          剧照与海报的来源标注在图片下方；部分影片元数据来自
+          影片的海报、剧照与部分元数据来自
           <a
             href="https://www.themoviedb.org/"
             target="_blank"
@@ -40,7 +40,8 @@ export default function AboutPage() {
           >
             TMDB
           </a>
-          （本站未经 TMDB 认可或认证）。观看渠道由编辑手工维护。
+          ，并在图片下方标注来源。本站使用 TMDB 的 API，但未经 TMDB
+          认可或认证。观看渠道由编辑手工维护。
         </p>
       </div>
     </article>
