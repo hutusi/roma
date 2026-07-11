@@ -22,3 +22,16 @@ The product is a Chinese-language curatorial site (ADR 0002's audience), but we 
 - Static page count roughly doubles as translations land (trivial at this scale).
 - Users have no stored locale preference yet; the reset email is bilingual. Recorded follow-up if English readership materializes: per-user locale, localized transactional email, an English RSS feed.
 - User areas (`/u`, `/me`, `/account`) are localized under `/en` (chrome only — usernames and user-authored list titles/descriptions stay as authored; a user's marks/lists are shown in full, linking to `/en` for en-published entities and falling back to the zh page otherwise). The invite flow (`/invite/[token]` — invitations come from the zh editorial team) and the admin stay zh-only.
+
+## Deferred follow-ups
+
+The edition is complete and live: the full corpus is authored and English-published (all 50 films / 24 directors / 7 lists), the `/en` user areas are localized (PR #12), and the AI-drafted prose was fact-checked and corrected in both languages (PR #13, via `src/db/resync-content.ts`). The SEO surface is verified healthy — `sitemap.xml` carries every en entity with a hreflang cluster, page `<head>` alternates are bidirectional (`zh-CN` / `en` / `x-default`, x-default → zh root), and the user areas stay `noindex`.
+
+Remaining, in rough priority — none blocking:
+
+- **English RSS feed** (`/en/rss.xml`) over the en-published films — net-new, self-contained (no schema/auth/migration); aids syndication.
+- **Per-user locale** (`users.locale`) + single-language transactional email — retires the bilingual reset stopgap noted above; needs a prod migration.
+- **Correctness cleanups** (not i18n): media-manager upload `try/finally` (a thrown upload leaves the button stuck at "上传中…"); the invite create-form's unconditional "copied" toast on a clipboard failure; unguarded `authClient.signOut()` in the admin sign-out button and the header auth-menu.
+- **`countries.ts` maintenance** — the hand-kept zh↔en map is guarded by a seed-corpus coverage test; add a pair when a new country appears (it renders in zh on `/en` until then).
+- **Collapse the `[...rest]` 404 workaround** — each tree catches its own strays pending Next's `global-not-found` stabilizing.
+- **SEO handoff (owner action)** — resubmit `sitemap.xml` in Google Search Console + Bing Webmaster Tools and watch the Coverage + International-Targeting (hreflang) reports for the new `/en` URLs.
