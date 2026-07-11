@@ -12,6 +12,13 @@ export const seedLists: SeedList[] = [
     slug: "into-black-and-white",
     title: "黑白影像入门",
     theme: "如果你想从黑白电影开始，先看这八部",
+    titleEn: "A Black-and-White Primer",
+    themeEn: "If black-and-white cinema is where you want to begin, start with these eight",
+    introEn: doc([
+      p(
+        'Black and white was never merely "before color arrived" — it is an active choice, one that hands the whole burden of storytelling over to light and shadow. This list gathers eight masterpieces, wildly different in style, spanning silent film to the New Wave and Europe to Asia, as the first door into a vast treasury. You need not watch them in order, but any one of them is enough to convince you: strip away the color, and cinema somehow comes into sharper focus.',
+      ),
+    ]),
     sortOrder: 0,
     coverFilmSlug: "seven-samurai",
     intro: doc([
@@ -27,12 +34,22 @@ export const seedLists: SeedList[] = [
             "从最朴素的一部开始。没有技巧的炫耀，只有一对父子和一辆丢失的自行车，却让你第一次明白电影可以如此贴近生活的疼痛。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Begin with the plainest of them all. No showmanship, just a father, a son, and a stolen bicycle — and yet it is here that you first understand how closely cinema can press against the ache of ordinary life.",
+          ),
+        ]),
       },
       {
         filmSlug: "tokyo-story",
         reasoning: doc([
           p(
             "学会在“什么都没发生”里看见一切。小津固定的低机位，教你把注意力从情节转向人与人之间那些欲言又止的沉默。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Learn to see everything in a film where nothing seems to happen. Ozu's fixed, low camera teaches you to move your attention off the plot and onto the unspoken silences that pass between people.",
           ),
         ]),
       },
@@ -43,12 +60,22 @@ export const seedLists: SeedList[] = [
             "再感受黑白如何迸发力量。雨中的决战证明，没有色彩，动作、天气与群像反而更有雕塑般的重量。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Then feel how black and white can erupt into sheer force. The final battle in the rain proves that without color, action, weather, and the massed faces take on a sculptural weight all their own.",
+          ),
+        ]),
       },
       {
         filmSlug: "the-seventh-seal",
         reasoning: doc([
           p(
             "当你准备好面对更大的问题——死亡与信仰。伯格曼把最沉重的追问，拍成了一则你会记住一辈子的画面。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "When you are ready for the larger questions — death, and faith. Bergman turns the heaviest inquiry of all into an image you will carry with you for the rest of your life.",
           ),
         ]),
       },
@@ -59,6 +86,11 @@ export const seedLists: SeedList[] = [
             "看一次“电影语言”本身。深焦、闪回、碎片叙事，二十五岁的威尔斯几乎一次性重写了电影能做什么。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Watch the language of cinema itself, laid bare. Deep focus, flashback, a story told in shards — at twenty-five, Welles all but rewrote what a film could do in a single stroke.",
+          ),
+        ]),
       },
       {
         filmSlug: "breathless",
@@ -67,11 +99,21 @@ export const seedLists: SeedList[] = [
             "然后看规则如何被打破。戈达尔的跳接砸碎了古典剪辑，让你意识到你熟悉的“顺畅”原来只是一种约定。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Then watch the rules get broken. Godard's jump cuts shatter classical editing and make you realize that the smoothness you always took for granted was only ever a convention.",
+          ),
+        ]),
       },
       {
         filmSlug: "la-strada",
         reasoning: doc([
           p("回到情感的原点。费里尼与马西纳提醒你，再前卫的形式，最终都是为了盛放一颗会痛的心。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Return to where feeling begins. Fellini and Masina remind you that even the most avant-garde form exists, in the end, only to hold a heart that can break.",
+          ),
         ]),
       },
       {
@@ -79,6 +121,11 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p(
             "最后，直视一张脸。近百年前的默片，用连绵的特写证明：一张受难的脸，就足以成为整个宇宙。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Finally, look straight into a face. A silent film nearly a century old, built from unbroken close-ups, proves that a single suffering face is enough to become an entire universe.",
           ),
         ]),
       },
@@ -92,7 +139,7 @@ export const seedLists: SeedList[] = [
     themeEn: "From the circus to Rome: how a director grew wings",
     introEn: doc([
       p(
-        "Fellini's films are one dream that keeps getting bigger. Watched in this order, they show him setting out from the streets of neorealism and flying, step by step, toward the circus-ring confession that belongs to him alone. Three are enough \u2014 after that you will want the rest on your own.",
+        "Fellini's films are one dream that keeps getting bigger. Watched in this order, they show him setting out from the streets of neorealism and flying, step by step, toward the circus-ring confession that belongs to him alone. Three are enough — after that you will want the rest on your own.",
       ),
     ]),
     sortOrder: 1,
@@ -112,7 +159,7 @@ export const seedLists: SeedList[] = [
         ]),
         reasoningEn: doc([
           p(
-            "Start here: Fellini has not yet left neorealism, but the wings are already growing. A simple girl and a brute \u2014 the seed of every dream he would film later.",
+            "Start here: Fellini has not yet left neorealism, but the wings are already growing. A simple girl and a brute — the seed of every dream he would film later.",
           ),
         ]),
       },
@@ -138,7 +185,7 @@ export const seedLists: SeedList[] = [
         ]),
         reasoningEn: doc([
           p(
-            "The end point is also the summit. When he finally dared to film the impossibility of making a film, dream and reality lost their border \u2014 and the wings opened all the way.",
+            "The end point is also the summit. When he finally dared to film the impossibility of making a film, dream and reality lost their border — and the wings opened all the way.",
           ),
         ]),
       },
@@ -148,6 +195,13 @@ export const seedLists: SeedList[] = [
     slug: "italian-neorealism",
     title: "意大利新现实主义",
     theme: "把摄影机搬到街上，让真实自己发声",
+    titleEn: "Italian Neorealism",
+    themeEn: "Carry the camera into the streets and let the truth speak for itself",
+    introEn: doc([
+      p(
+        "On the rubble of the Second World War, a handful of Italians shouldered their cameras into the streets and, with non-professional actors and real poverty, filmed the struggle and the dignity of ordinary people. The movement was brief but its reach was immense — it very nearly reset the moral coordinates of postwar cinema the world over.",
+      ),
+    ]),
     sortOrder: 2,
     coverFilmSlug: "bicycle-thieves",
     intro: doc([
@@ -163,12 +217,22 @@ export const seedLists: SeedList[] = [
             "运动的旗帜。德西卡用一辆丢失的自行车，把“没有故事的故事”拍成了最催泪的杰作，也定义了什么叫新现实主义。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "The movement's banner. De Sica took a single stolen bicycle — a story with no story — and turned it into the most tear-stained of masterpieces, defining in one stroke what neorealism could be.",
+          ),
+        ]),
       },
       {
         filmSlug: "la-strada",
         reasoning: doc([
           p(
             "运动的转身。费里尼在写实的尘土里注入寓言与诗意，预告了新现实主义如何向更私人的方向生长。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "The movement's pivot. Fellini stirred fable and poetry into the realist dust, foreshadowing how neorealism would grow toward something far more personal.",
           ),
         ]),
       },
@@ -179,6 +243,11 @@ export const seedLists: SeedList[] = [
             "运动的余晖。街头妓女的一夜，既是社会底层的写照，也已迈向费里尼式的马戏团梦境——写实与幻想在此交棒。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "The movement's afterglow. A streetwalker's single night is at once a portrait of life at the bottom and already a step toward Fellini's circus-ring dream — realism and fantasy trading the baton within one film.",
+          ),
+        ]),
       },
     ],
   },
@@ -186,6 +255,13 @@ export const seedLists: SeedList[] = [
     slug: "french-new-wave",
     title: "法国新浪潮",
     theme: "一群影评人拿起摄影机，重新发明电影",
+    titleEn: "The French New Wave",
+    themeEn: "A band of critics picked up cameras and reinvented cinema",
+    introEn: doc([
+      p(
+        "In the late 1950s, a clutch of young critics at Cahiers du Cinéma grew tired of the polished conventions of France's \"tradition of quality\" and simply stepped behind the camera themselves. Shooting handheld, on real streets, improvising as they went, they hauled cinema out of the studio and into the open air. They weren't only making films; they were using films to argue about what a film should be.",
+      ),
+    ]),
     sortOrder: 3,
     coverFilmSlug: "breathless",
     intro: doc([
@@ -201,12 +277,22 @@ export const seedLists: SeedList[] = [
             "从最温柔的一部进入。特吕弗把自己的童年拍成新浪潮的开山之作，那个奔向大海的少年，是整场运动的心跳。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Start with the gentlest of them. Truffaut turned his own childhood into the film that opened the movement, and that boy running toward the sea is the heartbeat of the whole New Wave.",
+          ),
+        ]),
       },
       {
         filmSlug: "breathless",
         reasoning: doc([
           p(
             "再感受最激进的一击。戈达尔用满不在乎的跳接，宣告电影可以像生活一样任性、鲜活、随时脱轨。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Then take the most radical blow. Godard's devil-may-care jump cuts announce that a film can be as willful, as alive, as ready to jump the rails as life itself.",
           ),
         ]),
       },
@@ -217,6 +303,11 @@ export const seedLists: SeedList[] = [
             "最后走向它思辨的深处。戈达尔用十二个段落解剖一个女人的堕落，让你看清新浪潮如何把电影变成一种思考方式。",
           ),
         ]),
+        reasoningEn: doc([
+          p(
+            "Finally, follow it into its thinking. Across twelve chapters Godard anatomizes one woman's slide into ruin, and you see exactly how the New Wave turned cinema into a way of thinking.",
+          ),
+        ]),
       },
     ],
   },
@@ -224,6 +315,13 @@ export const seedLists: SeedList[] = [
     slug: "japanese-golden-age",
     title: "日本电影的黄金时代",
     theme: "五十年代，一个国度同时拥有黑泽明、小津与沟口",
+    titleEn: "The Golden Age of Japanese Cinema",
+    themeEn: "The decade a single nation held Kurosawa, Ozu, and Mizoguchi all at once",
+    introEn: doc([
+      p(
+        "In the 1950s the Japanese screen blazed with talent all at once: Kurosawa's force, Ozu's restraint, Mizoguchi's sorrowful beauty, each reaching its own summit within the same decade. These films fused an Eastern aesthetic with the most universal of human truths, and let the world see for the first time just how deep Japanese cinema truly ran.",
+      ),
+    ]),
     sortOrder: 4,
     coverFilmSlug: "tokyo-story",
     intro: doc([
@@ -237,11 +335,21 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p("从这里叩开世界之门。黑泽明用一桩各执一词的凶案，把日本电影第一次推上国际舞台。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Start here, at the door onto the wider world. From a single killing recounted in flatly irreconcilable versions, Kurosawa lifted Japanese cinema onto the international stage for the very first time.",
+          ),
+        ]),
       },
       {
         filmSlug: "tokyo-story",
         reasoning: doc([
           p("再沉入最静默的深处。小津用一对老夫妻的东京之行，道尽了亲情随时间稀释的残忍。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Then sink into its quietest depths. Through one aging couple's visit to Tokyo, Ozu says everything there is to say about the quiet cruelty of family affection thinning out over time.",
+          ),
         ]),
       },
       {
@@ -249,11 +357,21 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p("感受沟口如水墨般流动的镜头，如何把民间怪谈拍成关于欲望与代价的凄美卷轴。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Feel how Mizoguchi's camera, gliding like ink across paper, turns a folk ghost tale into a mournful scroll about desire and the price it demands.",
+          ),
+        ]),
       },
       {
         filmSlug: "sansho-the-bailiff",
         reasoning: doc([
           p("在沟口的另一则古老传说里，称量仁慈能否在残酷世间存续——姐姐投水的涟漪，久久不散。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "In another of Mizoguchi's ancient legends, the film weighs whether mercy can survive in a merciless world, and the ripples from the sister's walk into the water never quite settle.",
+          ),
         ]),
       },
       {
@@ -261,11 +379,21 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p("回到黑泽明最恢弘的战场。三个多小时的史诗，把勇气、阶级与徒劳一并托起。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Return to Kurosawa's grandest battlefield. Across more than three hours, the epic holds up courage, class, and futility all in the same hand.",
+          ),
+        ]),
       },
       {
         filmSlug: "ikiru",
         reasoning: doc([
           p("以最温柔的一部收束。一个将死的公务员在雪夜的秋千上，找到了活过一场的意义。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Close on the gentlest film of all. A dying civil servant, on a swing in the falling snow, at last finds the meaning of having lived at all.",
+          ),
         ]),
       },
     ],
@@ -274,6 +402,13 @@ export const seedLists: SeedList[] = [
     slug: "silent-cinemas-last-light",
     title: "默片的最后光芒",
     theme: "在声音到来之前，电影已学会用光影歌唱",
+    titleEn: "Silent Cinema's Last Light",
+    themeEn: "Before sound arrived, film had already learned to sing in light and shadow",
+    introEn: doc([
+      p(
+        "The coming of sound cut the silent film off at the very moment of its maturity. Yet it was precisely that last decade in which silent cinema pushed purely visual storytelling to heights it would rarely reach again. These six films are the proof: without a single line of dialogue, the movies can say everything there is to say about fear, revolution, love, and redemption.",
+      ),
+    ]),
     sortOrder: 5,
     coverFilmSlug: "sunrise",
     intro: doc([
@@ -287,11 +422,21 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p("先上一堂剪辑课。爱森斯坦的敖德萨阶梯，让你亲眼看见镜头的碰撞如何迸出思想。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Begin with a lesson in editing. On Eisenstein's Odessa Steps you watch, with your own eyes, how the collision of one shot against another strikes an idea into being.",
+          ),
+        ]),
       },
       {
         filmSlug: "metropolis",
         reasoning: doc([
           p("再仰望默片最宏伟的奇观。弗里茨·朗的未来之城，奠定了此后一切科幻的视觉母题。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Then look up at silent cinema's grandest spectacle. Fritz Lang's city of the future set down the visual vocabulary that every science fiction since has drawn upon.",
+          ),
         ]),
       },
       {
@@ -299,21 +444,41 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p("走进它最幽暗的角落。茂瑙让吸血鬼的影子爬上楼梯，把恐惧凝成纯粹的光学事件。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Step into its darkest corner. Murnau sends the vampire's shadow creeping up the staircase, distilling fear into a purely optical event.",
+          ),
+        ]),
       },
       {
         filmSlug: "the-passion-of-joan-of-arc",
         reasoning: doc([p("直面它最纯粹的强度。德莱叶连绵的特写，用一张受难的脸撑起整部电影。")]),
+        reasoningEn: doc([
+          p(
+            "Face its purest intensity. Dreyer's unbroken procession of close-ups carries an entire film on a single suffering face.",
+          ),
+        ]),
       },
       {
         filmSlug: "sunrise",
         reasoning: doc([
           p("感受它抒情的顶峰。茂瑙赴美后用流动的镜头，几乎不靠字幕就唱完了一支沉沦与救赎之歌。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Feel it reach its lyrical summit. Working in America, Murnau's gliding camera sings a whole song of ruin and redemption with scarcely an intertitle to lean on.",
+          ),
+        ]),
       },
       {
         filmSlug: "city-lights",
         reasoning: doc([
           p("以一个微笑作别。有声时代已至，卓别林却固执地证明：默片的深情，从未过时。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Take your leave on a smile. The sound era had already arrived, and still Chaplin stubbornly proved that the tenderness of the silent film would never go out of date.",
+          ),
         ]),
       },
     ],
@@ -322,6 +487,13 @@ export const seedLists: SeedList[] = [
     slug: "film-noir",
     title: "黑色电影",
     theme: "百叶窗的阴影里，宿命正在收紧",
+    titleEn: "Film Noir",
+    themeEn: "In the shadow of the venetian blinds, fate tightens its grip",
+    introEn: doc([
+      p(
+        "Femmes fatales, cynical voiceover, frames sliced apart by shadow, and a fate that draws tighter with every step — film noir poured postwar America's anxiety and desire into a style at once icy and lavish. This list runs from the genre's German roots all the way to its most gorgeous elegy.",
+      ),
+    ]),
     sortOrder: 6,
     coverFilmSlug: "sunset-boulevard",
     intro: doc([
@@ -335,11 +507,21 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p("从源头开始。弗里茨·朗把倾斜的阴影与追捕的天罗地网带出德国，成了黑色电影的祖父。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Start at the source. Fritz Lang carried the canted shadows and the closing dragnet of the manhunt out of Germany, and in doing so became the grandfather of noir.",
+          ),
+        ]),
       },
       {
         filmSlug: "double-indemnity",
         reasoning: doc([
           p("看这一类型如何定型。怀尔德与钱德勒的剧本，几乎逐条写下了黑色电影的语法。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Watch the genre lock into its definitive shape. Wilder and Chandler's screenplay all but sets down, clause by clause, the grammar of film noir.",
+          ),
         ]),
       },
       {
@@ -347,11 +529,21 @@ export const seedLists: SeedList[] = [
         reasoning: doc([
           p("再看它华丽的堕落。威尔斯把腐败与边境的泥沼，拍成了黑色电影最邪魅的一次调度。"),
         ]),
+        reasoningEn: doc([
+          p(
+            "Then watch that style rot in the most gorgeous way possible. Welles turned corruption and the mire of the border into noir's most wickedly seductive feat of staging.",
+          ),
+        ]),
       },
       {
         filmSlug: "sunset-boulevard",
         reasoning: doc([
           p("以最凄美的挽歌收场。当好莱坞亲手解剖自己，宿命的阴影终于漫过了造梦的殿堂。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Close on the most hauntingly beautiful elegy of them all. When Hollywood takes a scalpel to itself, the shadow of fate finally floods the palace where dreams are made.",
+          ),
         ]),
       },
     ],
