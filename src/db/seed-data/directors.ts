@@ -22,13 +22,13 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Italian director, 1920\u20131993. He set out from the streets of neorealism and walked into dreams and circus rings, filming private memory until it became public myth.",
+      "Italian director, 1920–1993. He set out from the streets of neorealism and walked into dreams and circus rings, filming private memory until it became public myth.",
     careerEssayEn: doc([
       p(
         "The first half of Fellini's career belonged to neorealism. La strada still carries the dust and hunger of postwar Italy, but the strongman Zampano's tears are already less a social question than a question of the soul.",
       ),
       p(
-        "8\u00bd is the watershed. From there on he stopped pretending the camera was objective: memory, desire, and daydream crowd into the same frame, and none of them yields. In the late films \u2014 Amarcord, And the Ship Sails On \u2014 he simply built the whole world as a set, because for Fellini the real was always something memory had already re-directed.",
+        "8½ is the watershed. From there on he stopped pretending the camera was objective: memory, desire, and daydream crowd into the same frame, and none of them yields. In the late films — Amarcord, And the Ship Sails On — he simply built the whole world as a set, because for Fellini the real was always something memory had already re-directed.",
       ),
     ]),
   },
@@ -47,6 +47,16 @@ export const seedDirectors: SeedDirector[] = [
         "到了《假面》，寓言被剥掉，只剩下两张女人的脸互相渗透、吞噬。此后他越来越不需要中世纪或象征，一间夏屋、一段婚姻就足以让沉默变得震耳欲聋。摄影师尼克维斯特的光，是他探照人脸的手术灯。",
       ),
     ]),
+    bioEn:
+      "Swedish director, 1918–2007. A pastor's son who spent his life interrogating a silent God, driving faith, death, and the fault lines of marriage into the close-up of a human face.",
+    careerEssayEn: doc([
+      p(
+        "Almost every Bergman film unfolds among just two or three people, and yet each one shoulders the largest question there is: whether God exists, and if He does not, how a person is to go on living. The Seventh Seal sets a knight down to play chess with Death and casts that question as a parable, plain enough to see.",
+      ),
+      p(
+        "By Persona the parable has been stripped away, leaving only two women's faces seeping into and consuming one another. From there on he needed the Middle Ages and its symbols less and less; a summer house, a single marriage, was enough to make silence deafening. The light of his cinematographer Sven Nykvist was the surgical lamp he trained on the human face.",
+      ),
+    ]),
   },
   {
     slug: "akira-kurosawa",
@@ -59,6 +69,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "但他真正的主题是人如何在混乱与谎言中确认意义。《生之欲》里一个将死的公务员在雪夜的秋千上找到了答案；《罗生门》却告诉我们真相可能永远无法抵达。晚年他转向色彩与史诗，底色仍是同一份人道主义的焦虑。",
+      ),
+    ]),
+    bioEn:
+      "The Japanese director (1910–1998) who recast Eastern material with the narrative force of the West, making movement, weather, and the massed crowd erupt across the screen with a sculptor's weight.",
+    careerEssayEn: doc([
+      p(
+        "Few directors have understood better than Kurosawa how to make a film move. The rain-lashed final battle of Seven Samurai, the camera threading through the forest in Rashomon — each of these turns the lens into a participant rather than a bystander.",
+      ),
+      p(
+        "But his true subject is how a person holds on to meaning in the midst of chaos and lies. In Ikiru, a dying civil servant finds his answer on a playground swing in the falling snow; Rashomon, by contrast, tells us the truth itself may be forever out of reach. In his later years he turned toward color and epic scale, yet the ground note never changed — the same humanist disquiet, unresolved.",
       ),
     ]),
   },
@@ -75,6 +95,16 @@ export const seedDirectors: SeedDirector[] = [
         "这种极简是一种纪律。空镜头里的走廊、晾着的衣服、驶过的火车，承担了所有没有说出口的情绪。看懂小津，往往是在自己也开始送别至亲的年纪。",
       ),
     ]),
+    bioEn:
+      "Japanese director, 1903–1963. From a fixed low camera and the endless turning of the seasons he drew the whole quiet cycle of a family gathering and coming apart — the most restrained, and most tender, gaze in all of cinema.",
+    careerEssayEn: doc([
+      p(
+        "Ozu spent almost his entire life telling a single story: children grow up, parents grow old, and the household quietly dissolves through marriage and death. He set the camera at the height of a tatami mat and hardly ever moved it, letting his people sit upright and give way to time itself.",
+      ),
+      p(
+        "That minimalism is a discipline. The empty shots — a corridor, laundry hung out to dry, a train sliding past — carry every feeling no one manages to say aloud. And you tend to understand Ozu only once you have reached the age of seeing your own loved ones off.",
+      ),
+    ]),
   },
   {
     slug: "andrei-tarkovsky",
@@ -87,6 +117,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "从《伊万的童年》到《安德烈·卢布廖夫》，他反复追问艺术家在暴力与怀疑中如何保持创造的信念。流亡西方后拍的《乡愁》与《牺牲》，把这份追问推向了殉道般的顶点。",
+      ),
+    ]),
+    bioEn:
+      'A Soviet director (1932–1986) who built his films out of slowness, water, fire, and memory — "sculpting in time," he called it — treating the strip of film as an altar that opens onto faith and longing.',
+    careerEssayEn: doc([
+      p(
+        'Tarkovsky called cinema "sculpting in time." His long takes are never a display of virtuosity; they ask you to give up your everyday sense of time and settle into something close to prayer — rain soaking through ruins, fire creeping slowly through a wooden house.',
+      ),
+      p(
+        "From Ivan's Childhood to Andrei Rublev, he returned again and again to a single question: how the artist keeps faith in the act of creation amid violence and doubt. Nostalghia and The Sacrifice, made after his exile to the West, carry that question to a martyr's pitch.",
       ),
     ]),
   },
@@ -103,6 +143,16 @@ export const seedDirectors: SeedDirector[] = [
         "这种“去戏剧化”反而释放出惊人的精神强度。《扒手》里手指的芭蕾、《驴子巴特萨》里一头驴承受的人间罪恶，都指向他毕生的主题：恩典如何在最卑微处降临。他的极简主义影响了此后所有相信“少即是多”的导演。",
       ),
     ]),
+    bioEn:
+      'French director, 1901–1999. He rejected acting itself, working only with non-professional "models," with hands and with sound, to forge the purest and most exacting style in all of cinema.',
+    careerEssayEn: doc([
+      p(
+        'Bresson despised theatricality. He would have his non-professional actors repeat a gesture over and over until every last trace of expression had drained away, leaving only the movement of hands, feet, glances, and objects. He refused to call them actors at all; they were his "models."',
+      ),
+      p(
+        "That very stripping-away of drama is what unleashes his astonishing spiritual intensity. The ballet of fingers in Pickpocket, the sins of the world laid upon the back of a single donkey in Au Hasard Balthazar — everything points to the theme he pursued all his life: how grace descends upon the lowliest of places. His minimalism left its mark on every director since who has believed that less is more.",
+      ),
+    ]),
   },
   {
     slug: "michelangelo-antonioni",
@@ -115,6 +165,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "他把人物压缩到画面边缘，让墙壁、街道与工业风景占据中心，因为在他看来，现代人的孤独正是被这些空间塑造的。“爱情三部曲”之后的《红色沙漠》让色彩也染上了神经质，疏离由此有了颜色。",
+      ),
+    ]),
+    bioEn:
+      "Italian director, 1912–2007. With architectural compositions and long, unhurried stretches of emptiness, he chronicled the unbridgeable estrangement between modern people and the emotional deserts they wander.",
+    careerEssayEn: doc([
+      p(
+        "What Antonioni filmed was an architecture of feeling. In L'Avventura a woman vanishes, and yet the film refuses to go looking for an answer; it turns instead to watch the people she left behind lose each other across empty islands and emptier cities.",
+      ),
+      p(
+        "He presses his figures to the edges of the frame and lets walls, streets, and industrial landscapes hold the center, convinced that modern loneliness is something these spaces build in us. After the trilogy of love, Red Desert let color itself turn neurotic, and estrangement, at last, had a hue.",
       ),
     ]),
   },
@@ -131,6 +191,16 @@ export const seedDirectors: SeedDirector[] = [
         "六十年代末他愈发政治化，几乎放弃了叙事。但即便在最艰涩的时期，他也始终在追问同一件事：图像与声音能否承载真理？他不是在拍电影，而是在用电影思考电影。",
       ),
     ]),
+    bioEn:
+      "French director, 1930–2022. The New Wave's most radical wrecker and rebuilder, he spent a lifetime taking cinema's language apart and forcing it to learn to speak all over again.",
+    careerEssayEn: doc([
+      p(
+        "With Breathless, Godard took the jump cut and shattered the seamless continuity of classical editing, announcing that a film could leap as freely and as willfully as a thought. From then on he ushered quotations, title cards, and looks straight down the lens into the frame, so that the fiction was forever reminding you it was a fiction.",
+      ),
+      p(
+        "By the late sixties he had turned ever more political and all but abandoned storytelling. Yet even at his most forbidding he kept circling the same question: can images and sounds hold truth? He was never simply making films — he was using film to think about film.",
+      ),
+    ]),
   },
   {
     slug: "francois-truffaut",
@@ -143,6 +213,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "《四百击》里那个奔向大海的少年安托万，几乎是他自己的化身，并在此后的系列里陪他一起长大。无论是《祖与占》还是《日以继夜》，他镜头里始终有一种对生活与虚构双重的、几近感激的爱。",
+      ),
+    ]),
+    bioEn:
+      "French director, 1932–1984. He came to filmmaking from criticism, a standard-bearer of the New Wave who turned the tenderest of gazes on childhood, on books, and on his own lifelong infatuation with cinema itself.",
+    careerEssayEn: doc([
+      p(
+        "Truffaut was once the most caustic pen at Cahiers du Cinéma, the critic who championed the auteur theory and installed the director as the true author of a film. Yet the moment he stepped behind the camera himself, he turned out to be the most lyrical and nostalgic figure the New Wave ever produced.",
+      ),
+      p(
+        "The boy Antoine racing toward the sea at the end of The 400 Blows is very nearly Truffaut's own double, a self who would go on growing up beside him across the films that followed. Whether in Jules and Jim or Day for Night, his camera carries a doubled, almost grateful love — for life and for fiction alike.",
       ),
     ]),
   },
@@ -159,6 +239,16 @@ export const seedDirectors: SeedDirector[] = [
         "从英国时期到好莱坞，他把类型片提升为对窥视、罪疚与欲望的深层研究。《惊魂记》用一场淋浴谋杀改写了观众能被如何对待的底线，也证明了商业类型可以是最锋利的作者电影。",
       ),
     ]),
+    bioEn:
+      "British-American director, 1899–1980. The Master of Suspense, who turned the audience's fear and voyeurism into a precisely engineered machine of cinema.",
+    careerEssayEn: doc([
+      p(
+        "Hitchcock drew the crucial line between surprise and suspense: let the audience know, before the characters do, that there is a bomb under the table, and the mere act of waiting becomes torment. His whole career was an exercise in manipulating that wait, until the viewer is no longer a spectator but an accomplice.",
+      ),
+      p(
+        "From his British years to Hollywood, he raised the genre picture into a deep inquiry into voyeurism, guilt, and desire. Psycho, with a single shower murder, rewrote the limits of what an audience could be made to endure — and proved that a commercial genre could be the sharpest auteur cinema of all.",
+      ),
+    ]),
   },
   {
     slug: "orson-welles",
@@ -171,6 +261,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "此后他的作品屡屡被制片厂剪坏、抽资，却仍在《历劫佳人》的长镜头开场、《审判》的迷宫布景里迸发天才。他是好莱坞供养又背叛的巨人，残缺的作品比许多人完整的一生更有分量。",
+      ),
+    ]),
+    bioEn:
+      "American director and actor, 1915–1985. At twenty-five he rewrote the grammar of cinema with Citizen Kane, and spent the rest of his life wrestling Hollywood for its money and against its scissors.",
+    careerEssayEn: doc([
+      p(
+        "Welles came to film carrying the nerve of the stage and the radio studio, and Citizen Kane redrew the rules almost in a single stroke — its deep-focus photography, its ceilinged frames, its splintered chronology all but reinvented what it means for an image to feel cinematic.",
+      ),
+      p(
+        "From then on his films were repeatedly recut and defunded by the studios, yet the genius broke through anyway: in the unbroken crane shot that opens Touch of Evil, in the labyrinthine sets of The Trial. He was the giant Hollywood both nourished and betrayed, and his mutilated, unfinished work still carries more weight than many artists' whole and intact lives.",
       ),
     ]),
   },
@@ -187,6 +287,16 @@ export const seedDirectors: SeedDirector[] = [
         "他相信影像可以承载超验之物。《词语》以一场平静得令人战栗的复活收尾，逼迫最理性的观众直面神迹的可能。他的白墙、缓移与静默，是对灵魂的一种耐心测量。",
       ),
     ]),
+    bioEn:
+      "A Danish director, 1889–1968, who filmed faith, martyrdom, and miracle with an almost religious rigor — every one of his films an offering carved out of light.",
+    careerEssayEn: doc([
+      p(
+        "Dreyer made only a handful of films, yet each one pushes to the spiritual limit of what cinema can do. The Passion of Joan of Arc is built almost entirely from close-ups, until a single suffering face becomes the battlefield on which the whole silent film is fought.",
+      ),
+      p(
+        "He believed an image could carry the transcendent. Ordet closes on a resurrection so quiet it makes you shudder, cornering even the most rational viewer into facing the possibility of a miracle. His white walls, his slow tracking shots, his silences are a patient way of taking the measure of the soul.",
+      ),
+    ]),
   },
   {
     slug: "kenji-mizoguchi",
@@ -199,6 +309,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "他一生反复拍摄被出卖、被牺牲的女性——《雨月物语》的幽灵妻子、《山椒大夫》里卖身守护弟弟的姐姐。美与残酷在他镜头里从不分离，苦难被拍得越是优雅，越是叫人心碎。",
+      ),
+    ]),
+    bioEn:
+      "The Japanese director Kenji Mizoguchi (1898–1956) turned the cruelty of feudal society into something like a mournful hand scroll, unrolling his flowing long takes with a gaze fixed steadily on the suffering of women.",
+    careerEssayEn: doc([
+      p(
+        "Mizoguchi favored one scene, one shot: he let the camera glide sideways like an unrolling scroll, holding his figures within the full panorama of their fate rather than cutting in close. It is in that very distance that his deepest compassion hides.",
+      ),
+      p(
+        "All his life he returned again and again to women who are betrayed and sacrificed — the ghost wife of Ugetsu, the elder sister in Sansho the Bailiff who gives herself up to shield her younger brother. In his frames beauty and cruelty are never parted; the more gracefully he films their suffering, the more it breaks your heart.",
       ),
     ]),
   },
@@ -215,6 +335,16 @@ export const seedDirectors: SeedDirector[] = [
         "流亡墨西哥时期，他用《被遗忘的人们》把超现实的锋利对准了贫民窟的残酷现实。晚年回到欧洲，《资产阶级的审慎魅力》则以微笑戳破体面世界的荒诞。反叛之下，是一颗始终清醒的道德之心。",
       ),
     ]),
+    bioEn:
+      "Spanish director, 1900–1983. The grand old imp of surrealism, who spent a lifetime dissecting religion, desire, and bourgeois hypocrisy with a cool, deadpan wit.",
+    careerEssayEn: doc([
+      p(
+        "From the first stroke of the razor in Un Chien Andalou, splitting an eye open, Buñuel summoned dream, desire, and blasphemy onto the screen. He never explains his symbols; he simply lets them stand, the way a dream does — self-evident and impossible to decode.",
+      ),
+      p(
+        "In exile in Mexico, Los Olvidados turned that surrealist edge on the brutal reality of the slums. Back in Europe in his later years, The Discreet Charm of the Bourgeoisie punctures the absurdity of the respectable world with nothing more than a smile. Beneath all the mischief beats a moral heart that never once loses its clarity.",
+      ),
+    ]),
   },
   {
     slug: "jean-renoir",
@@ -227,6 +357,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "《大幻影》在战俘营里谈的却是阶级如何跨越国界，友谊如何跨越敌意。“每个人都有他的理由”，这句台词几乎是他全部电影的信条：理解先于审判。",
+      ),
+    ]),
+    bioEn:
+      "French director, 1894–1979. The son of the painter Auguste Renoir, he brought to the screen a camera that seems to flow and a humanism so wide-hearted that he has been called the very humanity of cinema.",
+    careerEssayEn: doc([
+      p(
+        "Renoir's camera is always breathing, always drifting, letting his characters wander freely in and out of a deep, living space. He could not bear to sort people neatly into the good and the bad: in The Rules of the Game everyone is at once ridiculous and worthy of pity, including the man he plays himself.",
+      ),
+      p(
+        "The Grand Illusion is set inside a prisoner-of-war camp, yet what it is really about is how class can reach across a national border and how friendship can outlast enmity. Everyone has their reasons, runs the line that is very nearly the creed of his entire body of work: to understand before you judge.",
       ),
     ]),
   },
@@ -243,6 +383,16 @@ export const seedDirectors: SeedDirector[] = [
         "他的伟大在于从最朴素的事件里看见人的尊严如何被贫穷一点点碾碎。《温别尔托·D》对一位孤独老人的凝视，至今仍是电影同情心的标尺。",
       ),
     ]),
+    bioEn:
+      "Italian director, 1901–1974. The conscience of neorealism, who cast nonprofessional actors against the backdrop of real streets to record the dignity and heartbreak of ordinary people in the rubble of the postwar years.",
+    careerEssayEn: doc([
+      p(
+        "Together with his screenwriter Cesare Zavattini, De Sica carried the camera out into the streets of Rome and let real unemployed men act out a despair they knew firsthand. In Bicycle Thieves, a father and son search the city in vain for a stolen bicycle, and the film needs almost no plot at all to bring you to tears.",
+      ),
+      p(
+        "His greatness lies in seeing, within the plainest of events, exactly how poverty grinds a person's dignity down bit by bit. The unhurried gaze of Umberto D. upon one lonely old man remains, to this day, the measure by which we take the compassion of the movies.",
+      ),
+    ]),
   },
   {
     slug: "billy-wilder",
@@ -255,6 +405,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "《日落大道》让一具浮尸开口讲述好莱坞如何吞噬自己的明星，犬儒到极致，却又饱含对失败者的怜悯。在他手里，玩世不恭从来只是深情的伪装。",
+      ),
+    ]),
+    bioEn:
+      "Austrian-American director, 1906–2002. A screenwriter's screenwriter, cynical and tender in equal measure, equally at home in film noir and in comedy.",
+    careerEssayEn: doc([
+      p(
+        "Wilder had the sharpest pen in Hollywood. He could carve murder into the icy fatalism of Double Indemnity and then send up a cross-dressing farce that lands on the most forgiving line in the movies, the shrug of Some Like It Hot: nobody's perfect.",
+      ),
+      p(
+        "Sunset Boulevard hands the narration to a corpse floating face-down in a swimming pool, letting the dead man tell you how Hollywood swallows its own stars — cynicism taken to the limit, and yet aching with pity for the has-beens and the also-rans. In Wilder's hands, contempt for the world was only ever a disguise worn over tenderness.",
       ),
     ]),
   },
@@ -271,6 +431,16 @@ export const seedDirectors: SeedDirector[] = [
         "他毕生着迷于个体如何被命运与体制这台巨大机器碾过。逃离纳粹德国后，他在好莱坞继续用黑色电影追问同样的问题，冷峻的宿命感始终是他的签名。",
       ),
     ]),
+    bioEn:
+      "Austrian-born director, 1890–1976. A titan of German Expressionism who, from the towering city of the future to the hunted child-killer, traced the cold geometry of fate and the machinery of the state.",
+    careerEssayEn: doc([
+      p(
+        "Lang built his worlds out of geometry and shadow. In Metropolis he casts class oppression as a magnificent city of the future; in M he turns the light and dark of an entire city into the dragnet that slowly closes around a killer.",
+      ),
+      p(
+        "All his life he was gripped by a single question: how the individual is ground beneath the vast machine of fate and the system. Fleeing Nazi Germany, he carried that question to Hollywood and went on asking it in film noir, and that austere sense of doom stayed his signature to the end.",
+      ),
+    ]),
   },
   {
     slug: "satyajit-ray",
@@ -283,6 +453,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "《阿普三部曲》跟随一个男孩从乡村走向城市，把成长、离别与贫穷写成了缓缓流动的史诗。他证明了第三世界的日常也能拥有最普世的诗意与尊严。",
+      ),
+    ]),
+    bioEn:
+      "Indian director, 1921–1992. With the Apu Trilogy he carried the poverty and poetry of rural India out into the world, and stands among the founders of Asia's humanist cinema.",
+    careerEssayEn: doc([
+      p(
+        "Ray absorbed Renoir and Italian neorealism and then distilled that plainspoken realism into a lyricism that could belong only to the villages of Bengal. In Pather Panchali, the moment a child first sees a train tearing through the reeds is one of the purest jolts of wonder in all of cinema.",
+      ),
+      p(
+        "The Apu Trilogy follows a single boy from village to city, turning growing up, parting, and poverty into a slow, unhurried epic. Ray proved that ordinary life in the Third World could carry the most universal poetry and dignity of all.",
       ),
     ]),
   },
@@ -299,6 +479,16 @@ export const seedDirectors: SeedDirector[] = [
         "赴美后拍的《日出》把这份视觉诗学推向顶峰：城市与乡村、堕落与救赎，全在流动的镜头里交融。他英年早逝，却为默片留下了最接近纯电影的遗产。",
       ),
     ]),
+    bioEn:
+      "German director, 1888–1931. A poet of the silent era who, with a roving camera and pure light and shadow, pushed both terror and tenderness to the far edge of the purely visual.",
+    careerEssayEn: doc([
+      p(
+        "Murnau believed a film could speak entirely through its images. In Nosferatu he sends the vampire's shadow climbing a staircase and turns dread into a purely optical event; in The Last Laugh he does away with intertitles almost completely and lets a moving camera alone tell the whole story of a man's dignity coming apart.",
+      ),
+      p(
+        "Sunrise, made once he had crossed to America, carries that visual poetry to its summit: city and country, temptation and redemption, all dissolving into one another within the drift of the frame. He died young, but he left silent cinema its closest approach to pure film.",
+      ),
+    ]),
   },
   {
     slug: "charlie-chaplin",
@@ -311,6 +501,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "有声时代来临，他固执地为默片辩护，《城市之光》与《摩登时代》几乎不靠台词就道尽了机器时代里小人物的心碎与倔强。喜剧于他不是逃避现实，而是直面现实最温柔也最有力的方式。",
+      ),
+    ]),
+    bioEn:
+      "British director and actor (1889–1977). The creator of the Tramp, who made comedy carry the deepest tenderness and the sharpest social criticism the screen had yet known.",
+    careerEssayEn: doc([
+      p(
+        "Chaplin's Tramp is the most famous figure in all of cinema: the bowler hat, the cane, the splayed-out walk, a little man forever kicked around by the world and yet forever holding on to his dignity. With Chaplin, laughter and tears were never opposites but the same gesture seen from two sides.",
+      ),
+      p(
+        "When sound arrived, he dug in his heels and kept faith with the silent image; City Lights and Modern Times say almost everything there is to say about the heartbreak and stubborn pride of the small man in the age of the machine, and they say it with hardly a word of dialogue. Comedy, for him, was never a way of escaping reality — it was the tenderest and most powerful way of looking it straight in the eye.",
       ),
     ]),
   },
@@ -327,6 +527,16 @@ export const seedDirectors: SeedDirector[] = [
         "《战舰波将金号》的敖德萨阶梯至今仍是剪辑教科书的第一课：婴儿车滚落台阶的几秒钟，把革命的悲剧凝成了永恒的节奏。他的理论深刻影响了此后整个世纪的电影语言。",
       ),
     ]),
+    bioEn:
+      "Soviet director and theorist, 1898–1948. The founding mind of montage, he turned editing into a weapon aimed straight at the viewer's thoughts and feelings.",
+    careerEssayEn: doc([
+      p(
+        "For Eisenstein, the power of cinema lay not in any single shot but in the collision between shots. Set two images against each other and a third meaning leaps out of the cut, belonging to neither one — this was his montage.",
+      ),
+      p(
+        "The Odessa Steps in Battleship Potemkin remain the first lesson in every editing textbook: in the few seconds it takes a baby carriage to tumble down the stairs, the tragedy of revolution is compressed into a rhythm that never lets go. His theory went on to shape the language of film for the entire century that followed.",
+      ),
+    ]),
   },
   {
     slug: "marcel-carne",
@@ -341,6 +551,16 @@ export const seedDirectors: SeedDirector[] = [
         "在纳粹占领下拍摄的《天堂的孩子》是这一风格的绝唱——一部关于剧场、表演与不可得之爱的鸿篇，被许多法国人视为民族电影的骄傲。",
       ),
     ]),
+    bioEn:
+      "A French director (1906–1996) and the defining figure of poetic realism, who, working with the screenwriter Jacques Prévert, staged love as destiny beneath the streetlamps of the studio backlot.",
+    careerEssayEn: doc([
+      p(
+        "Carné's partnership with the poet Jacques Prévert distilled the melancholy of 1930s France into what came to be called poetic realism: fog, streetlamps, the quays of the harbor, and a love doomed to fail, all of it playing out on streets built by hand for the camera. Nothing here is found and everything is composed, and that is precisely why the fatalism lands — these lovers move through a world constructed expressly to undo them.",
+      ),
+      p(
+        "Children of Paradise, shot under the Nazi occupation, is the swan song of that style — a sprawling work about the theater, about performance, and about a love that can never be possessed, which many in France have long claimed as the pride of their national cinema.",
+      ),
+    ]),
   },
   {
     slug: "elia-kazan",
@@ -353,6 +573,16 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "《码头风云》里白兰度那句“我本可以是个人物”，是这种表演的巅峰，也隐约映照着卡赞自己在麦卡锡时代作证的争议。他的电影始终在社会良知与个人软弱之间灼烧。",
+      ),
+    ]),
+    bioEn:
+      "Greek-American director, 1909–2003. A prime mover of Method acting, he drove social reality and inner conflict into the actor's hot, living body.",
+    careerEssayEn: doc([
+      p(
+        "Kazan came up through the theater and became one of the Method's indispensable champions; the Brando and the James Dean he shaped carried a wholly new, nakedly exposed kind of acting into Hollywood.",
+      ),
+      p(
+        "Brando's \"I coulda been a contender\" in On the Waterfront is the summit of that acting, and it quietly mirrors Kazan's own controversy over the names he gave in his McCarthy-era testimony. His films are forever smoldering in the gap between social conscience and personal weakness.",
       ),
     ]),
   },
