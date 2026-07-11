@@ -1,0 +1,201 @@
+import "server-only";
+import type { PublicDirector, PublicFilm, PublicList } from "@/db/queries/public";
+import { visibleIn } from "@/db/queries/visibility";
+import { countryToEn } from "@/i18n/countries";
+import { type Locale, localePath } from "@/i18n/locales";
+import { SITE_URL } from "@/lib/site";
+
+/**
+ * Schema.org JSON-LD builders for the editorial detail pages. These emit
+ * a data block for crawlers (Movie / Person / ItemList + BreadcrumbList),
+ * not rendered prose — the en variants pick the English fields and only
+ * link to entities that are en-visible (the same subset rule the pages
+ * apply), so /en never points a crawler at a page that 404s there.
+ *
+ * Rendered via <JsonLd>, which serializes with serializeJsonLd below.
+ */
+
+type JsonLdNode = Record<string, unknown>;
+
+const CRUMB = {
+  zh: { home: "首页", films: "影片", lists: "片单" },
+  en: { home: "Home", films: "Films", lists: "Curated Lists" },
+} as const;
+
+const JOB_TITLE = { zh: "电影导演", en: "Film director" } as const;
+
+function abs(locale: Locale, path: string): string {
+  return `${SITE_URL}${localePath(locale, path)}`;
+}
+
+/** Blob URLs are absolute; local-dev paths aren't — make image URLs absolute either way. */
+function absImage(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  return url.startsWith("http") ? url : `${SITE_URL}${url}`;
+}
+
+/** poster → still → hero → portrait → first, mirroring the page's own priority. */
+function pickImage(media: { kind: string; url: string }[]): string | undefined {
+  const byKind = (k: string) => media.find((m) => m.kind === k)?.url;
+  return absImage(
+    byKind("poster") ?? byKind("still") ?? byKind("hero") ?? byKind("portrait") ?? media[0]?.url,
+  );
+}
+
+function breadcrumb(locale: Locale, trail: { name: string; path: string }[]): JsonLdNode {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: t.name,
+      item: abs(locale, t.path),
+    })),
+  };
+}
+
+function graph(nodes: JsonLdNode[]): JsonLdNode {
+  return { "@context": "https://schema.org", "@graph": nodes };
+}
+
+export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode {
+  const en = locale === "en";
+  const url = abs(locale, `/film/${film.slug}`);
+  const name = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
+  const crumb = CRUMB[locale];
+
+  const director = film.filmDirectors.map((fd) => {
+    const linked =
+      fd.director.status === "published" && (!en || fd.director.statusEn === "published");
+    const person: JsonLdNode = {
+      "@type": "Person",
+      name: en ? fd.director.name : (fd.director.nameZh ?? fd.director.name),
+    };
+    if (linked) person.url = abs(locale, `/director/${fd.director.slug}`);
+    return person;
+  });
+
+  const alternateName = [...new Set([film.titleOriginal, en ? film.titleZh : film.titleEn])].filter(
+    (t): t is string => !!t && t !== name,
+  );
+  const description = (en ? film.editorialNoteEn : film.editorialNote)?.slice(0, 300);
+  const image = pickImage(film.media);
+
+  const movie: JsonLdNode = {
+    "@type": "Movie",
+    "@id": `${url}#movie`,
+    name,
+    url,
+    dateCreated: String(film.year),
+    ...(alternateName.length ? { alternateName } : {}),
+    ...(description ? { description } : {}),
+    ...(director.length ? { director } : {}),
+    ...(film.countries.length
+      ? {
+          countryOfOrigin: film.countries.map((c) => ({
+            "@type": "Country",
+            name: en ? countryToEn(c) : c,
+          })),
+        }
+      : {}),
+    ...(film.runtimeMinutes ? { duration: `PT${film.runtimeMinutes}M` } : {}),
+    ...(image ? { image } : {}),
+  };
+
+  return graph([
+    movie,
+    breadcrumb(locale, [
+      { name: crumb.home, path: "/" },
+      { name: crumb.films, path: "/films" },
+      { name, path: `/film/${film.slug}` },
+    ]),
+  ]);
+}
+
+export function directorJsonLd(director: PublicDirector, locale: Locale = "zh"): JsonLdNode {
+  const en = locale === "en";
+  const url = abs(locale, `/director/${director.slug}`);
+  const displayName = en ? director.name : (director.nameZh ?? director.name);
+  const subName = en ? director.nameZh : director.name;
+  const description = (en ? director.bioEn : director.bio)?.slice(0, 300);
+  const image = pickImage(director.media);
+  const crumb = CRUMB[locale];
+
+  const person: JsonLdNode = {
+    "@type": "Person",
+    "@id": `${url}#person`,
+    name: displayName,
+    url,
+    jobTitle: JOB_TITLE[locale],
+    ...(subName && subName !== displayName ? { alternateName: subName } : {}),
+    ...(description ? { description } : {}),
+    ...(image ? { image } : {}),
+  };
+
+  return graph([
+    person,
+    breadcrumb(locale, [
+      { name: crumb.home, path: "/" },
+      { name: displayName, path: `/director/${director.slug}` },
+    ]),
+  ]);
+}
+
+export function listJsonLd(list: PublicList, locale: Locale = "zh"): JsonLdNode {
+  const en = locale === "en";
+  const url = abs(locale, `/list/${list.slug}`);
+  const name = en ? (list.titleEn ?? list.title) : list.title;
+  const description = en ? list.themeEn : list.theme;
+  const crumb = CRUMB[locale];
+
+  const itemListElement = list.items.map((item, i) => {
+    const f = item.film;
+    const element: JsonLdNode = {
+      "@type": "ListItem",
+      position: i + 1,
+      name: en ? (f.titleEn ?? f.titleOriginal) : f.titleZh,
+    };
+    // Only link members visible in this locale: 顺序即立场 keeps untranslated
+    // members in the ordering, but /en must not link one (it 404s there).
+    if (visibleIn(f, locale)) element.item = abs(locale, `/film/${f.slug}`);
+    return element;
+  });
+
+  const itemList: JsonLdNode = {
+    "@type": "ItemList",
+    "@id": `${url}#itemlist`,
+    name,
+    url,
+    ...(description ? { description } : {}),
+    numberOfItems: list.items.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement,
+  };
+
+  return graph([
+    itemList,
+    breadcrumb(locale, [
+      { name: crumb.home, path: "/" },
+      { name: crumb.lists, path: "/lists" },
+      { name, path: `/list/${list.slug}` },
+    ]),
+  ]);
+}
+
+// JS line/paragraph separators: legal inside a JSON string but not inside
+// HTML <script> text, so they must be escaped in the serialized output.
+const LINE_SEP = String.fromCharCode(0x2028);
+const PARA_SEP = String.fromCharCode(0x2029);
+
+/**
+ * Serialize a JSON-LD node for injection into a <script> element. Escapes
+ * "<" so a string value containing "</script>" can't break out of the
+ * element, plus U+2028/U+2029. This keeps the raw injection in <JsonLd>
+ * safe regardless of what an editor typed into a title or note.
+ */
+export function serializeJsonLd(node: JsonLdNode): string {
+  return JSON.stringify(node)
+    .replaceAll("<", "\\u003c")
+    .replaceAll(LINE_SEP, "\\u2028")
+    .replaceAll(PARA_SEP, "\\u2029");
+}

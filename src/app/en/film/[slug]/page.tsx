@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FilmPage } from "@/components/film/film-page";
+import { JsonLd } from "@/components/seo/json-ld";
 import { MarkButtons } from "@/components/site/mark-buttons";
 import { getPublishedFilmBySlug, getPublishedFilmSlugs } from "@/db/queries/public";
 import { languageAlternates } from "@/i18n/alternates";
 import { getDict } from "@/i18n/dict";
+import { filmJsonLd } from "@/lib/structured-data";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedFilmSlugs("en");
@@ -31,12 +33,19 @@ export default async function EnPublicFilmPage({ params }: { params: Promise<{ s
   const film = await getPublishedFilmBySlug(slug, "en");
   if (!film) notFound();
   return (
-    <FilmPage
-      film={film}
-      locale="en"
-      actions={
-        <MarkButtons filmId={film.id} labels={getDict("en").markButtons} signInHref="/en/sign-in" />
-      }
-    />
+    <>
+      <JsonLd data={filmJsonLd(film, "en")} />
+      <FilmPage
+        film={film}
+        locale="en"
+        actions={
+          <MarkButtons
+            filmId={film.id}
+            labels={getDict("en").markButtons}
+            signInHref="/en/sign-in"
+          />
+        }
+      />
+    </>
   );
 }

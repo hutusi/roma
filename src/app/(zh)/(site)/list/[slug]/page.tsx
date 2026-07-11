@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ListPage } from "@/components/list/list-page";
+import { JsonLd } from "@/components/seo/json-ld";
 import { FollowButton } from "@/components/site/follow-button";
 import { getPublishedListBySlug, getPublishedListSlugs } from "@/db/queries/public";
 import { languageAlternates } from "@/i18n/alternates";
 import { getDict } from "@/i18n/dict";
+import { listJsonLd } from "@/lib/structured-data";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedListSlugs();
@@ -33,9 +35,12 @@ export default async function PublicListPage({ params }: { params: Promise<{ slu
   const list = await getPublishedListBySlug(slug);
   if (!list) notFound();
   return (
-    <ListPage
-      list={list}
-      actions={<FollowButton listId={list.id} labels={getDict("zh").followButton} />}
-    />
+    <>
+      <JsonLd data={listJsonLd(list)} />
+      <ListPage
+        list={list}
+        actions={<FollowButton listId={list.id} labels={getDict("zh").followButton} />}
+      />
+    </>
   );
 }

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DirectorPage } from "@/components/director/director-page";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getPublishedDirectorBySlug, getPublishedDirectorSlugs } from "@/db/queries/public";
 import { languageAlternates } from "@/i18n/alternates";
+import { directorJsonLd } from "@/lib/structured-data";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedDirectorSlugs();
@@ -36,5 +38,10 @@ export default async function PublicDirectorPage({
   const { slug } = await params;
   const director = await getPublishedDirectorBySlug(slug);
   if (!director) notFound();
-  return <DirectorPage director={director} />;
+  return (
+    <>
+      <JsonLd data={directorJsonLd(director)} />
+      <DirectorPage director={director} />
+    </>
+  );
 }
