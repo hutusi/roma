@@ -13,5 +13,5 @@ export default async function Page({
   params: Promise<{ username: string; id: string }>;
 }) {
   const { username, id } = await params;
-  return <UserListPage username={username} id={id} />;
+  return <UserListPage username={username} id={id} locale="en" />;
 }

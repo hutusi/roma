@@ -2,6 +2,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
+import { type Locale, localePath } from "@/i18n/locales";
 import { auth } from "@/lib/auth";
 
 export type Role = "admin" | "editor" | "user";
@@ -19,9 +20,11 @@ export function roleOf(session: Awaited<ReturnType<typeof getSession>>): Role {
   return role === "admin" || role === "editor" ? role : "user";
 }
 
-export async function requireUser() {
+export async function requireUser(locale: Locale = "zh") {
   const session = await getSession();
-  if (!session) redirect("/sign-in");
+  // Send an /en visitor to /en/sign-in so the sign-in round-trip stays
+  // in their locale; admin/editor guards below stay zh (admin is zh-only).
+  if (!session) redirect(localePath(locale, "/sign-in"));
   return session;
 }
 

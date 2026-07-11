@@ -14,6 +14,8 @@ import { SortableList } from "@/components/admin/sortable-list";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Toaster } from "@/components/ui/sonner";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
+import { type Locale, localePath } from "@/i18n/locales";
 
 type Item = { id: string; filmId: string; title: string; year: number };
 
@@ -24,6 +26,8 @@ export function OwnerPanel({
   description,
   filmOptions,
   initialItems,
+  locale,
+  labels,
 }: {
   listId: string;
   username: string;
@@ -31,8 +35,12 @@ export function OwnerPanel({
   description: string;
   filmOptions: { id: string; title: string; year: number }[];
   initialItems: Item[];
+  locale: Locale;
+  labels: Dictionary["userList"];
 }) {
   const router = useRouter();
+  const en = locale === "en";
+  const msg = (code: string) => labels.errors[code as keyof typeof labels.errors] ?? code;
   const [items, setItems] = useState(initialItems);
   const [selectedFilm, setSelectedFilm] = useState("");
   const [editing, setEditing] = useState(false);
@@ -52,33 +60,33 @@ export function OwnerPanel({
   return (
     <section className="mt-8 border border-line bg-card p-4 font-sans text-[15px]">
       <div className="flex items-center justify-between">
-        <p className="text-ink-muted text-sm">这是你的片单</p>
+        <p className="text-ink-muted text-sm">{labels.ownedHint}</p>
         <div className="flex gap-3 text-sm">
           <button
             type="button"
             className="text-brand hover:underline"
             onClick={() => setEditing(!editing)}
           >
-            {editing ? "收起" : "编辑标题"}
+            {editing ? labels.collapse : labels.editTitle}
           </button>
           <button
             type="button"
             className="text-ink-muted hover:text-destructive"
             disabled={pending}
             onClick={() => {
-              if (!window.confirm("删除这份片单？不可恢复。")) return;
+              if (!window.confirm(labels.deleteConfirm)) return;
               startTransition(async () => {
-                const result = await deleteUserList(listId);
+                const result = await deleteUserList(listId, locale);
                 if (!result.ok) {
-                  toast.error(result.error);
+                  toast.error(msg(result.error));
                   return;
                 }
-                router.push(`/u/${username}?tab=lists`);
+                router.push(localePath(locale, `/u/${username}?tab=lists`));
                 router.refresh();
               });
             }}
           >
-            删除片单
+            {labels.deleteList}
           </button>
         </div>
       </div>
@@ -90,12 +98,16 @@ export function OwnerPanel({
             e.preventDefault();
             const form = new FormData(e.currentTarget);
             startTransition(async () => {
-              const result = await updateUserList(listId, {
-                title: String(form.get("title")),
-                description: String(form.get("description") || ""),
-              });
+              const result = await updateUserList(
+                listId,
+                {
+                  title: String(form.get("title")),
+                  description: String(form.get("description") || ""),
+                },
+                locale,
+              );
               if (!result.ok) {
-                toast.error(result.error);
+                toast.error(msg(result.error));
                 return;
               }
               setEditing(false);
@@ -104,9 +116,14 @@ export function OwnerPanel({
           }}
         >
           <Input name="title" defaultValue={title} required maxLength={60} />
-          <Input name="description" defaultValue={description} placeholder="简介" maxLength={140} />
+          <Input
+            name="description"
+            defaultValue={description}
+            placeholder={labels.introPlaceholder}
+            maxLength={140}
+          />
           <Button type="submit" size="sm" disabled={pending}>
-            保存
+            {labels.save}
           </Button>
         </form>
       )}
@@ -117,10 +134,10 @@ export function OwnerPanel({
           value={selectedFilm}
           onChange={(e) => setSelectedFilm(e.target.value)}
         >
-          <option value="">加入影片…</option>
+          <option value="">{labels.addFilm}</option>
           {available.map((f) => (
             <option key={f.id} value={f.id}>
-              {f.title}（{f.year}）
+              {en ? `${f.title} (${f.year})` : `${f.title}（${f.year}）`}
             </option>
           ))}
         </select>
@@ -132,9 +149,9 @@ export function OwnerPanel({
           disabled={!selectedFilm || pending}
           onClick={() =>
             startTransition(async () => {
-              const result = await addFilmToUserList(listId, selectedFilm);
+              const result = await addFilmToUserList(listId, selectedFilm, locale);
               if (!result.ok) {
-                toast.error(result.error);
+                toast.error(msg(result.error));
                 return;
               }
               setSelectedFilm("");
@@ -142,13 +159,13 @@ export function OwnerPanel({
             })
           }
         >
-          加入
+          {labels.add}
         </Button>
       </div>
 
       {items.length > 1 && (
         <div className="mt-4">
-          <p className="mb-2 text-ink-muted text-xs">拖动排序（自动保存）：</p>
+          <p className="mb-2 text-ink-muted text-xs">{labels.reorderHint}</p>
           <SortableList
             items={items}
             onReorder={(next) => {
@@ -158,10 +175,11 @@ export function OwnerPanel({
                 const result = await reorderUserListItems(
                   listId,
                   next.map((item) => item.id),
+                  locale,
                 );
                 if (!result.ok) {
                   setItems(previous);
-                  toast.error(result.error);
+                  toast.error(msg(result.error));
                   return;
                 }
                 router.refresh();
@@ -179,9 +197,9 @@ export function OwnerPanel({
                   className="text-ink-muted text-xs hover:text-destructive"
                   onClick={() =>
                     startTransition(async () => {
-                      const result = await removeUserListItem(listId, item.id);
+                      const result = await removeUserListItem(listId, item.id, locale);
                       if (!result.ok) {
-                        toast.error(result.error);
+                        toast.error(msg(result.error));
                         return;
                       }
                       setItems(items.filter((it) => it.id !== item.id));
@@ -189,7 +207,7 @@ export function OwnerPanel({
                     })
                   }
                 >
-                  移除
+                  {labels.remove}
                 </button>
               </div>
             )}

@@ -10,14 +10,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
-import type { Locale } from "@/i18n/locales";
+import { type Locale, localePath } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
 
 /**
  * Header auth entry. A client island using the client-side session so
  * the header can live on fully static pages. Labels arrive as props
- * (dictionaries are server-only); user areas (/u, /me, /account,
- * /admin) are zh-only in v1, so only sign-in is locale-prefixed.
+ * (dictionaries are server-only). User areas (/u, /me, /account) are
+ * localized, so their links follow the current locale; /admin stays zh
+ * (the admin is zh-only).
  */
 export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionary["authMenu"] }) {
   const router = useRouter();
@@ -28,7 +29,7 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
   if (!session) {
     return (
       <Link
-        href={locale === "en" ? "/en/sign-in" : "/sign-in"}
+        href={localePath(locale, "/sign-in")}
         className="text-sm tracking-[0.2em] transition-colors hover:text-brand"
       >
         {labels.signIn}
@@ -47,14 +48,14 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
       <DropdownMenuContent align="end" className="font-sans">
         {username && (
           <DropdownMenuItem asChild>
-            <Link href={`/u/${username}`}>{labels.myPage}</Link>
+            <Link href={localePath(locale, `/u/${username}`)}>{labels.myPage}</Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem asChild>
-          <Link href="/me/follows">{labels.follows}</Link>
+          <Link href={localePath(locale, "/me/follows")}>{labels.follows}</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/account">{labels.account}</Link>
+          <Link href={localePath(locale, "/account")}>{labels.account}</Link>
         </DropdownMenuItem>
         {(role === "admin" || role === "editor") && (
           <>

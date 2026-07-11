@@ -3,12 +3,22 @@
 import { and, eq, max } from "drizzle-orm";
 import { db } from "@/db";
 import { userListItems, userLists } from "@/db/schema";
+import type { Locale } from "@/i18n/locales";
 import { requireUser } from "@/lib/auth-guards";
 import { type ActionResult, fail, ok } from "./result";
 
+/**
+ * These actions return a stable error CODE (not prose) as `error`; the
+ * calling client island maps it to a localized message via its `labels`,
+ * since the same action serves both the zh and /en user areas. The island
+ * also passes its `locale` so an expired-session redirect (from requireUser)
+ * lands on the in-locale sign-in — the /en/u/* profile routes are public, so
+ * this action guard is their only auth boundary.
+ */
+
 /** Every mutation first proves the list belongs to the caller. */
-async function ownedList(listId: string) {
-  const session = await requireUser();
+async function ownedList(listId: string, locale: Locale) {
+  const session = await requireUser(locale);
   const list = await db.query.userLists.findFirst({
     where: eq(userLists.id, listId),
   });
@@ -16,14 +26,14 @@ async function ownedList(listId: string) {
   return list;
 }
 
-export async function createUserList(values: {
-  title: string;
-  description?: string;
-}): Promise<ActionResult<{ id: string }>> {
-  const session = await requireUser();
+export async function createUserList(
+  values: { title: string; description?: string },
+  locale: Locale = "zh",
+): Promise<ActionResult<{ id: string }>> {
+  const session = await requireUser(locale);
   const title = values.title.trim();
-  if (!title) return fail("标题不能为空");
-  if (title.length > 60) return fail("标题不能超过 60 字");
+  if (!title) return fail("titleRequired");
+  if (title.length > 60) return fail("titleTooLong");
   const [created] = await db
     .insert(userLists)
     .values({
@@ -38,11 +48,13 @@ export async function createUserList(values: {
 export async function updateUserList(
   listId: string,
   values: { title: string; description?: string },
+  locale: Locale = "zh",
 ): Promise<ActionResult> {
-  const list = await ownedList(listId);
-  if (!list) return fail("片单不存在或无权限");
+  const list = await ownedList(listId, locale);
+  if (!list) return fail("notFound");
   const title = values.title.trim();
-  if (!title) return fail("标题不能为空");
+  if (!title) return fail("titleRequired");
+  if (title.length > 60) return fail("titleTooLong");
   await db
     .update(userLists)
     .set({ title, description: values.description?.trim() || null })
@@ -50,16 +62,20 @@ export async function updateUserList(
   return ok();
 }
 
-export async function deleteUserList(listId: string): Promise<ActionResult> {
-  const list = await ownedList(listId);
-  if (!list) return fail("片单不存在或无权限");
+export async function deleteUserList(listId: string, locale: Locale = "zh"): Promise<ActionResult> {
+  const list = await ownedList(listId, locale);
+  if (!list) return fail("notFound");
   await db.delete(userLists).where(eq(userLists.id, listId));
   return ok();
 }
 
-export async function addFilmToUserList(listId: string, filmId: string): Promise<ActionResult> {
-  const list = await ownedList(listId);
-  if (!list) return fail("片单不存在或无权限");
+export async function addFilmToUserList(
+  listId: string,
+  filmId: string,
+  locale: Locale = "zh",
+): Promise<ActionResult> {
+  const list = await ownedList(listId, locale);
+  if (!list) return fail("notFound");
   try {
     // max()+insert in one transaction so concurrent adds can't compute
     // the same position.
@@ -81,16 +97,20 @@ export async function addFilmToUserList(listId: string, filmId: string): Promise
       "code" in error &&
       (error as { code?: string }).code === "23505"
     ) {
-      return fail("这部影片已在片单中");
+      return fail("alreadyInList");
     }
     throw error;
   }
   return ok();
 }
 
-export async function removeUserListItem(listId: string, itemId: string): Promise<ActionResult> {
-  const list = await ownedList(listId);
-  if (!list) return fail("片单不存在或无权限");
+export async function removeUserListItem(
+  listId: string,
+  itemId: string,
+  locale: Locale = "zh",
+): Promise<ActionResult> {
+  const list = await ownedList(listId, locale);
+  if (!list) return fail("notFound");
   await db
     .delete(userListItems)
     .where(and(eq(userListItems.id, itemId), eq(userListItems.listId, listId)));
@@ -100,9 +120,10 @@ export async function removeUserListItem(listId: string, itemId: string): Promis
 export async function reorderUserListItems(
   listId: string,
   orderedItemIds: string[],
+  locale: Locale = "zh",
 ): Promise<ActionResult> {
-  const list = await ownedList(listId);
-  if (!list) return fail("片单不存在或无权限");
+  const list = await ownedList(listId, locale);
+  if (!list) return fail("notFound");
   await db.transaction(async (tx) => {
     for (const [i, itemId] of orderedItemIds.entries()) {
       await tx

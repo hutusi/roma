@@ -21,5 +21,5 @@ export default async function Page({
 }) {
   const { username } = await params;
   const { tab } = await searchParams;
-  return <ProfilePage username={username} tab={tab} />;
+  return <ProfilePage username={username} tab={tab} locale="en" />;
 }

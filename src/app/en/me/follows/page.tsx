@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { AccountPage } from "@/components/user/account-page";
+import { FollowsPage } from "@/components/user/follows-page";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "账号设置",
+  title: "Followed lists",
   robots: { index: false },
 };
 
 export default function Page() {
-  return <AccountPage />;
+  return <FollowsPage locale="en" />;
 }

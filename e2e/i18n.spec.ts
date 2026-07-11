@@ -149,3 +149,32 @@ test("en pages carry an English OG alt, not the zh root one", async ({ page }) =
   expect(alt).not.toContain("经典电影策展"); // the zh root alt
   expect(alt).toContain("Babuban");
 });
+
+test("en user profile tabs render in English", async ({ page }) => {
+  await page.goto("/en/u/e2euser");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  // Scope to main so the profile tabs don't collide with the header nav.
+  const main = page.getByRole("main");
+  await expect(main.getByRole("link", { name: "Watched" })).toBeVisible();
+  await expect(main.getByRole("link", { name: "Want to see" })).toBeVisible();
+  await expect(main.getByRole("link", { name: "Lists" })).toBeVisible();
+  await expect(page.getByText("看过")).toHaveCount(0);
+});
+
+test("logged-out /en/account redirects to /en/sign-in", async ({ page }) => {
+  await page.goto("/en/account");
+  await expect(page).toHaveURL(/\/en\/sign-in/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});
+
+test.describe("signed-in en user area", () => {
+  test.use({ storageState: "e2e/.auth/user.json" });
+
+  test("en account settings render in English", async ({ page }) => {
+    await page.goto("/en/account");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.getByRole("heading", { name: "Account settings" })).toBeVisible();
+    await expect(page.getByText("Basic info")).toBeVisible();
+    await expect(page.getByText("账号设置")).toHaveCount(0);
+  });
+});
