@@ -113,6 +113,7 @@ export const en = {
   },
   userList: {
     newList: "New list",
+    listSuffix: "'s list",
     titleLabel: "Title",
     introLabel: "Description (optional)",
     introPlaceholder: "Description",

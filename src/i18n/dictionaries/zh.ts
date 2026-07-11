@@ -116,6 +116,7 @@ export const zh = {
   },
   userList: {
     newList: "新建片单",
+    listSuffix: " 的片单",
     titleLabel: "标题",
     introLabel: "简介（可选）",
     introPlaceholder: "简介",

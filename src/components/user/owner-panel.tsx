@@ -76,7 +76,7 @@ export function OwnerPanel({
             onClick={() => {
               if (!window.confirm(labels.deleteConfirm)) return;
               startTransition(async () => {
-                const result = await deleteUserList(listId);
+                const result = await deleteUserList(listId, locale);
                 if (!result.ok) {
                   toast.error(msg(result.error));
                   return;
@@ -98,10 +98,14 @@ export function OwnerPanel({
             e.preventDefault();
             const form = new FormData(e.currentTarget);
             startTransition(async () => {
-              const result = await updateUserList(listId, {
-                title: String(form.get("title")),
-                description: String(form.get("description") || ""),
-              });
+              const result = await updateUserList(
+                listId,
+                {
+                  title: String(form.get("title")),
+                  description: String(form.get("description") || ""),
+                },
+                locale,
+              );
               if (!result.ok) {
                 toast.error(msg(result.error));
                 return;
@@ -145,7 +149,7 @@ export function OwnerPanel({
           disabled={!selectedFilm || pending}
           onClick={() =>
             startTransition(async () => {
-              const result = await addFilmToUserList(listId, selectedFilm);
+              const result = await addFilmToUserList(listId, selectedFilm, locale);
               if (!result.ok) {
                 toast.error(msg(result.error));
                 return;
@@ -171,6 +175,7 @@ export function OwnerPanel({
                 const result = await reorderUserListItems(
                   listId,
                   next.map((item) => item.id),
+                  locale,
                 );
                 if (!result.ok) {
                   setItems(previous);
@@ -192,7 +197,7 @@ export function OwnerPanel({
                   className="text-ink-muted text-xs hover:text-destructive"
                   onClick={() =>
                     startTransition(async () => {
-                      const result = await removeUserListItem(listId, item.id);
+                      const result = await removeUserListItem(listId, item.id, locale);
                       if (!result.ok) {
                         toast.error(msg(result.error));
                         return;

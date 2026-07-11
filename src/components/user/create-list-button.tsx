@@ -47,10 +47,13 @@ export function CreateListButton({
             e.preventDefault();
             const form = new FormData(e.currentTarget);
             startTransition(async () => {
-              const result = await createUserList({
-                title: String(form.get("title")),
-                description: String(form.get("description") || ""),
-              });
+              const result = await createUserList(
+                {
+                  title: String(form.get("title")),
+                  description: String(form.get("description") || ""),
+                },
+                locale,
+              );
               if (!result.ok) {
                 setError(labels.errors[result.error as keyof typeof labels.errors] ?? result.error);
                 return;

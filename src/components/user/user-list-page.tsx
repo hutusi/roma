@@ -68,7 +68,7 @@ export async function UserListPage({
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow={en ? `@${username}'s list` : `@${username} 的片单`} title={list.title} />
+      <TitleCard eyebrow={`@${username}${t.listSuffix}`} title={list.title} />
       {list.description && (
         <p className="mt-4 text-center text-ink-muted text-sm">{list.description}</p>
       )}
