@@ -1,5 +1,6 @@
 import { AcademyFrame } from "@/components/site/academy-frame";
 import { FilmCard } from "@/components/site/film-card";
+import { LocaleSwitch } from "@/components/site/locale-switch";
 import { TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
 import { type PublicList, posterOf } from "@/db/queries/public";
@@ -30,6 +31,11 @@ export function ListPage({
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       <TitleCard eyebrow="Curated List" title={title} />
       {theme && <p className="mt-4 text-center text-ink-muted text-sm tracking-[0.2em]">{theme}</p>}
+      {list.status === "published" && (en || list.statusEn === "published") && (
+        <p className="mt-3 text-center">
+          <LocaleSwitch locale={locale} path={`/list/${list.slug}`} />
+        </p>
+      )}
       {actions && <div className="mt-6 flex justify-center">{actions}</div>}
 
       {list.cover && (

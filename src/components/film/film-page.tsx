@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AcademyFrame } from "@/components/site/academy-frame";
+import { LocaleSwitch } from "@/components/site/locale-switch";
 import { TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
 import { heroOf, type PublicFilm } from "@/db/queries/public";
@@ -99,6 +100,11 @@ export function FilmPage({
                 )}
               </span>
             ))}
+          </p>
+        )}
+        {film.status === "published" && (en || film.statusEn === "published") && (
+          <p className="mt-3">
+            <LocaleSwitch locale={locale} path={`/film/${film.slug}`} />
           </p>
         )}
         {actions && <div className="mt-5 flex justify-center">{actions}</div>}

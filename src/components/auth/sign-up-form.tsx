@@ -6,12 +6,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
+import { type Locale, localePath } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
 
-export function SignUpForm() {
+export function SignUpForm({ locale, labels }: { locale: Locale; labels: Dictionary["auth"] }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const t = labels.signUp;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,38 +29,38 @@ export function SignUpForm() {
     });
     setPending(false);
     if (error) {
-      setError(error.message ?? "注册失败，请稍后再试。");
+      setError(error.message ?? t.fallbackError);
       return;
     }
-    router.push("/");
+    router.push(localePath(locale, "/"));
     router.refresh();
   }
 
   return (
     <div className="border-line border-y py-10">
-      <h1 className="text-center font-bold text-2xl tracking-[0.2em]">注册</h1>
+      <h1 className="text-center font-bold text-2xl tracking-[0.2em]">{t.title}</h1>
       <form onSubmit={onSubmit} className="mt-8 space-y-5">
         <div className="space-y-2">
-          <Label htmlFor="name">显示名</Label>
+          <Label htmlFor="name">{t.name}</Label>
           <Input id="name" name="name" required autoComplete="name" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="username">用户名</Label>
+          <Label htmlFor="username">{t.username}</Label>
           <Input
             id="username"
             name="username"
             required
             autoComplete="username"
             pattern="[a-zA-Z0-9_.-]{3,30}"
-            title="3–30 位字母、数字或 _ . -（用于个人主页地址）"
+            title={t.usernameHint}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">邮箱</Label>
+          <Label htmlFor="email">{labels.email}</Label>
           <Input id="email" name="email" type="email" required autoComplete="email" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">密码</Label>
+          <Label htmlFor="password">{labels.password}</Label>
           <Input
             id="password"
             name="password"
@@ -69,13 +72,13 @@ export function SignUpForm() {
         </div>
         {error && <p className="text-destructive text-sm">{error}</p>}
         <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
-          {pending ? "注册中…" : "注册"}
+          {pending ? t.submitting : t.submit}
         </Button>
       </form>
       <p className="mt-6 text-center text-ink-muted text-sm">
-        已有账号？
-        <Link href="/sign-in" className="ml-1 text-brand hover:underline">
-          登录
+        {t.hasAccount}
+        <Link href={localePath(locale, "/sign-in")} className="ml-1 text-brand hover:underline">
+          {t.signInLink}
         </Link>
       </p>
     </div>

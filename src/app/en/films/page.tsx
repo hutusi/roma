@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { getPublishedFilms, posterOf } from "@/db/queries/public";
+import { languageAlternates } from "@/i18n/alternates";
 import { countryToEn, countryToZh } from "@/i18n/countries";
 
 export const metadata: Metadata = {
   title: "Films",
   description: "Every film on Babuban — inclusion is the recommendation.",
+  alternates: { languages: languageAlternates("/films") },
 };
 
 const DECADES = [1920, 1930, 1940, 1950, 1960, 1970, 1980];

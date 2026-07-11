@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AcademyFrame } from "@/components/site/academy-frame";
 import { FilmCard } from "@/components/site/film-card";
+import { LocaleSwitch } from "@/components/site/locale-switch";
 import { TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
 import { type PublicDirector, posterOf } from "@/db/queries/public";
@@ -33,6 +34,11 @@ export function DirectorPage({
         <h1 className="font-bold text-4xl tracking-[0.15em]">{displayName}</h1>
         {subName && subName !== displayName && (
           <p className="mt-3 font-display text-ink-muted text-lg">{subName}</p>
+        )}
+        {director.status === "published" && (en || director.statusEn === "published") && (
+          <p className="mt-3">
+            <LocaleSwitch locale={locale} path={`/director/${director.slug}`} />
+          </p>
         )}
       </header>
 

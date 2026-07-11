@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { TitleCard } from "@/components/site/title-card";
+import { languageAlternates } from "@/i18n/alternates";
 
 export const metadata: Metadata = {
   title: "关于",
   description: "八部半是什么，以及它为什么存在。",
+  alternates: { languages: languageAlternates("/about") },
 };
 
 export default function AboutPage() {

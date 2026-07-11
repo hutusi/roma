@@ -6,13 +6,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Dictionary } from "@/i18n/dictionaries/zh";
+import { type Locale, localePath } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
 
-export function SignInForm() {
+export function SignInForm({ locale, labels }: { locale: Locale; labels: Dictionary["auth"] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const t = labels.signIn;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -25,26 +28,26 @@ export function SignInForm() {
     });
     setPending(false);
     if (error) {
-      setError("邮箱或密码不正确。");
+      setError(t.error);
       return;
     }
     const next = searchParams.get("next");
     // Same-origin paths only: "//evil.com" passes startsWith("/") but
     // navigates cross-origin (open redirect).
-    router.push(next?.startsWith("/") && !next.startsWith("//") ? next : "/");
+    router.push(next?.startsWith("/") && !next.startsWith("//") ? next : localePath(locale, "/"));
     router.refresh();
   }
 
   return (
     <div className="border-line border-y py-10">
-      <h1 className="text-center font-bold text-2xl tracking-[0.2em]">登录</h1>
+      <h1 className="text-center font-bold text-2xl tracking-[0.2em]">{t.title}</h1>
       <form onSubmit={onSubmit} className="mt-8 space-y-5">
         <div className="space-y-2">
-          <Label htmlFor="email">邮箱</Label>
+          <Label htmlFor="email">{labels.email}</Label>
           <Input id="email" name="email" type="email" required autoComplete="email" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">密码</Label>
+          <Label htmlFor="password">{labels.password}</Label>
           <Input
             id="password"
             name="password"
@@ -55,17 +58,17 @@ export function SignInForm() {
         </div>
         {error && <p className="text-destructive text-sm">{error}</p>}
         <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
-          {pending ? "登录中…" : "登录"}
+          {pending ? t.submitting : t.submit}
         </Button>
       </form>
       <p className="mt-6 text-center text-ink-muted text-sm">
-        还没有账号？
-        <Link href="/sign-up" className="ml-1 text-brand hover:underline">
-          注册
+        {t.noAccount}
+        <Link href={localePath(locale, "/sign-up")} className="ml-1 text-brand hover:underline">
+          {t.signUpLink}
         </Link>
         <span className="mx-2">·</span>
-        <Link href="/forgot-password" className="text-brand hover:underline">
-          忘记密码
+        <Link href={localePath(locale, "/forgot-password")} className="text-brand hover:underline">
+          {t.forgotLink}
         </Link>
       </p>
     </div>

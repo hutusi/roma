@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DirectorPage } from "@/components/director/director-page";
 import { getPublishedDirectorBySlug, getPublishedDirectorSlugs } from "@/db/queries/public";
+import { languageAlternates } from "@/i18n/alternates";
 
 export async function generateStaticParams() {
   const slugs = await getPublishedDirectorSlugs("en");
@@ -19,6 +20,7 @@ export async function generateMetadata({
   return {
     title: director.name,
     description: director.bioEn?.slice(0, 160) ?? director.name,
+    alternates: { languages: languageAlternates(`/director/${slug}`) },
   };
 }
 

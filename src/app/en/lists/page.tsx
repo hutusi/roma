@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { TitleCard } from "@/components/site/title-card";
 import { getPublishedLists } from "@/db/queries/public";
+import { languageAlternates } from "@/i18n/alternates";
 
 export const metadata: Metadata = {
   title: "Lists",
   description: "Babuban's curated lists: a theme, an introduction, films in a deliberate order.",
+  alternates: { languages: languageAlternates("/lists") },
 };
 
 export default async function EnListsIndexPage() {

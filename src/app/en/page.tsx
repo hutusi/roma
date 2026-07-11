@@ -1,15 +1,21 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
 import { getHomeData, posterOf } from "@/db/queries/public";
+import { languageAlternates } from "@/i18n/alternates";
 
 /**
  * English home — same shape as the zh home, over the en-published
  * subset. Sections render only when the subset has content, so the
  * page degrades gracefully while translations roll out.
  */
+export const metadata: Metadata = {
+  alternates: { languages: languageAlternates("/") },
+};
+
 export default async function EnHomePage() {
   const { featured, lists, recentFilms } = await getHomeData("en");
 

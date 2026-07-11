@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { FilmPage } from "@/components/film/film-page";
 import { MarkButtons } from "@/components/site/mark-buttons";
 import { getPublishedFilmBySlug, getPublishedFilmSlugs } from "@/db/queries/public";
+import { languageAlternates } from "@/i18n/alternates";
 import { getDict } from "@/i18n/dict";
 
 export async function generateStaticParams() {
@@ -21,6 +22,7 @@ export async function generateMetadata({
   return {
     title: `${film.titleEn ?? film.titleOriginal} (${film.year})`,
     description: film.editorialNoteEn?.slice(0, 160) ?? film.titleOriginal,
+    alternates: { languages: languageAlternates(`/film/${slug}`) },
   };
 }
 

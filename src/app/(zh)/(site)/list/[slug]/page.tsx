@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ListPage } from "@/components/list/list-page";
 import { FollowButton } from "@/components/site/follow-button";
 import { getPublishedListBySlug, getPublishedListSlugs } from "@/db/queries/public";
+import { languageAlternates } from "@/i18n/alternates";
 import { getDict } from "@/i18n/dict";
 
 export async function generateStaticParams() {
@@ -21,6 +22,9 @@ export async function generateMetadata({
   return {
     title: list.title,
     description: list.theme ?? `${list.items.length} 部影片`,
+    alternates: {
+      languages: languageAlternates(`/list/${slug}`, { en: list.statusEn === "published" }),
+    },
   };
 }
 

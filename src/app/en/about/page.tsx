@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { TitleCard } from "@/components/site/title-card";
+import { languageAlternates } from "@/i18n/alternates";
 
 export const metadata: Metadata = {
   title: "About",
   description: "What Babuban is, and why it exists.",
+  alternates: { languages: languageAlternates("/about") },
 };
 
 export default function EnAboutPage() {

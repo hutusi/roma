@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { getPublishedFilms, posterOf } from "@/db/queries/public";
+import { languageAlternates } from "@/i18n/alternates";
 
 export const metadata: Metadata = {
   title: "影片",
   description: "八部半收录的全部影片——收录即推荐。",
+  alternates: { languages: languageAlternates("/films") },
 };
 
 const DECADES = [1920, 1930, 1940, 1950, 1960, 1970, 1980];

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LocaleSwitch } from "@/components/site/locale-switch";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
 
@@ -15,6 +16,8 @@ export function SiteFooter({ locale = "zh" }: { locale?: Locale }) {
           <Link href={localePath(locale, "/about")} className="transition-colors hover:text-brand">
             {dict.footer.aboutLink}
           </Link>
+          <span className="mx-2">·</span>
+          <LocaleSwitch locale={locale} path="/" className="transition-colors hover:text-brand" />
           <span className="mx-2">·</span>© {new Date().getFullYear()} babuban.com
         </p>
       </div>
