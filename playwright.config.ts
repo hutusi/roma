@@ -1,9 +1,17 @@
+import { userInfo } from "node:os";
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 3105;
 const baseURL = `http://localhost:${PORT}`;
 
-const TEST_DATABASE_URL = process.env.E2E_DATABASE_URL ?? "postgres://localhost:5432/roma_test";
+// Fully specified on purpose: `next build` loads .env.production.local
+// (a `vercel env pull` artifact carrying PGUSER/PGHOST/PGPASSWORD), and
+// node-postgres fills any part missing from the URL from those vars —
+// a user-less URL would silently target prod credentials. CI passes an
+// explicit E2E_DATABASE_URL and never has the file.
+const TEST_DATABASE_URL =
+  process.env.E2E_DATABASE_URL ??
+  `postgres://${userInfo().username}@localhost:5432/roma_test`;
 
 export default defineConfig({
   testDir: "./e2e",
