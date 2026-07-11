@@ -4,10 +4,10 @@ import { AccountPage } from "@/components/user/account-page";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "账号设置",
+  title: "Account settings",
   robots: { index: false },
 };
 
 export default function Page() {
-  return <AccountPage />;
+  return <AccountPage locale="en" />;
 }
