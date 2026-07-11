@@ -16,20 +16,25 @@ mainland nodes. Test the real domain (`babuban.com`), not `*.vercel.app`
 URLs to test:
 
 - `/` — SSG home
-- a `/film/[slug]` page — SSG editorial (pick a stable published slug)
+- `/film/otto-e-mezzo` — SSG editorial (a stable published slug)
 - a `/_next/static/...` asset — cache/CDN delivery
 - a Blob image URL (`https://<id>.public.blob.vercel-storage.com/...`) — image egress path
 
 ## Baseline runs
 
-### YYYY-MM-DD — tool: <17ce | itdog | boce>
+### 2026-07 — first post-launch baseline (pending capture — owner)
+
+Prod went live 2026-07-11. Run a mainland multi-city test (17ce/itdog/boce)
+against the production URLs above and replace the placeholders below with
+the medians. Do NOT infer these from anywhere else — they are the synthetic
+ground truth for ADR 0009.
 
 | URL type | China median TTFB (ms) | China median full load (ms) | Notes |
 |---|---|---|---|
-| `/` (home) | _tbd_ | _tbd_ | |
-| `/film/[slug]` | _tbd_ | _tbd_ | |
-| static asset | _tbd_ | _tbd_ | |
-| Blob image | _tbd_ | _tbd_ | |
+| `/` (home) | _pending_ | _pending_ | |
+| `/film/otto-e-mezzo` | _pending_ | _pending_ | |
+| static asset | _pending_ | _pending_ | |
+| Blob image | _pending_ | _pending_ | |
 
 > Trigger reference (ADR 0009): the China-edge track opens when real-user
 > **p75 LCP > 4000 ms** or **p75 TTFB > 1800 ms** for the China segment
