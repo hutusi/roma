@@ -20,7 +20,12 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
-  use: { baseURL, trace: "on-first-retry" },
+  // locale: Playwright's default context locale is en-US, which would
+  // surface the language-hint banner on every /zh page and destabilize
+  // unrelated specs (strict-mode collisions, click interception by the
+  // fixed pill). fr-FR matches neither edition, so the banner appears
+  // only where a spec opts in via test.use({ locale }).
+  use: { baseURL, trace: "on-first-retry", locale: "fr-FR" },
   projects: [
     { name: "setup", testMatch: /.*\.setup\.ts/ },
     {
