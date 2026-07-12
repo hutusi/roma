@@ -55,9 +55,13 @@ export function MediaManager({
           let result: Awaited<ReturnType<typeof uploadMedia>>;
           try {
             result = await uploadMedia(formData);
+          } catch {
+            // A thrown upload (network drop, aborted request) would otherwise
+            // bubble up as an unhandled rejection with no feedback.
+            toast.error("上传失败，请重试");
+            return;
           } finally {
-            // A thrown upload (network drop, aborted request) must still
-            // release the button — otherwise it sticks on "上传中…".
+            // Always release the button — otherwise it sticks on "上传中…".
             setUploading(false);
           }
           if (!result.ok) {
