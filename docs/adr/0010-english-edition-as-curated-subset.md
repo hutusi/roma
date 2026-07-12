@@ -1,6 +1,6 @@
 # 0010 — English edition as a curated subset under /en
 
-Status: accepted (2026-07-11)
+Status: accepted (2026-07-11); routing & subset-presentation superseded by [ADR 0012](0012-symmetric-locale-urls-and-en-pending-stubs.md) (2026-07-12) — the content model, editorial workflow, and listing/SEO subset rule remain current
 
 ## Context
 
