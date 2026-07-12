@@ -68,7 +68,12 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
-            await authClient.signOut();
+            // Guard the network call so a failed sign-out doesn't throw an
+            // unhandled rejection. No toast here: this menu is shared chrome
+            // rendered on /en too, and refresh() re-checks the session.
+            try {
+              await authClient.signOut();
+            } catch {}
             router.refresh();
           }}
         >

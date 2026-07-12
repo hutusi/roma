@@ -28,4 +28,4 @@ months (refine against the numbers below).
 
 | Month | Stored (GB) | Egress (GB) | Egress cost ($) | Storage cost ($) | Notes |
 |---|---|---|---|---|---|
-| YYYY-MM | _tbd_ | _tbd_ | _tbd_ | _tbd_ | |
+| 2026-07 | _pending_ | _pending_ | _pending_ | _pending_ | first post-launch month (prod live 2026-07-11); capture from the Vercel dashboard on 2026-08-01 |

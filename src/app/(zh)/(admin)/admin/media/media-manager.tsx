@@ -52,8 +52,18 @@ export function MediaManager({
           e.preventDefault();
           const formData = new FormData(e.currentTarget);
           setUploading(true);
-          const result = await uploadMedia(formData);
-          setUploading(false);
+          let result: Awaited<ReturnType<typeof uploadMedia>>;
+          try {
+            result = await uploadMedia(formData);
+          } catch {
+            // A thrown upload (network drop, aborted request) would otherwise
+            // bubble up as an unhandled rejection with no feedback.
+            toast.error("上传失败，请重试");
+            return;
+          } finally {
+            // Always release the button — otherwise it sticks on "上传中…".
+            setUploading(false);
+          }
           if (!result.ok) {
             toast.error(result.error);
             return;

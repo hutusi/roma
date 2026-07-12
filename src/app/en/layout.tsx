@@ -40,6 +40,7 @@ export default function EnRootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
+        <link rel="alternate" type="application/rss+xml" title="Babuban" href="/en/rss.xml" />
         <RumBeacon />
         <SiteHeader locale="en" />
         <main className="flex-1">{children}</main>

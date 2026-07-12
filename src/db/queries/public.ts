@@ -3,6 +3,7 @@ import { and, arrayContains, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { db } from "@/db";
 import { curatedLists, directors, films, type media } from "@/db/schema";
 import type { Locale } from "@/i18n/locales";
+import { visibleIn } from "./visibility";
 
 /**
  * Read layer for the public site and the admin draft preview. The
@@ -14,11 +15,6 @@ import type { Locale } from "@/i18n/locales";
  * in zh AND en (so /en can never show what zh doesn't), and it must be
  * applied here — cached pages can't rely on request-time checks.
  */
-
-/** True when a row is visible in the given locale. Rows must carry both status columns. */
-function visibleIn(row: { status: string; statusEn: string }, locale: Locale): boolean {
-  return row.status === "published" && (locale !== "en" || row.statusEn === "published");
-}
 
 const filmStatusConds = (locale: Locale) =>
   locale === "en"
@@ -109,6 +105,16 @@ export async function getPublishedFilmSlugs(locale: Locale = "zh") {
     .select({ slug: films.slug })
     .from(films)
     .where(and(...filmStatusConds(locale)));
+}
+
+/** Most-recently-published films for the locale, newest first — feeds the RSS route. */
+export async function getRecentPublishedFilms(locale: Locale = "zh", limit = 30) {
+  return db.query.films.findMany({
+    where: and(...filmStatusConds(locale)),
+    orderBy: desc(locale === "en" ? films.publishedEnAt : films.publishedAt),
+    limit,
+    with: { filmDirectors: { with: { director: true } }, media: true },
+  });
 }
 
 const directorStatusConds = (locale: Locale) =>
@@ -254,15 +260,7 @@ export async function getPublishedListSlugs(locale: Locale = "zh") {
 export async function getHomeData(locale: Locale = "zh") {
   const [lists, recentFilms] = await Promise.all([
     getPublishedLists(locale),
-    db.query.films.findMany({
-      where: and(...filmStatusConds(locale)),
-      orderBy: desc(locale === "en" ? films.publishedEnAt : films.publishedAt),
-      limit: 4,
-      with: {
-        filmDirectors: { with: { director: true } },
-        media: true,
-      },
-    }),
+    getRecentPublishedFilms(locale, 4),
   ]);
   return {
     featured: lists[0] ?? null,

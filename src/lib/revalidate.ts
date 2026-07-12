@@ -21,6 +21,7 @@ export function revalidateFilm(slug: string) {
   for (const prefix of ["", "/en"]) {
     revalidatePath(`${prefix}/film/${slug}`);
     revalidatePath(`${prefix}/films`);
+    revalidatePath(`${prefix}/rss.xml`);
     revalidatePath(prefix === "" ? "/" : prefix);
   }
 }
