@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { LOCALES } from "@/i18n/locales";
+import { buildResetEmail } from "@/lib/reset-email";
 
 export const auth = betterAuth({
   appName: "八部半",
@@ -56,6 +57,12 @@ export const auth = betterAuth({
         }
         return;
       }
+      // The callback's static type is the base User, but the runtime
+      // value is the full DB row — read the additional field with the
+      // same narrow-cast pattern the auth menu uses for role/username.
+      // buildResetEmail narrows the value and falls back to the
+      // bilingual template for accounts with no stored locale.
+      const { subject, text } = buildResetEmail((user as { locale?: string | null }).locale, url);
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -65,11 +72,8 @@ export const auth = betterAuth({
         body: JSON.stringify({
           from: process.env.EMAIL_FROM ?? "八部半 <noreply@babuban.com>",
           to: user.email,
-          // Bilingual on purpose: users have no stored locale (deferred),
-          // and the reset link's callback already routes to the locale
-          // the request came from.
-          subject: "八部半 · 重置密码 / Babuban · Reset your password",
-          text: `你好，\n\n点击以下链接重置密码（1 小时内有效）：\n${url}\n\n如果这不是你的操作，请忽略这封邮件。\n\nHello,\n\nUse the link above to reset your password (valid for 1 hour).\nIf you didn't request this, you can safely ignore this email.\n\n—— 八部半 babuban.com`,
+          subject,
+          text,
         }),
         signal: AbortSignal.timeout(10_000),
       });
