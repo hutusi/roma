@@ -18,6 +18,12 @@ export const users = pgTable("users", {
   banExpires: timestamp("ban_expires"),
   username: text("username").unique(),
   displayUsername: text("display_username"),
+  // Reader-language preference ("zh" | "en"). NULL = unknown — accounts
+  // created before the column existed; they get the bilingual reset
+  // email until they save a preference. Values are constrained by the
+  // better-auth additionalFields validator, not a DB enum, so future
+  // locales don't need a migration.
+  locale: text("locale"),
 });
 
 export const sessions = pgTable(

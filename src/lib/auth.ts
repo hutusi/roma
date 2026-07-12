@@ -2,8 +2,10 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin, username } from "better-auth/plugins";
+import { z } from "zod";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { LOCALES } from "@/i18n/locales";
 
 export const auth = betterAuth({
   appName: "八部半",
@@ -12,6 +14,22 @@ export const auth = betterAuth({
     usePlural: true,
     schema,
   }),
+  user: {
+    additionalFields: {
+      // Reader-language preference ("zh" | "en"); NULL = unknown
+      // (pre-column accounts) and falls back to the bilingual reset
+      // email. The validator runs server-side on create AND update and
+      // must stay synchronous (async standard schemas throw in
+      // better-auth). Sessions are stateful today; if session.cookieCache
+      // is ever enabled, stored-locale reads can lag a change by the TTL.
+      locale: {
+        type: "string",
+        required: false,
+        input: true,
+        validator: { input: z.enum(LOCALES) },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
