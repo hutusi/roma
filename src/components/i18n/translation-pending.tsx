@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { localePath } from "@/i18n/locales";
 
 /**
  * /en stand-in for a zh-published entity whose English edition isn't
@@ -43,7 +44,7 @@ export function TranslationPending({
         Read the Chinese edition →
       </Link>
       <Link
-        href="/en"
+        href={localePath("en", "/")}
         className="mt-6 text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
       >
         Back to the home page

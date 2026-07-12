@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { isLocale } from "@/i18n/locales";
+import { isLocale, localePath } from "@/i18n/locales";
 
 // not-found receives no props; useParams is the documented way to read
 // the [lang] segment from a client boundary (it can't call notFound(),
@@ -30,7 +30,7 @@ export default function NotFound() {
       <h1 className="mt-4 font-bold text-3xl tracking-[0.2em]">{t.title}</h1>
       <p className="mt-4 max-w-[44ch] text-ink-muted leading-[1.9]">{t.body}</p>
       <Link
-        href={`/${locale}`}
+        href={localePath(locale, "/")}
         className="mt-8 border border-ink px-8 py-3 text-sm tracking-[0.3em] transition-colors hover:border-brand hover:text-brand"
       >
         {t.home}

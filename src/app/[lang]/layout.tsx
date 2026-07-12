@@ -3,7 +3,7 @@ import { DocumentShell } from "@/components/layout/document-shell";
 import { RumBeacon } from "@/components/site/rum-beacon";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { HTML_LANG, LOCALES, type Locale } from "@/i18n/locales";
+import { HTML_LANG, LOCALES, type Locale, localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { SITE_URL } from "@/lib/site";
 
@@ -64,7 +64,7 @@ export default async function LangRootLayout({
         rel="alternate"
         type="application/rss+xml"
         title={RSS_TITLE[locale]}
-        href={`/${locale}/rss.xml`}
+        href={localePath(locale, "/rss.xml")}
       />
       <RumBeacon />
       <SiteHeader locale={locale} />
