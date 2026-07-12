@@ -260,15 +260,7 @@ export async function getPublishedListSlugs(locale: Locale = "zh") {
 export async function getHomeData(locale: Locale = "zh") {
   const [lists, recentFilms] = await Promise.all([
     getPublishedLists(locale),
-    db.query.films.findMany({
-      where: and(...filmStatusConds(locale)),
-      orderBy: desc(locale === "en" ? films.publishedEnAt : films.publishedAt),
-      limit: 4,
-      with: {
-        filmDirectors: { with: { director: true } },
-        media: true,
-      },
-    }),
+    getRecentPublishedFilms(locale, 4),
   ]);
   return {
     featured: lists[0] ?? null,
