@@ -8,9 +8,9 @@ import {
   getPublishedDirectorBySlug,
   getPublishedDirectorSlugs,
 } from "@/db/queries/public";
-import { languageAlternates } from "@/i18n/alternates";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { seoMetadata } from "@/lib/seo";
 import { directorJsonLd } from "@/lib/structured-data";
 
 // zh slug set for both locales — en-pending directors prerender as
@@ -41,11 +41,10 @@ export async function generateMetadata({
     description: en
       ? (director.bioEn?.slice(0, 160) ?? director.name)
       : (director.bio?.slice(0, 120) ?? director.name),
-    alternates: {
-      languages: languageAlternates(`/director/${slug}`, {
-        en: en || director.statusEn === "published",
-      }),
-    },
+    ...seoMetadata(locale, `/director/${slug}`, {
+      en: en || director.statusEn === "published",
+      ogType: "profile",
+    }),
   };
 }
 

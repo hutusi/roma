@@ -5,13 +5,18 @@ import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
 import { getHomeData, posterOf } from "@/db/queries/public";
-import { languageAlternates } from "@/i18n/alternates";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { seoMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  alternates: { languages: languageAlternates("/", { en: true }) },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const locale = parseLocale((await params).lang);
+  return seoMetadata(locale, "/", { en: true });
+}
 
 // Page-local copy stays with the page (dictionaries are for shared
 // chrome only); zh and en literals sit side by side so a missing key

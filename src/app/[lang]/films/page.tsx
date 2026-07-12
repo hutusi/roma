@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { getPublishedFilms, posterOf } from "@/db/queries/public";
-import { languageAlternates } from "@/i18n/alternates";
 import { countryToEn, countryToZh } from "@/i18n/countries";
 import type { Locale } from "@/i18n/locales";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { seoMetadata } from "@/lib/seo";
 
 const COPY = {
   zh: {
@@ -38,11 +38,12 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  const t = COPY[parseLocale((await params).lang)];
+  const locale = parseLocale((await params).lang);
+  const t = COPY[locale];
   return {
     title: t.title,
     description: t.description,
-    alternates: { languages: languageAlternates("/films", { en: true }) },
+    ...seoMetadata(locale, "/films", { en: true }),
   };
 }
 

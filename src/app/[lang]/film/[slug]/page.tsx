@@ -9,10 +9,10 @@ import {
   getPublishedFilmBySlug,
   getPublishedFilmSlugs,
 } from "@/db/queries/public";
-import { languageAlternates } from "@/i18n/alternates";
 import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { seoMetadata } from "@/lib/seo";
 import { filmJsonLd } from "@/lib/structured-data";
 
 // The zh slug set for BOTH locales: en-pending entities prerender as
@@ -53,11 +53,10 @@ export async function generateMetadata({
     description: en
       ? (film.editorialNoteEn?.slice(0, 160) ?? film.titleOriginal)
       : (film.editorialNote?.slice(0, 120) ?? film.titleOriginal),
-    alternates: {
-      languages: languageAlternates(`/film/${slug}`, {
-        en: en || film.statusEn === "published",
-      }),
-    },
+    ...seoMetadata(locale, `/film/${slug}`, {
+      en: en || film.statusEn === "published",
+      ogType: "video.movie",
+    }),
   };
 }
 
