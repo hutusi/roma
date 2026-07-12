@@ -31,12 +31,12 @@ describe("filmJsonLd", () => {
     const [movie, crumbs] = graphOf(filmJsonLd(film, "zh"));
     expect(movie["@type"]).toBe("Movie");
     expect(movie.name).toBe("八部半");
-    expect(movie.url).toBe("https://babuban.com/film/otto-e-mezzo");
+    expect(movie.url).toBe("https://babuban.com/zh/film/otto-e-mezzo");
     expect(movie.dateCreated).toBe("1963");
     expect(movie.duration).toBe("PT138M");
     expect(movie.image).toBe("https://blob.example/8.jpg");
     expect((movie.director as { url: string }[])[0].url).toBe(
-      "https://babuban.com/director/fellini",
+      "https://babuban.com/zh/director/fellini",
     );
     expect((movie.countryOfOrigin as { name: string }[])[0].name).toBe("法国");
     expect(crumbs["@type"]).toBe("BreadcrumbList");

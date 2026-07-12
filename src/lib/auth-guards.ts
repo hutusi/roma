@@ -30,7 +30,7 @@ export async function requireUser(locale: Locale = "zh") {
 
 export async function requireEditor() {
   const session = await requireUser();
-  if (roleOf(session) === "user") redirect("/");
+  if (roleOf(session) === "user") redirect("/zh");
   return session;
 }
 

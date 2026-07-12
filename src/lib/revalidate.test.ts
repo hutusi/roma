@@ -17,11 +17,12 @@ beforeEach(() => {
   paths.length = 0;
 });
 
-/** Every base path must be revalidated for BOTH the zh root and the /en tree. */
+/** Every base path must be revalidated under BOTH the /zh and /en prefixes. */
 function expectBothLocales(basePaths: string[]) {
   for (const base of basePaths) {
-    expect(paths).toContain(base);
-    expect(paths).toContain(base === "/" ? "/en" : `/en${base}`);
+    for (const prefix of ["/zh", "/en"]) {
+      expect(paths).toContain(base === "/" ? prefix : `${prefix}${base}`);
+    }
   }
 }
 

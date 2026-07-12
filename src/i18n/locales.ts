@@ -1,10 +1,18 @@
-export type Locale = "zh" | "en";
+export const LOCALES = ["zh", "en"] as const;
+export type Locale = (typeof LOCALES)[number];
+
+/** BCP 47 value for the <html lang> attribute per locale. */
+export const HTML_LANG = { zh: "zh-CN", en: "en" } as const;
+
+export function isLocale(value: string): value is Locale {
+  return (LOCALES as readonly string[]).includes(value);
+}
 
 /**
- * Maps a canonical (zh) path to its locale's URL. zh lives at the root
- * (launched URLs are immutable); en lives under the /en prefix.
+ * Maps a canonical (locale-less) path to its locale's URL. Both locales
+ * live under a symmetric prefix — /zh and /en (ADR 0012); the bare root
+ * redirects to /zh in next.config.ts.
  */
 export function localePath(locale: Locale, path: string): string {
-  if (locale === "zh") return path;
-  return path === "/" ? "/en" : `/en${path}`;
+  return path === "/" ? `/${locale}` : `/${locale}${path}`;
 }
