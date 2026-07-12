@@ -151,6 +151,8 @@ export const en = {
     displayName: "Display name",
     usernameLabel: "Username (your profile URL)",
     usernameTitle: "3–30 letters, digits, or _ . -",
+    language: "Language",
+    languageHint: "Site preference and email language",
     saveProfile: "Save profile",
     savingProfile: "Saving…",
     profileSaved: "Profile updated",
