@@ -25,6 +25,12 @@ test("sign-up from /en seeds the stored locale", async ({ page }) => {
 test.describe("account language preference", () => {
   test.use({ storageState: "e2e/.auth/user.json" });
 
+  // Cleanup runs even when the test fails — inline cleanup wouldn't,
+  // and later specs assume the seeded users keep locale = NULL.
+  test.afterEach(async () => {
+    await queryOne("UPDATE users SET locale = NULL WHERE email = $1", ["user@e2e.test"]);
+  });
+
   test("changing the language persists and moves to that locale", async ({ page }) => {
     await page.goto("/zh/account");
     await page.selectOption("#locale", "en");
@@ -43,7 +49,6 @@ test.describe("account language preference", () => {
     await page.selectOption("#locale", "zh");
     await page.getByRole("button", { name: "Save profile" }).click();
     await page.waitForURL(/\/zh\/account/);
-    await queryOne("UPDATE users SET locale = NULL WHERE email = $1", ["user@e2e.test"]);
   });
 });
 
@@ -86,14 +91,19 @@ test.describe("language-hint banner", () => {
   test.describe("signed-in stored locale wins over the browser", () => {
     test.use({ locale: "en-US", storageState: "e2e/.auth/user.json" });
 
+    test.afterEach(async () => {
+      await queryOne("UPDATE users SET locale = NULL WHERE email = $1", ["user@e2e.test"]);
+    });
+
     test("no banner when the stored preference matches the current edition", async ({ page }) => {
       await queryOne("UPDATE users SET locale = 'zh' WHERE email = $1", ["user@e2e.test"]);
       await page.goto("/zh");
-      // Give the session-dependent banner logic a beat to settle, then
-      // assert absence.
-      await page.waitForTimeout(1000);
+      // The banner hides while the session is pending, so asserting its
+      // absence too early would pass for the wrong reason — wait for the
+      // signed-in header (the seeded user's name) to prove the session
+      // resolved, then assert the suppression.
+      await expect(page.getByRole("banner").getByText("读者甲")).toBeVisible();
       await expect(page.getByText("This page is available in English.")).toHaveCount(0);
-      await queryOne("UPDATE users SET locale = NULL WHERE email = $1", ["user@e2e.test"]);
     });
   });
 });
