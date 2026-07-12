@@ -36,7 +36,8 @@ test("en-pending film renders a noindex translation-pending stub, not a 404", as
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByText("Translation Pending")).toBeVisible();
   await expect(page.getByRole("heading", { name: "La strada" })).toBeVisible();
-  await expect(page.locator('a[href="/zh/film/la-strada"]')).toBeVisible();
+  // Scoped to main: the header LangToggle also links the zh counterpart.
+  await expect(page.getByRole("main").locator('a[href="/zh/film/la-strada"]')).toBeVisible();
   // Thin content stays out of the index and advertises no alternates.
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
@@ -103,19 +104,47 @@ test("sitemap carries en entries only for en-published entities", async ({ reque
 });
 
 test("locale switch links pair pages in both directions", async ({ page }) => {
+  // Scoped to main: these assert the editorial per-page switch; the
+  // header LangToggle (also matching the href) is covered separately.
   await page.goto("/zh/film/otto-e-mezzo");
   await expect(
-    page.locator('a[href="/en/film/otto-e-mezzo"]', { hasText: "English" }),
+    page.getByRole("main").locator('a[href="/en/film/otto-e-mezzo"]', { hasText: "English" }),
   ).toBeVisible();
 
   await page.goto("/en/film/otto-e-mezzo");
   await expect(
-    page.locator('a[href="/zh/film/otto-e-mezzo"]', { hasText: "中文版" }),
+    page.getByRole("main").locator('a[href="/zh/film/otto-e-mezzo"]', { hasText: "中文版" }),
   ).toBeVisible();
 
   // The switch is total now: a zh-only film links to its en stub.
   await page.goto("/zh/film/la-strada");
-  await expect(page.locator('a[href="/en/film/la-strada"]', { hasText: "English" })).toBeVisible();
+  await expect(
+    page.getByRole("main").locator('a[href="/en/film/la-strada"]', { hasText: "English" }),
+  ).toBeVisible();
+});
+
+test("header language toggle swaps the same page across locales", async ({ page }) => {
+  // banner = the site header only; detail pages have their own <header>
+  // element inside <main> (which never gets the banner role).
+  const header = page.getByRole("banner");
+
+  await page.goto("/zh");
+  await expect(header.locator('a[href="/en"]', { hasText: "English" })).toBeVisible();
+  await header.locator('a[href="/en"]').click();
+  await expect(page).toHaveURL(/\/en$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await header.locator('a[href="/zh"]', { hasText: "中文" }).click();
+  await expect(page).toHaveURL(/\/zh$/);
+
+  // Deep page and stub page swap in place.
+  await page.goto("/zh/film/otto-e-mezzo");
+  await expect(header.locator('a[href="/en/film/otto-e-mezzo"]')).toBeVisible();
+  await page.goto("/en/film/la-strada");
+  await expect(header.locator('a[href="/zh/film/la-strada"]')).toBeVisible();
+
+  // Query strings are dropped: /films' country param is locale-mapped.
+  await page.goto(`/zh/films?country=${encodeURIComponent("法国")}`);
+  await expect(header.locator('a[href="/en/films"]')).toBeVisible();
 });
 
 test("en OG image renders as PNG", async ({ page, request }) => {
