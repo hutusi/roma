@@ -170,9 +170,12 @@ function sealSvg(): string {
 // ----------------------------------------------------------------- rasters
 
 async function png(svg: string, size: number): Promise<Buffer> {
+  // flatten() drops to RGB; ensureAlpha() re-adds an opaque channel
+  // because Turbopack's ICO decoder rejects non-RGBA embedded PNGs.
   const buf = await sharp(Buffer.from(svg), { density: (72 * size) / CANVAS })
     .resize(size, size)
     .flatten({ background: PAPER })
+    .ensureAlpha()
     .png()
     .toBuffer();
   if (buf.length === 0) throw new Error(`empty PNG at ${size}px`);
