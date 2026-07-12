@@ -57,7 +57,7 @@ test("per-film reasoning saves from the expanded row", async ({ page }) => {
 });
 
 test("public list hides draft films; preview shows them", async ({ page }) => {
-  await page.goto("/list/fellini-primer");
+  await page.goto("/zh/list/fellini-primer");
   await expect(page.getByText("费里尼尚未离开新现实主义")).toBeVisible();
   await expect(page.locator("ol li", { hasText: "大路" })).toBeVisible();
   // Draft film (骗子) sits in the list rows but must not render publicly.
@@ -69,6 +69,6 @@ test("public list hides draft films; preview shows them", async ({ page }) => {
 });
 
 test("draft list 404s publicly", async ({ page }) => {
-  const res = await page.request.get("/list/draft-list");
+  const res = await page.request.get("/zh/list/draft-list");
   expect(res.status()).toBe(404);
 });

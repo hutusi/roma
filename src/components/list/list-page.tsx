@@ -4,14 +4,14 @@ import { LocaleSwitch } from "@/components/site/locale-switch";
 import { TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
 import { type PublicList, posterOf } from "@/db/queries/public";
-import type { Locale } from "@/i18n/locales";
+import { type Locale, localePath } from "@/i18n/locales";
 
 /**
  * A curated list reads like an article: title card, intro essay, then
  * the films in their deliberate order, each with its reasoning. The en
  * edition keeps every zh-published member in order (顺序即立场) —
- * untranslated members render unlinked, without reasoning, rather than
- * being dropped or linking to a 404.
+ * untranslated members link to their translation-pending stubs and
+ * render without reasoning (ADR 0012).
  */
 export function ListPage({
   list,
@@ -31,7 +31,7 @@ export function ListPage({
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       <TitleCard eyebrow="Curated List" title={title} />
       {theme && <p className="mt-4 text-center text-ink-muted text-sm tracking-[0.2em]">{theme}</p>}
-      {list.status === "published" && (en || list.statusEn === "published") && (
+      {list.status === "published" && (
         <p className="mt-3 text-center">
           <LocaleSwitch locale={locale} path={`/list/${list.slug}`} />
         </p>
@@ -55,7 +55,6 @@ export function ListPage({
       <ol className="mt-14 space-y-12 pb-4">
         {list.items.map((item, index) => {
           const poster = posterOf(item.film.media);
-          const enVisible = item.film.statusEn === "published";
           const filmTitle = en ? (item.film.titleEn ?? item.film.titleOriginal) : item.film.titleZh;
           const subtitle = item.film.titleOriginal !== filmTitle ? item.film.titleOriginal : null;
           const reasoning = en ? item.reasoningEn : item.reasoning;
@@ -67,34 +66,21 @@ export function ListPage({
                 </span>
                 <span className="h-px flex-1 bg-line" />
               </div>
-              {en && !enVisible ? (
-                <div className="flex items-baseline justify-between border border-line bg-card p-4">
-                  <span className="font-bold text-ink-muted">
-                    {filmTitle}
-                    {subtitle && (
-                      <span className="ml-2 font-display font-normal text-sm">{subtitle}</span>
-                    )}
-                  </span>
-                  <span className="font-display text-ink-muted text-sm">{item.film.year}</span>
-                </div>
-              ) : (
-                <>
-                  <FilmCard
-                    href={en ? `/en/film/${item.film.slug}` : `/film/${item.film.slug}`}
-                    title={filmTitle}
-                    subtitle={subtitle}
-                    year={item.film.year}
-                    directorsLabel={item.film.filmDirectors
-                      .map((fd) =>
-                        en ? fd.director.name : (fd.director.nameZh ?? fd.director.name),
-                      )
-                      .join(en ? ", " : "、")}
-                    imageUrl={poster?.url}
-                    imageAlt={poster?.alt}
-                  />
-                  {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-[16px]" />}
-                </>
-              )}
+              {/* Every member links in both locales — an en-pending film
+                  resolves to its translation-pending stub (ADR 0012). A
+                  missing reasoningEn just renders the entry lighter. */}
+              <FilmCard
+                href={localePath(locale, `/film/${item.film.slug}`)}
+                title={filmTitle}
+                subtitle={subtitle}
+                year={item.film.year}
+                directorsLabel={item.film.filmDirectors
+                  .map((fd) => (en ? fd.director.name : (fd.director.nameZh ?? fd.director.name)))
+                  .join(en ? ", " : "、")}
+                imageUrl={poster?.url}
+                imageAlt={poster?.alt}
+              />
+              {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-[16px]" />}
             </li>
           );
         })}

@@ -18,11 +18,13 @@ describe("renderFilmsFeed", () => {
     const xml = renderFilmsFeed("zh", [film({})]);
     expect(xml).toContain("<title>八部半</title>");
     expect(xml).toContain("<language>zh-CN</language>");
-    expect(xml).toContain("<link>https://babuban.com/film/otto-e-mezzo</link>");
-    expect(xml).toContain('<guid isPermaLink="true">https://babuban.com/film/otto-e-mezzo</guid>');
+    expect(xml).toContain("<link>https://babuban.com/zh/film/otto-e-mezzo</link>");
+    expect(xml).toContain(
+      '<guid isPermaLink="true">https://babuban.com/zh/film/otto-e-mezzo</guid>',
+    );
     expect(xml).toContain("<pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>");
     expect(xml).toContain("<description>zh note</description>");
-    expect(xml).toContain('href="https://babuban.com/rss.xml"');
+    expect(xml).toContain('href="https://babuban.com/zh/rss.xml"');
   });
 
   test("en feed uses English fields and /en URLs", () => {

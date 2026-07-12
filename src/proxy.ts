@@ -20,5 +20,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/me/:path*", "/account", "/en/me/:path*", "/en/account"],
+  // Legacy unprefixed /me and /account never reach the proxy: the
+  // next.config redirects run before it and prefix them with /zh.
+  matcher: ["/admin/:path*", "/:lang(zh|en)/me/:path*", "/:lang(zh|en)/account"],
 };

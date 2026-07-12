@@ -57,8 +57,7 @@ export async function ProfilePage({
   ]);
 
   const visibleMarks = marks.filter((m) => m.status === tab && m.film.status === "published");
-  const filmHref = (f: { slug: string; statusEn: string }) =>
-    en && f.statusEn === "published" ? `/en/film/${f.slug}` : `/film/${f.slug}`;
+  const filmHref = (f: { slug: string }) => localePath(locale, `/film/${f.slug}`);
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">

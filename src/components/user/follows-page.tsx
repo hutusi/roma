@@ -31,8 +31,7 @@ export async function FollowsPage({ locale = "zh" }: { locale?: Locale }) {
         {lists.map((list) => {
           const listTitle = en ? (list.titleEn ?? list.title) : list.title;
           const listTheme = en ? list.themeEn : list.theme;
-          const href =
-            en && list.statusEn === "published" ? `/en/list/${list.slug}` : `/list/${list.slug}`;
+          const href = localePath(locale, `/list/${list.slug}`);
           return (
             <Link
               key={list.id}

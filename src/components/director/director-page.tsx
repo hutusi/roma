@@ -35,7 +35,7 @@ export function DirectorPage({
         {subName && subName !== displayName && (
           <p className="mt-3 font-display text-ink-muted text-lg">{subName}</p>
         )}
-        {director.status === "published" && (en || director.statusEn === "published") && (
+        {director.status === "published" && (
           <p className="mt-3">
             <LocaleSwitch locale={locale} path={`/director/${director.slug}`} />
           </p>

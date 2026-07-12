@@ -10,25 +10,26 @@ import { revalidatePath, updateTag } from "next/cache";
  * with cacheTag/unstable_cache; paths cover the ISR'd pages.
  *
  * Both locales' paths are revalidated unconditionally: one row holds
- * both editions, so any edit can affect both pages, and revalidating a
- * never-built /en path is harmless — cheaper than a DB read to decide.
- * Tags stay locale-free for the same reason.
+ * both editions, so any edit can affect both pages (including flipping
+ * an /en translation-pending stub to the full page), and revalidating
+ * is cheaper than a DB read to decide. Tags stay locale-free for the
+ * same reason.
  */
 export function revalidateFilm(slug: string) {
   updateTag(`film:${slug}`);
   updateTag("films");
   updateTag("home");
-  for (const prefix of ["", "/en"]) {
+  for (const prefix of ["/zh", "/en"]) {
     revalidatePath(`${prefix}/film/${slug}`);
     revalidatePath(`${prefix}/films`);
     revalidatePath(`${prefix}/rss.xml`);
-    revalidatePath(prefix === "" ? "/" : prefix);
+    revalidatePath(prefix);
   }
 }
 
 export function revalidateDirector(slug: string) {
   updateTag(`director:${slug}`);
-  for (const prefix of ["", "/en"]) {
+  for (const prefix of ["/zh", "/en"]) {
     revalidatePath(`${prefix}/director/${slug}`);
   }
 }
@@ -37,9 +38,9 @@ export function revalidateList(slug: string) {
   updateTag(`list:${slug}`);
   updateTag("lists");
   updateTag("home");
-  for (const prefix of ["", "/en"]) {
+  for (const prefix of ["/zh", "/en"]) {
     revalidatePath(`${prefix}/list/${slug}`);
     revalidatePath(`${prefix}/lists`);
-    revalidatePath(prefix === "" ? "/" : prefix);
+    revalidatePath(prefix);
   }
 }

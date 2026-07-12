@@ -4,7 +4,7 @@
 // it must render its own <html>/<body> (it replaces the root layout) and
 // can't know the locale — the layout that would resolve it is what failed.
 // Hence the bilingual copy. Ordinary route errors are handled by the
-// per-tree (zh)/(site)/error.tsx and en/error.tsx boundaries.
+// [lang]/error.tsx and admin/error.tsx boundaries.
 import "@fontsource/noto-serif-sc/400.css";
 import "@fontsource/noto-serif-sc/700.css";
 import "@fontsource/playfair-display/400.css";

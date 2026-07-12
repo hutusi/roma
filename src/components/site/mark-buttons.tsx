@@ -16,11 +16,12 @@ type MarkStatus = "watched" | "want" | null;
 export function MarkButtons({
   filmId,
   labels,
-  signInHref = "/sign-in",
+  signInHref,
 }: {
   filmId: string;
   labels: Dictionary["markButtons"];
-  signInHref?: string;
+  /** Locale-prefixed sign-in URL — pages pass localePath(locale, "/sign-in"). */
+  signInHref: string;
 }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [mark, setMarkState] = useState<MarkStatus>(null);

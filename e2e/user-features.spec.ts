@@ -9,7 +9,7 @@ test.describe("reader", () => {
     page,
     browser,
   }) => {
-    await page.goto("/film/la-strada");
+    await page.goto("/zh/film/la-strada");
     await page.getByRole("button", { name: "看过" }).click();
     await page.waitForTimeout(1000);
     await page.reload();
@@ -28,7 +28,7 @@ test.describe("reader", () => {
     // Same (SSG-cached) page through a different account: no marks.
     const other = await browser.newContext({ storageState: "e2e/.auth/admin.json" });
     const otherPage = await other.newPage();
-    await otherPage.goto("/film/la-strada");
+    await otherPage.goto("/zh/film/la-strada");
     await expect(otherPage.getByRole("button", { name: "看过" })).toBeVisible();
     await expect(otherPage.getByRole("button", { name: "看过" })).not.toHaveClass(activeClass);
     await expect(otherPage.getByRole("button", { name: "想看" })).not.toHaveClass(activeClass);
@@ -36,23 +36,23 @@ test.describe("reader", () => {
   });
 
   test("profile tab reflects the want mark", async ({ page }) => {
-    await page.goto("/u/e2euser?tab=want");
-    await expect(page.locator('a[href="/film/la-strada"]')).toBeVisible();
+    await page.goto("/zh/u/e2euser?tab=want");
+    await expect(page.locator('a[href="/zh/film/la-strada"]')).toBeVisible();
   });
 
   test("follow shows up in /me/follows", async ({ page }) => {
-    await page.goto("/list/fellini-primer");
+    await page.goto("/zh/list/fellini-primer");
     await page.getByRole("button", { name: "关注片单" }).click();
     await page.waitForTimeout(1000);
-    await page.goto("/me/follows");
-    await expect(page.locator('a[href="/list/fellini-primer"]')).toBeVisible();
+    await page.goto("/zh/me/follows");
+    await expect(page.locator('a[href="/zh/list/fellini-primer"]')).toBeVisible();
   });
 
   test("user list: created, filled, and readable by others without the owner panel", async ({
     page,
     browser,
   }) => {
-    await page.goto("/u/e2euser?tab=lists");
+    await page.goto("/zh/u/e2euser?tab=lists");
     await page.getByRole("button", { name: "新建片单" }).click();
     await page.fill("#title", "我的黑白十佳");
     await page.getByRole("button", { name: "创建", exact: true }).click();
@@ -61,7 +61,7 @@ test.describe("reader", () => {
 
     await page.locator("select").first().selectOption({ label: "大路（1954）" });
     await page.getByRole("button", { name: "加入" }).click();
-    await expect(page.locator('a[href^="/film/"]').first()).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator('a[href^="/zh/film/"]').first()).toBeVisible({ timeout: 15_000 });
 
     const stranger = await browser.newContext({ storageState: "e2e/.auth/admin.json" });
     const strangerPage = await stranger.newPage();
@@ -74,9 +74,9 @@ test.describe("reader", () => {
 
 test.describe("guest", () => {
   test("sees sign-in hints instead of interactive buttons", async ({ page }) => {
-    await page.goto("/film/la-strada");
+    await page.goto("/zh/film/la-strada");
     await expect(page.getByText("登录后可标记")).toBeVisible();
-    await page.goto("/me/follows");
+    await page.goto("/zh/me/follows");
     await expect(page).toHaveURL(/\/sign-in/);
   });
 });

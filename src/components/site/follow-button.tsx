@@ -13,11 +13,12 @@ import { cn } from "@/lib/utils";
 export function FollowButton({
   listId,
   labels,
-  signInHref = "/sign-in",
+  signInHref,
 }: {
   listId: string;
   labels: Dictionary["followButton"];
-  signInHref?: string;
+  /** Locale-prefixed sign-in URL — pages pass localePath(locale, "/sign-in"). */
+  signInHref: string;
 }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [following, setFollowing] = useState(false);

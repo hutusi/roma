@@ -14,7 +14,7 @@ function alternatesFor(path: string, en: boolean) {
     languages: Object.fromEntries(
       Object.entries(languageAlternates(path, { en })).map(([lang, p]) => [
         lang,
-        `${SITE_URL}${p === "/" ? "" : p}`,
+        `${SITE_URL}${p}`,
       ]),
     ),
   };
@@ -44,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ): MetadataRoute.Sitemap => {
     const entries: MetadataRoute.Sitemap = [
       {
-        url: `${SITE_URL}${path === "/" ? "" : path}`,
+        url: `${SITE_URL}${localePath("zh", path)}`,
         changeFrequency,
         priority,
         alternates: alternatesFor(path, en),

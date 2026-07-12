@@ -269,6 +269,41 @@ export async function getHomeData(locale: Locale = "zh") {
   };
 }
 
+/**
+ * Minimal-column fetchers for the /en translation-pending stubs
+ * (ADR 0012): zh-published entities whose English edition isn't out
+ * yet resolve to a stub instead of a 404. The `columns` allowlists are
+ * the enforcement mechanism for "no zh prose on /en" — a stub can't
+ * leak what its query never selects. The listing/sitemap/RSS subset
+ * rule is untouched: these are only reached from a detail URL.
+ */
+export async function getFilmStubBySlug(slug: string) {
+  const film = await db.query.films.findFirst({
+    columns: { slug: true, titleEn: true, titleOriginal: true, year: true },
+    where: and(eq(films.slug, slug), eq(films.status, "published")),
+  });
+  return film ?? null;
+}
+
+export async function getDirectorStubBySlug(slug: string) {
+  const director = await db.query.directors.findFirst({
+    columns: { slug: true, name: true },
+    where: and(eq(directors.slug, slug), eq(directors.status, "published")),
+  });
+  return director ?? null;
+}
+
+export async function getListStubBySlug(slug: string) {
+  const list = await db.query.curatedLists.findFirst({
+    // `title` is the zh list title — a proper noun, shown on the stub
+    // heading only when titleEn is missing (ADR 0012 records this
+    // exemption from the no-zh-prose rule).
+    columns: { slug: true, titleEn: true, title: true },
+    where: and(eq(curatedLists.slug, slug), eq(curatedLists.status, "published")),
+  });
+  return list ?? null;
+}
+
 /** poster → still → hero, for cards. */
 export function posterOf(mediaRows: (typeof media.$inferSelect)[]) {
   const byKind = (kind: string) => mediaRows.find((m) => m.kind === kind);
