@@ -102,7 +102,7 @@ export type PublicFilmListItem = Awaited<ReturnType<typeof getPublishedFilms>>[n
 
 export async function getPublishedFilmSlugs(locale: Locale = "zh") {
   return db
-    .select({ slug: films.slug })
+    .select({ slug: films.slug, updatedAt: films.updatedAt })
     .from(films)
     .where(and(...filmStatusConds(locale)));
 }
@@ -168,7 +168,7 @@ export type PublicDirector = NonNullable<Awaited<ReturnType<typeof getPublishedD
 
 export async function getPublishedDirectorSlugs(locale: Locale = "zh") {
   return db
-    .select({ slug: directors.slug })
+    .select({ slug: directors.slug, updatedAt: directors.updatedAt })
     .from(directors)
     .where(and(...directorStatusConds(locale)));
 }
@@ -252,7 +252,7 @@ export type PublicListSummary = Awaited<ReturnType<typeof getPublishedLists>>[nu
 
 export async function getPublishedListSlugs(locale: Locale = "zh") {
   return db
-    .select({ slug: curatedLists.slug })
+    .select({ slug: curatedLists.slug, updatedAt: curatedLists.updatedAt })
     .from(curatedLists)
     .where(and(...listStatusConds(locale)));
 }
