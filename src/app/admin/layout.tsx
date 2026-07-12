@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { DocumentShell } from "@/components/layout/document-shell";
 import { Toaster } from "@/components/ui/sonner";
@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   },
   robots: { index: false },
 };
+
+export const viewport: Viewport = { themeColor: "#faf8f4" };
 
 const NAV = [
   { href: "/admin", label: "仪表盘" },

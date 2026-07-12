@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DocumentShell } from "@/components/layout/document-shell";
 import { LangHintBanner } from "@/components/site/lang-hint-banner";
 import { RumBeacon } from "@/components/site/rum-beacon";
@@ -18,6 +18,8 @@ import { SITE_URL } from "@/lib/site";
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
+
+export const viewport: Viewport = { themeColor: "#faf8f4" };
 
 const META: Record<Locale, Metadata> = {
   zh: {
