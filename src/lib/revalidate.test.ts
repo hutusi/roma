@@ -10,11 +10,19 @@ mock.module("next/cache", () => ({
   revalidatePath: (p: string) => paths.push(p),
 }));
 
+// The IndexNow ping has its own tests (indexnow.test.ts); here we only
+// assert each helper reports the pages it touched.
+const pinged: string[][] = [];
+mock.module("@/lib/indexnow", () => ({
+  pingIndexNow: (p: string[]) => pinged.push(p),
+}));
+
 const { revalidateDirector, revalidateFilm, revalidateList } = await import("./revalidate");
 
 beforeEach(() => {
   tags.length = 0;
   paths.length = 0;
+  pinged.length = 0;
 });
 
 /** Every base path must be revalidated under BOTH the /zh and /en prefixes. */
@@ -35,6 +43,7 @@ describe("revalidateFilm", () => {
     revalidateFilm("solaris");
     expectBothLocales(["/film/solaris", "/films", "/rss.xml", "/"]);
     expectTags(["film:solaris", "films", "home"]);
+    expect(pinged).toEqual([["/film/solaris", "/films"]]);
   });
 });
 
@@ -43,6 +52,7 @@ describe("revalidateDirector", () => {
     revalidateDirector("tarkovsky");
     expectBothLocales(["/director/tarkovsky"]);
     expectTags(["director:tarkovsky"]);
+    expect(pinged).toEqual([["/director/tarkovsky"]]);
   });
 });
 
@@ -51,5 +61,6 @@ describe("revalidateList", () => {
     revalidateList("essential-noir");
     expectBothLocales(["/list/essential-noir", "/lists", "/"]);
     expectTags(["list:essential-noir", "lists", "home"]);
+    expect(pinged).toEqual([["/list/essential-noir", "/lists"]]);
   });
 });

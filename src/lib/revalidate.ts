@@ -1,5 +1,6 @@
 import "server-only";
 import { revalidatePath, updateTag } from "next/cache";
+import { pingIndexNow } from "@/lib/indexnow";
 
 /**
  * Single map from entity → what must refresh on publish/update, so no
@@ -25,6 +26,7 @@ export function revalidateFilm(slug: string) {
     revalidatePath(`${prefix}/rss.xml`);
     revalidatePath(prefix);
   }
+  pingIndexNow([`/film/${slug}`, "/films"]);
 }
 
 export function revalidateDirector(slug: string) {
@@ -32,6 +34,7 @@ export function revalidateDirector(slug: string) {
   for (const prefix of ["/zh", "/en"]) {
     revalidatePath(`${prefix}/director/${slug}`);
   }
+  pingIndexNow([`/director/${slug}`]);
 }
 
 export function revalidateList(slug: string) {
@@ -43,4 +46,5 @@ export function revalidateList(slug: string) {
     revalidatePath(`${prefix}/lists`);
     revalidatePath(prefix);
   }
+  pingIndexNow([`/list/${slug}`, "/lists"]);
 }
