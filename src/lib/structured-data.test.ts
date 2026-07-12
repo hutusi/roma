@@ -144,8 +144,7 @@ describe("websiteJsonLd", () => {
   });
 
   test("both locales publish the same Organization entity", () => {
-    const [, zhOrg] = graphOf(websiteJsonLd("zh"));
-    const [zhSite] = graphOf(websiteJsonLd("zh"));
+    const [zhSite, zhOrg] = graphOf(websiteJsonLd("zh"));
     const [, enOrg] = graphOf(websiteJsonLd("en"));
     expect(zhOrg["@id"]).toBe(enOrg["@id"]);
     expect((zhSite.publisher as { "@id": string })["@id"]).toBe(zhOrg["@id"] as string);
