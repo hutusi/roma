@@ -26,6 +26,9 @@ export function SignUpForm({ locale, labels }: { locale: Locale; labels: Diction
       password: String(form.get("password")),
       name: String(form.get("name")),
       username: String(form.get("username")),
+      // The edition someone signs up from seeds their language
+      // preference (editable later in account settings).
+      locale,
     });
     setPending(false);
     if (error) {

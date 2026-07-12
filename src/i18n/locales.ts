@@ -16,3 +16,18 @@ export function isLocale(value: string): value is Locale {
 export function localePath(locale: Locale, path: string): string {
   return path === "/" ? `/${locale}` : `/${locale}${path}`;
 }
+
+/**
+ * The same page in the other locale, from a URL pathname: swap the
+ * first segment (/zh/x ↔ /en/x, ADR 0012 symmetry). Pathname only —
+ * query strings are dropped on purpose: /films' `country` param is
+ * locale-mapped (countries.ts), so carrying a query across would break
+ * the filter. Returns null off-tree (/admin, /api, unknown locales);
+ * callers render nothing.
+ */
+export function counterpartPath(pathname: string): { target: Locale; href: string } | null {
+  const [, first, ...rest] = pathname.split("/");
+  if (!first || !isLocale(first)) return null;
+  const target: Locale = first === "zh" ? "en" : "zh";
+  return { target, href: rest.length ? `/${target}/${rest.join("/")}` : `/${target}` };
+}

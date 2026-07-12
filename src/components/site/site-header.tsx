@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
 import { AuthMenu } from "./auth-menu";
+import { LangToggle } from "./lang-toggle";
 
 export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
   const dict = getDict(locale);
@@ -31,6 +32,7 @@ export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
             </Link>
           ))}
           <AuthMenu locale={locale} labels={dict.authMenu} />
+          <LangToggle />
         </nav>
       </div>
     </header>

@@ -20,7 +20,7 @@ The product is a Chinese-language curatorial site (ADR 0002's audience), but we 
 
 - Every new public route must be added to both trees; every article carries an optional-but-forever English translation cost. This is the accepted price of a real English audience.
 - Static page count roughly doubles as translations land (trivial at this scale).
-- Users have no stored locale preference yet; the reset email is bilingual. Recorded follow-up if English readership materializes: per-user locale, localized transactional email, an English RSS feed.
+- ~~Users have no stored locale preference yet; the reset email is bilingual.~~ Shipped 2026-07-12: `users.locale` (captured at sign-up, editable in /account) and a single-language reset email when the locale is known. The English RSS feed shipped with ADR 0012's `[lang]` tree.
 - User areas (`/u`, `/me`, `/account`) are localized under `/en` (chrome only — usernames and user-authored list titles/descriptions stay as authored; a user's marks/lists are shown in full, linking to `/en` for en-published entities and falling back to the zh page otherwise). The invite flow (`/invite/[token]` — invitations come from the zh editorial team) and the admin stay zh-only.
 
 ## Deferred follow-ups
@@ -29,8 +29,8 @@ The edition is complete and live: the full corpus is authored and English-publis
 
 Remaining, in rough priority — none blocking:
 
-- **English RSS feed** (`/en/rss.xml`) over the en-published films — net-new, self-contained (no schema/auth/migration); aids syndication.
-- **Per-user locale** (`users.locale`) + single-language transactional email — retires the bilingual reset stopgap noted above; needs a prod migration.
+- ~~**English RSS feed** (`/en/rss.xml`)~~ — shipped (served from the `[lang]` tree, ADR 0012).
+- ~~**Per-user locale** (`users.locale`) + single-language transactional email~~ — shipped 2026-07-12 (migration 0003; bilingual template remains the fallback for NULL locales).
 - **Correctness cleanups** (not i18n): media-manager upload `try/finally` (a thrown upload leaves the button stuck at "上传中…"); the invite create-form's unconditional "copied" toast on a clipboard failure; unguarded `authClient.signOut()` in the admin sign-out button and the header auth-menu.
 - **`countries.ts` maintenance** — the hand-kept zh↔en map is guarded by a seed-corpus coverage test; add a pair when a new country appears (it renders in zh on `/en` until then).
 - **Collapse the `[...rest]` 404 workaround** — each tree catches its own strays pending Next's `global-not-found` stabilizing.

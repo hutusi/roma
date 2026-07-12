@@ -154,6 +154,8 @@ export const zh = {
     displayName: "显示名",
     usernameLabel: "用户名（个人主页地址）",
     usernameTitle: "3–30 位字母、数字或 _ . -",
+    language: "语言 / Language",
+    languageHint: "站内偏好与邮件语言",
     saveProfile: "保存资料",
     savingProfile: "保存中…",
     profileSaved: "资料已更新",

@@ -8,17 +8,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
+import { isLocale, type Locale, localePath } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
 
 export function AccountForm({
   name,
   username,
   email,
+  locale,
+  storedLocale,
   labels,
 }: {
   name: string;
   username: string;
   email: string;
+  /** Locale of the page being viewed. */
+  locale: Locale;
+  /** The user's saved preference; null until they (or sign-up) set one. */
+  storedLocale: Locale | null;
   labels: Dictionary["account"];
 }) {
   const router = useRouter();
@@ -35,8 +42,11 @@ export function AccountForm({
           setSavingProfile(true);
           const newName = String(form.get("name"));
           const newUsername = String(form.get("username"));
+          const rawLocale = String(form.get("locale"));
+          const newLocale = isLocale(rawLocale) ? rawLocale : locale;
           const { error } = await authClient.updateUser({
             name: newName,
+            locale: newLocale,
             ...(newUsername !== username && { username: newUsername }),
           });
           setSavingProfile(false);
@@ -45,6 +55,11 @@ export function AccountForm({
             return;
           }
           toast.success(labels.profileSaved);
+          // Choosing the other language moves the reader there right away.
+          if (newLocale !== locale) {
+            router.push(localePath(newLocale, "/account"));
+            return;
+          }
           router.refresh();
         }}
       >
@@ -67,6 +82,21 @@ export function AccountForm({
             pattern="[a-zA-Z0-9_.-]{3,30}"
             title={labels.usernameTitle}
           />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="locale">{labels.language}</Label>
+          {/* Two invariant options — the unused radix select would be
+              overkill. Option labels are in their own language. */}
+          <select
+            id="locale"
+            name="locale"
+            defaultValue={storedLocale ?? locale}
+            title={labels.languageHint}
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-2.5 text-sm shadow-xs outline-none focus-visible:border-ring"
+          >
+            <option value="zh">中文</option>
+            <option value="en">English</option>
+          </select>
         </div>
         <Button type="submit" disabled={savingProfile}>
           {savingProfile ? labels.savingProfile : labels.saveProfile}

@@ -17,7 +17,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 | User list | Deliberately thinner (title, description, ordered films) at `/u/[username]/list/[id]` — never under `/list/`. |
 | 看过 / 想看 | User marks; one row per (user, film), each overwrites the other. |
 | Roles | `admin` > `editor` > `user`. "editor" is app-level (our guards), not a better-auth access-control role. |
-| 英文版 (English edition) | Per-entity `*En` fields + `statusEn`. Listings/sitemap/RSS/JSON-LD on `/en` expose only the en-published subset (en-visible ⇔ published in zh AND en), but detail URLs never 404 for en-pending entities — they render a noindex translation-pending stub linking to the zh edition (ADR 0012). English notes gate on 120–350 words. |
+| 英文版 (English edition) | Per-entity `*En` fields + `statusEn`. Listings/sitemap/RSS/JSON-LD on `/en` expose only the en-published subset (en-visible ⇔ published in zh AND en), but detail URLs never 404 for en-pending entities — they render a noindex translation-pending stub linking to the zh edition (ADR 0012). English notes gate on 120–350 words. Users carry an optional `locale` ("zh"/"en", NULL for pre-column accounts) captured at sign-up and editable in /account; the reset email is single-language when the locale is known, bilingual otherwise. |
 
 ## System map
 

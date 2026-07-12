@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DocumentShell } from "@/components/layout/document-shell";
+import { LangHintBanner } from "@/components/site/lang-hint-banner";
 import { RumBeacon } from "@/components/site/rum-beacon";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -67,6 +68,7 @@ export default async function LangRootLayout({
         href={localePath(locale, "/rss.xml")}
       />
       <RumBeacon />
+      <LangHintBanner locale={locale} />
       <SiteHeader locale={locale} />
       <main className="flex-1">{children}</main>
       <SiteFooter locale={locale} />

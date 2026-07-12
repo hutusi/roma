@@ -1,6 +1,6 @@
 import { TitleCard } from "@/components/site/title-card";
 import { getDict } from "@/i18n/dict";
-import type { Locale } from "@/i18n/locales";
+import { isLocale, type Locale } from "@/i18n/locales";
 import { requireUser } from "@/lib/auth-guards";
 import { AccountForm } from "./account-form";
 
@@ -8,6 +8,7 @@ import { AccountForm } from "./account-form";
 export async function AccountPage({ locale = "zh" }: { locale?: Locale }) {
   const dict = getDict(locale);
   const session = await requireUser(locale);
+  const rawLocale = (session.user as { locale?: string | null }).locale;
   return (
     <div className="mx-auto max-w-md animate-fade-up px-6 pt-16">
       <TitleCard eyebrow="Account" title={dict.account.settings} />
@@ -15,6 +16,8 @@ export async function AccountPage({ locale = "zh" }: { locale?: Locale }) {
         name={session.user.name}
         username={(session.user as { username?: string | null }).username ?? ""}
         email={session.user.email}
+        locale={locale}
+        storedLocale={rawLocale != null && isLocale(rawLocale) ? rawLocale : null}
         labels={dict.account}
       />
     </div>
