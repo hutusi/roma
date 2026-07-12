@@ -27,6 +27,8 @@ export function pingIndexNow(paths: string[]): void {
       await fetch(ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
+        // A hung endpoint must not pin the after() callback alive.
+        signal: AbortSignal.timeout(10_000),
         body: JSON.stringify({
           host: new URL(SITE_URL).host,
           key,

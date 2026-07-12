@@ -43,7 +43,7 @@ describe("revalidateFilm", () => {
     revalidateFilm("solaris");
     expectBothLocales(["/film/solaris", "/films", "/rss.xml", "/"]);
     expectTags(["film:solaris", "films", "home"]);
-    expect(pinged).toEqual([["/film/solaris", "/films"]]);
+    expect(pinged).toEqual([["/film/solaris", "/films", "/"]]);
   });
 });
 
@@ -61,6 +61,6 @@ describe("revalidateList", () => {
     revalidateList("essential-noir");
     expectBothLocales(["/list/essential-noir", "/lists", "/"]);
     expectTags(["list:essential-noir", "lists", "home"]);
-    expect(pinged).toEqual([["/list/essential-noir", "/lists"]]);
+    expect(pinged).toEqual([["/list/essential-noir", "/lists", "/"]]);
   });
 });

@@ -26,7 +26,7 @@ export function revalidateFilm(slug: string) {
     revalidatePath(`${prefix}/rss.xml`);
     revalidatePath(prefix);
   }
-  pingIndexNow([`/film/${slug}`, "/films"]);
+  pingIndexNow([`/film/${slug}`, "/films", "/"]);
 }
 
 export function revalidateDirector(slug: string) {
@@ -46,5 +46,5 @@ export function revalidateList(slug: string) {
     revalidatePath(`${prefix}/lists`);
     revalidatePath(prefix);
   }
-  pingIndexNow([`/list/${slug}`, "/lists"]);
+  pingIndexNow([`/list/${slug}`, "/lists", "/"]);
 }
