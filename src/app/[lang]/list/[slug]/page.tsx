@@ -9,10 +9,10 @@ import {
   getPublishedListBySlug,
   getPublishedListSlugs,
 } from "@/db/queries/public";
-import { languageAlternates } from "@/i18n/alternates";
 import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { seoMetadata } from "@/lib/seo";
 import { listJsonLd } from "@/lib/structured-data";
 
 // zh slug set for both locales — en-pending lists prerender as
@@ -43,11 +43,9 @@ export async function generateMetadata({
     description: en
       ? (list.themeEn ?? `${list.items.length} films`)
       : (list.theme ?? `${list.items.length} 部影片`),
-    alternates: {
-      languages: languageAlternates(`/list/${slug}`, {
-        en: en || list.statusEn === "published",
-      }),
-    },
+    ...seoMetadata(locale, `/list/${slug}`, {
+      en: en || list.statusEn === "published",
+    }),
   };
 }
 

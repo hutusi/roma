@@ -20,6 +20,14 @@ function alternatesFor(path: string, en: boolean) {
   };
 }
 
+function latest(rows: { updatedAt: Date }[]): Date | undefined {
+  if (!rows.length) return undefined;
+  return rows.reduce(
+    (max, { updatedAt }) => (updatedAt > max ? updatedAt : max),
+    rows[0].updatedAt,
+  );
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [filmSlugs, directorSlugs, listSlugs, enFilmSlugs, enDirectorSlugs, enListSlugs] =
     await Promise.all([
@@ -36,11 +44,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Each en page gets its own entry; both locales' entries carry the
   // same hreflang cluster so crawlers pair them from either side.
+  // lastModified is shared too: one row holds both editions.
   const entity = (
     path: string,
     en: boolean,
     changeFrequency: "weekly" | "monthly" | "yearly",
     priority: number,
+    lastModified?: Date,
   ): MetadataRoute.Sitemap => {
     const entries: MetadataRoute.Sitemap = [
       {
@@ -48,6 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency,
         priority,
         alternates: alternatesFor(path, en),
+        ...(lastModified ? { lastModified } : {}),
       },
     ];
     if (en) {
@@ -56,20 +67,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency,
         priority,
         alternates: alternatesFor(path, en),
+        ...(lastModified ? { lastModified } : {}),
       });
     }
     return entries;
   };
 
+  // Listing pages move whenever any of their members does; /about has
+  // no data-driven freshness signal, so it carries no lastModified.
+  const filmsTouched = latest(filmSlugs);
+  const listsTouched = latest(listSlugs);
+  const homeTouched = latest([...filmSlugs, ...listSlugs]);
+
   return [
-    ...entity("/", true, "weekly", 1),
-    ...entity("/lists", true, "weekly", 0.9),
-    ...entity("/films", true, "weekly", 0.8),
+    ...entity("/", true, "weekly", 1, homeTouched),
+    ...entity("/lists", true, "weekly", 0.9, listsTouched),
+    ...entity("/films", true, "weekly", 0.8, filmsTouched),
     ...entity("/about", true, "yearly", 0.3),
-    ...listSlugs.flatMap(({ slug }) => entity(`/list/${slug}`, enLists.has(slug), "monthly", 0.9)),
-    ...filmSlugs.flatMap(({ slug }) => entity(`/film/${slug}`, enFilms.has(slug), "monthly", 0.7)),
-    ...directorSlugs.flatMap(({ slug }) =>
-      entity(`/director/${slug}`, enDirectors.has(slug), "monthly", 0.6),
+    ...listSlugs.flatMap(({ slug, updatedAt }) =>
+      entity(`/list/${slug}`, enLists.has(slug), "monthly", 0.9, updatedAt),
+    ),
+    ...filmSlugs.flatMap(({ slug, updatedAt }) =>
+      entity(`/film/${slug}`, enFilms.has(slug), "monthly", 0.7, updatedAt),
+    ),
+    ...directorSlugs.flatMap(({ slug, updatedAt }) =>
+      entity(`/director/${slug}`, enDirectors.has(slug), "monthly", 0.6, updatedAt),
     ),
   ];
 }

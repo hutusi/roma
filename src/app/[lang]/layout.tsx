@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DocumentShell } from "@/components/layout/document-shell";
 import { LangHintBanner } from "@/components/site/lang-hint-banner";
 import { RumBeacon } from "@/components/site/rum-beacon";
@@ -18,6 +18,8 @@ import { SITE_URL } from "@/lib/site";
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
+
+export const viewport: Viewport = { themeColor: "#faf8f4" };
 
 const META: Record<Locale, Metadata> = {
   zh: {
@@ -40,13 +42,36 @@ const META: Record<Locale, Metadata> = {
 
 const RSS_TITLE: Record<Locale, string> = { zh: "八部半", en: "Babuban" };
 
+/**
+ * Search-console ownership tokens, env-driven so each console can be
+ * claimed without a code change (set the var in Vercel, redeploy —
+ * they're baked into the SSG HTML). Bing and Baidu have no first-class
+ * key in the Metadata type; `other` emits their <meta name> verbatim.
+ */
+function verification(): Metadata["verification"] {
+  const other = {
+    ...(process.env.BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.BAIDU_SITE_VERIFICATION
+      ? { "baidu-site-verification": process.env.BAIDU_SITE_VERIFICATION }
+      : {}),
+  };
+  return {
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(Object.keys(other).length ? { other } : {}),
+  };
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const locale = parseLocale((await params).lang);
-  return { metadataBase: new URL(SITE_URL), ...META[locale] };
+  return { metadataBase: new URL(SITE_URL), verification: verification(), ...META[locale] };
 }
 
 export default async function LangRootLayout({

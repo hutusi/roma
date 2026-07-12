@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/json-ld";
 import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
 import { getHomeData, posterOf } from "@/db/queries/public";
-import { languageAlternates } from "@/i18n/alternates";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { seoMetadata } from "@/lib/seo";
+import { websiteJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
-  alternates: { languages: languageAlternates("/", { en: true }) },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const locale = parseLocale((await params).lang);
+  return seoMetadata(locale, "/", { en: true });
+}
 
 // Page-local copy stays with the page (dictionaries are for shared
 // chrome only); zh and en literals sit side by side so a missing key
@@ -58,6 +65,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
 
   return (
     <div className="animate-fade-up">
+      <JsonLd data={websiteJsonLd(locale)} />
       {/* Hero — the only surface that carries grain */}
       <section className="relative overflow-hidden border-line border-b bg-paper">
         <Grain />

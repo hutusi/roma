@@ -11,7 +11,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  return { title: TITLE[parseLocale((await params).lang)] };
+  return { title: TITLE[parseLocale((await params).lang)], robots: { index: false } };
 }
 
 export default async function SignUpPage({ params }: { params: Promise<{ lang: string }> }) {

@@ -62,3 +62,69 @@ test("password reset loop completes against the production build", async ({ page
   await page.click("button[type=submit]");
   await page.waitForURL(/\/zh$/);
 });
+
+test("canonical and og/twitter identity are per-locale", async ({ page }) => {
+  await page.goto("/zh/film/otto-e-mezzo");
+  await expect(
+    page.locator('link[rel="canonical"][href="https://babuban.com/zh/film/otto-e-mezzo"]'),
+  ).toHaveCount(1);
+  await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", "八部半");
+  await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute("content", "zh_CN");
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "video.movie");
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+    "content",
+    "summary_large_image",
+  );
+  // twitter:image must autofill from the file-convention og image.
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveCount(1);
+
+  await page.goto("/en/film/otto-e-mezzo");
+  await expect(
+    page.locator('link[rel="canonical"][href="https://babuban.com/en/film/otto-e-mezzo"]'),
+  ).toHaveCount(1);
+  await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", "Babuban");
+  await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute("content", "en_US");
+});
+
+test("films filter permutations canonicalize back to the bare listing", async ({ page }) => {
+  await page.goto("/zh/films?decade=1960&country=%E6%84%8F%E5%A4%A7%E5%88%A9");
+  await expect(
+    page.locator('link[rel="canonical"][href="https://babuban.com/zh/films"]'),
+  ).toHaveCount(1);
+});
+
+test("sitemap entries carry lastmod", async ({ request }) => {
+  const sitemap = await (await request.get("/sitemap.xml")).text();
+  expect(sitemap).toContain("<lastmod>");
+});
+
+test("auth entry pages are noindex", async ({ page }) => {
+  for (const path of ["/zh/sign-in", "/zh/sign-up"]) {
+    await page.goto(path);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  }
+});
+
+test("home emits WebSite + Organization JSON-LD", async ({ page }) => {
+  await page.goto("/zh");
+  const jsonLd = await page.locator('script[type="application/ld+json"]').first().textContent();
+  const graph = JSON.parse(jsonLd as string)["@graph"] as Record<string, unknown>[];
+  expect(graph.map((n) => n["@type"])).toEqual(["WebSite", "Organization"]);
+});
+
+test("brand icons and manifest are served; codename stays internal", async ({ request }) => {
+  for (const path of [
+    "/favicon.ico",
+    "/icon.svg",
+    "/apple-icon.png",
+    "/icons/icon-512.png",
+    "/manifest.webmanifest",
+  ]) {
+    expect((await request.get(path)).status(), path).toBe(200);
+  }
+  const manifest = await (await request.get("/manifest.webmanifest")).text();
+  expect(manifest).toContain("八部半");
+  expect(manifest.toLowerCase()).not.toContain("roma");
+  // No INDEXNOW_KEY in the e2e env → the key file must 404, not leak an empty 200.
+  expect((await request.get("/indexnow-key.txt")).status()).toBe(404);
+});
