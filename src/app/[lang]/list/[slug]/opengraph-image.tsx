@@ -13,7 +13,9 @@ export default async function Image({
   params: Promise<{ lang: string; slug: string }>;
 }) {
   const { lang, slug } = await params;
-  const list = await getPublishedListBySlug(slug, parseLocale(lang));
+  parseLocale(lang);
+  // zh visibility — see the film OG card (stub pages need a card too).
+  const list = await getPublishedListBySlug(slug);
   if (!list) notFound();
   return ogCard({
     title: "A Curated List",

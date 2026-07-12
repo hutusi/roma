@@ -13,7 +13,9 @@ export default async function Image({
   params: Promise<{ lang: string; slug: string }>;
 }) {
   const { lang, slug } = await params;
-  const director = await getPublishedDirectorBySlug(slug, parseLocale(lang));
+  parseLocale(lang);
+  // zh visibility — see the film OG card (stub pages need a card too).
+  const director = await getPublishedDirectorBySlug(slug);
   if (!director) notFound();
   // ogCard renders the title in Playfair (Latin), so use the romanized name.
   return ogCard({ title: director.name, kicker: "The Directors" });

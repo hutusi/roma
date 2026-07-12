@@ -46,7 +46,7 @@ export function FilmPage({
   const directorNames = film.filmDirectors.map((fd) => ({
     slug: fd.director.slug,
     label: en ? fd.director.name : (fd.director.nameZh ?? fd.director.name),
-    linked: fd.director.status === "published" && (!en || fd.director.statusEn === "published"),
+    linked: fd.director.status === "published",
   }));
 
   const facts = [
@@ -108,7 +108,7 @@ export function FilmPage({
             ))}
           </p>
         )}
-        {film.status === "published" && (en || film.statusEn === "published") && (
+        {film.status === "published" && (
           <p className="mt-3">
             <LocaleSwitch locale={locale} path={`/film/${film.slug}`} />
           </p>

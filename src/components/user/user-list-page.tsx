@@ -6,7 +6,7 @@ import { db } from "@/db";
 import { posterOf } from "@/db/queries/public";
 import { films, userLists } from "@/db/schema";
 import { getDict } from "@/i18n/dict";
-import type { Locale } from "@/i18n/locales";
+import { type Locale, localePath } from "@/i18n/locales";
 import { getSession } from "@/lib/auth-guards";
 import { OwnerPanel } from "./owner-panel";
 
@@ -47,8 +47,7 @@ export async function UserListPage({
 
   const filmTitle = (f: { titleZh: string; titleEn: string | null; titleOriginal: string }) =>
     en ? (f.titleEn ?? f.titleOriginal) : f.titleZh;
-  const filmHref = (f: { slug: string; statusEn: string }) =>
-    en && f.statusEn === "published" ? `/en/film/${f.slug}` : `/film/${f.slug}`;
+  const filmHref = (f: { slug: string }) => localePath(locale, `/film/${f.slug}`);
 
   const filmOptions = isOwner
     ? (

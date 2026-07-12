@@ -16,7 +16,9 @@ export default async function Image({
 }) {
   const { lang, slug } = await params;
   const locale = parseLocale(lang);
-  const film = await getPublishedFilmBySlug(slug, locale);
+  // zh visibility: en-pending entities render stubs, and a stub page's
+  // auto-referenced og:image must resolve too (ADR 0012).
+  const film = await getPublishedFilmBySlug(slug);
   if (!film) notFound();
   return ogCard({
     title: locale === "en" ? (film.titleEn ?? film.titleOriginal) : film.titleOriginal,
