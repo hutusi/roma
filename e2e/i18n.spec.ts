@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 // Fixtures (see setup/reset-db.ts): otto-e-mezzo, federico-fellini, and
 // fellini-primer carry published English editions; la-strada is
-// zh-published only, so it exercises the subset rule.
+// zh-published only, so it exercises the translation-pending stub
+// (ADR 0012) and the listing subset rule.
 
 test("en film page renders the English edition with lang=en", async ({ page }) => {
   const response = await page.goto("/en/film/otto-e-mezzo");
@@ -16,7 +17,7 @@ test("en film page renders the English edition with lang=en", async ({ page }) =
 
 test("image-credit caption is localized (no zh 图片来源 on /en)", async ({ page }) => {
   // zh keeps the Chinese caption…
-  await page.goto("/film/otto-e-mezzo");
+  await page.goto("/zh/film/otto-e-mezzo");
   await expect(page.getByText("图片来源")).toBeVisible();
 
   // …and /en shows the English one, never the zh label.
@@ -29,12 +30,21 @@ test("image-credit caption is localized (no zh 图片来源 on /en)", async ({ p
   await expect(page.getByText("图片来源")).toHaveCount(0);
 });
 
-test("subset rule: zh-only film 404s on /en but stays live on zh", async ({ page }) => {
+test("en-pending film renders a noindex translation-pending stub, not a 404", async ({ page }) => {
   const en = await page.goto("/en/film/la-strada");
-  expect(en?.status()).toBe(404);
-  await expect(page.getByText("Lost to time")).toBeVisible();
+  expect(en?.status()).toBe(200);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.getByText("Translation Pending")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "La strada" })).toBeVisible();
+  await expect(page.locator('a[href="/zh/film/la-strada"]')).toBeVisible();
+  // Thin content stays out of the index and advertises no alternates.
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(0);
+  // No zh prose on the stub.
+  await expect(page.getByText("编辑札记")).toHaveCount(0);
+  await expect(page.getByText("大路")).toHaveCount(0);
 
-  const zh = await page.goto("/film/la-strada");
+  const zh = await page.goto("/zh/film/la-strada");
   expect(zh?.status()).toBe(200);
   await expect(page.getByRole("heading", { name: "大路" })).toBeVisible();
 });
@@ -50,15 +60,16 @@ test("en home and indexes show only the en-published subset", async ({ page }) =
   await expect(page.locator('a[href="/en/film/la-strada"]')).toHaveCount(0);
 });
 
-test("en list keeps order and degrades untranslated members to unlinked entries", async ({
-  page,
-}) => {
+test("en list keeps order and links untranslated members to their stubs", async ({ page }) => {
   await page.goto("/en/list/fellini-primer");
   await expect(page.getByRole("heading", { name: "A Fellini Primer" })).toBeVisible();
-  // The zh-only member renders (order preserved) but never links.
+  // The zh-only member renders in order and now links — the stub absorbs it.
   await expect(page.getByText("La strada")).toBeVisible();
-  await expect(page.locator('a[href="/en/film/la-strada"]')).toHaveCount(0);
+  await expect(page.locator('a[href="/en/film/la-strada"]')).toHaveCount(1);
   await expect(page.locator('a[href="/en/film/otto-e-mezzo"]')).toHaveCount(1);
+
+  await page.locator('a[href="/en/film/la-strada"]').click();
+  await expect(page.getByText("Translation Pending")).toBeVisible();
 });
 
 test("en director page shows English bio and only en-published films", async ({ page }) => {
@@ -69,17 +80,17 @@ test("en director page shows English bio and only en-published films", async ({ 
 });
 
 test("hreflang pairs both locales and skips zh-only entities", async ({ page }) => {
-  await page.goto("/film/otto-e-mezzo");
+  await page.goto("/zh/film/otto-e-mezzo");
   await expect(
     page.locator('link[rel="alternate"][hreflang="en"][href$="/en/film/otto-e-mezzo"]'),
   ).toHaveCount(1);
 
-  await page.goto("/film/la-strada");
+  await page.goto("/zh/film/la-strada");
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveCount(0);
 
   await page.goto("/en/film/otto-e-mezzo");
   await expect(
-    page.locator('link[rel="alternate"][hreflang="zh-CN"][href$="/film/otto-e-mezzo"]'),
+    page.locator('link[rel="alternate"][hreflang="zh-CN"][href$="/zh/film/otto-e-mezzo"]'),
   ).toHaveCount(1);
 });
 
@@ -92,18 +103,19 @@ test("sitemap carries en entries only for en-published entities", async ({ reque
 });
 
 test("locale switch links pair pages in both directions", async ({ page }) => {
-  await page.goto("/film/otto-e-mezzo");
+  await page.goto("/zh/film/otto-e-mezzo");
   await expect(
     page.locator('a[href="/en/film/otto-e-mezzo"]', { hasText: "English" }),
   ).toBeVisible();
 
   await page.goto("/en/film/otto-e-mezzo");
-  await expect(page.locator('a[href="/film/otto-e-mezzo"]', { hasText: "中文版" })).toBeVisible();
+  await expect(
+    page.locator('a[href="/zh/film/otto-e-mezzo"]', { hasText: "中文版" }),
+  ).toBeVisible();
 
-  // zh-only film offers no switch into the void (the footer's
-  // site-level switch to /en is always there; the page-level one isn't).
-  await page.goto("/film/la-strada");
-  await expect(page.locator('a[href="/en/film/la-strada"]')).toHaveCount(0);
+  // The switch is total now: a zh-only film links to its en stub.
+  await page.goto("/zh/film/la-strada");
+  await expect(page.locator('a[href="/en/film/la-strada"]', { hasText: "English" })).toBeVisible();
 });
 
 test("en OG image renders as PNG", async ({ page, request }) => {
@@ -129,24 +141,31 @@ test("en about page renders in English", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "About Babuban" })).toBeVisible();
 });
 
-test("unknown /en path 404s with the styled en page", async ({ page }) => {
-  const response = await page.goto("/en/does-not-exist");
-  expect(response?.status()).toBe(404);
+test("unknown paths 404: styled under a locale, bare without one", async ({ page }) => {
+  const en = await page.goto("/en/does-not-exist");
+  expect(en?.status()).toBe(404);
   await expect(page.getByText("Lost to time")).toBeVisible();
+
+  const zh = await page.goto("/zh/does-not-exist");
+  expect(zh?.status()).toBe(404);
+  await expect(page.getByText("此片散佚")).toBeVisible();
+
+  const bare = await page.goto("/fr/does-not-exist");
+  expect(bare?.status()).toBe(404);
 });
 
-test("x-default hreflang points at the zh root", async ({ page }) => {
-  await page.goto("/film/otto-e-mezzo");
+test("x-default hreflang points at the zh edition", async ({ page }) => {
+  await page.goto("/zh/film/otto-e-mezzo");
   await expect(
-    page.locator('link[rel="alternate"][hreflang="x-default"][href$="/film/otto-e-mezzo"]'),
+    page.locator('link[rel="alternate"][hreflang="x-default"][href$="/zh/film/otto-e-mezzo"]'),
   ).toHaveCount(1);
 });
 
-test("en pages carry an English OG alt, not the zh root one", async ({ page }) => {
+test("en pages carry an English OG alt", async ({ page }) => {
   await page.goto("/en");
   const alt = await page.locator('meta[property="og:image:alt"]').first().getAttribute("content");
   expect(alt).toBeTruthy();
-  expect(alt).not.toContain("经典电影策展"); // the zh root alt
+  expect(alt).not.toContain("经典电影策展");
   expect(alt).toContain("Babuban");
 });
 

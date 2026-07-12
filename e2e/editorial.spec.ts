@@ -29,13 +29,13 @@ test("publish gate: short 札记 blocked with count, then publish goes live with
 
   // The slug wasn't in the prerender manifest — this proves on-demand
   // rendering + revalidation, i.e. publish-without-redeploy.
-  const response = await page.goto("/film/publish-flow-film");
+  const response = await page.goto("/zh/film/publish-flow-film");
   expect(response?.status()).toBe(200);
   await expect(page.getByRole("heading", { name: "发布流程测试" })).toBeVisible();
 });
 
 test("draft film: 404 publicly, full render in editor preview", async ({ page }) => {
-  const draftRes = await page.request.get("/film/il-bidone");
+  const draftRes = await page.request.get("/zh/film/il-bidone");
   expect(draftRes.status()).toBe(404);
 
   const draft = await queryOne<{ id: string }>("select id from films where slug = $1", [
@@ -48,7 +48,7 @@ test("draft film: 404 publicly, full render in editor preview", async ({ page })
 });
 
 test("essay renders through the shared extension contract on the public page", async ({ page }) => {
-  await page.goto("/film/otto-e-mezzo");
+  await page.goto("/zh/film/otto-e-mezzo");
   await expect(page.getByRole("heading", { name: "为什么是黑白版" })).toBeVisible();
   await expect(page.locator("blockquote")).toContainText("告别本来就不该匆忙");
   // 译名 block carries all region variants

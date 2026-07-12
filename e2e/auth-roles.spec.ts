@@ -13,7 +13,7 @@ test.describe("plain user", () => {
 
   test("is bounced from /admin to the home page", async ({ page }) => {
     await page.goto("/admin");
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/zh$/);
   });
 });
 
@@ -40,7 +40,7 @@ test.describe("admin", () => {
 
     const guestContext = await browser.newContext();
     const guest = await guestContext.newPage();
-    await guest.goto(`/invite/${invite?.token}`);
+    await guest.goto(`/zh/invite/${invite?.token}`);
     await guest.fill("#name", "客座编辑");
     await guest.fill("#username", "e2eguest");
     await guest.fill("#password", "guest-password-1234");
