@@ -3,7 +3,7 @@ import { DocumentShell } from "@/components/layout/document-shell";
 import { RumBeacon } from "@/components/site/rum-beacon";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { HTML_LANG, type Locale } from "@/i18n/locales";
+import { HTML_LANG, LOCALES, type Locale } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { SITE_URL } from "@/lib/site";
 
@@ -14,10 +14,8 @@ import { SITE_URL } from "@/lib/site";
 // parseLocale() below instead. No proxy or Accept-Language detection
 // sits in the serving path (ADR 0012 keeps ADR 0005/0008's
 // fully-static posture).
-// TODO(en-merge): return LOCALES.map once app/en is folded in — while
-// that tree still exists it owns the /en URLs.
 export function generateStaticParams() {
-  return [{ lang: "zh" }];
+  return LOCALES.map((lang) => ({ lang }));
 }
 
 const META: Record<Locale, Metadata> = {

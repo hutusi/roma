@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { UserListPage } from "@/components/user/user-list-page";
+import { parseLocale } from "@/i18n/params";
 
 export const dynamic = "force-dynamic";
 
@@ -10,8 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page({
   params,
 }: {
-  params: Promise<{ username: string; id: string }>;
+  params: Promise<{ lang: string; username: string; id: string }>;
 }) {
-  const { username, id } = await params;
-  return <UserListPage username={username} id={id} />;
+  const { lang, username, id } = await params;
+  return <UserListPage username={username} id={id} locale={parseLocale(lang)} />;
 }

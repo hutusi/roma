@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProfilePage } from "@/components/user/profile-page";
+import { parseLocale } from "@/i18n/params";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +17,10 @@ export default async function Page({
   params,
   searchParams,
 }: {
-  params: Promise<{ username: string }>;
+  params: Promise<{ lang: string; username: string }>;
   searchParams: Promise<{ tab?: string }>;
 }) {
-  const { username } = await params;
+  const { lang, username } = await params;
   const { tab } = await searchParams;
-  return <ProfilePage username={username} tab={tab} />;
+  return <ProfilePage username={username} tab={tab} locale={parseLocale(lang)} />;
 }
