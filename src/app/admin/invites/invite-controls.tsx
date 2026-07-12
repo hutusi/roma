@@ -24,7 +24,7 @@ export function InviteCreateForm() {
             toast.error(result.error);
             return;
           }
-          const url = `${window.location.origin}/invite/${result.data.token}`;
+          const url = `${window.location.origin}/zh/invite/${result.data.token}`;
           let copied = true;
           try {
             await navigator.clipboard.writeText(url);
@@ -84,7 +84,7 @@ export function InviteControls({
           type="button"
           className="text-brand hover:underline"
           onClick={async () => {
-            const url = `${window.location.origin}/invite/${token}`;
+            const url = `${window.location.origin}/zh/invite/${token}`;
             try {
               await navigator.clipboard.writeText(url);
               toast.success("链接已复制");

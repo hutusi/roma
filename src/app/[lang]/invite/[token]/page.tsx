@@ -1,8 +1,10 @@
 import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
 import { invitations } from "@/db/schema";
+import { parseLocale } from "@/i18n/params";
 import { AcceptInviteForm } from "./accept-form";
 
 export const metadata: Metadata = {
@@ -10,8 +12,14 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default async function InvitePage({ params }: { params: Promise<{ token: string }> }) {
-  const { token } = await params;
+export default async function InvitePage({
+  params,
+}: {
+  params: Promise<{ lang: string; token: string }>;
+}) {
+  const { lang, token } = await params;
+  // Invitations come from the zh editorial team; the flow stays zh-only.
+  if (parseLocale(lang) !== "zh") notFound();
   const invite = await db.query.invitations.findFirst({
     where: eq(invitations.token, token),
   });
