@@ -2,7 +2,7 @@ import "server-only";
 import type { PublicDirector, PublicFilm, PublicList } from "@/db/queries/public";
 import { visibleIn } from "@/db/queries/visibility";
 import { countryToEn } from "@/i18n/countries";
-import { type Locale, localePath } from "@/i18n/locales";
+import { HTML_LANG, type Locale, localePath } from "@/i18n/locales";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -56,6 +56,37 @@ function breadcrumb(locale: Locale, trail: { name: string; path: string }[]): Js
 
 function graph(nodes: JsonLdNode[]): JsonLdNode {
   return { "@context": "https://schema.org", "@graph": nodes };
+}
+
+/**
+ * Site-level identity for the home pages. The WebSite node is per-locale
+ * (each locale home is its own page with its own name/inLanguage); the
+ * Organization is one entity shared by both, so it keeps a single @id
+ * and carries the other-language name as alternateName. No SearchAction:
+ * the site has no search. The logo path is the generated brand icon.
+ */
+export function websiteJsonLd(locale: Locale): JsonLdNode {
+  const en = locale === "en";
+  const orgId = `${SITE_URL}/#org`;
+  return graph([
+    {
+      "@type": "WebSite",
+      "@id": `${abs(locale, "/")}#website`,
+      name: en ? "Babuban" : "八部半",
+      alternateName: en ? ["八部半", "8½"] : ["Babuban", "8½"],
+      url: abs(locale, "/"),
+      inLanguage: HTML_LANG[locale],
+      publisher: { "@id": orgId },
+    },
+    {
+      "@type": "Organization",
+      "@id": orgId,
+      name: "八部半",
+      alternateName: ["Babuban", "8½"],
+      url: SITE_URL,
+      logo: `${SITE_URL}/icons/icon-512.png`,
+    },
+  ]);
 }
 
 export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode {

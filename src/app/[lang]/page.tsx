@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/json-ld";
 import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
@@ -8,6 +9,7 @@ import { getHomeData, posterOf } from "@/db/queries/public";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
+import { websiteJsonLd } from "@/lib/structured-data";
 
 export async function generateMetadata({
   params,
@@ -63,6 +65,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
 
   return (
     <div className="animate-fade-up">
+      <JsonLd data={websiteJsonLd(locale)} />
       {/* Hero — the only surface that carries grain */}
       <section className="relative overflow-hidden border-line border-b bg-paper">
         <Grain />

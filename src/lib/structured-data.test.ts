@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import type { PublicDirector, PublicFilm, PublicList } from "@/db/queries/public";
-import { directorJsonLd, filmJsonLd, listJsonLd, serializeJsonLd } from "./structured-data";
+import {
+  directorJsonLd,
+  filmJsonLd,
+  listJsonLd,
+  serializeJsonLd,
+  websiteJsonLd,
+} from "./structured-data";
 
 const fellini = {
   slug: "fellini",
@@ -119,5 +125,30 @@ describe("serializeJsonLd", () => {
     const out = serializeJsonLd({ name: "</script><script>alert(1)</script>" });
     expect(out).not.toContain("</script>");
     expect(out).toContain("\\u003c/script>");
+  });
+});
+
+describe("websiteJsonLd", () => {
+  test("zh WebSite is named 八部半, English home carries the Latin name", () => {
+    const [site, org] = graphOf(websiteJsonLd("zh"));
+    expect(site["@type"]).toBe("WebSite");
+    expect(site.name).toBe("八部半");
+    expect(site.url).toBe("https://babuban.com/zh");
+    expect(site.inLanguage).toBe("zh-CN");
+    expect(org["@type"]).toBe("Organization");
+
+    const [enSite] = graphOf(websiteJsonLd("en"));
+    expect(enSite.name).toBe("Babuban");
+    expect(enSite.url).toBe("https://babuban.com/en");
+    expect(enSite.inLanguage).toBe("en");
+  });
+
+  test("both locales publish the same Organization entity", () => {
+    const [, zhOrg] = graphOf(websiteJsonLd("zh"));
+    const [zhSite] = graphOf(websiteJsonLd("zh"));
+    const [, enOrg] = graphOf(websiteJsonLd("en"));
+    expect(zhOrg["@id"]).toBe(enOrg["@id"]);
+    expect((zhSite.publisher as { "@id": string })["@id"]).toBe(zhOrg["@id"] as string);
+    expect(zhOrg.logo).toBe("https://babuban.com/icons/icon-512.png");
   });
 });
