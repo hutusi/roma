@@ -89,4 +89,42 @@ test.describe("admin", () => {
     expect(promoted?.role).toBe("editor");
     await guestContext.close();
   });
+
+  // An invite is an onboarding grant, not role management, so accepting a
+  // lower-ranked one must never cost an existing account its access. The
+  // promote-existing-account path (added so a half-finished accept can be
+  // retried) writes the invite's role, and would otherwise demote an admin.
+  test("invite flow: an editor invite never demotes an existing admin", async ({
+    page,
+    browser,
+  }) => {
+    await page.goto("/admin/invites");
+    // The seeded admin, invited as a plain editor.
+    await page.fill('input[type="email"]', "admin@e2e.test");
+    await page.getByRole("button", { name: "创建邀请" }).click();
+    await expect(page.locator("[data-sonner-toast]").last()).toBeVisible();
+
+    const invite = await queryOne<{ token: string }>(
+      "select token from invitations where email = $1 order by created_at desc limit 1",
+      ["admin@e2e.test"],
+    );
+    expect(invite?.token).toBeTruthy();
+
+    const guestContext = await browser.newContext();
+    const guest = await guestContext.newPage();
+    await guest.goto(`/zh/invite/${invite?.token}`);
+    await guest.fill("#name", "已存在的管理员");
+    await guest.fill("#username", "e2eexistingadmin");
+    await guest.fill("#password", "another-password-1234");
+    await guest.getByRole("button", { name: "接受邀请" }).click();
+    // No signup happens, so no session — the form says so instead of
+    // bouncing off /admin.
+    await guest.waitForURL(/\/sign-in/);
+
+    const role = await queryOne<{ role: string }>("select role from users where email = $1", [
+      "admin@e2e.test",
+    ]);
+    expect(role?.role).toBe("admin");
+    await guestContext.close();
+  });
 });

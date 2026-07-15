@@ -36,6 +36,11 @@ export function AcceptInviteForm({ token }: { token: string }) {
       if (result.data.signedIn) {
         toast.success("欢迎加入编辑部");
         router.push("/admin");
+        // Signup set a session cookie; refresh so server components
+        // re-render with it. Only meaningful on this branch — refreshing
+        // the other one just re-renders this page (now "already used")
+        // and races the push, which can strand the user here.
+        router.refresh();
       } else {
         toast.success("该邮箱已有账号，权限已授予", {
           description: "请用原有密码登录。",
@@ -43,7 +48,6 @@ export function AcceptInviteForm({ token }: { token: string }) {
         });
         router.push(localePath("zh", "/sign-in"));
       }
-      router.refresh();
     } catch {
       setError("出了点问题，请稍后再试。");
     } finally {

@@ -49,6 +49,21 @@ export async function revokeInvite(id: string): Promise<ActionResult> {
 }
 
 /**
+ * Thrown only to roll the transaction back, and mapped straight to
+ * fail() by the caller — server actions must return ActionResult, since
+ * production masks thrown messages into a generic error.
+ */
+class ClaimFailure extends Error {
+  constructor(readonly userMessage: string) {
+    super(userMessage);
+  }
+}
+
+/** user < editor < admin. An unknown/null role is a plain user, matching roleOf(). */
+const ROLE_RANK: Record<string, number> = { user: 0, editor: 1, admin: 2 };
+const rank = (role: string | null | undefined) => ROLE_RANK[role ?? "user"] ?? 0;
+
+/**
  * Promotes `userId` and claims the invitation as one unit. The claim is
  * conditional on the invitation still being unaccepted, so two concurrent
  * accepts can't both consume it. Both statements assert they matched a
@@ -62,14 +77,14 @@ async function promoteAndClaim(userId: string, inviteId: string, role: string) {
       .set({ role })
       .where(eq(users.id, userId))
       .returning({ id: users.id });
-    if (!promoted.length) throw new Error(`invite ${inviteId}: user ${userId} vanished`);
+    if (!promoted.length) throw new ClaimFailure("账号不存在，请重新接受邀请");
 
     const claimed = await tx
       .update(invitations)
       .set({ acceptedAt: new Date() })
       .where(and(eq(invitations.id, inviteId), isNull(invitations.acceptedAt)))
       .returning({ id: invitations.id });
-    if (!claimed.length) throw new Error(`invite ${inviteId}: already accepted`);
+    if (!claimed.length) throw new ClaimFailure("邀请已被使用");
   });
 }
 
@@ -100,11 +115,14 @@ export async function acceptInvite(
   const email = normalizeEmail(invite.email);
   const existing = await db.query.users.findFirst({
     where: eq(users.email, email),
-    columns: { id: true },
+    columns: { id: true, role: true },
   });
   if (existing) {
-    await promoteAndClaim(existing.id, invite.id, invite.role);
-    return ok({ signedIn: false });
+    // Only ever raise. An invite is an onboarding grant, not role
+    // management (/admin/users is), so an admin accepting an editor
+    // invite must keep admin rather than be silently demoted.
+    const role = rank(existing.role) >= rank(invite.role) ? (existing.role ?? "user") : invite.role;
+    return claim(() => promoteAndClaim(existing.id, invite.id, role), { signedIn: false });
   }
 
   // Signup can't join the transaction below, so it comes first: if the
@@ -122,6 +140,21 @@ export async function acceptInvite(
     }));
   if (created.error || !created.user) return fail(created.error ?? "注册失败");
 
-  await promoteAndClaim(created.user.id, invite.id, invite.role);
-  return ok({ signedIn: true });
+  // A fresh account is always defaultRole "user", so it always takes the
+  // invite's role — no rank comparison needed here.
+  return claim(() => promoteAndClaim(created.user.id, invite.id, invite.role), { signedIn: true });
+}
+
+/** Runs a claim, turning its rollback signal into an ActionResult. */
+async function claim(
+  run: () => Promise<unknown>,
+  data: { signedIn: boolean },
+): Promise<ActionResult<{ signedIn: boolean }>> {
+  try {
+    await run();
+    return ok(data);
+  } catch (error) {
+    if (error instanceof ClaimFailure) return fail(error.userMessage);
+    throw error;
+  }
 }
