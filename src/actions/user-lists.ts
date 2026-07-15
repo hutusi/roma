@@ -16,6 +16,14 @@ import { type ActionResult, fail, ok } from "./result";
  * this action guard is their only auth boundary.
  */
 
+/**
+ * Both limits mirror the inputs' maxLength. maxLength is a client hint —
+ * these actions are public endpoints, and title was already checked here
+ * while description was not, so only description could arrive unbounded.
+ */
+const TITLE_MAX = 60;
+const DESCRIPTION_MAX = 140;
+
 /** Every mutation first proves the list belongs to the caller. */
 async function ownedList(listId: string, locale: Locale) {
   const session = await requireUser(locale);
@@ -32,14 +40,16 @@ export async function createUserList(
 ): Promise<ActionResult<{ id: string }>> {
   const session = await requireUser(locale);
   const title = values.title.trim();
+  const description = values.description?.trim() || null;
   if (!title) return fail("titleRequired");
-  if (title.length > 60) return fail("titleTooLong");
+  if (title.length > TITLE_MAX) return fail("titleTooLong");
+  if (description && description.length > DESCRIPTION_MAX) return fail("descriptionTooLong");
   const [created] = await db
     .insert(userLists)
     .values({
       userId: session.user.id,
       title,
-      description: values.description?.trim() || null,
+      description,
     })
     .returning({ id: userLists.id });
   return ok({ id: created.id });
@@ -53,12 +63,11 @@ export async function updateUserList(
   const list = await ownedList(listId, locale);
   if (!list) return fail("notFound");
   const title = values.title.trim();
+  const description = values.description?.trim() || null;
   if (!title) return fail("titleRequired");
-  if (title.length > 60) return fail("titleTooLong");
-  await db
-    .update(userLists)
-    .set({ title, description: values.description?.trim() || null })
-    .where(eq(userLists.id, listId));
+  if (title.length > TITLE_MAX) return fail("titleTooLong");
+  if (description && description.length > DESCRIPTION_MAX) return fail("descriptionTooLong");
+  await db.update(userLists).set({ title, description }).where(eq(userLists.id, listId));
   return ok();
 }
 
@@ -77,8 +86,15 @@ export async function addFilmToUserList(
   const list = await ownedList(listId, locale);
   if (!list) return fail("notFound");
   try {
-    // max()+insert in one transaction so concurrent adds can't compute
-    // the same position.
+    // The transaction makes the read and the insert atomic, but NOT
+    // mutually exclusive: under READ COMMITTED (the default here) two
+    // concurrent adds both see the same max() — neither sees the other's
+    // uncommitted row — and both write maxPos + 1. Nothing enforces
+    // unique positions, so the duplicates land and the two items tie.
+    // Accepted rather than fixed: serializing this needs SERIALIZABLE or
+    // an advisory lock plus a unique (list_id, position) constraint and a
+    // backfill, which is a lot of machinery for a per-user list where
+    // the tie only costs an arbitrary order between two items.
     await db.transaction(async (tx) => {
       const [{ maxPos }] = await tx
         .select({ maxPos: max(userListItems.position) })

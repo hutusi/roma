@@ -22,7 +22,8 @@ Dashboard → Storage → Create → **Blob**, attach to the project. This injec
 BETTER_AUTH_SECRET   # openssl rand -base64 32
 BETTER_AUTH_URL      # https://babuban.com
 NEXT_PUBLIC_SITE_URL # https://babuban.com
-RESEND_API_KEY       # optional — password-reset email; without it resets log to the console
+RESEND_API_KEY       # REQUIRED in production — password reset throws without it (a live
+                     # reset token must never reach the logs). Only dev falls back to console.
 EMAIL_FROM           # optional — e.g. 八部半 <noreply@babuban.com>
 TMDB_API_TOKEN       # optional — enables the metadata-import button in /admin/films/new
 ```

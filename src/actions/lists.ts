@@ -91,8 +91,15 @@ export async function saveListMeta(
 export async function addFilmToList(listId: string, filmId: string): Promise<ActionResult> {
   await requireEditor();
   try {
-    // max()+insert in one transaction so concurrent adds can't compute
-    // the same position.
+    // The transaction makes the read and the insert atomic, but NOT
+    // mutually exclusive: under READ COMMITTED (the default here) two
+    // concurrent adds both see the same max() — neither sees the other's
+    // uncommitted row — and both write maxPos + 1. Nothing enforces
+    // unique positions, so the duplicates land and the two items tie.
+    // Accepted rather than fixed: serializing this needs SERIALIZABLE or
+    // an advisory lock plus a unique (list_id, position) constraint and a
+    // backfill, which is a lot of machinery for a two-editor site where
+    // the tie only costs an arbitrary order between two items.
     await db.transaction(async (tx) => {
       const [{ maxPos }] = await tx
         .select({ maxPos: max(curatedListItems.position) })
@@ -130,7 +137,14 @@ export async function removeListItem(itemId: string): Promise<ActionResult> {
   return ok();
 }
 
-/** Rewrites every position in one transaction; last write wins. */
+/**
+ * Rewrites the positions it is GIVEN, in one transaction — not "every
+ * position", as this claimed. Ids from another list are already no-ops
+ * (the listId predicate below), but an incomplete or duplicated list
+ * leaves the omitted items on stale positions that can now collide with
+ * the ones just assigned. The admin UI always sends the full set; this
+ * does not check that it did.
+ */
 export async function reorderListItems(
   listId: string,
   orderedItemIds: string[],

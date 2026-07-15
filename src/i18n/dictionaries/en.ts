@@ -134,6 +134,7 @@ export const en = {
     errors: {
       titleRequired: "Title can't be empty",
       titleTooLong: "Title can't exceed 60 characters",
+      descriptionTooLong: "Description can't exceed 140 characters",
       notFound: "List not found, or you don't have permission",
       alreadyInList: "This film is already in the list",
     },

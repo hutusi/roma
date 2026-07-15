@@ -137,6 +137,7 @@ export const zh = {
     errors: {
       titleRequired: "标题不能为空",
       titleTooLong: "标题不能超过 60 字",
+      descriptionTooLong: "简介不能超过 140 字",
       notFound: "片单不存在或无权限",
       alreadyInList: "这部影片已在片单中",
     },
