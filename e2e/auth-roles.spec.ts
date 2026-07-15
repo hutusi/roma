@@ -55,4 +55,38 @@ test.describe("admin", () => {
     await expect(guest.locator("h1")).toHaveText("影片");
     await guestContext.close();
   });
+
+  // Better Auth lowercases the address at signup, so an invitation stored
+  // with the admin's original casing used to promote zero rows while still
+  // marking itself accepted: the invite was burned and the account stayed
+  // a plain user. The test above never caught it — its email is lowercase.
+  test("invite flow: a mixed-case email still promotes the account", async ({ page, browser }) => {
+    await page.goto("/admin/invites");
+    await page.fill('input[type="email"]', "  Mixed.Case@E2E.Test  ");
+    await page.getByRole("button", { name: "创建邀请" }).click();
+    await expect(page.locator("[data-sonner-toast]").last()).toBeVisible();
+
+    const invite = await queryOne<{ token: string; email: string; invited_by: string | null }>(
+      "select token, email, invited_by from invitations where email = $1 order by created_at desc limit 1",
+      ["mixed.case@e2e.test"],
+    );
+    expect(invite?.email).toBe("mixed.case@e2e.test");
+    // The column exists with a live FK but was never written.
+    expect(invite?.invited_by).toBeTruthy();
+
+    const guestContext = await browser.newContext();
+    const guest = await guestContext.newPage();
+    await guest.goto(`/zh/invite/${invite?.token}`);
+    await guest.fill("#name", "大小写编辑");
+    await guest.fill("#username", "e2emixedcase");
+    await guest.fill("#password", "guest-password-1234");
+    await guest.getByRole("button", { name: "接受邀请" }).click();
+    await guest.waitForURL(/\/admin$/);
+
+    const promoted = await queryOne<{ role: string }>("select role from users where email = $1", [
+      "mixed.case@e2e.test",
+    ]);
+    expect(promoted?.role).toBe("editor");
+    await guestContext.close();
+  });
 });

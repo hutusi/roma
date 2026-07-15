@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
+import { localePath } from "@/i18n/locales";
 
 export function AcceptInviteForm({ token }: { token: string }) {
   const router = useRouter();
@@ -29,8 +30,19 @@ export function AcceptInviteForm({ token }: { token: string }) {
         setError(result.error);
         return;
       }
-      toast.success("欢迎加入编辑部");
-      router.push("/admin");
+      // Only signup establishes a session. When the address already had
+      // an account the role is granted but no session exists, so /admin
+      // would just bounce to sign-in — say so instead of pretending.
+      if (result.data.signedIn) {
+        toast.success("欢迎加入编辑部");
+        router.push("/admin");
+      } else {
+        toast.success("该邮箱已有账号，权限已授予", {
+          description: "请用原有密码登录。",
+          duration: 8000,
+        });
+        router.push(localePath("zh", "/sign-in"));
+      }
       router.refresh();
     } catch {
       setError("出了点问题，请稍后再试。");
