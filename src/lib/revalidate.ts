@@ -1,50 +1,72 @@
 import "server-only";
-import { revalidatePath, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { pingIndexNow } from "@/lib/indexnow";
 
 /**
- * Single map from entity → what must refresh on publish/update, so no
- * server action hand-rolls its own (and misses one). These helpers are
- * only ever called from server actions, which is why updateTag (instead
- * of revalidateTag) is allowed: it expires immediately, so an editor
- * sees their publish on the very next request. Tags cover data cached
- * with cacheTag/unstable_cache; paths cover the ISR'd pages.
+ * The single seam every editorial mutation invalidates through, so no
+ * server action hand-rolls its own list (and misses one).
  *
- * Both locales' paths are revalidated unconditionally: one row holds
- * both editions, so any edit can affect both pages (including flipping
- * an /en translation-pending stub to the full page), and revalidating
- * is cheaper than a DB read to decide. Tags stay locale-free for the
- * same reason.
+ * It sweeps the whole public tree rather than mapping entity → pages.
+ * The entity graph is densely cross-linked — a film's title rides on
+ * director pages, list pages, film cards and the home page; a list's
+ * membership rides on the film's "appears in" section; a director's name
+ * rides on every film card — so an accurate per-entity map is most of the
+ * read layer restated, and the previous attempt at one silently
+ * under-invalidated on every one of those edges. The corpus is small and
+ * edited rarely (ADR 0005), so re-rendering it costs less than the stale
+ * pages the map leaked.
+ *
+ * Paths are the only mechanism available: ADR 0005 deliberately leaves
+ * `cacheComponents` off in v1, so there is no `use cache`/`cacheTag`
+ * anywhere to tag. Earlier revisions called `updateTag` here — those tags
+ * had no readers and expired nothing.
  */
-export function revalidateFilm(slug: string) {
-  updateTag(`film:${slug}`);
-  updateTag("films");
-  updateTag("home");
-  for (const prefix of ["/zh", "/en"]) {
-    revalidatePath(`${prefix}/film/${slug}`);
-    revalidatePath(`${prefix}/films`);
-    revalidatePath(`${prefix}/rss.xml`);
-    revalidatePath(prefix);
-  }
-  pingIndexNow([`/film/${slug}`, "/films", "/"]);
+function revalidateEditorialPages() {
+  // This app has no root layout — /[lang] and /admin are separate root
+  // trees — so the "revalidate everything" form from the Next docs,
+  // revalidatePath("/", "layout"), matches no layout file here. The
+  // dynamic segment is why "layout" is required rather than optional.
+  revalidatePath("/[lang]", "layout");
+  // Reached by neither the sweep above (it sits outside the [lang] tree)
+  // nor anything else — it had been frozen at build time since launch.
+  revalidatePath("/sitemap.xml");
+  // Route handlers are invalidated by their own path; a layout sweep
+  // covers pages beneath it, not handlers.
+  for (const prefix of ["/zh", "/en"]) revalidatePath(`${prefix}/rss.xml`);
 }
 
-export function revalidateDirector(slug: string) {
-  updateTag(`director:${slug}`);
-  for (const prefix of ["/zh", "/en"]) {
-    revalidatePath(`${prefix}/director/${slug}`);
-  }
-  pingIndexNow([`/director/${slug}`]);
+/**
+ * `notify` pings IndexNow, and is separate from invalidation because the
+ * two answer different questions. Invalidation asks "could a cached page
+ * be wrong?" — true even for a draft-only save, since drafts surface in
+ * admin previews. Notification asks "is there a public URL worth
+ * recrawling?" — false for a row that has never been published, where a
+ * ping would hand a search engine the slug of unpublished work.
+ *
+ * Unpublishing and deleting DO notify: the URL now 404s, and a recrawl is
+ * how the engine learns to drop it.
+ */
+type Options = { notify?: boolean };
+
+export function revalidateFilm(slug: string, { notify = false }: Options = {}) {
+  revalidateEditorialPages();
+  if (notify) pingIndexNow([`/film/${slug}`, "/films", "/"]);
 }
 
-export function revalidateList(slug: string) {
-  updateTag(`list:${slug}`);
-  updateTag("lists");
-  updateTag("home");
-  for (const prefix of ["/zh", "/en"]) {
-    revalidatePath(`${prefix}/list/${slug}`);
-    revalidatePath(`${prefix}/lists`);
-    revalidatePath(prefix);
-  }
-  pingIndexNow([`/list/${slug}`, "/lists", "/"]);
+export function revalidateDirector(slug: string, { notify = false }: Options = {}) {
+  revalidateEditorialPages();
+  if (notify) pingIndexNow([`/director/${slug}`]);
+}
+
+export function revalidateList(slug: string, { notify = false }: Options = {}) {
+  revalidateEditorialPages();
+  if (notify) pingIndexNow([`/list/${slug}`, "/lists", "/"]);
+}
+
+/**
+ * Media has no public URL of its own — it renders inside film, director
+ * and list pages — so it invalidates without ever notifying.
+ */
+export function revalidateMedia() {
+  revalidateEditorialPages();
 }

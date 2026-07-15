@@ -33,15 +33,15 @@ export async function saveDirector(
     bioEn: v.bioEn || null,
     careerEssayEn: (v.careerEssayEn as TiptapDoc) ?? null,
   };
-  // A slug change must also refresh the page cached under the old slug.
-  const previousSlug = id
-    ? (
-        await db.query.directors.findFirst({
-          where: eq(directors.id, id),
-          columns: { slug: true },
-        })
-      )?.slug
+  const existing = id
+    ? await db.query.directors.findFirst({
+        where: eq(directors.id, id),
+        columns: { slug: true, status: true, statusEn: true },
+      })
     : undefined;
+  // A slug change must also ping the URL the director used to live at.
+  const previousSlug = existing?.slug;
+  const isPublic = existing?.status === "published";
 
   try {
     let targetId = id;
@@ -51,8 +51,10 @@ export async function saveDirector(
       const [created] = await db.insert(directors).values(row).returning({ id: directors.id });
       targetId = created.id;
     }
-    revalidateDirector(v.slug);
-    if (previousSlug && previousSlug !== v.slug) revalidateDirector(previousSlug);
+    revalidateDirector(v.slug, { notify: isPublic });
+    if (isPublic && previousSlug && previousSlug !== v.slug) {
+      revalidateDirector(previousSlug, { notify: true });
+    }
     return ok({ id: targetId });
   } catch (error) {
     if (
@@ -92,7 +94,7 @@ export async function setViewingOrder(
       );
     }
   });
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: true });
   return ok();
 }
 
@@ -112,7 +114,7 @@ export async function publishDirector(id: string): Promise<ActionResult> {
       publishedAt: director.publishedAt ?? new Date(),
     })
     .where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: true });
   return ok();
 }
 
@@ -131,7 +133,7 @@ export async function publishDirectorEn(id: string): Promise<ActionResult> {
       publishedEnAt: director.publishedEnAt ?? new Date(),
     })
     .where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: true });
   return ok();
 }
 
@@ -142,7 +144,7 @@ export async function unpublishDirectorEn(id: string): Promise<ActionResult> {
   });
   if (!director) return fail("导演不存在");
   await db.update(directors).set({ statusEn: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: true });
   return ok();
 }
 
@@ -153,7 +155,7 @@ export async function unpublishDirector(id: string): Promise<ActionResult> {
   });
   if (!director) return fail("导演不存在");
   await db.update(directors).set({ status: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: true });
   return ok();
 }
 
@@ -164,6 +166,6 @@ export async function deleteDirector(id: string): Promise<ActionResult> {
   });
   if (!director) return fail("导演不存在");
   await db.delete(directors).where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: true });
   return ok();
 }

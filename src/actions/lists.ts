@@ -9,12 +9,17 @@ import { revalidateList } from "@/lib/revalidate";
 import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
 import { type ActionResult, fail, ok } from "./result";
 
-async function listSlug(listId: string): Promise<string | null> {
-  const list = await db.query.curatedLists.findFirst({
+/** Slug to revalidate, plus whether the list has a public URL to notify. */
+async function listMeta(listId: string) {
+  return db.query.curatedLists.findFirst({
     where: eq(curatedLists.id, listId),
-    columns: { slug: true },
+    columns: { slug: true, status: true },
   });
-  return list?.slug ?? null;
+}
+
+function revalidateListMeta(list: { slug: string; status: string } | undefined) {
+  if (!list) return;
+  revalidateList(list.slug, { notify: list.status === "published" });
 }
 
 export async function saveListMeta(
@@ -37,8 +42,15 @@ export async function saveListMeta(
     introEn: (v.introEn as TiptapDoc) ?? null,
     sortOrder: v.sortOrder,
   };
-  // A slug change must also refresh the page cached under the old slug.
-  const previousSlug = id ? await listSlug(id) : undefined;
+  const existing = id
+    ? await db.query.curatedLists.findFirst({
+        where: eq(curatedLists.id, id),
+        columns: { slug: true, status: true, statusEn: true },
+      })
+    : undefined;
+  // A slug change must also ping the URL the list used to live at.
+  const previousSlug = existing?.slug;
+  const isPublic = existing?.status === "published";
 
   try {
     let targetId = id;
@@ -51,8 +63,10 @@ export async function saveListMeta(
         .returning({ id: curatedLists.id });
       targetId = created.id;
     }
-    revalidateList(v.slug);
-    if (previousSlug && previousSlug !== v.slug) revalidateList(previousSlug);
+    revalidateList(v.slug, { notify: isPublic });
+    if (isPublic && previousSlug && previousSlug !== v.slug) {
+      revalidateList(previousSlug, { notify: true });
+    }
     return ok({ id: targetId });
   } catch (error) {
     if (
@@ -94,8 +108,7 @@ export async function addFilmToList(listId: string, filmId: string): Promise<Act
     }
     throw error;
   }
-  const slug = await listSlug(listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(listId));
   return ok();
 }
 
@@ -106,8 +119,7 @@ export async function removeListItem(itemId: string): Promise<ActionResult> {
   });
   if (!item) return fail("条目不存在");
   await db.delete(curatedListItems).where(eq(curatedListItems.id, itemId));
-  const slug = await listSlug(item.listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(item.listId));
   return ok();
 }
 
@@ -125,8 +137,7 @@ export async function reorderListItems(
         .where(and(eq(curatedListItems.id, itemId), eq(curatedListItems.listId, listId)));
     }
   });
-  const slug = await listSlug(listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(listId));
   return ok();
 }
 
@@ -148,8 +159,7 @@ export async function updateItemReasoning(
         : { reasoning: reasoning as TiptapDoc },
     )
     .where(eq(curatedListItems.id, itemId));
-  const slug = await listSlug(item.listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(item.listId));
   return ok();
 }
 
@@ -168,7 +178,7 @@ export async function publishList(id: string): Promise<ActionResult> {
     .update(curatedLists)
     .set({ status: "published", publishedAt: list.publishedAt ?? new Date() })
     .where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: true });
   return ok();
 }
 
@@ -184,7 +194,7 @@ export async function publishListEn(id: string): Promise<ActionResult> {
     .update(curatedLists)
     .set({ statusEn: "published", publishedEnAt: list.publishedEnAt ?? new Date() })
     .where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: true });
   return ok();
 }
 
@@ -195,7 +205,7 @@ export async function unpublishListEn(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.update(curatedLists).set({ statusEn: "draft" }).where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: true });
   return ok();
 }
 
@@ -206,7 +216,7 @@ export async function unpublishList(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.update(curatedLists).set({ status: "draft" }).where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: true });
   return ok();
 }
 
@@ -217,6 +227,6 @@ export async function deleteList(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.delete(curatedLists).where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: true });
   return ok();
 }

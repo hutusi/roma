@@ -3,64 +3,91 @@ import { beforeEach, describe, expect, mock, test } from "bun:test";
 // Capture what the revalidate helpers hand to next/cache without touching
 // the real cache. Registered before the dynamic import below so the module
 // under test binds to these stubs.
-const tags: string[] = [];
-const paths: string[] = [];
+const paths: [string, string?][] = [];
 mock.module("next/cache", () => ({
-  updateTag: (t: string) => tags.push(t),
-  revalidatePath: (p: string) => paths.push(p),
+  revalidatePath: (p: string, type?: string) => paths.push([p, type]),
 }));
 
 // The IndexNow ping has its own tests (indexnow.test.ts); here we only
-// assert each helper reports the pages it touched.
+// assert whether each helper notifies at all.
 const pinged: string[][] = [];
 mock.module("@/lib/indexnow", () => ({
   pingIndexNow: (p: string[]) => pinged.push(p),
 }));
 
-const { revalidateDirector, revalidateFilm, revalidateList } = await import("./revalidate");
+const { revalidateDirector, revalidateFilm, revalidateList, revalidateMedia } = await import(
+  "./revalidate"
+);
 
 beforeEach(() => {
-  tags.length = 0;
   paths.length = 0;
   pinged.length = 0;
 });
 
-/** Every base path must be revalidated under BOTH the /zh and /en prefixes. */
-function expectBothLocales(basePaths: string[]) {
-  for (const base of basePaths) {
-    for (const prefix of ["/zh", "/en"]) {
-      expect(paths).toContain(base === "/" ? prefix : `${prefix}${base}`);
-    }
-  }
-}
-
-function expectTags(expected: string[]) {
-  for (const t of expected) expect(tags).toContain(t);
+/**
+ * The whole public tree, however the edit reached it. Asserting the sweep
+ * rather than a per-entity path list is the point: the entity→page map
+ * this replaced passed its own tests while leaking stale pages on every
+ * cross-entity edge it forgot.
+ */
+function expectFullSweep() {
+  // Dynamic segment ⇒ the "layout" type is required, and "/[lang]" rather
+  // than "/" because this app has no root layout for "/" to match.
+  expect(paths).toContainEqual(["/[lang]", "layout"]);
+  // Outside the [lang] tree — the sweep above never reaches it.
+  expect(paths).toContainEqual(["/sitemap.xml", undefined]);
+  // Route handlers need their own path.
+  expect(paths).toContainEqual(["/zh/rss.xml", undefined]);
+  expect(paths).toContainEqual(["/en/rss.xml", undefined]);
 }
 
 describe("revalidateFilm", () => {
-  test("invalidates the film, index, feed, and home in both locales", () => {
+  test("sweeps the public tree", () => {
     revalidateFilm("solaris");
-    expectBothLocales(["/film/solaris", "/films", "/rss.xml", "/"]);
-    expectTags(["film:solaris", "films", "home"]);
+    expectFullSweep();
+  });
+
+  test("does not notify by default, so a draft-only save can't leak its slug", () => {
+    revalidateFilm("unreleased-draft");
+    expect(pinged).toEqual([]);
+  });
+
+  test("notifies the film, index, and home when asked", () => {
+    revalidateFilm("solaris", { notify: true });
     expect(pinged).toEqual([["/film/solaris", "/films", "/"]]);
   });
 });
 
 describe("revalidateDirector", () => {
-  test("invalidates the director page in both locales", () => {
+  test("sweeps the public tree, so film cards carrying the name refresh too", () => {
     revalidateDirector("tarkovsky");
-    expectBothLocales(["/director/tarkovsky"]);
-    expectTags(["director:tarkovsky"]);
+    expectFullSweep();
+    expect(pinged).toEqual([]);
+  });
+
+  test("notifies the director page when asked", () => {
+    revalidateDirector("tarkovsky", { notify: true });
     expect(pinged).toEqual([["/director/tarkovsky"]]);
   });
 });
 
 describe("revalidateList", () => {
-  test("invalidates the list, index, and home in both locales", () => {
+  test("sweeps the public tree, so member films' 'appears in' refreshes too", () => {
     revalidateList("essential-noir");
-    expectBothLocales(["/list/essential-noir", "/lists", "/"]);
-    expectTags(["list:essential-noir", "lists", "home"]);
+    expectFullSweep();
+    expect(pinged).toEqual([]);
+  });
+
+  test("notifies the list, index, and home when asked", () => {
+    revalidateList("essential-noir", { notify: true });
     expect(pinged).toEqual([["/list/essential-noir", "/lists", "/"]]);
+  });
+});
+
+describe("revalidateMedia", () => {
+  test("sweeps the public tree but never notifies — media has no URL of its own", () => {
+    revalidateMedia();
+    expectFullSweep();
+    expect(pinged).toEqual([]);
   });
 });
