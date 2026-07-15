@@ -3,7 +3,7 @@
 import { and, count, eq, max } from "drizzle-orm";
 import { db } from "@/db";
 import type { TiptapDoc } from "@/db/schema";
-import { curatedListItems, curatedLists } from "@/db/schema";
+import { curatedListItems, curatedLists, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateList } from "@/lib/revalidate";
 import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
@@ -176,11 +176,15 @@ export async function publishList(id: string): Promise<ActionResult> {
     where: eq(curatedLists.id, id),
   });
   if (!list) return fail("片单不存在");
+  // Count what the public actually renders. The gate counted every item
+  // including drafts, while the read layer strips them, so a list of
+  // nothing but drafts passed and published an empty <ol>.
   const [{ n }] = await db
     .select({ n: count() })
     .from(curatedListItems)
-    .where(eq(curatedListItems.listId, id));
-  if (n === 0) return fail("片单至少要包含一部影片");
+    .innerJoin(films, eq(curatedListItems.filmId, films.id))
+    .where(and(eq(curatedListItems.listId, id), eq(films.status, "published")));
+  if (n === 0) return fail("片单至少要包含一部已发布影片");
   await db
     .update(curatedLists)
     .set({ status: "published", publishedAt: list.publishedAt ?? new Date() })

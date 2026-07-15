@@ -4,7 +4,7 @@ import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
 import { posterOf } from "@/db/queries/public";
-import { films, userLists } from "@/db/schema";
+import { filmDirectors, films, media, userLists } from "@/db/schema";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
 import { getSession } from "@/lib/auth-guards";
@@ -33,7 +33,19 @@ export async function UserListPage({
     with: {
       user: true,
       items: {
-        with: { film: { with: { media: true, filmDirectors: { with: { director: true } } } } },
+        // posterOf takes the first row of the preferred kind, so the
+        // relation has to arrive ordered or the poster is arbitrary.
+        with: {
+          film: {
+            with: {
+              media: { orderBy: [asc(media.sortOrder), asc(media.id)] },
+              filmDirectors: {
+                with: { director: true as const },
+                orderBy: [asc(filmDirectors.position), asc(filmDirectors.directorId)],
+              },
+            },
+          },
+        },
       },
     },
   });

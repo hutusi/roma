@@ -1,11 +1,11 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
 import { posterOf } from "@/db/queries/public";
-import { userLists, userMarks, users } from "@/db/schema";
+import { filmDirectors, media, userLists, userMarks, users } from "@/db/schema";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
 import { getSession } from "@/lib/auth-guards";
@@ -47,12 +47,26 @@ export async function ProfilePage({
       : db.query.userMarks.findMany({
           where: eq(userMarks.userId, user.id),
           orderBy: desc(userMarks.updatedAt),
-          with: { film: { with: { media: true, filmDirectors: { with: { director: true } } } } },
+          // posterOf takes the first row of the preferred kind, so the
+          // relation has to arrive ordered or the poster is arbitrary.
+          with: {
+            film: {
+              with: {
+                media: { orderBy: [asc(media.sortOrder), asc(media.id)] },
+                filmDirectors: {
+                  with: { director: true as const },
+                  orderBy: [asc(filmDirectors.position), asc(filmDirectors.directorId)],
+                },
+              },
+            },
+          },
         }),
     db.query.userLists.findMany({
       where: eq(userLists.userId, user.id),
       orderBy: desc(userLists.updatedAt),
-      with: { items: { columns: { id: true } } },
+      // The list page shows only published members, so counting every
+      // item made the profile's count disagree with the page it links to.
+      with: { items: { columns: { id: true }, with: { film: { columns: { status: true } } } } },
     }),
   ]);
 
@@ -130,7 +144,7 @@ export async function ProfilePage({
                 )}
               </span>
               <span className="font-display text-ink-muted text-xs tracking-[0.3em]">
-                {list.items.length} FILMS
+                {list.items.filter((i) => i.film.status === "published").length} FILMS
               </span>
             </Link>
           ))}
