@@ -10,6 +10,7 @@ import {
   type DirectorFormValues,
   directorFormSchema,
   publishEnProblems,
+  publishProblems,
   viewingOrderSchema,
 } from "@/lib/validators/director";
 import { type ActionResult, fail, ok } from "./result";
@@ -44,6 +45,13 @@ export async function saveDirector(
   const isPublic = existing?.status === "published";
 
   // Draft saves stay lax on purpose; a live row must remain publishable.
+  if (isPublic) {
+    const problems = publishProblems({
+      bio: v.bio || null,
+      careerEssay: (v.careerEssay as TiptapDoc) ?? null,
+    });
+    if (problems.length) return fail(`导演已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
   if (existing?.statusEn === "published") {
     const problems = publishEnProblems({ bioEn: v.bioEn || null });
     if (problems.length)
@@ -111,9 +119,8 @@ export async function publishDirector(id: string): Promise<ActionResult> {
     where: eq(directors.id, id),
   });
   if (!director) return fail("导演不存在");
-  if (!director.bio && !director.careerEssay) {
-    return fail("发布前请填写简介或创作历程");
-  }
+  const problems = publishProblems(director);
+  if (problems.length) return fail(problems.join("；"));
   await db
     .update(directors)
     .set({
