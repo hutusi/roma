@@ -219,7 +219,7 @@ export async function publishListEn(id: string): Promise<ActionResult> {
     .update(curatedLists)
     .set({ statusEn: "published", publishedEnAt: list.publishedEnAt ?? new Date() })
     .where(eq(curatedLists.id, id));
-  revalidateList(list.slug, { notify: true });
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }
 
@@ -230,7 +230,7 @@ export async function unpublishListEn(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.update(curatedLists).set({ statusEn: "draft" }).where(eq(curatedLists.id, id));
-  revalidateList(list.slug, { notify: true });
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }
 
@@ -241,7 +241,7 @@ export async function unpublishList(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.update(curatedLists).set({ status: "draft" }).where(eq(curatedLists.id, id));
-  revalidateList(list.slug, { notify: true });
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }
 
@@ -252,6 +252,6 @@ export async function deleteList(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.delete(curatedLists).where(eq(curatedLists.id, id));
-  revalidateList(list.slug, { notify: true });
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }

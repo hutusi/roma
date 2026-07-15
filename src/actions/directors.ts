@@ -101,7 +101,7 @@ export async function setViewingOrder(
       );
     }
   });
-  revalidateDirector(director.slug, { notify: true });
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -140,7 +140,7 @@ export async function publishDirectorEn(id: string): Promise<ActionResult> {
       publishedEnAt: director.publishedEnAt ?? new Date(),
     })
     .where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: true });
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -151,7 +151,7 @@ export async function unpublishDirectorEn(id: string): Promise<ActionResult> {
   });
   if (!director) return fail("导演不存在");
   await db.update(directors).set({ statusEn: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: true });
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -162,7 +162,7 @@ export async function unpublishDirector(id: string): Promise<ActionResult> {
   });
   if (!director) return fail("导演不存在");
   await db.update(directors).set({ status: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: true });
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -185,6 +185,6 @@ export async function deleteDirector(id: string): Promise<ActionResult> {
     return fail(`该导演仍关联 ${n} 部已发布影片，请先解除关联或下架这些影片`);
   }
   await db.delete(directors).where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: true });
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }

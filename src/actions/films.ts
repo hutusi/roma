@@ -168,7 +168,7 @@ export async function publishFilmEn(id: string): Promise<ActionResult> {
     .update(films)
     .set({ statusEn: "published", publishedEnAt: film.publishedEnAt ?? new Date() })
     .where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: true });
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }
 
@@ -177,7 +177,7 @@ export async function unpublishFilmEn(id: string): Promise<ActionResult> {
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   await db.update(films).set({ statusEn: "draft" }).where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: true });
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }
 
@@ -186,7 +186,7 @@ export async function unpublishFilm(id: string): Promise<ActionResult> {
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   await db.update(films).set({ status: "draft" }).where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: true });
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }
 
@@ -195,6 +195,6 @@ export async function deleteFilm(id: string): Promise<ActionResult> {
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   await db.delete(films).where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: true });
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }

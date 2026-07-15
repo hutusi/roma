@@ -43,8 +43,16 @@ function revalidateEditorialPages() {
  * recrawling?" — false for a row that has never been published, where a
  * ping would hand a search engine the slug of unpublished work.
  *
- * Unpublishing and deleting DO notify: the URL now 404s, and a recrawl is
- * how the engine learns to drop it.
+ * So the caller's test is "does this row have, or did it have, a public
+ * URL" — not "is this a big change". Unpublishing and deleting a
+ * PUBLISHED row do notify: the URL now 404s, and a recrawl is how the
+ * engine learns to drop it. Unpublishing or deleting a draft notifies
+ * nothing, because there was never a URL to recrawl.
+ *
+ * Callers pass the row's PRE-mutation status; only the publish actions
+ * pass a literal true, since the row is public after they run. Note
+ * pingIndexNow pings both locales, and /en visibility requires zh
+ * published (the subset rule), so the zh status is the whole test.
  */
 type Options = { notify?: boolean };
 
