@@ -1,9 +1,9 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { db } from "@/db";
 import type { TiptapDoc } from "@/db/schema";
-import { directors, directorViewingItems } from "@/db/schema";
+import { directors, directorViewingItems, filmDirectors, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateDirector } from "@/lib/revalidate";
 import {
@@ -42,6 +42,13 @@ export async function saveDirector(
   // A slug change must also ping the URL the director used to live at.
   const previousSlug = existing?.slug;
   const isPublic = existing?.status === "published";
+
+  // Draft saves stay lax on purpose; a live row must remain publishable.
+  if (existing?.statusEn === "published") {
+    const problems = publishEnProblems({ bioEn: v.bioEn || null });
+    if (problems.length)
+      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
 
   try {
     let targetId = id;
@@ -165,6 +172,18 @@ export async function deleteDirector(id: string): Promise<ActionResult> {
     where: eq(directors.id, id),
   });
   if (!director) return fail("导演不存在");
+  // film_directors.director_id cascades, so deleting a director silently
+  // strips the credit from every film citing them — including published
+  // ones, which the publish gate requires to have at least one director.
+  // The cascade is right for cleanup, wrong as an editorial action.
+  const [{ n }] = await db
+    .select({ n: count() })
+    .from(filmDirectors)
+    .innerJoin(films, eq(filmDirectors.filmId, films.id))
+    .where(and(eq(filmDirectors.directorId, id), eq(films.status, "published")));
+  if (n > 0) {
+    return fail(`该导演仍关联 ${n} 部已发布影片，请先解除关联或下架这些影片`);
+  }
   await db.delete(directors).where(eq(directors.id, id));
   revalidateDirector(director.slug, { notify: true });
   return ok();

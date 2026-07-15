@@ -52,6 +52,13 @@ export async function saveListMeta(
   const previousSlug = existing?.slug;
   const isPublic = existing?.status === "published";
 
+  // Draft saves stay lax on purpose; a live row must remain publishable.
+  if (existing?.statusEn === "published") {
+    const problems = publishEnProblems({ titleEn: v.titleEn || null });
+    if (problems.length)
+      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
+
   try {
     let targetId = id;
     if (targetId) {

@@ -65,6 +65,29 @@ export async function saveFilm(
   const previousSlug = existing?.slug;
   const isPublic = existing?.status === "published";
 
+  // Saving a draft is deliberately laxer than publishing one, but that
+  // laxness was only ever meant for drafts: nothing re-checked the gate
+  // once a row was live, so a published film could be saved down to a
+  // 3-character note or zero directors and stay published, with the
+  // public queries trusting the status flag. Re-run the gate the row
+  // already passed, and reject the save rather than silently
+  // unpublishing work the editor didn't ask to take down.
+  if (isPublic) {
+    const problems = publishProblems({
+      editorialNote: v.editorialNote || null,
+      directorCount: v.directorIds.length,
+    });
+    if (problems.length) return fail(`影片已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
+  if (existing?.statusEn === "published") {
+    const problems = publishEnProblems({
+      titleEn: v.titleEn || null,
+      editorialNoteEn: v.editorialNoteEn || null,
+    });
+    if (problems.length)
+      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
+
   try {
     const filmId = await db.transaction(async (tx) => {
       let targetId = id;
