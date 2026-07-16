@@ -33,8 +33,31 @@ describe("hasProse", () => {
     ).toBe(true);
   });
 
-  test("true for a self-contained atom (image) with no text", () => {
+  test("true for a self-contained atom (image) with no text — allowed srcs only", () => {
     expect(hasProse(doc({ type: "image", attrs: { src: "/uploads/x.png" } }))).toBe(true);
+    expect(
+      hasProse(
+        doc({
+          type: "image",
+          attrs: { src: "https://abc-123.public.blob.vercel-storage.com/media/x.png" },
+        }),
+      ),
+    ).toBe(true);
+  });
+
+  test("false for an image the renderer would refuse to draw", () => {
+    // The renderer's allowlist rejects these, so they render as nothing —
+    // the gate must not count them as content.
+    expect(hasProse(doc({ type: "image", attrs: { src: "https://evil.example/x.png" } }))).toBe(
+      false,
+    );
+    expect(hasProse(doc({ type: "image", attrs: {} }))).toBe(false);
+    expect(hasProse(doc({ type: "image" }))).toBe(false);
+  });
+
+  test("false for a doc missing its root type — the static renderer throws on it", () => {
+    expect(hasProse({ content: [para("text without a doc root")] })).toBe(false);
+    expect(hasProse({ type: "paragraph", content: [para("wrong root type")] })).toBe(false);
   });
 
   test("does not throw on structurally malformed nodes", () => {

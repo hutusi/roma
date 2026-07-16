@@ -3,6 +3,9 @@ import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
 import Image from "next/image";
 import type React from "react";
 import { cn } from "@/lib/utils";
+// The image-src allowlist lives with the validators so the publish gate
+// (hasProse) and this renderer share one definition of "this image draws".
+import { isAllowedImageSrc } from "@/lib/validators/prose";
 import { essayExtensions } from "./extensions";
 
 /**
@@ -13,11 +16,6 @@ import { essayExtensions } from "./extensions";
 
 const isSafeHref = (href: unknown): href is string =>
   typeof href === "string" && /^https?:\/\//i.test(href);
-
-const isAllowedImageSrc = (src: unknown): src is string =>
-  typeof src === "string" &&
-  (src.startsWith("/uploads/") ||
-    /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//.test(src));
 
 export function TiptapContent({
   doc,
