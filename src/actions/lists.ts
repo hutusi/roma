@@ -1,10 +1,11 @@
 "use server";
 
-import { and, count, eq, max } from "drizzle-orm";
+import { and, eq, max } from "drizzle-orm";
 import { db } from "@/db";
 import type { TiptapDoc } from "@/db/schema";
-import { curatedListItems, curatedLists, films } from "@/db/schema";
+import { curatedListItems, curatedLists } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
+import { publishedMemberCount } from "@/lib/list-invariants";
 import { revalidateList } from "@/lib/revalidate";
 import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
 import { permutationProblem } from "@/lib/validators/ordering";
@@ -131,8 +132,20 @@ export async function removeListItem(itemId: string): Promise<ActionResult> {
   await requireEditor();
   const item = await db.query.curatedListItems.findFirst({
     where: eq(curatedListItems.id, itemId),
+    with: { list: { columns: { status: true } }, film: { columns: { status: true } } },
   });
   if (!item) return fail("条目不存在");
+  // publishList guarantees a published list has >= 1 published member;
+  // removing the last one would leave it live and empty. Block it and
+  // tell the editor to unpublish the list first. (Removing a draft member,
+  // or removing from a draft list, is always fine.)
+  if (
+    item.list.status === "published" &&
+    item.film.status === "published" &&
+    (await publishedMemberCount(item.listId)) === 1
+  ) {
+    return fail("这是片单中最后一部已发布影片，移除会使已发布片单变空；请先下架片单");
+  }
   await db.delete(curatedListItems).where(eq(curatedListItems.id, itemId));
   revalidateListMeta(await listMeta(item.listId));
   return ok();
@@ -207,12 +220,7 @@ export async function publishList(id: string): Promise<ActionResult> {
   // Count what the public actually renders. The gate counted every item
   // including drafts, while the read layer strips them, so a list of
   // nothing but drafts passed and published an empty <ol>.
-  const [{ n }] = await db
-    .select({ n: count() })
-    .from(curatedListItems)
-    .innerJoin(films, eq(curatedListItems.filmId, films.id))
-    .where(and(eq(curatedListItems.listId, id), eq(films.status, "published")));
-  if (n === 0) return fail("片单至少要包含一部已发布影片");
+  if ((await publishedMemberCount(id)) === 0) return fail("片单至少要包含一部已发布影片");
   await db
     .update(curatedLists)
     .set({ status: "published", publishedAt: list.publishedAt ?? new Date() })

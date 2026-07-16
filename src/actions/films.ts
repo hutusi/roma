@@ -12,6 +12,7 @@ import {
   userMarks,
 } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
+import { unpublishEmptiedLists } from "@/lib/list-invariants";
 import { revalidateFilm } from "@/lib/revalidate";
 import {
   type FilmFormValues,
@@ -193,6 +194,10 @@ export async function unpublishFilm(id: string): Promise<ActionResult> {
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   await db.update(films).set({ status: "draft" }).where(eq(films.id, id));
+  // If this was the last published member of a published list, that list
+  // would now render empty — auto-unpublish it. Runs after the status
+  // flip so the count reflects it.
+  await unpublishEmptiedLists(id);
   revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }
