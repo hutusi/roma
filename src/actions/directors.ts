@@ -183,6 +183,17 @@ export async function deleteDirector(id: string): Promise<ActionResult> {
   // strips the credit from every film citing them — including published
   // ones, which the publish gate requires to have at least one director.
   // The cascade is right for cleanup, wrong as an editorial action.
+  //
+  // This count and the delete below are NOT serialized against a
+  // concurrent publishFilm: it could publish one of this director's
+  // drafts after the count reads 0, and the cascade would then leave a
+  // published film with no directors. Wrapping the pair in
+  // db.transaction() would NOT fix that — at READ COMMITTED a
+  // transaction buys atomicity, not mutual exclusion, the same trap the
+  // comment in lists.ts describes. A real fix locks this director's
+  // films FOR UPDATE so publishFilm blocks. Left undone deliberately: it
+  // needs two editors on the same director within milliseconds, and the
+  // save gate above now rejects the resulting row rather than hiding it.
   const [{ n }] = await db
     .select({ n: count() })
     .from(filmDirectors)
