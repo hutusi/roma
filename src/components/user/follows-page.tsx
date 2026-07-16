@@ -20,9 +20,25 @@ export async function FollowsPage({ locale = "zh" }: { locale?: Locale }) {
   const follows = await db.query.listFollows.findMany({
     where: eq(listFollows.userId, session.user.id),
     orderBy: desc(listFollows.createdAt),
-    with: { list: { with: { cover: true, items: { columns: { id: true } } } } },
+    with: {
+      list: {
+        with: {
+          cover: true,
+          // Count what the list page renders: it strips draft members,
+          // so counting every item made /me/follows disagree with /lists
+          // about the same list.
+          items: { columns: { id: true }, with: { film: { columns: { status: true } } } },
+        },
+      },
+    },
   });
-  const lists = follows.map((f) => f.list).filter((list) => list.status === "published");
+  const lists = follows
+    .map((f) => f.list)
+    .filter((list) => list.status === "published")
+    .map((list) => ({
+      ...list,
+      items: list.items.filter((item) => item.film.status === "published"),
+    }));
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">

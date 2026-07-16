@@ -3,18 +3,24 @@
 import { and, count, eq, max } from "drizzle-orm";
 import { db } from "@/db";
 import type { TiptapDoc } from "@/db/schema";
-import { curatedListItems, curatedLists } from "@/db/schema";
+import { curatedListItems, curatedLists, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateList } from "@/lib/revalidate";
 import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
+import { permutationProblem } from "@/lib/validators/ordering";
 import { type ActionResult, fail, ok } from "./result";
 
-async function listSlug(listId: string): Promise<string | null> {
-  const list = await db.query.curatedLists.findFirst({
+/** Slug to revalidate, plus whether the list has a public URL to notify. */
+async function listMeta(listId: string) {
+  return db.query.curatedLists.findFirst({
     where: eq(curatedLists.id, listId),
-    columns: { slug: true },
+    columns: { slug: true, status: true },
   });
-  return list?.slug ?? null;
+}
+
+function revalidateListMeta(list: { slug: string; status: string } | undefined) {
+  if (!list) return;
+  revalidateList(list.slug, { notify: list.status === "published" });
 }
 
 export async function saveListMeta(
@@ -37,8 +43,22 @@ export async function saveListMeta(
     introEn: (v.introEn as TiptapDoc) ?? null,
     sortOrder: v.sortOrder,
   };
-  // A slug change must also refresh the page cached under the old slug.
-  const previousSlug = id ? await listSlug(id) : undefined;
+  const existing = id
+    ? await db.query.curatedLists.findFirst({
+        where: eq(curatedLists.id, id),
+        columns: { slug: true, status: true, statusEn: true },
+      })
+    : undefined;
+  // A slug change must also ping the URL the list used to live at.
+  const previousSlug = existing?.slug;
+  const isPublic = existing?.status === "published";
+
+  // Draft saves stay lax on purpose; a live row must remain publishable.
+  if (existing?.statusEn === "published") {
+    const problems = publishEnProblems({ titleEn: v.titleEn || null });
+    if (problems.length)
+      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
 
   try {
     let targetId = id;
@@ -51,8 +71,10 @@ export async function saveListMeta(
         .returning({ id: curatedLists.id });
       targetId = created.id;
     }
-    revalidateList(v.slug);
-    if (previousSlug && previousSlug !== v.slug) revalidateList(previousSlug);
+    revalidateList(v.slug, { notify: isPublic });
+    if (isPublic && previousSlug && previousSlug !== v.slug) {
+      revalidateList(previousSlug, { notify: true });
+    }
     return ok({ id: targetId });
   } catch (error) {
     if (
@@ -70,8 +92,15 @@ export async function saveListMeta(
 export async function addFilmToList(listId: string, filmId: string): Promise<ActionResult> {
   await requireEditor();
   try {
-    // max()+insert in one transaction so concurrent adds can't compute
-    // the same position.
+    // The transaction makes the read and the insert atomic, but NOT
+    // mutually exclusive: under READ COMMITTED (the default here) two
+    // concurrent adds both see the same max() — neither sees the other's
+    // uncommitted row — and both write maxPos + 1. Nothing enforces
+    // unique positions, so the duplicates land and the two items tie.
+    // Accepted rather than fixed: serializing this needs SERIALIZABLE or
+    // an advisory lock plus a unique (list_id, position) constraint and a
+    // backfill, which is a lot of machinery for a two-editor site where
+    // the tie only costs an arbitrary order between two items.
     await db.transaction(async (tx) => {
       const [{ maxPos }] = await tx
         .select({ maxPos: max(curatedListItems.position) })
@@ -94,8 +123,7 @@ export async function addFilmToList(listId: string, filmId: string): Promise<Act
     }
     throw error;
   }
-  const slug = await listSlug(listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(listId));
   return ok();
 }
 
@@ -106,17 +134,36 @@ export async function removeListItem(itemId: string): Promise<ActionResult> {
   });
   if (!item) return fail("条目不存在");
   await db.delete(curatedListItems).where(eq(curatedListItems.id, itemId));
-  const slug = await listSlug(item.listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(item.listId));
   return ok();
 }
 
-/** Rewrites every position in one transaction; last write wins. */
+/**
+ * Rewrites every position in one transaction, and now verifies that it
+ * was actually handed every one: an incomplete or duplicated list would
+ * strand the omitted items on stale positions that collide with the ones
+ * just assigned, and position has no unique constraint to catch it. Ids
+ * from another list were always no-ops (the listId predicate below), but
+ * "the UI always sends the full set" turned out to be false on the
+ * user-list side, so this checks rather than trusts.
+ */
 export async function reorderListItems(
   listId: string,
   orderedItemIds: string[],
 ): Promise<ActionResult> {
   await requireEditor();
+  const current = await db
+    .select({ id: curatedListItems.id })
+    .from(curatedListItems)
+    .where(eq(curatedListItems.listId, listId));
+  if (
+    permutationProblem(
+      orderedItemIds,
+      current.map((i) => i.id),
+    )
+  ) {
+    return fail("片单条目已变化，请刷新后重试");
+  }
   await db.transaction(async (tx) => {
     for (const [i, itemId] of orderedItemIds.entries()) {
       await tx
@@ -125,8 +172,7 @@ export async function reorderListItems(
         .where(and(eq(curatedListItems.id, itemId), eq(curatedListItems.listId, listId)));
     }
   });
-  const slug = await listSlug(listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(listId));
   return ok();
 }
 
@@ -148,8 +194,7 @@ export async function updateItemReasoning(
         : { reasoning: reasoning as TiptapDoc },
     )
     .where(eq(curatedListItems.id, itemId));
-  const slug = await listSlug(item.listId);
-  if (slug) revalidateList(slug);
+  revalidateListMeta(await listMeta(item.listId));
   return ok();
 }
 
@@ -159,16 +204,20 @@ export async function publishList(id: string): Promise<ActionResult> {
     where: eq(curatedLists.id, id),
   });
   if (!list) return fail("片单不存在");
+  // Count what the public actually renders. The gate counted every item
+  // including drafts, while the read layer strips them, so a list of
+  // nothing but drafts passed and published an empty <ol>.
   const [{ n }] = await db
     .select({ n: count() })
     .from(curatedListItems)
-    .where(eq(curatedListItems.listId, id));
-  if (n === 0) return fail("片单至少要包含一部影片");
+    .innerJoin(films, eq(curatedListItems.filmId, films.id))
+    .where(and(eq(curatedListItems.listId, id), eq(films.status, "published")));
+  if (n === 0) return fail("片单至少要包含一部已发布影片");
   await db
     .update(curatedLists)
     .set({ status: "published", publishedAt: list.publishedAt ?? new Date() })
     .where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: true });
   return ok();
 }
 
@@ -184,7 +233,7 @@ export async function publishListEn(id: string): Promise<ActionResult> {
     .update(curatedLists)
     .set({ statusEn: "published", publishedEnAt: list.publishedEnAt ?? new Date() })
     .where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }
 
@@ -195,7 +244,7 @@ export async function unpublishListEn(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.update(curatedLists).set({ statusEn: "draft" }).where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }
 
@@ -206,7 +255,7 @@ export async function unpublishList(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.update(curatedLists).set({ status: "draft" }).where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }
 
@@ -217,6 +266,6 @@ export async function deleteList(id: string): Promise<ActionResult> {
   });
   if (!list) return fail("片单不存在");
   await db.delete(curatedLists).where(eq(curatedLists.id, id));
-  revalidateList(list.slug);
+  revalidateList(list.slug, { notify: list.status === "published" });
   return ok();
 }

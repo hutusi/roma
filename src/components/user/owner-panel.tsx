@@ -17,7 +17,12 @@ import { Toaster } from "@/components/ui/sonner";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { type Locale, localePath } from "@/i18n/locales";
 
-type Item = { id: string; filmId: string; title: string; year: number };
+/**
+ * `unavailable` = the film is no longer published. The owner still gets
+ * the row (they must be able to remove it, and the reorder payload has to
+ * stay a complete permutation), but not the film's title.
+ */
+type Item = { id: string; filmId: string; title: string; year: number; unavailable?: boolean };
 
 export function OwnerPanel({
   listId,
@@ -189,8 +194,14 @@ export function OwnerPanel({
               <div className="flex items-center gap-2">
                 <span className="w-5 text-right font-display text-ink-muted">{index + 1}</span>
                 <span className="flex-1">
-                  {item.title}
-                  <span className="ml-1 text-ink-muted text-xs">{item.year}</span>
+                  {item.unavailable ? (
+                    <span className="text-ink-muted italic">{labels.unavailable}</span>
+                  ) : (
+                    <>
+                      {item.title}
+                      <span className="ml-1 text-ink-muted text-xs">{item.year}</span>
+                    </>
+                  )}
                 </span>
                 <button
                   type="button"

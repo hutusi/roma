@@ -63,6 +63,37 @@ test("publish gate: empty list blocked", async ({ page }) => {
   await page.waitForURL(/\/admin\/lists\/(?!new)[^/]+$/);
   await page.getByRole("button", { name: "发布", exact: true }).click();
   await expect(
-    page.locator("[data-sonner-toast]", { hasText: "至少要包含一部影片" }),
+    page.locator("[data-sonner-toast]", { hasText: "至少要包含一部已发布影片" }),
+  ).toBeVisible();
+});
+
+// The gate counted every item while the list page renders only published
+// members, so a list holding nothing but drafts passed and went live as an
+// empty <ol>. The empty-list test above never reached this: it had no items
+// at all.
+test("publish gate: list of only draft films blocked", async ({ page }) => {
+  // Left as a draft on purpose — the film picker lists every film
+  // regardless of status, which is how a draft-only list gets built.
+  await page.goto("/admin/films/new");
+  await page.fill("#titleZh", "草稿成员");
+  await page.fill("#titleOriginal", "Draft Only Member");
+  await page.fill("#slug", "draft-only-member");
+  await page.fill("#year", "1970");
+  await page.click("button[type=submit]");
+  await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
+
+  await page.goto("/admin/lists/new");
+  await page.fill("#title", "只有草稿的片单");
+  await page.fill("#slug", "draft-only-list-gate");
+  await page.click("button[type=submit]");
+  await page.waitForURL(/\/admin\/lists\/(?!new)[^/]+$/);
+
+  await page.getByRole("combobox").selectOption({ label: "草稿成员（1970）" });
+  await page.getByRole("button", { name: "加入" }).click();
+  await expect(page.locator("[data-sonner-toast]", { hasText: "已加入" })).toBeVisible();
+
+  await page.getByRole("button", { name: "发布", exact: true }).click();
+  await expect(
+    page.locator("[data-sonner-toast]", { hasText: "至少要包含一部已发布影片" }),
   ).toBeVisible();
 });

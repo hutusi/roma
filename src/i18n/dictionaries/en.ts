@@ -129,13 +129,16 @@ export const en = {
     add: "Add",
     reorderHint: "Drag to reorder (saves automatically):",
     remove: "Remove",
+    unavailable: "This film is no longer available",
     emptyOwner: "Add your first film above.",
     emptyViewer: "This list is empty.",
     errors: {
       titleRequired: "Title can't be empty",
       titleTooLong: "Title can't exceed 60 characters",
+      descriptionTooLong: "Description can't exceed 140 characters",
       notFound: "List not found, or you don't have permission",
       alreadyInList: "This film is already in the list",
+      reorderInvalid: "This list changed — refresh and try again",
     },
   },
   follows: {

@@ -54,15 +54,39 @@ export async function saveFilm(
     castJson: v.cast,
   };
 
-  // A slug change must also refresh the page cached under the old slug.
-  const previousSlug = id
-    ? (
-        await db.query.films.findFirst({
-          where: eq(films.id, id),
-          columns: { slug: true },
-        })
-      )?.slug
+  const existing = id
+    ? await db.query.films.findFirst({
+        where: eq(films.id, id),
+        columns: { slug: true, status: true, statusEn: true },
+      })
     : undefined;
+  // A slug change must also ping the URL the film used to live at, so
+  // engines recrawl it and find the 404.
+  const previousSlug = existing?.slug;
+  const isPublic = existing?.status === "published";
+
+  // Saving a draft is deliberately laxer than publishing one, but that
+  // laxness was only ever meant for drafts: nothing re-checked the gate
+  // once a row was live, so a published film could be saved down to a
+  // 3-character note or zero directors and stay published, with the
+  // public queries trusting the status flag. Re-run the gate the row
+  // already passed, and reject the save rather than silently
+  // unpublishing work the editor didn't ask to take down.
+  if (isPublic) {
+    const problems = publishProblems({
+      editorialNote: v.editorialNote || null,
+      directorCount: v.directorIds.length,
+    });
+    if (problems.length) return fail(`影片已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
+  if (existing?.statusEn === "published") {
+    const problems = publishEnProblems({
+      titleEn: v.titleEn || null,
+      editorialNoteEn: v.editorialNoteEn || null,
+    });
+    if (problems.length)
+      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
 
   try {
     const filmId = await db.transaction(async (tx) => {
@@ -99,8 +123,10 @@ export async function saveFilm(
       }
       return targetId;
     });
-    revalidateFilm(v.slug);
-    if (previousSlug && previousSlug !== v.slug) revalidateFilm(previousSlug);
+    revalidateFilm(v.slug, { notify: isPublic });
+    if (isPublic && previousSlug && previousSlug !== v.slug) {
+      revalidateFilm(previousSlug, { notify: true });
+    }
     return ok({ id: filmId });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
@@ -125,7 +151,7 @@ export async function publishFilm(id: string): Promise<ActionResult> {
     .update(films)
     .set({ status: "published", publishedAt: film.publishedAt ?? new Date() })
     .where(eq(films.id, id));
-  revalidateFilm(film.slug);
+  revalidateFilm(film.slug, { notify: true });
   return ok();
 }
 
@@ -142,7 +168,7 @@ export async function publishFilmEn(id: string): Promise<ActionResult> {
     .update(films)
     .set({ statusEn: "published", publishedEnAt: film.publishedEnAt ?? new Date() })
     .where(eq(films.id, id));
-  revalidateFilm(film.slug);
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }
 
@@ -151,7 +177,7 @@ export async function unpublishFilmEn(id: string): Promise<ActionResult> {
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   await db.update(films).set({ statusEn: "draft" }).where(eq(films.id, id));
-  revalidateFilm(film.slug);
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }
 
@@ -160,7 +186,7 @@ export async function unpublishFilm(id: string): Promise<ActionResult> {
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   await db.update(films).set({ status: "draft" }).where(eq(films.id, id));
-  revalidateFilm(film.slug);
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }
 
@@ -169,6 +195,6 @@ export async function deleteFilm(id: string): Promise<ActionResult> {
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   await db.delete(films).where(eq(films.id, id));
-  revalidateFilm(film.slug);
+  revalidateFilm(film.slug, { notify: film.status === "published" });
   return ok();
 }

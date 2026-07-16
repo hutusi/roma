@@ -1,15 +1,16 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { db } from "@/db";
 import type { TiptapDoc } from "@/db/schema";
-import { directors, directorViewingItems } from "@/db/schema";
+import { directors, directorViewingItems, filmDirectors, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateDirector } from "@/lib/revalidate";
 import {
   type DirectorFormValues,
   directorFormSchema,
   publishEnProblems,
+  publishProblems,
   viewingOrderSchema,
 } from "@/lib/validators/director";
 import { type ActionResult, fail, ok } from "./result";
@@ -33,15 +34,29 @@ export async function saveDirector(
     bioEn: v.bioEn || null,
     careerEssayEn: (v.careerEssayEn as TiptapDoc) ?? null,
   };
-  // A slug change must also refresh the page cached under the old slug.
-  const previousSlug = id
-    ? (
-        await db.query.directors.findFirst({
-          where: eq(directors.id, id),
-          columns: { slug: true },
-        })
-      )?.slug
+  const existing = id
+    ? await db.query.directors.findFirst({
+        where: eq(directors.id, id),
+        columns: { slug: true, status: true, statusEn: true },
+      })
     : undefined;
+  // A slug change must also ping the URL the director used to live at.
+  const previousSlug = existing?.slug;
+  const isPublic = existing?.status === "published";
+
+  // Draft saves stay lax on purpose; a live row must remain publishable.
+  if (isPublic) {
+    const problems = publishProblems({
+      bio: v.bio || null,
+      careerEssay: (v.careerEssay as TiptapDoc) ?? null,
+    });
+    if (problems.length) return fail(`导演已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
+  if (existing?.statusEn === "published") {
+    const problems = publishEnProblems({ bioEn: v.bioEn || null });
+    if (problems.length)
+      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
+  }
 
   try {
     let targetId = id;
@@ -51,8 +66,10 @@ export async function saveDirector(
       const [created] = await db.insert(directors).values(row).returning({ id: directors.id });
       targetId = created.id;
     }
-    revalidateDirector(v.slug);
-    if (previousSlug && previousSlug !== v.slug) revalidateDirector(previousSlug);
+    revalidateDirector(v.slug, { notify: isPublic });
+    if (isPublic && previousSlug && previousSlug !== v.slug) {
+      revalidateDirector(previousSlug, { notify: true });
+    }
     return ok({ id: targetId });
   } catch (error) {
     if (
@@ -92,7 +109,7 @@ export async function setViewingOrder(
       );
     }
   });
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -102,9 +119,8 @@ export async function publishDirector(id: string): Promise<ActionResult> {
     where: eq(directors.id, id),
   });
   if (!director) return fail("导演不存在");
-  if (!director.bio && !director.careerEssay) {
-    return fail("发布前请填写简介或创作历程");
-  }
+  const problems = publishProblems(director);
+  if (problems.length) return fail(problems.join("；"));
   await db
     .update(directors)
     .set({
@@ -112,7 +128,7 @@ export async function publishDirector(id: string): Promise<ActionResult> {
       publishedAt: director.publishedAt ?? new Date(),
     })
     .where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: true });
   return ok();
 }
 
@@ -131,7 +147,7 @@ export async function publishDirectorEn(id: string): Promise<ActionResult> {
       publishedEnAt: director.publishedEnAt ?? new Date(),
     })
     .where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -142,7 +158,7 @@ export async function unpublishDirectorEn(id: string): Promise<ActionResult> {
   });
   if (!director) return fail("导演不存在");
   await db.update(directors).set({ statusEn: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -153,7 +169,7 @@ export async function unpublishDirector(id: string): Promise<ActionResult> {
   });
   if (!director) return fail("导演不存在");
   await db.update(directors).set({ status: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
 
@@ -163,7 +179,30 @@ export async function deleteDirector(id: string): Promise<ActionResult> {
     where: eq(directors.id, id),
   });
   if (!director) return fail("导演不存在");
+  // film_directors.director_id cascades, so deleting a director silently
+  // strips the credit from every film citing them — including published
+  // ones, which the publish gate requires to have at least one director.
+  // The cascade is right for cleanup, wrong as an editorial action.
+  //
+  // This count and the delete below are NOT serialized against a
+  // concurrent publishFilm: it could publish one of this director's
+  // drafts after the count reads 0, and the cascade would then leave a
+  // published film with no directors. Wrapping the pair in
+  // db.transaction() would NOT fix that — at READ COMMITTED a
+  // transaction buys atomicity, not mutual exclusion, the same trap the
+  // comment in lists.ts describes. A real fix locks this director's
+  // films FOR UPDATE so publishFilm blocks. Left undone deliberately: it
+  // needs two editors on the same director within milliseconds, and the
+  // save gate above now rejects the resulting row rather than hiding it.
+  const [{ n }] = await db
+    .select({ n: count() })
+    .from(filmDirectors)
+    .innerJoin(films, eq(filmDirectors.filmId, films.id))
+    .where(and(eq(filmDirectors.directorId, id), eq(films.status, "published")));
+  if (n > 0) {
+    return fail(`该导演仍关联 ${n} 部已发布影片，请先解除关联或下架这些影片`);
+  }
   await db.delete(directors).where(eq(directors.id, id));
-  revalidateDirector(director.slug);
+  revalidateDirector(director.slug, { notify: director.status === "published" });
   return ok();
 }
