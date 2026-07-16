@@ -47,7 +47,7 @@ Dashboard → Domains → add `babuban.com` (+ `www` redirect).
 
 ## 7. Post-deploy checks
 
-- `/` 200; `/sitemap.xml` lists only published slugs; `/robots.txt` blocks /admin.
+- `/` 308-redirects to `/zh`; `/sitemap.xml` lists only published slugs; `/robots.txt` blocks /admin.
 - Sign in with the seeded admin → `/admin` loads; upload an image → it lands in Blob (URL on `*.public.blob.vercel-storage.com`).
 - Publish a film → its public page appears without a redeploy.
 - Share a film URL in a social-card debugger → OG image renders (八部半 wordmark + original title).

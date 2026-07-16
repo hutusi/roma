@@ -80,7 +80,13 @@ function normalizeFilm(
 ) {
   return {
     ...film,
-    relatedLists: film.listItems.map((item) => item.list).filter((list) => visibleIn(list, locale)),
+    // "Appears in" — order by the lists' own editorial priority (sortOrder,
+    // then slug) rather than junction-row order, so the section is stable
+    // across requests.
+    relatedLists: film.listItems
+      .map((item) => item.list)
+      .filter((list) => visibleIn(list, locale))
+      .sort((a, b) => a.sortOrder - b.sortOrder || a.slug.localeCompare(b.slug)),
   };
 }
 
