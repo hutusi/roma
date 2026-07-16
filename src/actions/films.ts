@@ -23,6 +23,9 @@ import {
 } from "@/lib/validators/film";
 import { type ActionResult, fail, ok } from "./result";
 
+/** Thrown inside the save transaction to roll back child ops when the row was concurrently deleted. */
+class RowVanished extends Error {}
+
 function isUniqueViolation(error: unknown): boolean {
   return (
     typeof error === "object" &&
@@ -103,7 +106,15 @@ export async function saveFilm(
     const filmId = await db.transaction(async (tx) => {
       let targetId = id;
       if (targetId) {
-        await tx.update(films).set(row).where(eq(films.id, targetId));
+        // The pre-check above ran at read time; a delete landing between
+        // it and this write would update zero rows. RETURNING is the
+        // write-time assertion — throwing rolls the child ops back too.
+        const updated = await tx
+          .update(films)
+          .set(row)
+          .where(eq(films.id, targetId))
+          .returning({ id: films.id });
+        if (!updated.length) throw new RowVanished();
         await tx.delete(filmWatchLinks).where(eq(filmWatchLinks.filmId, targetId));
         await tx.delete(filmDirectors).where(eq(filmDirectors.filmId, targetId));
       } else {
@@ -140,6 +151,7 @@ export async function saveFilm(
     }
     return ok({ id: filmId });
   } catch (error) {
+    if (error instanceof RowVanished) return fail("影片不存在，可能已被删除");
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
     throw error;
   }

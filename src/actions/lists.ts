@@ -67,7 +67,14 @@ export async function saveListMeta(
   try {
     let targetId = id;
     if (targetId) {
-      await db.update(curatedLists).set(row).where(eq(curatedLists.id, targetId));
+      // Write-time assertion: the pre-check above ran at read time, and a
+      // delete landing in between would update zero rows yet report ok.
+      const updated = await db
+        .update(curatedLists)
+        .set(row)
+        .where(eq(curatedLists.id, targetId))
+        .returning({ id: curatedLists.id });
+      if (!updated.length) return fail("片单不存在，可能已被删除");
     } else {
       const [created] = await db
         .insert(curatedLists)

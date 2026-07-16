@@ -64,7 +64,14 @@ export async function saveDirector(
   try {
     let targetId = id;
     if (targetId) {
-      await db.update(directors).set(row).where(eq(directors.id, targetId));
+      // Write-time assertion: the pre-check above ran at read time, and a
+      // delete landing in between would update zero rows yet report ok.
+      const updated = await db
+        .update(directors)
+        .set(row)
+        .where(eq(directors.id, targetId))
+        .returning({ id: directors.id });
+      if (!updated.length) return fail("导演不存在，可能已被删除");
     } else {
       const [created] = await db.insert(directors).values(row).returning({ id: directors.id });
       targetId = created.id;
