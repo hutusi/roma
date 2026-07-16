@@ -73,7 +73,7 @@ export async function updateMedia(
   ) {
     return fail("无效的图片类型");
   }
-  await db
+  const updated = await db
     .update(media)
     .set({
       ...(fields.alt !== undefined && { alt: fields.alt || null }),
@@ -85,7 +85,12 @@ export async function updateMedia(
       ...(fields.directorId !== undefined && { directorId: fields.directorId }),
       ...(fields.sortOrder !== undefined && { sortOrder: fields.sortOrder }),
     })
-    .where(eq(media.id, id));
+    .where(eq(media.id, id))
+    .returning({ id: media.id });
+  // No pre-fetch here (unlike deleteMedia), so the affected-row count is
+  // the existence check: a deleted id matches nothing and must not
+  // report success.
+  if (!updated.length) return fail("图片不存在");
   revalidateMedia();
   return ok();
 }

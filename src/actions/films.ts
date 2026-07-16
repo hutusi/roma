@@ -68,6 +68,9 @@ export async function saveFilm(
         columns: { slug: true, status: true, statusEn: true },
       })
     : undefined;
+  // An edit against an id that no longer exists (deleted in another tab)
+  // would UPDATE zero rows and still report success; catch it here.
+  if (id && !existing) return fail("影片不存在，可能已被删除");
   // A slug change must also ping the URL the film used to live at, so
   // engines recrawl it and find the 404.
   const previousSlug = existing?.slug;
@@ -144,6 +147,15 @@ export async function saveFilm(
 
 export async function publishFilm(id: string): Promise<ActionResult> {
   await requireEditor();
+  // The read, the gate, and the status write below are not serialized
+  // against a concurrent saveFilm: that save skips the gate (it sees
+  // status: "draft") and could overwrite editorialNote between this read
+  // and the update, publishing content that never passed the gate. Left
+  // undone deliberately — like the deleteDirector race, it needs two
+  // editors on one film within milliseconds. The real fix is
+  // SELECT ... FOR UPDATE on the film row so the save blocks; a plain
+  // transaction would NOT help (atomicity, not mutual exclusion, at READ
+  // COMMITTED).
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
   const [{ n: directorCount }] = await db

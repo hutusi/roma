@@ -40,6 +40,9 @@ export async function saveDirector(
         columns: { slug: true, status: true, statusEn: true },
       })
     : undefined;
+  // An edit against an id that no longer exists (deleted in another tab)
+  // would UPDATE zero rows and still report success; catch it here.
+  if (id && !existing) return fail("导演不存在，可能已被删除");
   // A slug change must also ping the URL the director used to live at.
   const previousSlug = existing?.slug;
   const isPublic = existing?.status === "published";
