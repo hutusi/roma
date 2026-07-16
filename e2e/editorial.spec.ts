@@ -97,3 +97,42 @@ test("publish gate: list of only draft films blocked", async ({ page }) => {
     page.locator("[data-sonner-toast]", { hasText: "至少要包含一部已发布影片" }),
   ).toBeVisible();
 });
+
+// deleteFilm cascades to reader data (marks, user-list membership) and
+// curated-list membership. A draft film that's referenced must be refused
+// rather than silently taking that data with it — mirrors deleteDirector.
+test("delete guard: a referenced draft film cannot be hard-deleted", async ({ page }) => {
+  await page.goto("/admin/films/new");
+  await page.fill("#titleZh", "被引用的草稿");
+  await page.fill("#titleOriginal", "Referenced Draft");
+  await page.fill("#slug", "referenced-draft-delete");
+  await page.fill("#year", "1972");
+  await page.click("button[type=submit]");
+  await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
+
+  await page.goto("/admin/lists/new");
+  await page.fill("#title", "引用测试片单");
+  await page.fill("#slug", "reference-delete-list");
+  await page.click("button[type=submit]");
+  await page.waitForURL(/\/admin\/lists\/(?!new)[^/]+$/);
+  await page.getByRole("combobox").selectOption({ label: "被引用的草稿（1972）" });
+  await page.getByRole("button", { name: "加入" }).click();
+  await expect(page.locator("[data-sonner-toast]", { hasText: "已加入" })).toBeVisible();
+
+  // Deletion is refused while the list references it.
+  page.once("dialog", (d) => d.accept());
+  await page.goto(`/admin/films/${await filmId("referenced-draft-delete")}`);
+  await page.getByRole("button", { name: "删除", exact: true }).click();
+  await expect(page.locator("[data-sonner-toast]", { hasText: "片单引用" })).toBeVisible();
+
+  // Still there.
+  const still = await queryOne<{ slug: string }>("select slug from films where slug = $1", [
+    "referenced-draft-delete",
+  ]);
+  expect(still?.slug).toBe("referenced-draft-delete");
+});
+
+async function filmId(slug: string): Promise<string> {
+  const row = await queryOne<{ id: string }>("select id from films where slug = $1", [slug]);
+  return row?.id ?? "";
+}

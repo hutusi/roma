@@ -3,7 +3,14 @@
 import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
 import type { TiptapDoc } from "@/db/schema";
-import { filmDirectors, films, filmWatchLinks } from "@/db/schema";
+import {
+  curatedListItems,
+  filmDirectors,
+  films,
+  filmWatchLinks,
+  userListItems,
+  userMarks,
+} from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateFilm } from "@/lib/revalidate";
 import {
@@ -194,7 +201,41 @@ export async function deleteFilm(id: string): Promise<ActionResult> {
   await requireEditor();
   const film = await db.query.films.findFirst({ where: eq(films.id, id) });
   if (!film) return fail("影片不存在");
+
+  // Every FK to films.id is ON DELETE CASCADE, so a bare delete silently
+  // erases reader data — 看过/想看 marks and user-list membership — plus
+  // curated-list membership, and it bypasses the "unavailable film"
+  // placeholder readers rely on. deleteDirector already guards its
+  // cascade; this is the symmetric gate. Draft, unreferenced films still
+  // delete freely.
+  if (film.status === "published") {
+    return fail("影片已发布，请先下架再删除");
+  }
+  const [{ lists }] = await db
+    .select({ lists: count() })
+    .from(curatedListItems)
+    .where(eq(curatedListItems.filmId, id));
+  const [{ userLists }] = await db
+    .select({ userLists: count() })
+    .from(userListItems)
+    .where(eq(userListItems.filmId, id));
+  const [{ marks }] = await db
+    .select({ marks: count() })
+    .from(userMarks)
+    .where(eq(userMarks.filmId, id));
+  if (lists + userLists + marks > 0) {
+    const parts = [
+      lists > 0 && `${lists} 个片单`,
+      userLists > 0 && `${userLists} 个用户清单`,
+      marks > 0 && `${marks} 条用户标记`,
+    ].filter(Boolean);
+    return fail(`影片仍被 ${parts.join("、")}引用，删除会一并清除这些数据；请先移除引用`);
+  }
+
   await db.delete(films).where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: film.status === "published" });
+  // Only drafts reach here (published films are refused above), so there
+  // is no public URL to notify — but still invalidate, since an admin
+  // preview or a stale listing could reference it.
+  revalidateFilm(film.slug);
   return ok();
 }
