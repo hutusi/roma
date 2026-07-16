@@ -75,7 +75,11 @@ export function TiptapContent({
         unhandledMark: ({ children }) => <>{children}</>,
       },
     });
-  } catch {
+  } catch (error) {
+    // Degrade for the reader, but leave a trace for operators: stored
+    // JSON only corrupts via a direct DB write, and a silent null would
+    // make affected pages render empty with nothing in the log drain.
+    console.error("TiptapContent: malformed stored document", error);
     return null;
   }
 
