@@ -28,13 +28,18 @@ export const rumEvents = pgTable(
     isChina: boolean().notNull().default(false),
     createdAt: createdAt(),
   },
-  // MIS-ORDERED, and kept that way only until a migration can land.
-  // getRumSummary — the table's entire read surface — filters on
-  // created_at alone and GROUPs BY (metric, is_china). Grouping is not a
-  // predicate, so a btree led by metric can't serve a range scan on the
-  // window and the planner seq-scans instead: dead weight on the read
-  // side while still costing writes on the app's hottest write path
-  // (/api/rum, ~1 row per page view). Should lead with created_at; see
-  // the follow-up.
-  (t) => [index("rum_events_metric_created_idx").on(t.metric, t.createdAt)],
+  // created_at is the ONLY predicate this table is queried by:
+  // getRumSummary — its entire read surface — filters a time window and
+  // GROUPs BY (metric, is_china). Grouping is not a filter, so an index
+  // can't help those two and none should be added for them.
+  //
+  // The previous index led with metric, which Postgres could still use —
+  // but only by bitmap-scanning the WHOLE index and filtering on the
+  // non-leading column, never a range scan. Leading with created_at
+  // turns that into a real Index Scan with an Index Cond, and the table
+  // is append-only so the window is a contiguous tail. Measured on 200k
+  // rows at correlation 0.9997: ~19ms -> ~11ms, and the index is ~29%
+  // smaller (6184kB -> 4408kB), which matters because every row here is
+  // written on the app's hottest path (/api/rum, ~1 row per page view).
+  (t) => [index("rum_events_created_idx").on(t.createdAt)],
 );
