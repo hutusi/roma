@@ -30,10 +30,11 @@ export const rumEvents = pgTable(
   },
   // MIS-ORDERED, and kept that way only until a migration can land.
   // getRumSummary — the table's entire read surface — filters on
-  // created_at alone and merely GROUPs BY metric, so a btree led by
-  // metric can't serve a range scan on the window and the planner
-  // seq-scans instead. It's dead weight on the read side while still
-  // costing writes on the app's hottest write path (/api/rum, ~1 row per
-  // page view). Should lead with created_at; see the follow-up.
+  // created_at alone and GROUPs BY (metric, is_china). Grouping is not a
+  // predicate, so a btree led by metric can't serve a range scan on the
+  // window and the planner seq-scans instead: dead weight on the read
+  // side while still costing writes on the app's hottest write path
+  // (/api/rum, ~1 row per page view). Should lead with created_at; see
+  // the follow-up.
   (t) => [index("rum_events_metric_created_idx").on(t.metric, t.createdAt)],
 );
