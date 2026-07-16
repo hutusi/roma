@@ -121,6 +121,16 @@ export async function acceptInvite(
     // Only ever raise. An invite is an onboarding grant, not role
     // management (/admin/users is), so an admin accepting an editor
     // invite must keep admin rather than be silently demoted.
+    //
+    // This rank decision reads the role OUTSIDE the transaction that
+    // writes it, so two accepts for the SAME email (two distinct
+    // invitations — the acceptedAt guard doesn't serialize across
+    // invites) can both read the old role and the lower grant can commit
+    // last. Left undone deliberately: it needs one address racing two
+    // invite links within milliseconds. The real fix is SELECT ... FOR
+    // UPDATE on the user row (or a rank-conditional UPDATE) — a plain
+    // transaction around the read would NOT help, same READ COMMITTED
+    // trap the publishFilm and deleteDirector comments describe.
     const role = rank(existing.role) >= rank(invite.role) ? (existing.role ?? "user") : invite.role;
     return claim(() => promoteAndClaim(existing.id, invite.id, role), { signedIn: false });
   }
