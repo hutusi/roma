@@ -1,7 +1,8 @@
 "use server";
 
-import { and, count, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
+import { lockDirector, lockFilms } from "@/db/locks";
 import type { TiptapDoc } from "@/db/schema";
 import { directors, directorViewingItems, filmDirectors, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -14,6 +15,10 @@ import {
   viewingOrderSchema,
 } from "@/lib/validators/director";
 import { type ActionResult, fail, ok } from "./result";
+
+function hasSlug<T extends { slug?: string }>(value: T): value is T & { slug: string } {
+  return typeof value.slug === "string";
+}
 
 export async function saveDirector(
   id: string | null,
@@ -34,48 +39,44 @@ export async function saveDirector(
     bioEn: v.bioEn || null,
     careerEssayEn: (v.careerEssayEn as TiptapDoc) ?? null,
   };
-  const existing = id
-    ? await db.query.directors.findFirst({
-        where: eq(directors.id, id),
-        columns: { slug: true, status: true, statusEn: true },
-      })
-    : undefined;
-  // An edit against an id that no longer exists (deleted in another tab)
-  // would UPDATE zero rows and still report success; catch it here.
-  if (id && !existing) return fail("导演不存在，可能已被删除");
-  // A slug change must also ping the URL the director used to live at.
-  const previousSlug = existing?.slug;
-  const isPublic = existing?.status === "published";
-
-  // Draft saves stay lax on purpose; a live row must remain publishable.
-  if (isPublic) {
-    const problems = publishProblems({
-      bio: v.bio || null,
-      careerEssay: (v.careerEssay as TiptapDoc) ?? null,
-    });
-    if (problems.length) return fail(`导演已发布，不能存为不可发布的状态：${problems.join("；")}`);
-  }
-  if (existing?.statusEn === "published") {
-    const problems = publishEnProblems({ bioEn: v.bioEn || null });
-    if (problems.length)
-      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
-  }
-
   try {
-    let targetId = id;
-    if (targetId) {
-      // Write-time assertion: the pre-check above ran at read time, and a
-      // delete landing in between would update zero rows yet report ok.
-      const updated = await db
-        .update(directors)
-        .set(row)
-        .where(eq(directors.id, targetId))
-        .returning({ id: directors.id });
-      if (!updated.length) return fail("导演不存在，可能已被删除");
-    } else {
-      const [created] = await db.insert(directors).values(row).returning({ id: directors.id });
-      targetId = created.id;
-    }
+    const outcome = await db.transaction(async (tx) => {
+      let targetId = id;
+      const existing = targetId ? await lockDirector(tx, targetId) : undefined;
+      if (targetId && !existing) return { error: "导演不存在，可能已被删除" } as const;
+      const previousSlug = existing?.slug;
+      const isPublic = existing?.status === "published";
+
+      if (isPublic) {
+        const problems = publishProblems({
+          bio: v.bio || null,
+          careerEssay: (v.careerEssay as TiptapDoc) ?? null,
+        });
+        if (problems.length) {
+          return {
+            error: `导演已发布，不能存为不可发布的状态：${problems.join("；")}`,
+          } as const;
+        }
+      }
+      if (existing?.statusEn === "published") {
+        const problems = publishEnProblems({ bioEn: v.bioEn || null });
+        if (problems.length) {
+          return {
+            error: `英文版已发布，不能存为不可发布的状态：${problems.join("；")}`,
+          } as const;
+        }
+      }
+
+      if (targetId) {
+        await tx.update(directors).set(row).where(eq(directors.id, targetId));
+      } else {
+        const [created] = await tx.insert(directors).values(row).returning({ id: directors.id });
+        targetId = created.id;
+      }
+      return { id: targetId, previousSlug, isPublic } as const;
+    });
+    if ("error" in outcome && outcome.error) return fail(outcome.error);
+    const { id: targetId, previousSlug, isPublic } = outcome;
     revalidateDirector(v.slug, { notify: isPublic });
     if (isPublic && previousSlug && previousSlug !== v.slug) {
       revalidateDirector(previousSlug, { notify: true });
@@ -101,11 +102,16 @@ export async function setViewingOrder(
   await requireEditor();
   const parsed = viewingOrderSchema.safeParse(items);
   if (!parsed.success) return fail("观看顺序数据无效");
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, directorId),
-  });
-  if (!director) return fail("导演不存在");
-  await db.transaction(async (tx) => {
+  const outcome = await db.transaction(async (tx) => {
+    const director = await lockDirector(tx, directorId);
+    if (!director) return { error: "导演不存在" } as const;
+    const lockedFilms = await lockFilms(
+      tx,
+      parsed.data.map((item) => item.filmId),
+    );
+    if (lockedFilms.length !== new Set(parsed.data.map((item) => item.filmId)).size) {
+      return { error: "观看顺序中的影片不存在，可能已被删除" } as const;
+    }
     await tx.delete(directorViewingItems).where(eq(directorViewingItems.directorId, directorId));
     if (parsed.data.length) {
       await tx.insert(directorViewingItems).values(
@@ -118,101 +124,107 @@ export async function setViewingOrder(
         })),
       );
     }
+    return { slug: director.slug, isPublic: director.status === "published" } as const;
   });
-  revalidateDirector(director.slug, { notify: director.status === "published" });
+  if (!hasSlug(outcome)) return fail(outcome.error ?? "导演操作失败");
+  revalidateDirector(outcome.slug, { notify: outcome.isPublic });
   return ok();
 }
 
 export async function publishDirector(id: string): Promise<ActionResult> {
   await requireEditor();
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, id),
+  const outcome = await db.transaction(async (tx) => {
+    const director = await lockDirector(tx, id);
+    if (!director) return { error: "导演不存在" } as const;
+    const problems = publishProblems(director);
+    if (problems.length) return { error: problems.join("；") } as const;
+    await tx
+      .update(directors)
+      .set({ status: "published", publishedAt: director.publishedAt ?? new Date() })
+      .where(eq(directors.id, id));
+    return { slug: director.slug } as const;
   });
-  if (!director) return fail("导演不存在");
-  const problems = publishProblems(director);
-  if (problems.length) return fail(problems.join("；"));
-  await db
-    .update(directors)
-    .set({
-      status: "published",
-      publishedAt: director.publishedAt ?? new Date(),
-    })
-    .where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: true });
+  if (!hasSlug(outcome)) return fail(outcome.error ?? "导演操作失败");
+  revalidateDirector(outcome.slug, { notify: true });
   return ok();
 }
 
 export async function publishDirectorEn(id: string): Promise<ActionResult> {
   await requireEditor();
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, id),
+  const outcome = await db.transaction(async (tx) => {
+    const director = await lockDirector(tx, id);
+    if (!director) return { error: "导演不存在" } as const;
+    const problems = publishEnProblems({ bioEn: director.bioEn });
+    if (problems.length) return { error: problems.join("；") } as const;
+    await tx
+      .update(directors)
+      .set({ statusEn: "published", publishedEnAt: director.publishedEnAt ?? new Date() })
+      .where(eq(directors.id, id));
+    return { slug: director.slug, isPublic: director.status === "published" } as const;
   });
-  if (!director) return fail("导演不存在");
-  const problems = publishEnProblems({ bioEn: director.bioEn });
-  if (problems.length) return fail(problems.join("；"));
-  await db
-    .update(directors)
-    .set({
-      statusEn: "published",
-      publishedEnAt: director.publishedEnAt ?? new Date(),
-    })
-    .where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: director.status === "published" });
+  if (!hasSlug(outcome)) return fail(outcome.error ?? "导演操作失败");
+  revalidateDirector(outcome.slug, { notify: outcome.isPublic });
   return ok();
 }
 
 export async function unpublishDirectorEn(id: string): Promise<ActionResult> {
   await requireEditor();
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, id),
+  const outcome = await db.transaction(async (tx) => {
+    const director = await lockDirector(tx, id);
+    if (!director) return null;
+    await tx.update(directors).set({ statusEn: "draft" }).where(eq(directors.id, id));
+    return { slug: director.slug, isPublic: director.status === "published" };
   });
-  if (!director) return fail("导演不存在");
-  await db.update(directors).set({ statusEn: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: director.status === "published" });
+  if (!outcome) return fail("导演不存在");
+  revalidateDirector(outcome.slug, { notify: outcome.isPublic });
   return ok();
 }
 
 export async function unpublishDirector(id: string): Promise<ActionResult> {
   await requireEditor();
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, id),
+  const outcome = await db.transaction(async (tx) => {
+    const director = await lockDirector(tx, id);
+    if (!director) return null;
+    await tx.update(directors).set({ status: "draft" }).where(eq(directors.id, id));
+    return { slug: director.slug, wasPublic: director.status === "published" };
   });
-  if (!director) return fail("导演不存在");
-  await db.update(directors).set({ status: "draft" }).where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: director.status === "published" });
+  if (!outcome) return fail("导演不存在");
+  revalidateDirector(outcome.slug, { notify: outcome.wasPublic });
   return ok();
 }
 
 export async function deleteDirector(id: string): Promise<ActionResult> {
   await requireEditor();
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, id),
+  const outcome = await db.transaction(async (tx) => {
+    const director = await lockDirector(tx, id);
+    if (!director) return { error: "导演不存在" } as const;
+    const associated = await tx
+      .select({ filmId: filmDirectors.filmId })
+      .from(filmDirectors)
+      .where(eq(filmDirectors.directorId, id));
+    await lockFilms(
+      tx,
+      associated.map((row) => row.filmId),
+    );
+    // A save that was already ahead of us may have removed this director
+    // while we waited for the film locks. Re-read the relation after all
+    // locks are held so a no-longer-associated published film cannot cause
+    // a false refusal.
+    const currentPublished = await tx
+      .select({ filmId: filmDirectors.filmId })
+      .from(filmDirectors)
+      .innerJoin(films, eq(filmDirectors.filmId, films.id))
+      .where(and(eq(filmDirectors.directorId, id), eq(films.status, "published")));
+    const publishedCount = currentPublished.length;
+    if (publishedCount > 0) {
+      return {
+        error: `该导演仍关联 ${publishedCount} 部已发布影片，请先解除关联或下架这些影片`,
+      } as const;
+    }
+    await tx.delete(directors).where(eq(directors.id, id));
+    return { slug: director.slug, wasPublic: director.status === "published" } as const;
   });
-  if (!director) return fail("导演不存在");
-  // film_directors.director_id cascades, so deleting a director silently
-  // strips the credit from every film citing them — including published
-  // ones, which the publish gate requires to have at least one director.
-  // The cascade is right for cleanup, wrong as an editorial action.
-  //
-  // This count and the delete below are NOT serialized against a
-  // concurrent publishFilm: it could publish one of this director's
-  // drafts after the count reads 0, and the cascade would then leave a
-  // published film with no directors. Wrapping the pair in
-  // db.transaction() would NOT fix that — at READ COMMITTED a
-  // transaction buys atomicity, not mutual exclusion, the same trap the
-  // comment in lists.ts describes. A real fix locks this director's
-  // films FOR UPDATE so publishFilm blocks. Left undone deliberately: it
-  // needs two editors on the same director within milliseconds, and the
-  // save gate above now rejects the resulting row rather than hiding it.
-  const [{ n }] = await db
-    .select({ n: count() })
-    .from(filmDirectors)
-    .innerJoin(films, eq(filmDirectors.filmId, films.id))
-    .where(and(eq(filmDirectors.directorId, id), eq(films.status, "published")));
-  if (n > 0) {
-    return fail(`该导演仍关联 ${n} 部已发布影片，请先解除关联或下架这些影片`);
-  }
-  await db.delete(directors).where(eq(directors.id, id));
-  revalidateDirector(director.slug, { notify: director.status === "published" });
+  if ("error" in outcome && outcome.error) return fail(outcome.error);
+  revalidateDirector(outcome.slug, { notify: outcome.wasPublic });
   return ok();
 }

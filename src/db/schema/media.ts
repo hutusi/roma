@@ -1,4 +1,5 @@
-import { index, integer, pgTable, text } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { check, index, integer, pgTable, text } from "drizzle-orm/pg-core";
 import { directors } from "./directors";
 import { mediaKind } from "./enums";
 import { films } from "./films";
@@ -19,7 +20,7 @@ export const media = pgTable(
     pathname: text().notNull(),
     alt: text(),
     /** Source attribution — always filled; stills carry licensing risk. */
-    credit: text(),
+    credit: text().notNull(),
     width: integer(),
     height: integer(),
     kind: mediaKind().notNull().default("still"),
@@ -30,5 +31,9 @@ export const media = pgTable(
     sortOrder: integer().notNull().default(0),
     createdAt: createdAt(),
   },
-  (t) => [index("media_film_idx").on(t.filmId), index("media_director_idx").on(t.directorId)],
+  (t) => [
+    index("media_film_idx").on(t.filmId),
+    index("media_director_idx").on(t.directorId),
+    check("media_credit_nonblank", sql`length(btrim(${t.credit})) > 0`),
+  ],
 );

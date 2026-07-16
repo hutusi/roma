@@ -16,3 +16,46 @@ export async function queryOne<T extends Record<string, unknown>>(
     await client.end();
   }
 }
+
+/** Holds a transaction-level row lock until the returned release function is called. */
+export async function holdDatabaseLock(
+  sql: string,
+  params: unknown[] = [],
+): Promise<() => Promise<void>> {
+  const client = new Client({ connectionString: url });
+  await client.connect();
+  await client.query("begin");
+  await client.query(sql, params);
+  let released = false;
+  return async () => {
+    if (released) return;
+    released = true;
+    try {
+      await client.query("commit");
+    } finally {
+      await client.end();
+    }
+  };
+}
+
+export async function blockedTransactionCount(): Promise<number> {
+  const row = await queryOne<{ n: number }>(
+    "select count(*)::int as n from pg_stat_activity where datname = current_database() and pid <> pg_backend_pid() and wait_event_type = 'Lock'",
+  );
+  return row?.n ?? 0;
+}
+
+export async function queryErrorCode(sql: string, params: unknown[] = []): Promise<string | null> {
+  const client = new Client({ connectionString: url });
+  await client.connect();
+  try {
+    await client.query(sql, params);
+    return null;
+  } catch (error) {
+    return typeof error === "object" && error !== null && "code" in error
+      ? String((error as { code: unknown }).code)
+      : "unknown";
+  } finally {
+    await client.end();
+  }
+}

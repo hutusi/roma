@@ -1,4 +1,5 @@
-import { index, integer, pgTable, primaryKey, text, unique } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { check, index, integer, pgTable, primaryKey, text, unique } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 import { users } from "./auth";
 import { markStatus } from "./enums";
@@ -18,7 +19,7 @@ export const userMarks = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     filmId: text()
       .notNull()
-      .references(() => films.id, { onDelete: "cascade" }),
+      .references(() => films.id, { onDelete: "restrict" }),
     status: markStatus().notNull(),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -57,10 +58,14 @@ export const userListItems = pgTable(
       .references(() => userLists.id, { onDelete: "cascade" }),
     filmId: text()
       .notNull()
-      .references(() => films.id, { onDelete: "cascade" }),
+      .references(() => films.id, { onDelete: "restrict" }),
     position: integer().notNull(),
   },
-  (t) => [unique("user_list_items_unique").on(t.listId, t.filmId)],
+  (t) => [
+    unique("user_list_items_unique").on(t.listId, t.filmId),
+    unique("user_list_items_position_unique").on(t.listId, t.position),
+    check("user_list_items_position_nonnegative", sql`${t.position} >= 0`),
+  ],
 );
 
 export const listFollows = pgTable(

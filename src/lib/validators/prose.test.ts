@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { hasProse } from "./prose";
+import { hasProse, tiptapDocSchema, validateTiptapDoc } from "./prose";
 
 const doc = (...content: unknown[]) => ({ type: "doc", content });
 const para = (text: string) => ({ type: "paragraph", content: [{ type: "text", text }] });
@@ -64,5 +64,52 @@ describe("hasProse", () => {
     // content that isn't an array, a null child — must be handled, not thrown.
     expect(hasProse(doc({ type: "paragraph", content: "not-an-array" }))).toBe(false);
     expect(hasProse({ type: "doc", content: [null] })).toBe(false);
+  });
+
+  test("rejects unknown nodes even when their subtree contains visible text", () => {
+    const value = doc({ type: "unknownWrapper", content: [para("must not be silently dropped")] });
+    expect(validateTiptapDoc(value)).toMatchObject({
+      success: false,
+      message: "富文本包含不支持的内容：unknownWrapper",
+    });
+    expect(tiptapDocSchema.safeParse(value).success).toBe(false);
+    expect(hasProse(value)).toBe(false);
+  });
+
+  test("rejects unknown marks", () => {
+    const value = doc({
+      type: "paragraph",
+      content: [{ type: "text", text: "marked", marks: [{ type: "rainbow" }] }],
+    });
+    expect(validateTiptapDoc(value)).toMatchObject({
+      success: false,
+      message: "富文本包含不支持的内容：rainbow",
+    });
+  });
+
+  test("rejects attributes the renderer would strip or cannot represent", () => {
+    expect(
+      validateTiptapDoc(
+        doc({
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "unsafe",
+              marks: [{ type: "link", attrs: { href: "javascript:alert(1)" } }],
+            },
+          ],
+        }),
+      ),
+    ).toMatchObject({ success: false, message: "富文本链接仅支持 http(s) 地址" });
+    expect(
+      validateTiptapDoc(doc({ type: "heading", attrs: { level: 1 }, content: [] })),
+    ).toMatchObject({ success: false, message: "富文本标题只支持二级或三级标题" });
+  });
+
+  test("accepts a structurally valid but visibly empty document", () => {
+    const value = doc({ type: "paragraph" });
+    expect(validateTiptapDoc(value).success).toBe(true);
+    expect(hasProse(value)).toBe(false);
   });
 });

@@ -1,59 +1,130 @@
-/**
- * Shared "does this rich-text document actually render something" check,
- * so the publish gates and the renderer agree on what "empty" means.
- *
- * The gates used to accept any truthy object — `{ type: "doc" }` with no
- * content passed, but render.tsx (which requires a non-empty `content`
- * array) renders it as nothing, so a director could publish with a
- * blank-looking career essay. This walks the node tree for a single text
- * node bearing non-whitespace, or an atom node that renders on its own
- * (an image with an allowed src), which is the same "is there anything
- * to show" question the renderer answers.
- */
-
-type Node = {
-  type?: unknown;
-  text?: unknown;
-  attrs?: unknown;
-  content?: unknown;
-};
+import { getSchema, type JSONContent, rewriteUnknownContent } from "@tiptap/core";
+import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
+import { z } from "zod";
+import { essayExtensions } from "@/components/tiptap/extensions";
 
 /**
  * The image sources the renderer will actually draw — our own uploads or
- * Vercel Blob. Defined here (not in render.tsx) so the publish gate and
- * the renderer share one rule: an image the renderer would reject must
- * not count as visible content either.
+ * Vercel Blob. The save validator, publish gate, and renderer share this
+ * rule so content can never be accepted and then silently disappear.
  */
 export const isAllowedImageSrc = (src: unknown): src is string =>
   typeof src === "string" &&
   (src.startsWith("/uploads/") ||
     /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//.test(src));
 
-function nodeHasProse(node: unknown): boolean {
-  if (!node || typeof node !== "object") return false;
-  const n = node as Node;
-  if (typeof n.text === "string" && n.text.trim().length > 0) return true;
-  // Self-contained atoms that render without text. An image only counts
-  // if the renderer would accept its src — a disallowed one draws nothing.
-  if (n.type === "horizontalRule") return true;
-  if (n.type === "image") {
-    const attrs = n.attrs as { src?: unknown } | undefined;
-    return isAllowedImageSrc(attrs?.src);
+const isSafeHref = (href: unknown): href is string =>
+  typeof href === "string" && /^https?:\/\//i.test(href);
+
+const essaySchema = getSchema(essayExtensions);
+
+type ValidationResult =
+  | { success: true; node: ProseMirrorNode }
+  | { success: false; message: string };
+
+function unsafeAttributeMessage(value: unknown): string | null {
+  if (!value || typeof value !== "object") return null;
+  const node = value as {
+    type?: unknown;
+    attrs?: Record<string, unknown>;
+    marks?: unknown;
+    content?: unknown;
+  };
+
+  if (node.type === "image" && !isAllowedImageSrc(node.attrs?.src)) {
+    return "富文本图片地址无效，只能使用本站上传的图片";
   }
-  if (Array.isArray(n.content)) return n.content.some(nodeHasProse);
-  return false;
+  if (node.type === "heading" && node.attrs?.level !== 2 && node.attrs?.level !== 3) {
+    return "富文本标题只支持二级或三级标题";
+  }
+  if (Array.isArray(node.marks)) {
+    for (const mark of node.marks) {
+      if (
+        mark &&
+        typeof mark === "object" &&
+        (mark as { type?: unknown }).type === "link" &&
+        !isSafeHref((mark as { attrs?: Record<string, unknown> }).attrs?.href)
+      ) {
+        return "富文本链接仅支持 http(s) 地址";
+      }
+    }
+  }
+  if (Array.isArray(node.content)) {
+    for (const child of node.content) {
+      const message = unsafeAttributeMessage(child);
+      if (message) return message;
+    }
+  }
+  return null;
 }
 
 /**
- * True when `doc` is a Tiptap document that renders visible content.
- * Requires the root to be a real doc node — the static renderer throws
- * on anything else, which render.tsx catches into an empty render — and
- * then descends for actual text/atoms, so gate and renderer never
- * disagree.
+ * Parses a stored document through the exact editor/renderer schema.
+ * Unknown nodes or marks are reported instead of rewritten: silently
+ * dropping authored content would violate the shared extension contract.
+ */
+export function validateTiptapDoc(value: unknown): ValidationResult {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return { success: false, message: "富文本数据格式无效" };
+  }
+  const json = structuredClone(value) as JSONContent;
+  if (json.type !== "doc") {
+    return { success: false, message: "富文本根节点必须是 doc" };
+  }
+
+  try {
+    const { rewrittenContent } = rewriteUnknownContent(structuredClone(json), essaySchema, {
+      fallbackToParagraph: false,
+    });
+    if (rewrittenContent.length > 0) {
+      const names = [...new Set(rewrittenContent.map((item) => item.unsupported))].join("、");
+      return { success: false, message: `富文本包含不支持的内容：${names}` };
+    }
+
+    const unsafeMessage = unsafeAttributeMessage(json);
+    if (unsafeMessage) return { success: false, message: unsafeMessage };
+
+    const node = essaySchema.nodeFromJSON(json);
+    node.check();
+    return { success: true, node };
+  } catch {
+    return { success: false, message: "富文本结构无效，请重新编辑后保存" };
+  }
+}
+
+const tiptapObjectSchema = z.record(z.string(), z.unknown()).superRefine((value, ctx) => {
+  const result = validateTiptapDoc(value);
+  if (!result.success) ctx.addIssue({ code: "custom", message: result.message });
+});
+
+/** Shared persistence schema for every optional Tiptap field. */
+export const tiptapDocSchema = tiptapObjectSchema.nullable().optional();
+
+/**
+ * True only when a valid document contains something the public renderer
+ * displays: non-whitespace text, a horizontal rule, or an allowed image.
  */
 export function hasProse(doc: Record<string, unknown> | null | undefined): boolean {
-  if (doc?.type !== "doc" || !Array.isArray(doc.content) || doc.content.length === 0) {
-    return false;
-  }
-  return doc.content.some(nodeHasProse);
+  if (!doc) return false;
+  const parsed = validateTiptapDoc(doc);
+  if (!parsed.success) return false;
+
+  let visible = false;
+  parsed.node.descendants((node) => {
+    if (visible) return false;
+    if (node.isText && node.text?.trim()) {
+      visible = true;
+      return false;
+    }
+    if (node.type.name === "horizontalRule") {
+      visible = true;
+      return false;
+    }
+    if (node.type.name === "image" && isAllowedImageSrc(node.attrs.src)) {
+      visible = true;
+      return false;
+    }
+    return true;
+  });
+  return visible;
 }

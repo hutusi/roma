@@ -3,11 +3,12 @@ import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { del, put } from "@vercel/blob";
 import { nanoid } from "nanoid";
+import type { ImageMime, ValidatedImage } from "@/lib/image-upload";
 
 // Extension derives from the validated MIME type, never from the
 // client-supplied filename — the public/uploads fallback serves these
 // as public assets and must not persist attacker-chosen extensions.
-export const EXT_BY_MIME: Record<string, string> = {
+export const EXT_BY_MIME: Record<ImageMime, string> = {
   "image/jpeg": ".jpg",
   "image/png": ".png",
   "image/webp": ".webp",
@@ -24,19 +25,18 @@ export type StoredImage = { url: string; pathname: string };
 
 const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
-export async function storeImage(file: File, prefix: string): Promise<StoredImage> {
-  const ext = EXT_BY_MIME[file.type];
-  if (!ext) throw new Error(`Unsupported image type: ${file.type}`);
+export async function storeImage(image: ValidatedImage, prefix: string): Promise<StoredImage> {
+  const ext = EXT_BY_MIME[image.mime];
   const pathname = `${prefix}/${nanoid(10)}${ext}`;
 
   if (hasBlob()) {
-    const blob = await put(pathname, file, { access: "public" });
+    const blob = await put(pathname, image.bytes, { access: "public", contentType: image.mime });
     return { url: blob.url, pathname: blob.pathname };
   }
 
   const target = path.join(process.cwd(), "public", "uploads", pathname);
   await mkdir(path.dirname(target), { recursive: true });
-  await writeFile(target, Buffer.from(await file.arrayBuffer()));
+  await writeFile(target, image.bytes);
   return { url: `/uploads/${pathname}`, pathname };
 }
 

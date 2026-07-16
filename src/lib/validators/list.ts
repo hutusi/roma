@@ -1,6 +1,5 @@
 import { z } from "zod";
-
-const tiptapDoc = z.record(z.string(), z.unknown()).nullable().optional();
+import { tiptapDocSchema } from "./prose";
 
 export const listFormSchema = z.object({
   slug: z
@@ -9,10 +8,10 @@ export const listFormSchema = z.object({
     .regex(/^[a-z0-9-]+$/, "仅小写字母、数字和连字符"),
   title: z.string().min(1, "标题不能为空"),
   theme: z.string().optional(),
-  intro: tiptapDoc,
+  intro: tiptapDocSchema,
   titleEn: z.string().optional(),
   themeEn: z.string().optional(),
-  introEn: tiptapDoc,
+  introEn: tiptapDocSchema,
   sortOrder: z.coerce.number<number>().int(),
 });
 

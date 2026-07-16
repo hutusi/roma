@@ -30,6 +30,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 - `src/lib/seo.ts` — every indexable page composes canonical + hreflang + og/twitter identity by spreading `seoMetadata()`; never hand-roll `alternates` on a page. It deliberately sets no titles/descriptions/images — Next inherits those and merges the file-convention OG images.
 - `scripts/generate-brand-assets.ts` → `src/assets/brand/` — the 8½ monogram (live) and 红印章 seal (candidate; compare in `src/assets/brand/preview.html`), plus every icon (favicon/apple/manifest/header paths). All generated and deterministic: edit the script, `bun run brand:generate` — never the assets.
 - `src/lib/storage.ts` — the storage seam (Vercel Blob in prod, `public/uploads` in dev). Keep all storage behind it (ADR 0008).
+- `src/lib/rum-retention.ts` — opportunistic RUM maintenance. Successful beacons schedule a post-response cleanup; an atomic daily claim retains raw events for 90 days.
 
 ## QA
 

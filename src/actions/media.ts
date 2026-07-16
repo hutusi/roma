@@ -4,12 +4,12 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { media, mediaKind } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
+import { ImageValidationError, type ValidatedImage, validateImageUpload } from "@/lib/image-upload";
 import { revalidateMedia } from "@/lib/revalidate";
 import { deleteImage, storeImage } from "@/lib/storage";
 import { type ActionResult, fail, ok } from "./result";
 
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // Vercel request-body ceiling is 4.5MB
-const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
 
 export async function uploadMedia(
   formData: FormData,
@@ -17,8 +17,14 @@ export async function uploadMedia(
   await requireEditor();
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) return fail("请选择图片文件");
-  if (!IMAGE_TYPES.has(file.type)) return fail("仅支持 JPEG/PNG/WebP/AVIF");
-  if (file.size > MAX_UPLOAD_BYTES) return fail("图片不能超过 4MB");
+
+  let image: ValidatedImage;
+  try {
+    image = await validateImageUpload(file, MAX_UPLOAD_BYTES);
+  } catch (error) {
+    if (error instanceof ImageValidationError) return fail(error.message);
+    throw error;
+  }
 
   const kind = String(formData.get("kind") || "still");
   if (!mediaKind.enumValues.includes(kind as (typeof mediaKind.enumValues)[number])) {
@@ -27,7 +33,7 @@ export async function uploadMedia(
   const credit = String(formData.get("credit") || "").trim();
   if (!credit) return fail("必须填写图片来源（版权信息）");
 
-  const stored = await storeImage(file, "media");
+  const stored = await storeImage(image, "media");
   let row: { id: string; url: string };
   try {
     [row] = await db
@@ -37,6 +43,8 @@ export async function uploadMedia(
         pathname: stored.pathname,
         alt: String(formData.get("alt") || "") || null,
         credit,
+        width: image.width,
+        height: image.height,
         kind: kind as (typeof mediaKind.enumValues)[number],
         filmId: String(formData.get("filmId") || "") || null,
         directorId: String(formData.get("directorId") || "") || null,
@@ -77,7 +85,7 @@ export async function updateMedia(
     .update(media)
     .set({
       ...(fields.alt !== undefined && { alt: fields.alt || null }),
-      ...(fields.credit !== undefined && { credit: fields.credit }),
+      ...(fields.credit !== undefined && { credit: fields.credit.trim() }),
       ...(fields.kind !== undefined && {
         kind: fields.kind as (typeof mediaKind.enumValues)[number],
       }),

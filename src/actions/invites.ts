@@ -3,6 +3,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { db } from "@/db";
+import { lockUser } from "@/db/locks";
 import { invitations, users } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { requireAdmin } from "@/lib/auth-guards";
@@ -64,20 +65,33 @@ const ROLE_RANK: Record<string, number> = { user: 0, editor: 1, admin: 2 };
 const rank = (role: string | null | undefined) => ROLE_RANK[role ?? "user"] ?? 0;
 
 /**
- * Promotes `userId` and claims the invitation as one unit. The claim is
- * conditional on the invitation still being unaccepted, so two concurrent
- * accepts can't both consume it. Both statements assert they matched a
- * row: a zero-row promotion that still stamped acceptedAt would burn the
- * invitation while leaving the account unprivileged, with no way back.
+ * Promotes `userId` and claims the invitation as one unit. The locked rows
+ * serialize both duplicate claims and distinct grants for the same account;
+ * the latter always recompute rank from the latest committed role.
  */
-async function promoteAndClaim(userId: string, inviteId: string, role: string) {
+async function promoteAndClaim(userId: string, inviteId: string) {
   return db.transaction(async (tx) => {
-    const promoted = await tx
-      .update(users)
-      .set({ role })
-      .where(eq(users.id, userId))
-      .returning({ id: users.id });
-    if (!promoted.length) throw new ClaimFailure("账号不存在，请重新接受邀请");
+    // Invitation → user is the canonical claim order. Distinct invites
+    // for one address then serialize on the same user row, so each rank
+    // decision observes the role committed by the previous claim.
+    const [invite] = await tx
+      .select()
+      .from(invitations)
+      .where(eq(invitations.id, inviteId))
+      .for("update");
+    if (!invite) throw new ClaimFailure("邀请链接无效");
+    if (invite.acceptedAt) throw new ClaimFailure("邀请已被使用");
+    if (invite.expiresAt < new Date()) throw new ClaimFailure("邀请已过期");
+
+    const user = await lockUser(tx, userId);
+    if (!user) throw new ClaimFailure("账号不存在，请重新接受邀请");
+    if (normalizeEmail(user.email) !== normalizeEmail(invite.email)) {
+      throw new ClaimFailure("邀请邮箱与账号不匹配");
+    }
+    const role = rank(user.role) >= rank(invite.role) ? (user.role ?? "user") : invite.role;
+    if (role !== user.role) {
+      await tx.update(users).set({ role }).where(eq(users.id, userId));
+    }
 
     const claimed = await tx
       .update(invitations)
@@ -118,21 +132,7 @@ export async function acceptInvite(
     columns: { id: true, role: true },
   });
   if (existing) {
-    // Only ever raise. An invite is an onboarding grant, not role
-    // management (/admin/users is), so an admin accepting an editor
-    // invite must keep admin rather than be silently demoted.
-    //
-    // This rank decision reads the role OUTSIDE the transaction that
-    // writes it, so two accepts for the SAME email (two distinct
-    // invitations — the acceptedAt guard doesn't serialize across
-    // invites) can both read the old role and the lower grant can commit
-    // last. Left undone deliberately: it needs one address racing two
-    // invite links within milliseconds. The real fix is SELECT ... FOR
-    // UPDATE on the user row (or a rank-conditional UPDATE) — a plain
-    // transaction around the read would NOT help, same READ COMMITTED
-    // trap the publishFilm and deleteDirector comments describe.
-    const role = rank(existing.role) >= rank(invite.role) ? (existing.role ?? "user") : invite.role;
-    return claim(() => promoteAndClaim(existing.id, invite.id, role), { signedIn: false });
+    return claim(() => promoteAndClaim(existing.id, invite.id), { signedIn: false });
   }
 
   // Signup can't join the transaction below, so it comes first: if the
@@ -152,7 +152,7 @@ export async function acceptInvite(
 
   // A fresh account is always defaultRole "user", so it always takes the
   // invite's role — no rank comparison needed here.
-  return claim(() => promoteAndClaim(created.user.id, invite.id, invite.role), { signedIn: true });
+  return claim(() => promoteAndClaim(created.user.id, invite.id), { signedIn: true });
 }
 
 /** Runs a claim, turning its rollback signal into an ActionResult. */

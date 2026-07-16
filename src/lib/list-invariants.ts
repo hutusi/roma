@@ -1,27 +1,12 @@
 import "server-only";
 import { and, count, eq } from "drizzle-orm";
-import { db } from "@/db";
+import type { DbTransaction } from "@/db/locks";
+import { lockCuratedLists } from "@/db/locks";
 import { curatedListItems, curatedLists, films } from "@/db/schema";
-import { revalidateList } from "@/lib/revalidate";
 
-/**
- * The invariant a published curated list must hold: at least one member
- * film is itself published. publishList enforces it at publish time; this
- * module guards the mutations that could later break it — item removal
- * (in lists.ts) and film unpublish (in films.ts).
- *
- * These are plain server-side helpers, deliberately NOT in a "use server"
- * module: every export of one becomes a public RPC endpoint, and an
- * unguarded unpublishEmptiedLists would let anyone unpublish lists. They
- * run only inside already-guarded actions.
- */
-
-/**
- * How many of a list's members are published — i.e. how many the public
- * list page actually renders (it strips draft members).
- */
-export async function publishedMemberCount(listId: string): Promise<number> {
-  const [{ n }] = await db
+/** How many members the public list page can render. */
+export async function publishedMemberCount(tx: DbTransaction, listId: string): Promise<number> {
+  const [{ n }] = await tx
     .select({ n: count() })
     .from(curatedListItems)
     .innerJoin(films, eq(curatedListItems.filmId, films.id))
@@ -29,24 +14,34 @@ export async function publishedMemberCount(listId: string): Promise<number> {
   return n;
 }
 
+export type UnpublishedList = { slug: string; wasPublic: boolean };
+
 /**
- * After a film is unpublished, auto-unpublish any published curated list
- * this leaves with zero published members — the public page would
- * otherwise render a bare <ol>. Auto-unpublish rather than blocking the
- * film edit is the right coupling: a film belongs to many lists, and the
- * editor's action was about the film, not the list. Call AFTER the film's
- * status flip so the count reflects it.
+ * Called inside the film-unpublish transaction after the film row is locked.
+ * Locking every affected list makes publish/remove/unpublish one serialized
+ * state transition and returns revalidation work for the caller to run only
+ * after commit.
  */
-export async function unpublishEmptiedLists(filmId: string): Promise<void> {
-  const rows = await db
-    .select({ id: curatedLists.id, slug: curatedLists.slug })
+export async function unpublishEmptiedLists(
+  tx: DbTransaction,
+  filmId: string,
+): Promise<UnpublishedList[]> {
+  const affected = await tx
+    .select({ id: curatedLists.id })
     .from(curatedListItems)
     .innerJoin(curatedLists, eq(curatedListItems.listId, curatedLists.id))
     .where(and(eq(curatedListItems.filmId, filmId), eq(curatedLists.status, "published")));
-  for (const list of rows) {
-    if ((await publishedMemberCount(list.id)) === 0) {
-      await db.update(curatedLists).set({ status: "draft" }).where(eq(curatedLists.id, list.id));
-      revalidateList(list.slug, { notify: true });
+  const locked = await lockCuratedLists(
+    tx,
+    affected.map((list) => list.id),
+  );
+
+  const unpublished: UnpublishedList[] = [];
+  for (const list of locked) {
+    if (list.status === "published" && (await publishedMemberCount(tx, list.id)) === 0) {
+      await tx.update(curatedLists).set({ status: "draft" }).where(eq(curatedLists.id, list.id));
+      unpublished.push({ slug: list.slug, wasPublic: true });
     }
   }
+  return unpublished;
 }

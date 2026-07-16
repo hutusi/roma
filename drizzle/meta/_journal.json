@@ -36,6 +36,13 @@
       "when": 1784171867619,
       "tag": "0004_legal_killer_shrike",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1784244371014,
+      "tag": "0005_flashy_molten_man",
+      "breakpoints": true
     }
   ]
 }

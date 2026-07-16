@@ -3,6 +3,7 @@
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { db } from "@/db";
+import { lockUser } from "@/db/locks";
 import { users } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { requireAdmin } from "@/lib/auth-guards";
@@ -20,8 +21,13 @@ export async function setUserRole(
 ): Promise<ActionResult> {
   const session = await requireAdmin();
   if (session.user.id === userId) return fail("不能修改自己的角色");
-  await db.update(users).set({ role }).where(eq(users.id, userId));
-  return ok();
+  const updated = await db.transaction(async (tx) => {
+    const user = await lockUser(tx, userId);
+    if (!user) return false;
+    await tx.update(users).set({ role }).where(eq(users.id, userId));
+    return true;
+  });
+  return updated ? ok() : fail("用户不存在");
 }
 
 export async function banUser(userId: string, reason: string): Promise<ActionResult> {

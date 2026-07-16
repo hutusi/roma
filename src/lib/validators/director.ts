@@ -1,7 +1,5 @@
 import { z } from "zod";
-import { hasProse } from "./prose";
-
-const tiptapDoc = z.record(z.string(), z.unknown()).nullable().optional();
+import { hasProse, tiptapDocSchema } from "./prose";
 
 export const directorFormSchema = z.object({
   slug: z
@@ -11,9 +9,9 @@ export const directorFormSchema = z.object({
   name: z.string().min(1, "姓名不能为空"),
   nameZh: z.string().optional(),
   bio: z.string().optional(),
-  careerEssay: tiptapDoc,
+  careerEssay: tiptapDocSchema,
   bioEn: z.string().optional(),
-  careerEssayEn: tiptapDoc,
+  careerEssayEn: tiptapDocSchema,
 });
 
 export type DirectorFormValues = z.infer<typeof directorFormSchema>;
@@ -41,10 +39,15 @@ export function publishEnProblems(director: { bioEn: string | null }): string[] 
   return director.bioEn?.trim() ? [] : ["缺少英文简介（bioEn）"];
 }
 
-export const viewingOrderSchema = z.array(
-  z.object({
-    filmId: z.string(),
-    note: z.string().optional(),
-    noteEn: z.string().optional(),
-  }),
-);
+export const viewingOrderSchema = z
+  .array(
+    z.object({
+      filmId: z.string(),
+      note: z.string().optional(),
+      noteEn: z.string().optional(),
+    }),
+  )
+  .refine(
+    (items) => items.length === new Set(items.map((item) => item.filmId)).size,
+    "观看顺序不能重复包含同一部影片",
+  );

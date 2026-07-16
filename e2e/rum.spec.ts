@@ -53,3 +53,27 @@ test("an invalid beacon is rejected and stored nothing", async ({ request }) => 
   const row = await queryOne("select id from rum_events where path = $1 limit 1", ["/e2e/rum-bad"]);
   expect(row).toBeNull();
 });
+
+test("successful ingest opportunistically removes RUM older than 90 days", async ({ request }) => {
+  await queryOne("delete from maintenance_runs where job = 'rum-retention' returning job");
+  await queryOne(
+    "insert into rum_events (id, metric, value, path, is_china, created_at) values ('rum-old-e2e', 'LCP', 1, '/e2e/rum-old', false, now() - interval '91 days') returning id",
+  );
+  await queryOne(
+    "insert into rum_events (id, metric, value, path, is_china, created_at) values ('rum-recent-e2e', 'LCP', 1, '/e2e/rum-recent', false, now() - interval '89 days') returning id",
+  );
+
+  const res = await request.post("/api/rum", {
+    data: beacon({ path: "/e2e/rum-retention-trigger" }),
+  });
+  expect(res.status()).toBe(204);
+
+  await expect
+    .poll(async () =>
+      queryOne<{ id: string }>("select id from rum_events where id = $1", ["rum-old-e2e"]),
+    )
+    .toBeNull();
+  expect(
+    await queryOne<{ id: string }>("select id from rum_events where id = $1", ["rum-recent-e2e"]),
+  ).not.toBeNull();
+});
