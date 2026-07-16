@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { hasProse } from "./prose";
 
 const tiptapDoc = z.record(z.string(), z.unknown()).nullable().optional();
 
@@ -26,9 +27,13 @@ export type DirectorFormValues = z.infer<typeof directorFormSchema>;
  */
 export function publishProblems(director: {
   bio: string | null;
-  careerEssay: unknown | null;
+  careerEssay: Record<string, unknown> | null;
 }): string[] {
-  return director.bio?.trim() || director.careerEssay ? [] : ["发布前请填写简介或创作历程"];
+  // careerEssay must actually render — an empty { type: "doc" } used to
+  // pass as a truthy object while rendering nothing (see hasProse).
+  return director.bio?.trim() || hasProse(director.careerEssay)
+    ? []
+    : ["发布前请填写简介或创作历程"];
 }
 
 /** Gate for the English edition; the career essay stays optional. */

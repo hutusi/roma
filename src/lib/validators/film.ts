@@ -75,7 +75,9 @@ export function publishProblems(film: {
   directorCount: number;
 }): string[] {
   const problems: string[] = [];
-  const note = film.editorialNote ?? "";
+  // Trim first: 200 spaces used to pass the raw code-point gate while
+  // rendering as nothing.
+  const note = (film.editorialNote ?? "").trim();
   const len = codePointLength(note);
   if (len < EDITORIAL_NOTE_MIN || len > EDITORIAL_NOTE_MAX) {
     problems.push(`编辑札记需 ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX} 字（当前 ${len} 字）`);

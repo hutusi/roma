@@ -1,6 +1,7 @@
 import type { JSONContent } from "@tiptap/core";
 import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
 import Image from "next/image";
+import type React from "react";
 import { cn } from "@/lib/utils";
 import { essayExtensions } from "./extensions";
 
@@ -29,43 +30,56 @@ export function TiptapContent({
     return null;
   }
 
-  const rendered = renderToReactElement({
-    content: doc as JSONContent,
-    extensions: essayExtensions,
-    options: {
-      nodeMapping: {
-        image: ({ node }) => {
-          const src = node.attrs?.src;
-          if (!isAllowedImageSrc(src)) return null;
-          const alt = typeof node.attrs?.alt === "string" ? node.attrs.alt : "";
-          return (
-            <span className="relative my-8 block aspect-[137/100] w-full overflow-hidden bg-ink">
-              <Image
-                src={src}
-                alt={alt}
-                fill
-                sizes="(min-width: 1024px) 700px, 100vw"
-                className="object-contain"
-              />
-            </span>
-          );
+  // The top-level guard above only checks `content` is a non-empty array;
+  // a structurally-corrupt child (e.g. a node whose `content` is a string,
+  // not an array) can still reach the renderer and throw. This is a
+  // public server component, so an uncaught throw would break the whole
+  // page over one bad essay. Stored JSON always comes from the admin
+  // editor, so corruption means a bad direct write — degrade to rendering
+  // nothing rather than 500 the page. Not a substitute for validating on
+  // the way in; a last-resort guard.
+  let rendered: React.ReactNode = null;
+  try {
+    rendered = renderToReactElement({
+      content: doc as JSONContent,
+      extensions: essayExtensions,
+      options: {
+        nodeMapping: {
+          image: ({ node }) => {
+            const src = node.attrs?.src;
+            if (!isAllowedImageSrc(src)) return null;
+            const alt = typeof node.attrs?.alt === "string" ? node.attrs.alt : "";
+            return (
+              <span className="relative my-8 block aspect-[137/100] w-full overflow-hidden bg-ink">
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  sizes="(min-width: 1024px) 700px, 100vw"
+                  className="object-contain"
+                />
+              </span>
+            );
+          },
         },
-      },
-      markMapping: {
-        link: ({ mark, children }) => {
-          const href = mark.attrs?.href;
-          if (!isSafeHref(href)) return <>{children}</>;
-          return (
-            <a href={href} target="_blank" rel="noopener noreferrer">
-              {children}
-            </a>
-          );
+        markMapping: {
+          link: ({ mark, children }) => {
+            const href = mark.attrs?.href;
+            if (!isSafeHref(href)) return <>{children}</>;
+            return (
+              <a href={href} target="_blank" rel="noopener noreferrer">
+                {children}
+              </a>
+            );
+          },
         },
+        unhandledNode: () => null,
+        unhandledMark: ({ children }) => <>{children}</>,
       },
-      unhandledNode: () => null,
-      unhandledMark: ({ children }) => <>{children}</>,
-    },
-  });
+    });
+  } catch {
+    return null;
+  }
 
   return (
     <div
