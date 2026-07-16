@@ -7,6 +7,7 @@ import { curatedListItems, curatedLists, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateList } from "@/lib/revalidate";
 import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
+import { permutationProblem } from "@/lib/validators/ordering";
 import { type ActionResult, fail, ok } from "./result";
 
 /** Slug to revalidate, plus whether the list has a public URL to notify. */
@@ -138,18 +139,31 @@ export async function removeListItem(itemId: string): Promise<ActionResult> {
 }
 
 /**
- * Rewrites the positions it is GIVEN, in one transaction — not "every
- * position", as this claimed. Ids from another list are already no-ops
- * (the listId predicate below), but an incomplete or duplicated list
- * leaves the omitted items on stale positions that can now collide with
- * the ones just assigned. The admin UI always sends the full set; this
- * does not check that it did.
+ * Rewrites every position in one transaction, and now verifies that it
+ * was actually handed every one: an incomplete or duplicated list would
+ * strand the omitted items on stale positions that collide with the ones
+ * just assigned, and position has no unique constraint to catch it. Ids
+ * from another list were always no-ops (the listId predicate below), but
+ * "the UI always sends the full set" turned out to be false on the
+ * user-list side, so this checks rather than trusts.
  */
 export async function reorderListItems(
   listId: string,
   orderedItemIds: string[],
 ): Promise<ActionResult> {
   await requireEditor();
+  const current = await db
+    .select({ id: curatedListItems.id })
+    .from(curatedListItems)
+    .where(eq(curatedListItems.listId, listId));
+  if (
+    permutationProblem(
+      orderedItemIds,
+      current.map((i) => i.id),
+    )
+  ) {
+    return fail("片单条目已变化，请刷新后重试");
+  }
   await db.transaction(async (tx) => {
     for (const [i, itemId] of orderedItemIds.entries()) {
       await tx

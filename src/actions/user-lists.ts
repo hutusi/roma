@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { userListItems, userLists } from "@/db/schema";
 import type { Locale } from "@/i18n/locales";
 import { requireUser } from "@/lib/auth-guards";
+import { permutationProblem } from "@/lib/validators/ordering";
 import { type ActionResult, fail, ok } from "./result";
 
 /**
@@ -140,6 +141,17 @@ export async function reorderUserListItems(
 ): Promise<ActionResult> {
   const list = await ownedList(listId, locale);
   if (!list) return fail("notFound");
+  const current = await db
+    .select({ id: userListItems.id })
+    .from(userListItems)
+    .where(eq(userListItems.listId, listId));
+  if (
+    permutationProblem(
+      orderedItemIds,
+      current.map((i) => i.id),
+    )
+  )
+    return fail("reorderInvalid");
   await db.transaction(async (tx) => {
     for (const [i, itemId] of orderedItemIds.entries()) {
       await tx

@@ -132,6 +132,7 @@ export const zh = {
     add: "加入",
     reorderHint: "拖动排序（自动保存）：",
     remove: "移除",
+    unavailable: "该影片暂不可用（已下架）",
     emptyOwner: "从上方加入第一部影片。",
     emptyViewer: "这份片单还是空的。",
     errors: {
@@ -140,6 +141,7 @@ export const zh = {
       descriptionTooLong: "简介不能超过 140 字",
       notFound: "片单不存在或无权限",
       alreadyInList: "这部影片已在片单中",
+      reorderInvalid: "片单条目已变化，请刷新后重试",
     },
   },
   follows: {

@@ -4,7 +4,7 @@ import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
 import { posterOf } from "@/db/queries/public";
-import { filmDirectors, films, media, userLists } from "@/db/schema";
+import { filmDirectors, films, media, userListItems, userLists } from "@/db/schema";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
 import { getSession } from "@/lib/auth-guards";
@@ -33,6 +33,8 @@ export async function UserListPage({
     with: {
       user: true,
       items: {
+        // The list's order IS the list; id breaks ties deterministically.
+        orderBy: [asc(userListItems.position), asc(userListItems.id)],
         // posterOf takes the first row of the preferred kind, so the
         // relation has to arrive ordered or the poster is arbitrary.
         with: {
@@ -53,9 +55,14 @@ export async function UserListPage({
 
   const session = await getSession();
   const isOwner = session?.user.id === list.userId;
-  const items = [...list.items]
-    .sort((a, b) => a.position - b.position)
-    .filter((item) => item.film.status === "published");
+  // Ordering is the query's job (asc position); the public render drops
+  // unpublished members, but the OWNER must still see them. Filtering
+  // before the isOwner branch made them invisible-but-present: the owner
+  // couldn't remove them, every drag then sent a partial permutation that
+  // silently collided positions, and re-publishing dead-ended on
+  // "alreadyInList" for a row they couldn't see.
+  const ownerItems = list.items;
+  const items = ownerItems.filter((item) => item.film.status === "published");
 
   const filmTitle = (f: { titleZh: string; titleEn: string | null; titleOriginal: string }) =>
     en ? (f.titleEn ?? f.titleOriginal) : f.titleZh;
@@ -91,12 +98,20 @@ export async function UserListPage({
           title={list.title}
           description={list.description ?? ""}
           filmOptions={filmOptions}
-          initialItems={items.map((item) => ({
-            id: item.id,
-            filmId: item.film.id,
-            title: filmTitle(item.film),
-            year: item.film.year,
-          }))}
+          initialItems={ownerItems.map((item) => {
+            const unavailable = item.film.status !== "published";
+            return {
+              id: item.id,
+              filmId: item.film.id,
+              // No title for an unavailable film: it's unpublished
+              // editorial work that may have been renamed or pulled, and
+              // the owner isn't an editor. Position plus a remove button
+              // is all they need to get unstuck.
+              title: unavailable ? "" : filmTitle(item.film),
+              year: item.film.year,
+              unavailable,
+            };
+          })}
           locale={locale}
           labels={t}
         />
