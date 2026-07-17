@@ -26,11 +26,17 @@ export async function unpublishEmptiedLists(
   tx: DbTransaction,
   filmId: string,
 ): Promise<UnpublishedList[]> {
+  // Lock EVERY list containing the film, not just currently-published
+  // ones: this pre-lock read can't see a concurrent publishList that has
+  // not committed yet, so filtering on status here would let a
+  // just-published list escape the lock set and go live empty. The
+  // status check runs below, on rows read under the lock — after any
+  // in-flight publish has committed or been refused.
   const affected = await tx
     .select({ id: curatedLists.id })
     .from(curatedListItems)
     .innerJoin(curatedLists, eq(curatedListItems.listId, curatedLists.id))
-    .where(and(eq(curatedListItems.filmId, filmId), eq(curatedLists.status, "published")));
+    .where(eq(curatedListItems.filmId, filmId));
   const locked = await lockCuratedLists(
     tx,
     affected.map((list) => list.id),

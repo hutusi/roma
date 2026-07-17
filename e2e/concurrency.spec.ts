@@ -187,22 +187,90 @@ test("concurrent invitation grants preserve the highest role", async ({ browser 
     await page.fill("#password", "concurrent-password");
   }
 
-  const release = await holdDatabaseLock("select id from users where id = $1 for update", [
-    user.id,
-  ]);
+  // The fixture user is SHARED with other specs; if anything below
+  // throws while they hold the promoted role, later tests would run
+  // against an unexpected admin. Restore unconditionally.
+  try {
+    const release = await holdDatabaseLock("select id from users where id = $1 for update", [
+      user.id,
+    ]);
+    try {
+      await Promise.all([
+        editorPage.getByRole("button", { name: "接受邀请" }).click(),
+        adminPage.getByRole("button", { name: "接受邀请" }).click(),
+      ]);
+      await expect.poll(blockedTransactionCount).toBeGreaterThanOrEqual(2);
+    } finally {
+      await release();
+    }
+
+    await expect
+      .poll(async () =>
+        queryOne<{ role: string }>("select role from users where id = $1", [user.id]),
+      )
+      .toEqual({ role: "admin" });
+  } finally {
+    await context.close();
+    await queryOne("update users set role = 'user' where id = $1 returning id", [user.id]);
+  }
+});
+
+// Regression for the lock-set race in unpublishEmptiedLists: it used to
+// pre-select only PUBLISHED lists before locking, so a draft list being
+// published in the same instant escaped the lock set and went live with
+// zero published members. With every containing list locked, both
+// resolution orders converge on the list ending up draft.
+test("publishing a list cannot race a member film's unpublish into an empty live list", async ({
+  browser,
+}) => {
+  const filmId = randomUUID();
+  await queryOne(
+    "insert into films (id, slug, title_zh, title_original, year, status) values ($1, $2, '并发下架影片', 'Race Film', 1955, 'published') returning id",
+    [filmId, `concurrency-race-${filmId}`],
+  );
+  const listId = await createList("draft");
+  await queryOne(
+    "insert into curated_list_items (id, list_id, film_id, position) values ($1, $2, $3, 0) returning id",
+    [randomUUID(), listId, filmId],
+  );
+
+  const context = await browser.newContext({ storageState: "e2e/.auth/admin.json" });
+  const listPage = await context.newPage();
+  const filmPage = await context.newPage();
   try {
     await Promise.all([
-      editorPage.getByRole("button", { name: "接受邀请" }).click(),
-      adminPage.getByRole("button", { name: "接受邀请" }).click(),
+      listPage.goto(`/admin/lists/${listId}`),
+      filmPage.goto(`/admin/films/${filmId}`),
     ]);
-    await expect.poll(blockedTransactionCount).toBeGreaterThanOrEqual(2);
-  } finally {
-    await release();
-  }
 
-  await expect
-    .poll(async () => queryOne<{ role: string }>("select role from users where id = $1", [user.id]))
-    .toEqual({ role: "admin" });
-  await context.close();
-  await queryOne("update users set role = 'user' where id = $1 returning id", [user.id]);
+    // Both transactions must block on the LIST row: publishList locks it
+    // first thing; unpublishFilm locks the film, then every containing
+    // list — including this draft one, which is the point of the fix.
+    const release = await holdDatabaseLock(
+      "select id from curated_lists where id = $1 for update",
+      [listId],
+    );
+    try {
+      await Promise.all([
+        listPage.getByRole("button", { name: "发布", exact: true }).click(),
+        filmPage.getByRole("button", { name: "撤回", exact: true }).click(),
+      ]);
+      await expect.poll(blockedTransactionCount).toBeGreaterThanOrEqual(2);
+    } finally {
+      await release();
+    }
+
+    // Whichever wins the lock, the invariant holds: the film is a draft,
+    // so the list must not be live. (Publish-first gets auto-unpublished;
+    // unpublish-first makes the publish refuse.)
+    await expect
+      .poll(async () =>
+        queryOne<{ status: string }>("select status from curated_lists where id = $1", [listId]),
+      )
+      .toEqual({ status: "draft" });
+  } finally {
+    await context.close();
+    await queryOne("delete from curated_lists where id = $1 returning id", [listId]);
+    await queryOne("delete from films where id = $1 returning id", [filmId]);
+  }
 });
