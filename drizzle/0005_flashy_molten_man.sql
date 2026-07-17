@@ -49,3 +49,5 @@ ALTER TABLE "user_list_items" ADD CONSTRAINT "user_list_items_position_unique" U
 ALTER TABLE "curated_list_items" ADD CONSTRAINT "curated_list_items_position_nonnegative" CHECK ("curated_list_items"."position" >= 0);--> statement-breakpoint
 ALTER TABLE "media" ADD CONSTRAINT "media_credit_nonblank" CHECK (length(btrim("media"."credit")) > 0);--> statement-breakpoint
 ALTER TABLE "user_list_items" ADD CONSTRAINT "user_list_items_position_nonnegative" CHECK ("user_list_items"."position" >= 0);
+--> statement-breakpoint
+INSERT INTO "maintenance_runs" ("job", "last_successful_run_at") VALUES ('rum-retention', to_timestamp(0)) ON CONFLICT ("job") DO NOTHING;
