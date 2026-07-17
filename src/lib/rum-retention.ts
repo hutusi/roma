@@ -13,16 +13,25 @@ const RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
  * same transaction as deletion so a failed cleanup remains immediately retryable.
  */
 export async function runRumRetention(now = new Date()): Promise<boolean> {
+  // Fast path, no transaction and no lock: this runs after EVERY beacon
+  // (~one per page view), and on all but one request a day the answer is
+  // "nothing to do". Don't pay for a lock queue to learn that.
+  const [peek] = await db.select().from(maintenanceRuns).where(eq(maintenanceRuns.job, JOB));
+  if (peek && now.getTime() - peek.lastSuccessfulRunAt.getTime() < RUN_INTERVAL_MS) return false;
+
   return db.transaction(async (tx) => {
     await tx
       .insert(maintenanceRuns)
       .values({ job: JOB, lastSuccessfulRunAt: new Date(0) })
       .onConflictDoNothing();
+    // skipLocked: a concurrent pass already holds the claim — back off
+    // instead of queuing behind it (the winner does the day's work).
     const [run] = await tx
       .select()
       .from(maintenanceRuns)
       .where(eq(maintenanceRuns.job, JOB))
-      .for("update");
+      .for("update", { skipLocked: true });
+    if (!run) return false;
     if (now.getTime() - run.lastSuccessfulRunAt.getTime() < RUN_INTERVAL_MS) return false;
 
     await tx
