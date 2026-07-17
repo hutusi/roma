@@ -101,10 +101,39 @@ describe("hasProse", () => {
           ],
         }),
       ),
-    ).toMatchObject({ success: false, message: "富文本链接仅支持 http(s) 地址" });
+    ).toMatchObject({ success: false, message: "富文本链接包含不安全的协议" });
     expect(
       validateTiptapDoc(doc({ type: "heading", attrs: { level: 1 }, content: [] })),
     ).toMatchObject({ success: false, message: "富文本标题只支持二级或三级标题" });
+  });
+
+  test("accepts the links the editor legitimately produces", () => {
+    // The gate blocks dangerous schemes only. An http(s) link is the
+    // normal case; a mailto: link is what autolink creates from a typed
+    // email address — rejecting it made the whole document unsaveable
+    // (the renderer degrades it to plain text instead).
+    const linked = (href: string) =>
+      doc({
+        type: "paragraph",
+        content: [{ type: "text", text: "联系方式", marks: [{ type: "link", attrs: { href } }] }],
+      });
+    expect(validateTiptapDoc(linked("https://example.com/a")).success).toBe(true);
+    expect(validateTiptapDoc(linked("mailto:foo@bar.com")).success).toBe(true);
+    expect(validateTiptapDoc(linked("tel:+861234567")).success).toBe(true);
+    // And the text still counts as prose even when the renderer will
+    // drop the anchor.
+    expect(hasProse(linked("mailto:foo@bar.com"))).toBe(true);
+  });
+
+  test("rejects dangerous link schemes however they are spelled", () => {
+    const linked = (href: string) =>
+      doc({
+        type: "paragraph",
+        content: [{ type: "text", text: "x", marks: [{ type: "link", attrs: { href } }] }],
+      });
+    for (const href of ["data:text/html,x", "  JAVASCRIPT:alert(1)", "vbscript:x", "file:///etc"]) {
+      expect(validateTiptapDoc(linked(href)).success).toBe(false);
+    }
   });
 
   test("accepts a structurally valid but visibly empty document", () => {
