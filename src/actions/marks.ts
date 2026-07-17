@@ -24,12 +24,27 @@ export async function setMark(
     return ok();
   }
   if (status !== "watched" && status !== "want") return fail("无效的标记");
-  await db
-    .insert(userMarks)
-    .values({ userId: session.user.id, filmId, status })
-    .onConflictDoUpdate({
-      target: [userMarks.userId, userMarks.filmId],
-      set: { status, updatedAt: new Date() },
-    });
+  try {
+    await db
+      .insert(userMarks)
+      .values({ userId: session.user.id, filmId, status })
+      .onConflictDoUpdate({
+        target: [userMarks.userId, userMarks.filmId],
+        set: { status, updatedAt: new Date() },
+      });
+  } catch (error) {
+    // user_marks.film_id is ON DELETE RESTRICT now, so marking a film in
+    // the instant it is deleted surfaces as an FK violation rather than a
+    // silently vanishing row — return a result instead of a masked throw.
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: string }).code === "23503"
+    ) {
+      return fail("影片不存在，可能已被删除");
+    }
+    throw error;
+  }
   return ok();
 }
