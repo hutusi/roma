@@ -2,6 +2,7 @@ import { getSchema, type JSONContent, rewriteUnknownContent } from "@tiptap/core
 import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import { z } from "zod";
 import { essayExtensions } from "@/components/tiptap/extensions";
+import { isAllowedLinkHref } from "@/components/tiptap/link-policy";
 
 /**
  * The image sources the renderer will actually draw — our own uploads or
@@ -12,21 +13,6 @@ export const isAllowedImageSrc = (src: unknown): src is string =>
   typeof src === "string" &&
   (src.startsWith("/uploads/") ||
     /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//.test(src));
-
-/**
- * The SAVE gate blocks dangerous schemes; it deliberately does NOT
- * require http(s). The editor's autolink legitimately produces mailto:
- * links from typed email addresses (and legacy content may hold them),
- * so an http(s) allowlist here would make those documents unsaveable —
- * while the renderer already degrades any non-http(s) link to plain
- * text (render.tsx anchors http(s) only, and the editor never opens
- * links on click). Storage safety is this blocklist; display policy is
- * the renderer's allowlist.
- */
-const hasDangerousScheme = (href: unknown): boolean => {
-  if (typeof href !== "string") return true;
-  return /^\s*(?:javascript|data|vbscript|file|blob)\s*:/i.test(href);
-};
 
 const essaySchema = getSchema(essayExtensions);
 
@@ -55,9 +41,9 @@ function unsafeAttributeMessage(value: unknown): string | null {
         mark &&
         typeof mark === "object" &&
         (mark as { type?: unknown }).type === "link" &&
-        hasDangerousScheme((mark as { attrs?: Record<string, unknown> }).attrs?.href)
+        !isAllowedLinkHref((mark as { attrs?: Record<string, unknown> }).attrs?.href)
       ) {
-        return "富文本链接包含不安全的协议";
+        return "富文本链接仅支持 http(s) 或 mailto 地址";
       }
     }
   }

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { essayExtensions } from "./extensions";
+import { isAllowedLinkHref } from "./link-policy";
 
 export type MediaOption = { id: string; url: string; alt: string | null };
 
@@ -136,7 +137,7 @@ export function TiptapEditor({
       editor.chain().focus().unsetLink().run();
       return;
     }
-    if (!/^https?:\/\//.test(url)) return;
+    if (!isAllowedLinkHref(url)) return;
     editor.chain().focus().setLink({ href: url }).run();
   };
 

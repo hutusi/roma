@@ -7,15 +7,13 @@ import { cn } from "@/lib/utils";
 // (hasProse) and this renderer share one definition of "this image draws".
 import { isAllowedImageSrc } from "@/lib/validators/prose";
 import { essayExtensions } from "./extensions";
+import { isAllowedLinkHref } from "./link-policy";
 
 /**
  * The only way Tiptap JSON reaches public HTML. Renders through the
  * SAME extension list the editor uses; unknown nodes/marks render
  * nothing rather than guessing. No dangerouslySetInnerHTML anywhere.
  */
-
-const isSafeHref = (href: unknown): href is string =>
-  typeof href === "string" && /^https?:\/\//i.test(href);
 
 export function TiptapContent({
   doc,
@@ -63,7 +61,7 @@ export function TiptapContent({
         markMapping: {
           link: ({ mark, children }) => {
             const href = mark.attrs?.href;
-            if (!isSafeHref(href)) return <>{children}</>;
+            if (!isAllowedLinkHref(href)) return <>{children}</>;
             return (
               <a href={href} target="_blank" rel="noopener noreferrer">
                 {children}
