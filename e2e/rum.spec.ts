@@ -56,6 +56,12 @@ test("an invalid beacon is rejected and stored nothing", async ({ request }) => 
 
 test("successful ingest opportunistically removes RUM older than 90 days", async ({ request }) => {
   await queryOne("delete from maintenance_runs where job = 'rum-retention' returning job");
+  // Fixed-PK fixtures: clear leftovers first so a rerun against a
+  // persistent database doesn't fail on a duplicate key (the 89-day row
+  // deliberately survives retention).
+  await queryOne(
+    "delete from rum_events where id in ('rum-old-e2e', 'rum-recent-e2e') returning id",
+  );
   await queryOne(
     "insert into rum_events (id, metric, value, path, is_china, created_at) values ('rum-old-e2e', 'LCP', 1, '/e2e/rum-old', false, now() - interval '91 days') returning id",
   );
