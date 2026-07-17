@@ -37,6 +37,21 @@ describe("validateImageUpload", () => {
     );
   });
 
+  test("rejects a truncated image whose header still parses", async () => {
+    // metadata() reads only the header, so a file cut mid-stream passes
+    // it; the full pixel decode is what catches the truncation. A large
+    // noisy JPEG so the byte cut lands inside compressed pixel data.
+    const raw = Buffer.alloc(400 * 400 * 3);
+    for (let i = 0; i < raw.length; i++) raw[i] = (i * 31) % 251;
+    const whole = await sharp(raw, { raw: { width: 400, height: 400, channels: 3 } })
+      .jpeg()
+      .toBuffer();
+    const truncated = whole.subarray(0, Math.floor(whole.length / 2));
+    await expect(
+      validateImageUpload(fileFrom(truncated, "image/jpeg"), 1024 * 1024),
+    ).rejects.toThrow("图片文件已损坏或格式无效");
+  });
+
   test("recognizes AVIF through its container brands", async () => {
     const bytes = await sharp({
       create: { width: 2, height: 2, channels: 3, background: "#f00" },
