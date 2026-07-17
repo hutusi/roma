@@ -204,6 +204,15 @@ test("concurrent invitation grants preserve the highest role", async ({ browser 
       await release();
     }
 
+    // Both accepts are for an EXISTING account, so both forms end on the
+    // sign-in redirect — that's the signal both server actions returned,
+    // i.e. both transactions committed. Restoring the fixture role before
+    // that could hand the slower claim a 'user' role to re-raise.
+    await Promise.all([
+      editorPage.waitForURL(/\/zh\/sign-in/),
+      adminPage.waitForURL(/\/zh\/sign-in/),
+    ]);
+
     await expect
       .poll(async () =>
         queryOne<{ role: string }>("select role from users where id = $1", [user.id]),
@@ -260,14 +269,29 @@ test("publishing a list cannot race a member film's unpublish into an empty live
       await release();
     }
 
-    // Whichever wins the lock, the invariant holds: the film is a draft,
+    // Wait for BOTH flows to finish (each surfaces an outcome toast —
+    // the publish either succeeds or shows the refusal) before asserting,
+    // so the check can't pass on the initial state while the loser's
+    // transaction is still in flight.
+    await Promise.all([
+      expect(listPage.locator("[data-sonner-toast]").last()).toBeVisible(),
+      expect(filmPage.locator("[data-sonner-toast]").last()).toBeVisible(),
+    ]);
+
+    // Whichever won the lock, the invariant holds: the film is a draft,
     // so the list must not be live. (Publish-first gets auto-unpublished;
-    // unpublish-first makes the publish refuse.)
+    // unpublish-first makes the publish refuse.) Asserting the film too
+    // proves the unpublish actually committed — otherwise the
+    // unpublish-first order would pass on the list's initial draft state
+    // without demonstrating anything.
     await expect
       .poll(async () =>
-        queryOne<{ status: string }>("select status from curated_lists where id = $1", [listId]),
+        queryOne<{ film: string; list: string }>(
+          "select f.status as film, l.status as list from films f, curated_lists l where f.id = $1 and l.id = $2",
+          [filmId, listId],
+        ),
       )
-      .toEqual({ status: "draft" });
+      .toEqual({ film: "draft", list: "draft" });
   } finally {
     await context.close();
     await queryOne("delete from curated_lists where id = $1 returning id", [listId]);
