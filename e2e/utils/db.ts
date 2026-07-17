@@ -24,8 +24,15 @@ export async function holdDatabaseLock(
 ): Promise<() => Promise<void>> {
   const client = new Client({ connectionString: url });
   await client.connect();
-  await client.query("begin");
-  await client.query(sql, params);
+  try {
+    await client.query("begin");
+    await client.query(sql, params);
+  } catch (error) {
+    // The release callback was never handed out, so nothing else will
+    // ever close this connection — do it here or leak it for the run.
+    await client.end().catch(() => {});
+    throw error;
+  }
   let released = false;
   return async () => {
     if (released) return;
