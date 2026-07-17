@@ -1,7 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { after, type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/db";
 import { rumEvents } from "@/db/schema";
+import { runRumRetention } from "@/lib/rum-retention";
 
 /**
  * Ingest for the real-user Web Vitals beacon (see RumBeacon). Anonymous
@@ -69,6 +70,12 @@ export async function POST(request: NextRequest) {
     console.error("rum ingest insert failed:", error);
     return new NextResponse(null, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
+
+  after(async () => {
+    await runRumRetention().catch((error) => {
+      console.error("rum retention cleanup failed:", error);
+    });
+  });
 
   return new NextResponse(null, { status: 204, headers: { "Cache-Control": "no-store" } });
 }

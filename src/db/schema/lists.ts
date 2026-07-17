@@ -1,4 +1,5 @@
-import { index, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { check, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { users } from "./auth";
 import { contentStatus } from "./enums";
 import { films } from "./films";
@@ -43,7 +44,7 @@ export const curatedListItems = pgTable(
       .references(() => curatedLists.id, { onDelete: "cascade" }),
     filmId: text()
       .notNull()
-      .references(() => films.id, { onDelete: "cascade" }),
+      .references(() => films.id, { onDelete: "restrict" }),
     position: integer().notNull(),
     /** 入选理由 — per-film reasoning (Tiptap JSON). */
     reasoning: jsonb().$type<TiptapDoc>(),
@@ -51,6 +52,7 @@ export const curatedListItems = pgTable(
   },
   (t) => [
     unique("curated_list_items_unique").on(t.listId, t.filmId),
-    index("curated_list_items_list_idx").on(t.listId, t.position),
+    unique("curated_list_items_position_unique").on(t.listId, t.position),
+    check("curated_list_items_position_nonnegative", sql`${t.position} >= 0`),
   ],
 );

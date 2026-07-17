@@ -22,5 +22,6 @@ The full OpenNext/Workers migration remains gated separately on the external ris
 
 - "Measured, not assumed" becomes a dashboard-able rule; the two triggers are decoupled, so egress cost never forces a premature platform move and vice-versa.
 - Beacon rows are anonymous, sampled (~20%), and land in the primary Postgres — a small, bounded write cost we accept for the signal (revisit sampling if volume grows).
+- Raw beacon rows are retained for 90 days. A successful ingest schedules `after()` cleanup; a database-backed daily claim ensures concurrent requests perform at most one deletion pass, and the claim only advances when deletion commits. No aggregate archive is kept, so the effective window is 90–91 days.
 - The China segment is only trustworthy while we serve directly from Vercel: it derives from `x-vercel-ip-country`, which a proxied (orange-cloud) Cloudflare in front would break. ADR 0011 keeps the domain DNS-only until that signal is re-sourced, so this trigger stays measurable.
 - The thresholds are deliberately conservative placeholders; update this ADR as the baseline docs accumulate real numbers.

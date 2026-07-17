@@ -1,6 +1,5 @@
 import { z } from "zod";
-
-const tiptapDoc = z.record(z.string(), z.unknown()).nullable().optional();
+import { hasProse, tiptapDocSchema } from "./prose";
 
 export const directorFormSchema = z.object({
   slug: z
@@ -10,9 +9,9 @@ export const directorFormSchema = z.object({
   name: z.string().min(1, "姓名不能为空"),
   nameZh: z.string().optional(),
   bio: z.string().optional(),
-  careerEssay: tiptapDoc,
+  careerEssay: tiptapDocSchema,
   bioEn: z.string().optional(),
-  careerEssayEn: tiptapDoc,
+  careerEssayEn: tiptapDocSchema,
 });
 
 export type DirectorFormValues = z.infer<typeof directorFormSchema>;
@@ -26,9 +25,13 @@ export type DirectorFormValues = z.infer<typeof directorFormSchema>;
  */
 export function publishProblems(director: {
   bio: string | null;
-  careerEssay: unknown | null;
+  careerEssay: Record<string, unknown> | null;
 }): string[] {
-  return director.bio?.trim() || director.careerEssay ? [] : ["发布前请填写简介或创作历程"];
+  // careerEssay must actually render — an empty { type: "doc" } used to
+  // pass as a truthy object while rendering nothing (see hasProse).
+  return director.bio?.trim() || hasProse(director.careerEssay)
+    ? []
+    : ["发布前请填写简介或创作历程"];
 }
 
 /** Gate for the English edition; the career essay stays optional. */
@@ -36,10 +39,15 @@ export function publishEnProblems(director: { bioEn: string | null }): string[] 
   return director.bioEn?.trim() ? [] : ["缺少英文简介（bioEn）"];
 }
 
-export const viewingOrderSchema = z.array(
-  z.object({
-    filmId: z.string(),
-    note: z.string().optional(),
-    noteEn: z.string().optional(),
-  }),
-);
+export const viewingOrderSchema = z
+  .array(
+    z.object({
+      filmId: z.string(),
+      note: z.string().optional(),
+      noteEn: z.string().optional(),
+    }),
+  )
+  .refine(
+    (items) => items.length === new Set(items.map((item) => item.filmId)).size,
+    "观看顺序不能重复包含同一部影片",
+  );

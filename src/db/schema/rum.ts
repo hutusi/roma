@@ -1,4 +1,4 @@
-import { boolean, index, pgTable, real, text } from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
 import { createdAt, primaryId } from "./helpers";
 
 /**
@@ -43,3 +43,9 @@ export const rumEvents = pgTable(
   // written on the app's hottest path (/api/rum, ~1 row per page view).
   (t) => [index("rum_events_created_idx").on(t.createdAt)],
 );
+
+/** Singleton-style timestamps for opportunistic maintenance jobs. */
+export const maintenanceRuns = pgTable("maintenance_runs", {
+  job: text().primaryKey(),
+  lastSuccessfulRunAt: timestamp({ withTimezone: true }).notNull(),
+});

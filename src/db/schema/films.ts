@@ -117,7 +117,7 @@ export const directorViewingItems = pgTable(
       .references(() => directors.id, { onDelete: "cascade" }),
     filmId: text()
       .notNull()
-      .references(() => films.id, { onDelete: "cascade" }),
+      .references(() => films.id, { onDelete: "restrict" }),
     position: integer().notNull(),
     note: text(),
     noteEn: text(),

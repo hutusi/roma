@@ -20,6 +20,7 @@
  * public/uploads (local dev). Attribution lives on /about.
  */
 import { and, eq, inArray } from "drizzle-orm";
+import { validateImageUpload } from "../lib/image-upload";
 import { storeImage } from "../lib/storage";
 import {
   codePointLength,
@@ -65,9 +66,18 @@ async function tmdbGet(path: string, token: string): Promise<Record<string, unkn
 async function downloadAsFile(url: string, name: string): Promise<File> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`image ${res.status}`);
-  const type = res.headers.get("content-type") ?? "image/jpeg";
+  const type = (res.headers.get("content-type") ?? "image/jpeg").split(";", 1)[0];
   const ext = type.includes("png") ? "png" : type.includes("webp") ? "webp" : "jpg";
   return new File([await res.arrayBuffer()], `${name}.${ext}`, { type });
+}
+
+async function downloadAndStoreImage(url: string, name: string) {
+  const image = await validateImageUpload(await downloadAsFile(url, name), 20 * 1024 * 1024);
+  return {
+    ...(await storeImage(image, "seed")),
+    width: image.width,
+    height: image.height,
+  };
 }
 
 async function main() {
@@ -310,9 +320,9 @@ async function seedImages(
       }
       const rows: (typeof media.$inferInsert)[] = [];
       if (typeof hit.poster_path === "string") {
-        const stored = await storeImage(
-          await downloadAsFile(`${TMDB_IMG}${hit.poster_path}`, `${f.slug}-poster`),
-          "seed",
+        const stored = await downloadAndStoreImage(
+          `${TMDB_IMG}${hit.poster_path}`,
+          `${f.slug}-poster`,
         );
         rows.push({
           ...stored,
@@ -324,9 +334,9 @@ async function seedImages(
         });
       }
       if (typeof hit.backdrop_path === "string") {
-        const stored = await storeImage(
-          await downloadAsFile(`${TMDB_IMG}${hit.backdrop_path}`, `${f.slug}-hero`),
-          "seed",
+        const stored = await downloadAndStoreImage(
+          `${TMDB_IMG}${hit.backdrop_path}`,
+          `${f.slug}-hero`,
         );
         rows.push({
           ...stored,
@@ -375,10 +385,7 @@ async function seedImages(
         counts.imagesSkipped++;
         continue;
       }
-      const stored = await storeImage(
-        await downloadAsFile(`${TMDB_IMG}${profile}`, `${d.slug}-portrait`),
-        "seed",
-      );
+      const stored = await downloadAndStoreImage(`${TMDB_IMG}${profile}`, `${d.slug}-portrait`);
       await db.insert(media).values({
         ...stored,
         alt: `${d.nameZh}肖像`,

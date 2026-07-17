@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { tiptapDocSchema } from "./prose";
 
 /**
  * Counts code points, not UTF-16 units, so CJK text measures correctly.
@@ -13,8 +14,6 @@ export const EDITORIAL_NOTE_MAX = 500;
 /** ≈ the zh 200–500 code-point band, converted to English words. */
 export const EDITORIAL_NOTE_EN_MIN = 120;
 export const EDITORIAL_NOTE_EN_MAX = 350;
-
-const tiptapDoc = z.record(z.string(), z.unknown()).nullable().optional();
 
 export const castMemberSchema = z.object({
   name: z.string().min(1, "姓名不能为空"),
@@ -53,7 +52,7 @@ export const filmFormSchema = z.object({
       (s) => !s || codePointLength(s) <= EDITORIAL_NOTE_MAX,
       `编辑札记不能超过 ${EDITORIAL_NOTE_MAX} 字`,
     ),
-  essay: tiptapDoc,
+  essay: tiptapDocSchema,
   editorialNoteEn: z
     .string()
     .optional()
@@ -61,10 +60,12 @@ export const filmFormSchema = z.object({
       (s) => !s || wordCount(s) <= EDITORIAL_NOTE_EN_MAX,
       `英文札记不能超过 ${EDITORIAL_NOTE_EN_MAX} 词`,
     ),
-  essayEn: tiptapDoc,
+  essayEn: tiptapDocSchema,
   cast: z.array(castMemberSchema),
   watchLinks: z.array(watchLinkSchema),
-  directorIds: z.array(z.string()),
+  directorIds: z
+    .array(z.string())
+    .refine((ids) => ids.length === new Set(ids).size, "不能重复关联同一位导演"),
 });
 
 export type FilmFormValues = z.infer<typeof filmFormSchema>;
@@ -75,7 +76,9 @@ export function publishProblems(film: {
   directorCount: number;
 }): string[] {
   const problems: string[] = [];
-  const note = film.editorialNote ?? "";
+  // Trim first: 200 spaces used to pass the raw code-point gate while
+  // rendering as nothing.
+  const note = (film.editorialNote ?? "").trim();
   const len = codePointLength(note);
   if (len < EDITORIAL_NOTE_MIN || len > EDITORIAL_NOTE_MAX) {
     problems.push(`编辑札记需 ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX} 字（当前 ${len} 字）`);

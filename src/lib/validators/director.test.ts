@@ -13,11 +13,23 @@ describe("publishProblems", () => {
   });
 
   test("accepts a career essay alone — the bio stays optional", () => {
-    expect(publishProblems({ bio: null, careerEssay: { type: "doc" } })).toEqual([]);
+    const essay = {
+      type: "doc",
+      content: [{ type: "paragraph", content: [{ type: "text", text: "意大利导演。" }] }],
+    };
+    expect(publishProblems({ bio: null, careerEssay: essay })).toEqual([]);
   });
 
   test("rejects both empty", () => {
     expect(publishProblems({ bio: null, careerEssay: null })).toHaveLength(1);
+  });
+
+  test("rejects a careerEssay that renders nothing — an empty doc is not content", () => {
+    // Used to pass: a truthy object satisfied the old `|| careerEssay`.
+    expect(publishProblems({ bio: null, careerEssay: { type: "doc" } })).toHaveLength(1);
+    expect(publishProblems({ bio: null, careerEssay: { type: "doc", content: [] } })).toHaveLength(
+      1,
+    );
   });
 
   test("rejects a whitespace-only bio, which is not a bio", () => {

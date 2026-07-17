@@ -2,10 +2,20 @@
 
 import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
+import { lockDirectors, lockFilm } from "@/db/locks";
 import type { TiptapDoc } from "@/db/schema";
-import { filmDirectors, films, filmWatchLinks } from "@/db/schema";
+import {
+  curatedListItems,
+  directorViewingItems,
+  filmDirectors,
+  films,
+  filmWatchLinks,
+  userListItems,
+  userMarks,
+} from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
-import { revalidateFilm } from "@/lib/revalidate";
+import { unpublishEmptiedLists } from "@/lib/list-invariants";
+import { revalidateFilm, revalidateList } from "@/lib/revalidate";
 import {
   type FilmFormValues,
   filmFormSchema,
@@ -15,12 +25,25 @@ import {
 } from "@/lib/validators/film";
 import { type ActionResult, fail, ok } from "./result";
 
+function hasSlug<T extends { slug?: string }>(value: T): value is T & { slug: string } {
+  return typeof value.slug === "string";
+}
+
 function isUniqueViolation(error: unknown): boolean {
   return (
     typeof error === "object" &&
     error !== null &&
     "code" in error &&
     (error as { code?: string }).code === "23505"
+  );
+}
+
+function isForeignKeyViolation(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: string }).code === "23503"
   );
 }
 
@@ -54,43 +77,42 @@ export async function saveFilm(
     castJson: v.cast,
   };
 
-  const existing = id
-    ? await db.query.films.findFirst({
-        where: eq(films.id, id),
-        columns: { slug: true, status: true, statusEn: true },
-      })
-    : undefined;
-  // A slug change must also ping the URL the film used to live at, so
-  // engines recrawl it and find the 404.
-  const previousSlug = existing?.slug;
-  const isPublic = existing?.status === "published";
-
-  // Saving a draft is deliberately laxer than publishing one, but that
-  // laxness was only ever meant for drafts: nothing re-checked the gate
-  // once a row was live, so a published film could be saved down to a
-  // 3-character note or zero directors and stay published, with the
-  // public queries trusting the status flag. Re-run the gate the row
-  // already passed, and reject the save rather than silently
-  // unpublishing work the editor didn't ask to take down.
-  if (isPublic) {
-    const problems = publishProblems({
-      editorialNote: v.editorialNote || null,
-      directorCount: v.directorIds.length,
-    });
-    if (problems.length) return fail(`影片已发布，不能存为不可发布的状态：${problems.join("；")}`);
-  }
-  if (existing?.statusEn === "published") {
-    const problems = publishEnProblems({
-      titleEn: v.titleEn || null,
-      editorialNoteEn: v.editorialNoteEn || null,
-    });
-    if (problems.length)
-      return fail(`英文版已发布，不能存为不可发布的状态：${problems.join("；")}`);
-  }
-
   try {
-    const filmId = await db.transaction(async (tx) => {
+    const outcome = await db.transaction(async (tx) => {
+      const lockedDirectors = await lockDirectors(tx, v.directorIds);
+      if (lockedDirectors.length !== new Set(v.directorIds).size) {
+        return { error: "关联的导演不存在，可能已被删除" } as const;
+      }
+
       let targetId = id;
+      const existing = targetId ? await lockFilm(tx, targetId) : undefined;
+      if (targetId && !existing) return { error: "影片不存在，可能已被删除" } as const;
+      const previousSlug = existing?.slug;
+      const isPublic = existing?.status === "published";
+
+      if (isPublic) {
+        const problems = publishProblems({
+          editorialNote: v.editorialNote || null,
+          directorCount: v.directorIds.length,
+        });
+        if (problems.length) {
+          return {
+            error: `影片已发布，不能存为不可发布的状态：${problems.join("；")}`,
+          } as const;
+        }
+      }
+      if (existing?.statusEn === "published") {
+        const problems = publishEnProblems({
+          titleEn: v.titleEn || null,
+          editorialNoteEn: v.editorialNoteEn || null,
+        });
+        if (problems.length) {
+          return {
+            error: `英文版已发布，不能存为不可发布的状态：${problems.join("；")}`,
+          } as const;
+        }
+      }
+
       if (targetId) {
         await tx.update(films).set(row).where(eq(films.id, targetId));
         await tx.delete(filmWatchLinks).where(eq(filmWatchLinks.filmId, targetId));
@@ -121,8 +143,10 @@ export async function saveFilm(
           })),
         );
       }
-      return targetId;
+      return { id: targetId, previousSlug, isPublic } as const;
     });
+    if ("error" in outcome && outcome.error) return fail(outcome.error);
+    const { id: filmId, previousSlug, isPublic } = outcome;
     revalidateFilm(v.slug, { notify: isPublic });
     if (isPublic && previousSlug && previousSlug !== v.slug) {
       revalidateFilm(previousSlug, { notify: true });
@@ -130,71 +154,125 @@ export async function saveFilm(
     return ok({ id: filmId });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
+    if (isForeignKeyViolation(error)) return fail("关联的导演不存在，可能已被删除");
     throw error;
   }
 }
 
 export async function publishFilm(id: string): Promise<ActionResult> {
   await requireEditor();
-  const film = await db.query.films.findFirst({ where: eq(films.id, id) });
-  if (!film) return fail("影片不存在");
-  const [{ n: directorCount }] = await db
-    .select({ n: count() })
-    .from(filmDirectors)
-    .where(eq(filmDirectors.filmId, id));
-  const problems = publishProblems({
-    editorialNote: film.editorialNote,
-    directorCount,
+  const outcome = await db.transaction(async (tx) => {
+    const film = await lockFilm(tx, id);
+    if (!film) return { error: "影片不存在" } as const;
+    const [{ n: directorCount }] = await tx
+      .select({ n: count() })
+      .from(filmDirectors)
+      .where(eq(filmDirectors.filmId, id));
+    const problems = publishProblems({ editorialNote: film.editorialNote, directorCount });
+    if (problems.length) return { error: problems.join("；") } as const;
+    await tx
+      .update(films)
+      .set({ status: "published", publishedAt: film.publishedAt ?? new Date() })
+      .where(eq(films.id, id));
+    return { slug: film.slug } as const;
   });
-  if (problems.length) return fail(problems.join("；"));
-  await db
-    .update(films)
-    .set({ status: "published", publishedAt: film.publishedAt ?? new Date() })
-    .where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: true });
+  if (!hasSlug(outcome)) return fail(outcome.error ?? "影片操作失败");
+  revalidateFilm(outcome.slug, { notify: true });
   return ok();
 }
 
 export async function publishFilmEn(id: string): Promise<ActionResult> {
   await requireEditor();
-  const film = await db.query.films.findFirst({ where: eq(films.id, id) });
-  if (!film) return fail("影片不存在");
-  const problems = publishEnProblems({
-    titleEn: film.titleEn,
-    editorialNoteEn: film.editorialNoteEn,
+  const outcome = await db.transaction(async (tx) => {
+    const film = await lockFilm(tx, id);
+    if (!film) return { error: "影片不存在" } as const;
+    const problems = publishEnProblems({
+      titleEn: film.titleEn,
+      editorialNoteEn: film.editorialNoteEn,
+    });
+    if (problems.length) return { error: problems.join("；") } as const;
+    await tx
+      .update(films)
+      .set({ statusEn: "published", publishedEnAt: film.publishedEnAt ?? new Date() })
+      .where(eq(films.id, id));
+    return { slug: film.slug, isPublic: film.status === "published" } as const;
   });
-  if (problems.length) return fail(problems.join("；"));
-  await db
-    .update(films)
-    .set({ statusEn: "published", publishedEnAt: film.publishedEnAt ?? new Date() })
-    .where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: film.status === "published" });
+  if (!hasSlug(outcome)) return fail(outcome.error ?? "影片操作失败");
+  revalidateFilm(outcome.slug, { notify: outcome.isPublic });
   return ok();
 }
 
 export async function unpublishFilmEn(id: string): Promise<ActionResult> {
   await requireEditor();
-  const film = await db.query.films.findFirst({ where: eq(films.id, id) });
-  if (!film) return fail("影片不存在");
-  await db.update(films).set({ statusEn: "draft" }).where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: film.status === "published" });
+  const outcome = await db.transaction(async (tx) => {
+    const film = await lockFilm(tx, id);
+    if (!film) return null;
+    await tx.update(films).set({ statusEn: "draft" }).where(eq(films.id, id));
+    return { slug: film.slug, isPublic: film.status === "published" };
+  });
+  if (!outcome) return fail("影片不存在");
+  revalidateFilm(outcome.slug, { notify: outcome.isPublic });
   return ok();
 }
 
 export async function unpublishFilm(id: string): Promise<ActionResult> {
   await requireEditor();
-  const film = await db.query.films.findFirst({ where: eq(films.id, id) });
-  if (!film) return fail("影片不存在");
-  await db.update(films).set({ status: "draft" }).where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: film.status === "published" });
+  const outcome = await db.transaction(async (tx) => {
+    const film = await lockFilm(tx, id);
+    if (!film) return null;
+    await tx.update(films).set({ status: "draft" }).where(eq(films.id, id));
+    const emptiedLists = await unpublishEmptiedLists(tx, id);
+    return { slug: film.slug, wasPublic: film.status === "published", emptiedLists };
+  });
+  if (!outcome) return fail("影片不存在");
+  revalidateFilm(outcome.slug, { notify: outcome.wasPublic });
+  for (const list of outcome.emptiedLists) {
+    revalidateList(list.slug, { notify: list.wasPublic });
+  }
   return ok();
 }
 
 export async function deleteFilm(id: string): Promise<ActionResult> {
   await requireEditor();
-  const film = await db.query.films.findFirst({ where: eq(films.id, id) });
-  if (!film) return fail("影片不存在");
-  await db.delete(films).where(eq(films.id, id));
-  revalidateFilm(film.slug, { notify: film.status === "published" });
-  return ok();
+  try {
+    const outcome = await db.transaction(async (tx) => {
+      const film = await lockFilm(tx, id);
+      if (!film) return { error: "影片不存在" } as const;
+      if (film.status === "published") return { error: "影片已发布，请先下架再删除" } as const;
+
+      const [{ lists }] = await tx
+        .select({ lists: count() })
+        .from(curatedListItems)
+        .where(eq(curatedListItems.filmId, id));
+      const [{ viewingOrders }] = await tx
+        .select({ viewingOrders: count() })
+        .from(directorViewingItems)
+        .where(eq(directorViewingItems.filmId, id));
+      const [{ userLists }] = await tx
+        .select({ userLists: count() })
+        .from(userListItems)
+        .where(eq(userListItems.filmId, id));
+      const [{ marks }] = await tx
+        .select({ marks: count() })
+        .from(userMarks)
+        .where(eq(userMarks.filmId, id));
+      if (lists + viewingOrders + userLists + marks > 0) {
+        const parts = [
+          lists > 0 && `${lists} 个片单`,
+          viewingOrders > 0 && `${viewingOrders} 个导演观看顺序`,
+          userLists > 0 && `${userLists} 个用户清单`,
+          marks > 0 && `${marks} 条用户标记`,
+        ].filter(Boolean);
+        return { error: `影片仍被 ${parts.join("、")}引用，请先移除引用` } as const;
+      }
+      await tx.delete(films).where(eq(films.id, id));
+      return { slug: film.slug } as const;
+    });
+    if ("error" in outcome && outcome.error) return fail(outcome.error);
+    revalidateFilm(outcome.slug);
+    return ok();
+  } catch (error) {
+    if (isForeignKeyViolation(error)) return fail("影片仍被其他内容引用，请刷新后移除引用");
+    throw error;
+  }
 }

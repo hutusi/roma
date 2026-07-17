@@ -86,7 +86,7 @@ export function ListForm({
       <section className="space-y-5 border-line border-t pt-5">
         <h2 className="font-bold">英文版 · English Edition</h2>
         <p className="text-ink-muted text-xs">
-          发布英文版需要英文标题；未翻译的影片在英文页降级为不可点击的条目。
+          发布英文版需要英文标题；未翻译的影片在英文页链接到翻译占位页，并省略入选理由。
         </p>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">

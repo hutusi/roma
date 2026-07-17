@@ -39,6 +39,11 @@ describe("publishProblems", () => {
     expect(problems.join()).toContain("0 字");
   });
 
+  test("rejects a whitespace-only note — 200 spaces render as nothing", () => {
+    const problems = publishProblems({ editorialNote: " ".repeat(200), ...base });
+    expect(problems.join()).toContain("0 字");
+  });
+
   test("requires at least one director", () => {
     const problems = publishProblems({ editorialNote: note(300), directorCount: 0 });
     expect(problems.join()).toContain("导演");
