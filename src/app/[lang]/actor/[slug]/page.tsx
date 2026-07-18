@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { personPageMetadata, personStaticParams, renderPersonPage } from "@/lib/person-route";
 
 export async function generateStaticParams() {
-  return personStaticParams("director");
+  return personStaticParams("actor");
 }
 
 export async function generateMetadata({
@@ -10,13 +10,13 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string; slug: string }>;
 }): Promise<Metadata> {
-  return personPageMetadata("director", params);
+  return personPageMetadata("actor", params);
 }
 
-export default async function PublicDirectorPage({
+export default async function PublicActorPage({
   params,
 }: {
   params: Promise<{ lang: string; slug: string }>;
 }) {
-  return renderPersonPage("director", params);
+  return renderPersonPage("actor", params);
 }

@@ -23,7 +23,7 @@ export const viewport: Viewport = { themeColor: "#faf8f4" };
 const NAV = [
   { href: "/admin", label: "仪表盘" },
   { href: "/admin/films", label: "影片" },
-  { href: "/admin/directors", label: "导演" },
+  { href: "/admin/people", label: "人物" },
   { href: "/admin/lists", label: "片单" },
   { href: "/admin/media", label: "媒体库" },
   { href: "/admin/users", label: "用户", adminOnly: true },

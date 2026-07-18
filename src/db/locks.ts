@@ -1,28 +1,28 @@
 import "server-only";
 import { asc, eq, inArray } from "drizzle-orm";
 import type { db } from "@/db";
-import { curatedLists, directors, films, userLists, users } from "@/db/schema";
+import { curatedLists, films, people, userLists, users } from "@/db/schema";
 
 export type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 /**
- * Canonical editorial lock order: directors → films → lists. Callers that
+ * Canonical editorial lock order: people → films → lists. Callers that
  * need more than one kind must follow it; multi-row helpers sort by id so
  * two requests cannot acquire the same set in opposite order.
  */
-export async function lockDirector(tx: DbTransaction, id: string) {
-  const [row] = await tx.select().from(directors).where(eq(directors.id, id)).for("update");
+export async function lockPerson(tx: DbTransaction, id: string) {
+  const [row] = await tx.select().from(people).where(eq(people.id, id)).for("update");
   return row;
 }
 
-export async function lockDirectors(tx: DbTransaction, ids: string[]) {
+export async function lockPeople(tx: DbTransaction, ids: string[]) {
   const uniqueIds = [...new Set(ids)].sort();
   if (uniqueIds.length === 0) return [];
   return tx
-    .select({ id: directors.id })
-    .from(directors)
-    .where(inArray(directors.id, uniqueIds))
-    .orderBy(asc(directors.id))
+    .select({ id: people.id })
+    .from(people)
+    .where(inArray(people.id, uniqueIds))
+    .orderBy(asc(people.id))
     .for("update");
 }
 

@@ -15,7 +15,7 @@ mock.module("@/lib/indexnow", () => ({
   pingIndexNow: (p: string[]) => pinged.push(p),
 }));
 
-const { revalidateDirector, revalidateFilm, revalidateList, revalidateMedia } = await import(
+const { revalidateFilm, revalidateList, revalidateMedia, revalidatePerson } = await import(
   "./revalidate"
 );
 
@@ -58,16 +58,21 @@ describe("revalidateFilm", () => {
   });
 });
 
-describe("revalidateDirector", () => {
+describe("revalidatePerson", () => {
   test("sweeps the public tree, so film cards carrying the name refresh too", () => {
-    revalidateDirector("tarkovsky");
+    revalidatePerson("tarkovsky", "director");
     expectFullSweep();
     expect(pinged).toEqual([]);
   });
 
-  test("notifies the director page when asked", () => {
-    revalidateDirector("tarkovsky", { notify: true });
+  test("notifies the person page when asked", () => {
+    revalidatePerson("tarkovsky", "director", { notify: true });
     expect(pinged).toEqual([["/director/tarkovsky"]]);
+  });
+
+  test("an actor-primary person notifies the /actor canonical URL", () => {
+    revalidatePerson("masina", "actor", { notify: true });
+    expect(pinged).toEqual([["/actor/masina"]]);
   });
 });
 

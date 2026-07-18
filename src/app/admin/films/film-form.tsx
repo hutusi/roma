@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { type FilmFormValues, filmFormSchema } from "@/lib/validators/film";
 
-export type DirectorOption = { id: string; name: string; nameZh: string | null };
+export type PersonOption = { id: string; name: string; nameZh: string | null };
 
 const ASPECT_RATIOS = ["1.37:1", "1.33:1", "1.66:1", "1.85:1", "2.35:1"];
 const REGIONS = [
@@ -41,13 +41,13 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export function FilmForm({
   filmId,
   defaultValues,
-  directors,
+  people,
   media,
   tmdbEnabled = false,
 }: {
   filmId: string | null;
   defaultValues: FilmFormValues;
-  directors: DirectorOption[];
+  people: PersonOption[];
   media: MediaOption[];
   tmdbEnabled?: boolean;
 }) {
@@ -118,7 +118,13 @@ export function FilmForm({
                 year: d.year ?? getValues("year"),
                 runtimeMinutes: d.runtimeMinutes ?? "",
                 countries: d.countries,
-                cast: d.cast.map((m) => ({ ...m, zhName: "" })),
+                cast: d.cast.map((m) => ({
+                  name: m.name,
+                  nameZh: "",
+                  character: m.character ?? "",
+                  characterZh: m.characterZh ?? "",
+                  personId: "",
+                })),
               });
               toast.success("已从 TMDB 预填，请核对并补写编辑札记");
             }}
@@ -206,10 +212,10 @@ export function FilmForm({
             name="directorIds"
             render={({ field }) => (
               <div className="flex flex-wrap gap-3 border border-line bg-card p-3">
-                {directors.length === 0 && (
-                  <p className="text-ink-muted text-sm">还没有导演条目——请先在「导演」中创建。</p>
+                {people.length === 0 && (
+                  <p className="text-ink-muted text-sm">还没有人物条目——请先在「人物」中创建。</p>
                 )}
-                {directors.map((d) => (
+                {people.map((d) => (
                   <label key={d.id} className="flex items-center gap-1.5 text-sm">
                     <input
                       type="checkbox"
@@ -282,10 +288,22 @@ export function FilmForm({
       <Section title="演员表">
         {castArray.fields.map((field, i) => (
           <div key={field.id}>
-            <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2">
+            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-2">
               <Input placeholder="姓名（原文）" {...register(`cast.${i}.name`)} />
-              <Input placeholder="中文名" {...register(`cast.${i}.zhName`)} />
-              <Input placeholder="角色" {...register(`cast.${i}.character`)} />
+              <Input placeholder="中文名" {...register(`cast.${i}.nameZh`)} />
+              <Input placeholder="角色（原文）" {...register(`cast.${i}.character`)} />
+              <Input placeholder="中文角色" {...register(`cast.${i}.characterZh`)} />
+              <select
+                className="h-9 border border-input bg-transparent px-2 text-sm"
+                {...register(`cast.${i}.personId`)}
+              >
+                <option value="">（不关联人物）</option>
+                {people.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nameZh ?? p.name}
+                  </option>
+                ))}
+              </select>
               <Button type="button" variant="ghost" onClick={() => castArray.remove(i)}>
                 删除
               </Button>
@@ -296,7 +314,9 @@ export function FilmForm({
         <Button
           type="button"
           variant="outline"
-          onClick={() => castArray.append({ name: "", zhName: "", character: "" })}
+          onClick={() =>
+            castArray.append({ name: "", nameZh: "", character: "", characterZh: "", personId: "" })
+          }
         >
           添加演员
         </Button>

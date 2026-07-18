@@ -4,29 +4,26 @@ import { FilmCard } from "@/components/site/film-card";
 import { LocaleSwitch } from "@/components/site/locale-switch";
 import { TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
-import { type PublicDirector, posterOf } from "@/db/queries/public";
+import { type PublicPerson, posterOf } from "@/db/queries/public";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
+import { personPath } from "@/lib/routes";
 
 /**
- * Pure presentation of a director for both locales; the en edition
+ * Pure presentation of a person for both locales; the en edition
  * shows English prose only, and the query layer has already filtered
  * films/viewing items to the locale's visible subset.
  */
-export function DirectorPage({
-  director,
-  locale = "zh",
-}: {
-  director: PublicDirector;
-  locale?: Locale;
-}) {
-  const dict = getDict(locale).director;
+export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; locale?: Locale }) {
+  const fullDict = getDict(locale);
+  const dict = fullDict.person;
+  const castAs = fullDict.film.castAs;
   const en = locale === "en";
-  const portrait = director.media.find((m) => m.kind === "portrait") ?? director.media[0] ?? null;
-  const displayName = en ? director.name : (director.nameZh ?? director.name);
-  const subName = en ? director.nameZh : director.name;
-  const bio = en ? director.bioEn : director.bio;
-  const careerEssay = en ? director.careerEssayEn : director.careerEssay;
+  const portrait = person.media.find((m) => m.kind === "portrait") ?? person.media[0] ?? null;
+  const displayName = en ? person.name : (person.nameZh ?? person.name);
+  const subName = en ? person.nameZh : person.name;
+  const bio = en ? person.bioEn : person.bio;
+  const careerEssay = en ? person.careerEssayEn : person.careerEssay;
 
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
@@ -35,9 +32,9 @@ export function DirectorPage({
         {subName && subName !== displayName && (
           <p className="mt-3 font-display text-ink-muted text-lg">{subName}</p>
         )}
-        {director.status === "published" && (
+        {person.status === "published" && (
           <p className="mt-3">
-            <LocaleSwitch locale={locale} path={`/director/${director.slug}`} />
+            <LocaleSwitch locale={locale} path={personPath(person)} />
           </p>
         )}
       </header>
@@ -46,7 +43,7 @@ export function DirectorPage({
         <div className="mx-auto mt-10 max-w-md">
           <AcademyFrame
             src={portrait.url}
-            alt={portrait.alt ?? director.name}
+            alt={portrait.alt ?? person.name}
             credit={portrait.credit}
             locale={locale}
           />
@@ -66,11 +63,11 @@ export function DirectorPage({
         </section>
       )}
 
-      {director.viewingItems.length > 0 && (
+      {person.viewingItems.length > 0 && (
         <section className="mt-14">
           <TitleCard eyebrow={en ? undefined : "Suggested Order"} title={dict.suggestedOrder} />
           <ol className="mx-auto mt-8 max-w-xl space-y-6">
-            {director.viewingItems.map((item, index) => {
+            {person.viewingItems.map((item, index) => {
               const filmTitle = en
                 ? (item.film.titleEn ?? item.film.titleOriginal)
                 : item.film.titleZh;
@@ -105,11 +102,11 @@ export function DirectorPage({
         </section>
       )}
 
-      {director.films.length > 0 && (
+      {person.films.length > 0 && (
         <section className="mt-14 pb-4">
           <TitleCard eyebrow={en ? undefined : "Films"} title={dict.films} />
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {director.films.map((film) => {
+            {person.films.map((film) => {
               const poster = posterOf(film.media);
               const title = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
               const subtitle = film.titleOriginal !== title ? film.titleOriginal : null;
@@ -126,6 +123,43 @@ export function DirectorPage({
               );
             })}
           </div>
+        </section>
+      )}
+
+      {person.actedIn.length > 0 && (
+        <section className="mt-14 pb-4">
+          <TitleCard eyebrow={en ? undefined : "As Actor"} title={dict.actedIn} />
+          {/* A film the person also directed repeats here on purpose: this
+              row carries the character, which the directed grid can't. */}
+          <ul className="mx-auto mt-8 max-w-xl space-y-2 text-[15px]">
+            {person.actedIn.map((credit) => {
+              const filmTitle = en
+                ? (credit.film.titleEn ?? credit.film.titleOriginal)
+                : credit.film.titleZh;
+              // Same split as names: /en shows the Latin/original role only.
+              const role = en ? credit.character : (credit.characterZh ?? credit.character);
+              return (
+                <li key={credit.id} className="flex justify-between border-line border-b py-2">
+                  <span>
+                    {credit.film.status === "published" ? (
+                      <Link
+                        href={localePath(locale, `/film/${credit.film.slug}`)}
+                        className="font-bold hover:text-brand"
+                      >
+                        {filmTitle}
+                      </Link>
+                    ) : (
+                      <span className="font-bold">{filmTitle}</span>
+                    )}
+                    <span className="ml-2 font-display text-ink-muted text-sm">
+                      {credit.film.year}
+                    </span>
+                  </span>
+                  {role && <span className="text-ink-muted">{castAs(role)}</span>}
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
     </article>

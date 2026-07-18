@@ -10,7 +10,7 @@ import {
   unpublishFilmEn,
 } from "@/actions/films";
 import { db } from "@/db";
-import { directors, films, media } from "@/db/schema";
+import { films, media, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { FilmForm } from "../film-form";
 import { PublishControls } from "../publish-controls";
@@ -24,17 +24,18 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
     where: eq(films.id, id),
     with: {
       filmDirectors: true,
+      cast: { orderBy: (t, { asc }) => asc(t.position) },
       watchLinks: { orderBy: (t, { asc }) => asc(t.sortOrder) },
       media: { orderBy: (t, { asc }) => asc(t.sortOrder) },
     },
   });
   if (!film) notFound();
 
-  const [directorRows, mediaRows] = await Promise.all([
+  const [personRows, mediaRows] = await Promise.all([
     db
-      .select({ id: directors.id, name: directors.name, nameZh: directors.nameZh })
-      .from(directors)
-      .orderBy(asc(directors.name)),
+      .select({ id: people.id, name: people.name, nameZh: people.nameZh })
+      .from(people)
+      .orderBy(asc(people.name)),
     db
       .select({ id: media.id, url: media.url, alt: media.alt })
       .from(media)
@@ -97,7 +98,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
       <div className="mt-6">
         <FilmForm
           filmId={film.id}
-          directors={directorRows}
+          people={personRows}
           media={mediaRows}
           defaultValues={{
             slug: film.slug,
@@ -115,7 +116,13 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             essay: film.essay ?? null,
             editorialNoteEn: film.editorialNoteEn ?? "",
             essayEn: film.essayEn ?? null,
-            cast: film.castJson ?? [],
+            cast: film.cast.map((m) => ({
+              name: m.name,
+              nameZh: m.nameZh ?? "",
+              character: m.character ?? "",
+              characterZh: m.characterZh ?? "",
+              personId: m.personId ?? "",
+            })),
             watchLinks: film.watchLinks.map((l) => ({
               platform: l.platform,
               region: l.region as "CN" | "HK" | "TW" | "INTL",

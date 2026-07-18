@@ -1,8 +1,9 @@
 import "server-only";
-import type { PublicDirector, PublicFilm, PublicList } from "@/db/queries/public";
+import type { PublicFilm, PublicList, PublicPerson } from "@/db/queries/public";
 import { visibleIn } from "@/db/queries/visibility";
 import { countryToEn } from "@/i18n/countries";
 import { HTML_LANG, type Locale, localePath } from "@/i18n/locales";
+import { personPath } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -22,7 +23,10 @@ const CRUMB = {
   en: { home: "Home", films: "Films", lists: "Curated Lists" },
 } as const;
 
-const JOB_TITLE = { zh: "电影导演", en: "Film director" } as const;
+const JOB_TITLE = {
+  director: { zh: "电影导演", en: "Film director" },
+  actor: { zh: "演员", en: "Actor" },
+} as const;
 
 function abs(locale: Locale, path: string): string {
   return `${SITE_URL}${localePath(locale, path)}`;
@@ -102,7 +106,21 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
       "@type": "Person",
       name: en ? fd.director.name : (fd.director.nameZh ?? fd.director.name),
     };
-    if (linked) person.url = abs(locale, `/director/${fd.director.slug}`);
+    if (linked) person.url = abs(locale, personPath(fd.director));
+    return person;
+  });
+
+  // Unlinked credits still emit a name-only Person; linked ones get a
+  // url only when the person is visible in this locale (strict gate,
+  // same as director Persons above).
+  const actor = film.cast.map((member) => {
+    const person: JsonLdNode = {
+      "@type": "Person",
+      name: en ? member.name : (member.nameZh ?? member.name),
+    };
+    if (member.person && visibleIn(member.person, locale)) {
+      person.url = abs(locale, personPath(member.person));
+    }
     return person;
   });
 
@@ -121,6 +139,7 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
     ...(alternateName.length ? { alternateName } : {}),
     ...(description ? { description } : {}),
     ...(director.length ? { director } : {}),
+    ...(actor.length ? { actor } : {}),
     ...(film.countries.length
       ? {
           countryOfOrigin: film.countries.map((c) => ({
@@ -143,31 +162,31 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
   ]);
 }
 
-export function directorJsonLd(director: PublicDirector, locale: Locale = "zh"): JsonLdNode {
+export function personJsonLd(person: PublicPerson, locale: Locale = "zh"): JsonLdNode {
   const en = locale === "en";
-  const url = abs(locale, `/director/${director.slug}`);
-  const displayName = en ? director.name : (director.nameZh ?? director.name);
-  const subName = en ? director.nameZh : director.name;
-  const description = (en ? director.bioEn : director.bio)?.slice(0, 300);
-  const image = pickImage(director.media);
+  const url = abs(locale, personPath(person));
+  const displayName = en ? person.name : (person.nameZh ?? person.name);
+  const subName = en ? person.nameZh : person.name;
+  const description = (en ? person.bioEn : person.bio)?.slice(0, 300);
+  const image = pickImage(person.media);
   const crumb = CRUMB[locale];
 
-  const person: JsonLdNode = {
+  const personNode: JsonLdNode = {
     "@type": "Person",
     "@id": `${url}#person`,
     name: displayName,
     url,
-    jobTitle: JOB_TITLE[locale],
+    jobTitle: JOB_TITLE[person.primaryRole][locale],
     ...(subName && subName !== displayName ? { alternateName: subName } : {}),
     ...(description ? { description } : {}),
     ...(image ? { image } : {}),
   };
 
   return graph([
-    person,
+    personNode,
     breadcrumb(locale, [
       { name: crumb.home, path: "/" },
-      { name: displayName, path: `/director/${director.slug}` },
+      { name: displayName, path: personPath(person) },
     ]),
   ]);
 }

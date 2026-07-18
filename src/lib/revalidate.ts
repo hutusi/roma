@@ -1,6 +1,7 @@
 import "server-only";
 import { revalidatePath } from "next/cache";
 import { pingIndexNow } from "@/lib/indexnow";
+import { type PersonUrlRole, personPath } from "@/lib/routes";
 
 /**
  * The single seam every editorial mutation invalidates through, so no
@@ -8,7 +9,7 @@ import { pingIndexNow } from "@/lib/indexnow";
  *
  * It sweeps the whole public tree rather than mapping entity → pages.
  * The entity graph is densely cross-linked — a film's title rides on
- * director pages, list pages, film cards and the home page; a list's
+ * person pages, list pages, film cards and the home page; a list's
  * membership rides on the film's "appears in" section; a director's name
  * rides on every film card — so an accurate per-entity map is most of the
  * read layer restated, and the previous attempt at one silently
@@ -61,9 +62,14 @@ export function revalidateFilm(slug: string, { notify = false }: Options = {}) {
   if (notify) pingIndexNow([`/film/${slug}`, "/films", "/"]);
 }
 
-export function revalidateDirector(slug: string, { notify = false }: Options = {}) {
+/** role picks the canonical segment IndexNow is pointed at. */
+export function revalidatePerson(
+  slug: string,
+  role: PersonUrlRole,
+  { notify = false }: Options = {},
+) {
   revalidateEditorialPages();
-  if (notify) pingIndexNow([`/director/${slug}`]);
+  if (notify) pingIndexNow([personPath({ slug, primaryRole: role })]);
 }
 
 export function revalidateList(slug: string, { notify = false }: Options = {}) {
@@ -72,7 +78,7 @@ export function revalidateList(slug: string, { notify = false }: Options = {}) {
 }
 
 /**
- * Media has no public URL of its own — it renders inside film, director
+ * Media has no public URL of its own — it renders inside film, person
  * and list pages — so it invalidates without ever notifying.
  */
 export function revalidateMedia() {

@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import type { PublicDirector, PublicFilm, PublicList } from "@/db/queries/public";
+import type { PublicFilm, PublicList, PublicPerson } from "@/db/queries/public";
 import {
-  directorJsonLd,
   filmJsonLd,
   listJsonLd,
+  personJsonLd,
   serializeJsonLd,
   websiteJsonLd,
 } from "./structured-data";
@@ -12,6 +12,16 @@ const fellini = {
   slug: "fellini",
   name: "Federico Fellini",
   nameZh: "费德里科·费里尼",
+  primaryRole: "director",
+  status: "published",
+  statusEn: "published",
+};
+
+const masina = {
+  slug: "giulietta-masina",
+  name: "Giulietta Masina",
+  nameZh: "茱莉艾塔·玛西娜",
+  primaryRole: "actor",
   status: "published",
   statusEn: "published",
 };
@@ -27,6 +37,16 @@ const film = {
   editorialNote: "zh note",
   editorialNoteEn: "en note",
   filmDirectors: [{ director: fellini }],
+  cast: [
+    {
+      id: "c1",
+      name: "Giulietta Masina",
+      nameZh: "茱莉艾塔·玛西娜",
+      character: "x",
+      person: masina,
+    },
+    { id: "c2", name: "Marcello Mastroianni", nameZh: "马塞洛·马斯楚安尼", person: null },
+  ],
   media: [{ kind: "poster", url: "https://blob.example/8.jpg" }],
 } as unknown as PublicFilm;
 
@@ -67,24 +87,52 @@ describe("filmJsonLd", () => {
     const [movie] = graphOf(filmJsonLd(withDraftEnCoDirector, "en"));
     expect((movie.director as { url?: string }[])[0].url).toBeUndefined();
   });
+
+  test("cast emits actor Persons — linked to /actor for curated people, name-only otherwise", () => {
+    const [movie] = graphOf(filmJsonLd(film, "zh"));
+    const actors = movie.actor as { name: string; url?: string }[];
+    expect(actors[0].name).toBe("茱莉艾塔·玛西娜");
+    expect(actors[0].url).toBe("https://babuban.com/zh/actor/giulietta-masina");
+    expect(actors[1].name).toBe("马塞洛·马斯楚安尼");
+    expect(actors[1].url).toBeUndefined();
+  });
+
+  test("en does not link a cast person who isn't en-published", () => {
+    const withDraftEnActor = {
+      ...film,
+      cast: [{ id: "c1", name: "G. Masina", person: { ...masina, statusEn: "draft" } }],
+    } as unknown as PublicFilm;
+    const [movie] = graphOf(filmJsonLd(withDraftEnActor, "en"));
+    expect((movie.actor as { url?: string }[])[0].url).toBeUndefined();
+  });
 });
 
-describe("directorJsonLd", () => {
+describe("personJsonLd", () => {
   test("emits a Person with name, alternateName, and jobTitle", () => {
-    const director = {
+    const person = {
       slug: "fellini",
       name: "Federico Fellini",
       nameZh: "费德里科·费里尼",
+      primaryRole: "director",
       bio: "生平",
       bioEn: "Life",
       media: [{ kind: "portrait", url: "https://blob.example/f.jpg" }],
-    } as unknown as PublicDirector;
-    const [person] = graphOf(directorJsonLd(director, "en"));
-    expect(person["@type"]).toBe("Person");
-    expect(person.name).toBe("Federico Fellini");
-    expect(person.alternateName).toBe("费德里科·费里尼");
-    expect(person.jobTitle).toBe("Film director");
-    expect(person.url).toBe("https://babuban.com/en/director/fellini");
+    } as unknown as PublicPerson;
+    const [node] = graphOf(personJsonLd(person, "en"));
+    expect(node["@type"]).toBe("Person");
+    expect(node.name).toBe("Federico Fellini");
+    expect(node.alternateName).toBe("费德里科·费里尼");
+    expect(node.jobTitle).toBe("Film director");
+    expect(node.url).toBe("https://babuban.com/en/director/fellini");
+  });
+
+  test("an actor-primary person gets the actor jobTitle and /actor URL", () => {
+    const person = { ...masina, media: [] } as unknown as PublicPerson;
+    const [zhNode] = graphOf(personJsonLd(person, "zh"));
+    expect(zhNode.jobTitle).toBe("演员");
+    expect(zhNode.url).toBe("https://babuban.com/zh/actor/giulietta-masina");
+    const [enNode] = graphOf(personJsonLd(person, "en"));
+    expect(enNode.jobTitle).toBe("Actor");
   });
 });
 

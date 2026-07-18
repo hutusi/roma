@@ -3,7 +3,7 @@ import { getPublishedPersonBySlug } from "@/db/queries/public";
 import { parseLocale } from "@/i18n/params";
 import { OG_SIZE, ogCard } from "@/lib/og";
 
-export const alt = "Babuban director page";
+export const alt = "Babuban actor page";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
@@ -16,7 +16,7 @@ export default async function Image({
   parseLocale(lang);
   // zh visibility — see the film OG card (stub pages need a card too).
   const person = await getPublishedPersonBySlug(slug);
-  if (person?.primaryRole !== "director") notFound();
+  if (person?.primaryRole !== "actor") notFound();
   // ogCard renders the title in Playfair (Latin), so use the romanized name.
-  return ogCard({ title: person.name, kicker: "The Directors" });
+  return ogCard({ title: person.name, kicker: "The Actors" });
 }

@@ -5,21 +5,21 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { saveDirector } from "@/actions/directors";
+import { savePerson } from "@/actions/people";
 import { type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { type DirectorFormValues, directorFormSchema } from "@/lib/validators/director";
+import { type PersonFormValues, personFormSchema } from "@/lib/validators/person";
 
-export function DirectorForm({
-  directorId,
+export function PersonForm({
+  personId,
   defaultValues,
   media,
 }: {
-  directorId: string | null;
-  defaultValues: DirectorFormValues;
+  personId: string | null;
+  defaultValues: PersonFormValues;
   media: MediaOption[];
 }) {
   const router = useRouter();
@@ -29,21 +29,21 @@ export function DirectorForm({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<DirectorFormValues>({
-    resolver: zodResolver(directorFormSchema),
+  } = useForm<PersonFormValues>({
+    resolver: zodResolver(personFormSchema),
     defaultValues,
   });
 
   const onSubmit = handleSubmit(async (values) => {
     setSubmitting(true);
-    const result = await saveDirector(directorId, values);
+    const result = await savePerson(personId, values);
     setSubmitting(false);
     if (!result.ok) {
       toast.error(result.error);
       return;
     }
     toast.success("已保存");
-    if (!directorId) router.push(`/admin/directors/${result.data.id}`);
+    if (!personId) router.push(`/admin/people/${result.data.id}`);
     router.refresh();
   });
 
@@ -64,6 +64,19 @@ export function DirectorForm({
         <Label htmlFor="slug">slug *</Label>
         <Input id="slug" placeholder="federico-fellini" {...register("slug")} />
         {errors.slug && <p className="text-destructive text-xs">{errors.slug.message}</p>}
+      </div>
+      <div className="space-y-1.5">
+        <Label>类型（决定公开页地址：/director 或 /actor）</Label>
+        <div className="flex gap-4 text-sm">
+          <label className="flex items-center gap-1.5">
+            <input type="radio" value="director" {...register("primaryRole")} />
+            导演
+          </label>
+          <label className="flex items-center gap-1.5">
+            <input type="radio" value="actor" {...register("primaryRole")} />
+            演员
+          </label>
+        </div>
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="bio">简介（纯文本）</Label>

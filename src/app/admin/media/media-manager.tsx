@@ -24,18 +24,18 @@ export type MediaRow = {
   credit: string;
   kind: string;
   filmId: string | null;
-  directorId: string | null;
+  personId: string | null;
 };
 
 export function MediaManager({
   rows,
   films,
-  directors,
+  people,
   activeFilmId,
 }: {
   rows: MediaRow[];
   films: { id: string; title: string }[];
-  directors: { id: string; name: string }[];
+  people: { id: string; name: string }[];
   activeFilmId: string | null;
 }) {
   const router = useRouter();
@@ -117,15 +117,15 @@ export function MediaManager({
           </select>
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="directorId">关联导演</Label>
+          <Label htmlFor="personId">关联人物</Label>
           <select
-            id="directorId"
-            name="directorId"
+            id="personId"
+            name="personId"
             className="h-9 w-full border border-input bg-transparent px-2 text-sm"
             defaultValue=""
           >
             <option value="">（不关联）</option>
-            {directors.map((d) => (
+            {people.map((d) => (
               <option key={d.id} value={d.id}>
                 {d.name}
               </option>

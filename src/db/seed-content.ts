@@ -34,12 +34,13 @@ import { db } from "./index";
 import {
   curatedListItems,
   curatedLists,
-  directors,
   directorViewingItems,
+  filmCast,
   filmDirectors,
   films,
   filmWatchLinks,
   media,
+  people,
   users,
 } from "./schema";
 import { seedDirectors } from "./seed-data/directors";
@@ -88,7 +89,7 @@ async function main() {
 
   // ── Directors ──────────────────────────────────────────────────────
   const insertedDirectors = await db
-    .insert(directors)
+    .insert(people)
     .values(
       seedDirectors.map((d) => ({
         slug: d.slug,
@@ -105,16 +106,16 @@ async function main() {
         publishedEnAt: d.bioEn ? new Date(NOW) : null,
       })),
     )
-    .onConflictDoNothing({ target: directors.slug })
-    .returning({ slug: directors.slug });
+    .onConflictDoNothing({ target: people.slug })
+    .returning({ slug: people.slug });
   counts.directors = insertedDirectors.length;
 
   const directorRows = await db
-    .select({ id: directors.id, slug: directors.slug })
-    .from(directors)
+    .select({ id: people.id, slug: people.slug })
+    .from(people)
     .where(
       inArray(
-        directors.slug,
+        people.slug,
         seedDirectors.map((d) => d.slug),
       ),
     );
@@ -140,7 +141,6 @@ async function main() {
         essay: f.essay ?? null,
         editorialNoteEn: f.editorialNoteEn ?? null,
         essayEn: f.essayEn ?? null,
-        castJson: f.cast ?? null,
         status: "published" as const,
         statusEn: (f.editorialNoteEn && f.titleEn ? "published" : "draft") as "published" | "draft",
         publishedAt: publishedAtFor(i),
@@ -172,6 +172,21 @@ async function main() {
     }),
   );
   if (fdValues.length) await db.insert(filmDirectors).values(fdValues).onConflictDoNothing();
+
+  // ── 演员表 — only for newly-created films (no natural unique key) ────
+  const castValues = seedFilms
+    .filter((f) => newFilmSlugs.has(f.slug) && f.cast?.length)
+    .flatMap((f) =>
+      (f.cast ?? []).map((m, position) => ({
+        filmId: filmIdBySlug.get(f.slug) as string,
+        position,
+        name: m.name,
+        nameZh: m.zhName ?? null,
+        character: m.character ?? null,
+        characterZh: m.characterZh ?? null,
+      })),
+    );
+  if (castValues.length) await db.insert(filmCast).values(castValues);
 
   // ── 哪里能看 — only for newly-created films (no natural unique key) ──
   const wlValues = seedFilms
@@ -363,7 +378,7 @@ async function seedImages(
   for (const d of seedDirectors) {
     const directorId = directorIdBySlug.get(d.slug);
     if (!directorId) continue;
-    if (await db.query.media.findFirst({ where: eq(media.directorId, directorId) })) continue;
+    if (await db.query.media.findFirst({ where: eq(media.personId, directorId) })) continue;
     try {
       let person: Record<string, unknown> | undefined;
       if (d.tmdbPersonId) {
@@ -391,7 +406,7 @@ async function seedImages(
         alt: `${d.nameZh}肖像`,
         credit: "TMDB",
         kind: "portrait",
-        directorId,
+        personId: directorId,
         sortOrder: 0,
       });
       counts.images++;

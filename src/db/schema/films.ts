@@ -9,10 +9,10 @@ import {
   timestamp,
   unique,
 } from "drizzle-orm/pg-core";
-import { directors } from "./directors";
 import { contentStatus } from "./enums";
 import { createdAt, primaryId, updatedAt } from "./helpers";
-import type { CastMember, TiptapDoc } from "./types";
+import { people } from "./people";
+import type { TiptapDoc } from "./types";
 
 export const films = pgTable(
   "films",
@@ -47,7 +47,6 @@ export const films = pgTable(
      */
     editorialNoteEn: text(),
     essayEn: jsonb().$type<TiptapDoc>(),
-    castJson: jsonb().$type<CastMember[]>(),
     status: contentStatus().notNull().default("draft"),
     /**
      * English edition lives on the same row (house style: explicit
@@ -76,13 +75,42 @@ export const filmDirectors = pgTable(
       .references(() => films.id, { onDelete: "cascade" }),
     directorId: text()
       .notNull()
-      .references(() => directors.id, { onDelete: "cascade" }),
+      .references(() => people.id, { onDelete: "cascade" }),
     position: integer().notNull().default(0),
   },
   (t) => [
     primaryKey({ columns: [t.filmId, t.directorId] }),
     index("film_directors_director_idx").on(t.directorId),
   ],
+);
+
+/**
+ * 演员表 — curated cast credits, one row per billing position. Name and
+ * character are denormalized on the row so a credit stands on its own;
+ * personId optionally links a curated person and degrades to the plain
+ * credit (SET NULL) if that person is ever deleted.
+ */
+export const filmCast = pgTable(
+  "film_cast",
+  {
+    id: primaryId(),
+    filmId: text()
+      .notNull()
+      .references(() => films.id, { onDelete: "cascade" }),
+    position: integer().notNull().default(0),
+    /** Latin/original name, verbatim from curation. */
+    name: text().notNull(),
+    nameZh: text(),
+    /**
+     * Role name, split like name/nameZh (a character is a name, not
+     * prose): character = Latin/original, what /en shows; /zh prefers
+     * characterZh and falls back to character.
+     */
+    character: text(),
+    characterZh: text(),
+    personId: text().references(() => people.id, { onDelete: "set null" }),
+  },
+  (t) => [index("film_cast_film_idx").on(t.filmId), index("film_cast_person_idx").on(t.personId)],
 );
 
 /** 哪里能看 — manually maintained, one row per platform/region. */
@@ -114,7 +142,7 @@ export const directorViewingItems = pgTable(
     id: primaryId(),
     directorId: text()
       .notNull()
-      .references(() => directors.id, { onDelete: "cascade" }),
+      .references(() => people.id, { onDelete: "cascade" }),
     filmId: text()
       .notNull()
       .references(() => films.id, { onDelete: "restrict" }),

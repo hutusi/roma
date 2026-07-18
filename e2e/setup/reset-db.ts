@@ -43,11 +43,12 @@ const { db } = await import("@/db");
 const {
   curatedListItems,
   curatedLists,
-  directors,
+  filmCast,
   filmDirectors,
   films,
   filmWatchLinks,
   media,
+  people,
   users,
 } = await import("@/db/schema");
 const { auth } = await import("@/lib/auth");
@@ -89,7 +90,7 @@ const NOTE =
 const NOTE_EN = Array.from({ length: 130 }, (_, i) => `word${i + 1}`).join(" ");
 
 const [fellini] = await db
-  .insert(directors)
+  .insert(people)
   .values({
     slug: "federico-fellini",
     name: "Federico Fellini",
@@ -101,6 +102,38 @@ const [fellini] = await db
     statusEn: "published",
     publishedAt: new Date(),
     publishedEnAt: new Date(),
+  })
+  .returning();
+
+// Actor-primary people: canonical URL /actor/[slug]; /director 308s there.
+const [masina] = await db
+  .insert(people)
+  .values({
+    slug: "giulietta-masina",
+    name: "Giulietta Masina",
+    nameZh: "茱莉艾塔·玛西娜",
+    primaryRole: "actor",
+    bio: "意大利演员，费里尼的银幕缪斯。",
+    bioEn: "Italian actor, Fellini's screen muse.",
+    status: "published",
+    statusEn: "published",
+    publishedAt: new Date(),
+    publishedEnAt: new Date(),
+  })
+  .returning();
+
+// zh-only on purpose: /en/actor/anouk-aimee must render the
+// translation-pending stub (and only at the canonical segment).
+const [anouk] = await db
+  .insert(people)
+  .values({
+    slug: "anouk-aimee",
+    name: "Anouk Aimée",
+    nameZh: "阿努克·艾梅",
+    primaryRole: "actor",
+    bio: "法国演员。",
+    status: "published",
+    publishedAt: new Date(),
   })
   .returning();
 
@@ -125,7 +158,6 @@ const filmRows = await db
         p("光影承担了原本属于色彩的全部叙事责任。"),
         quote("告别本来就不该匆忙。"),
       ]),
-      castJson: [{ name: "Marcello Mastroianni", zhName: "马塞洛·马斯楚安尼", character: "Guido" }],
       // The en edition of the e2e corpus: la-strada below stays zh-only
       // so the subset 404 is testable.
       editorialNoteEn: NOTE_EN,
@@ -179,6 +211,46 @@ await db
   .insert(filmDirectors)
   .values(filmRows.map((film) => ({ filmId: film.id, directorId: fellini.id, position: 0 })));
 
+await db.insert(filmCast).values([
+  // Unlinked credit (no person row) — renders as plain text.
+  {
+    filmId: bySlug["otto-e-mezzo"].id,
+    position: 0,
+    name: "Marcello Mastroianni",
+    nameZh: "马塞洛·马斯楚安尼",
+    character: "Guido",
+  },
+  // Linked to a zh-only person — /en cast link lands on her stub. The
+  // zh-only role must render on /zh and stay off /en.
+  {
+    filmId: bySlug["otto-e-mezzo"].id,
+    position: 1,
+    name: "Anouk Aimée",
+    nameZh: "阿努克·艾梅",
+    characterZh: "路易莎",
+    personId: anouk.id,
+  },
+  // Linked to the zh+en person on the en-published film, so her /en
+  // acted-in section has a visible member.
+  {
+    filmId: bySlug["otto-e-mezzo"].id,
+    position: 2,
+    name: "Giulietta Masina",
+    nameZh: "茱莉艾塔·玛西娜",
+    personId: masina.id,
+  },
+  // Both role forms: /zh prefers the zh one, /en shows the Latin one.
+  {
+    filmId: bySlug["la-strada"].id,
+    position: 0,
+    name: "Giulietta Masina",
+    nameZh: "茱莉艾塔·玛西娜",
+    character: "Gelsomina",
+    characterZh: "杰尔索米娜",
+    personId: masina.id,
+  },
+]);
+
 await db.insert(filmWatchLinks).values({
   filmId: bySlug["otto-e-mezzo"].id,
   platform: "Criterion Channel",
@@ -207,7 +279,7 @@ await db.insert(media).values([
     alt: "Federico Fellini",
     credit: "TMDB",
     kind: "portrait",
-    directorId: fellini.id,
+    personId: fellini.id,
     sortOrder: 0,
   },
 ]);

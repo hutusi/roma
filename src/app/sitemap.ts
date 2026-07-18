@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
 import {
-  getPublishedDirectorSlugs,
   getPublishedFilmSlugs,
   getPublishedListSlugs,
+  getPublishedPersonSlugs,
 } from "@/db/queries/public";
 import { languageAlternates } from "@/i18n/alternates";
 import { localePath } from "@/i18n/locales";
+import { personPath } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 
 /** Absolute-URL hreflang map (sitemaps don't get metadataBase). */
@@ -29,17 +30,17 @@ function latest(rows: { updatedAt: Date }[]): Date | undefined {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [filmSlugs, directorSlugs, listSlugs, enFilmSlugs, enDirectorSlugs, enListSlugs] =
+  const [filmSlugs, personSlugs, listSlugs, enFilmSlugs, enPersonSlugs, enListSlugs] =
     await Promise.all([
       getPublishedFilmSlugs(),
-      getPublishedDirectorSlugs(),
+      getPublishedPersonSlugs(),
       getPublishedListSlugs(),
       getPublishedFilmSlugs("en"),
-      getPublishedDirectorSlugs("en"),
+      getPublishedPersonSlugs("en"),
       getPublishedListSlugs("en"),
     ]);
   const enFilms = new Set(enFilmSlugs.map(({ slug }) => slug));
-  const enDirectors = new Set(enDirectorSlugs.map(({ slug }) => slug));
+  const enPeople = new Set(enPersonSlugs.map(({ slug }) => slug));
   const enLists = new Set(enListSlugs.map(({ slug }) => slug));
 
   // Each en page gets its own entry; both locales' entries carry the
@@ -90,8 +91,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...filmSlugs.flatMap(({ slug, updatedAt }) =>
       entity(`/film/${slug}`, enFilms.has(slug), "monthly", 0.7, updatedAt),
     ),
-    ...directorSlugs.flatMap(({ slug, updatedAt }) =>
-      entity(`/director/${slug}`, enDirectors.has(slug), "monthly", 0.6, updatedAt),
+    // Canonical segment per person; the other segment 308s and stays out.
+    ...personSlugs.flatMap((person) =>
+      entity(personPath(person), enPeople.has(person.slug), "monthly", 0.6, person.updatedAt),
     ),
   ];
 }

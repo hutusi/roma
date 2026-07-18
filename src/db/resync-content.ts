@@ -17,7 +17,7 @@
  */
 import { eq } from "drizzle-orm";
 import { db } from "./index";
-import { directors, films } from "./schema";
+import { films, people } from "./schema";
 import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
 
@@ -111,7 +111,7 @@ async function main() {
         console.log(`  director ${slug}: ⚠ not in seed-data — skipped`);
         continue;
       }
-      const cur = await tx.query.directors.findFirst({ where: eq(directors.slug, slug) });
+      const cur = await tx.query.people.findFirst({ where: eq(people.slug, slug) });
       if (!cur) {
         console.log(`  director ${slug}: ⚠ not in DB — skipped`);
         continue;
@@ -130,7 +130,7 @@ async function main() {
       console.log(`  director ${slug}: ${diff ? "differs → resync" : "already in sync"}`);
       if (diff) {
         changed++;
-        if (APPLY) await tx.update(directors).set(next).where(eq(directors.slug, slug));
+        if (APPLY) await tx.update(people).set(next).where(eq(people.slug, slug));
       }
     }
   });

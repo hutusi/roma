@@ -11,30 +11,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { db } from "@/db";
-import { directors } from "@/db/schema";
+import { people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 
-export const metadata = { title: "导演管理" };
+export const metadata = { title: "人物管理" };
 
-export default async function AdminDirectorsPage() {
+export default async function AdminPeoplePage() {
   await requireEditor();
-  const rows = await db.query.directors.findMany({
-    orderBy: desc(directors.updatedAt),
+  const rows = await db.query.people.findMany({
+    orderBy: desc(people.updatedAt),
     limit: 200,
   });
 
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">导演</h1>
+        <h1 className="font-bold text-xl">人物</h1>
         <Button asChild>
-          <Link href="/admin/directors/new">新建导演</Link>
+          <Link href="/admin/people/new">新建人物</Link>
         </Button>
       </div>
       <Table className="mt-6">
         <TableHeader>
           <TableRow>
             <TableHead>姓名</TableHead>
+            <TableHead>类型</TableHead>
             <TableHead>slug</TableHead>
             <TableHead>状态</TableHead>
             <TableHead>更新时间</TableHead>
@@ -44,10 +45,13 @@ export default async function AdminDirectorsPage() {
           {rows.map((d) => (
             <TableRow key={d.id}>
               <TableCell>
-                <Link href={`/admin/directors/${d.id}`} className="font-medium hover:text-brand">
+                <Link href={`/admin/people/${d.id}`} className="font-medium hover:text-brand">
                   {d.nameZh ?? d.name}
                 </Link>
                 <span className="ml-2 text-ink-muted text-xs">{d.name}</span>
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline">{d.primaryRole === "actor" ? "演员" : "导演"}</Badge>
               </TableCell>
               <TableCell className="text-ink-muted">{d.slug}</TableCell>
               <TableCell>
@@ -65,8 +69,8 @@ export default async function AdminDirectorsPage() {
           ))}
           {rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4} className="text-center text-ink-muted">
-                还没有导演条目
+              <TableCell colSpan={5} className="text-center text-ink-muted">
+                还没有人物条目
               </TableCell>
             </TableRow>
           )}

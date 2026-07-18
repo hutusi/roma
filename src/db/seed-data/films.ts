@@ -212,8 +212,8 @@ export const seedFilms: SeedFilm[] = [
       ),
     ]),
     cast: [
-      { name: "Toshiro Mifune", zhName: "三船敏郎", character: "菊千代" },
-      { name: "Takashi Shimura", zhName: "志村乔", character: "岛田勘兵卫" },
+      { name: "Toshiro Mifune", zhName: "三船敏郎", characterZh: "菊千代" },
+      { name: "Takashi Shimura", zhName: "志村乔", characterZh: "岛田勘兵卫" },
     ],
     directorSlugs: ["akira-kurosawa"],
     watchLinks: [
@@ -240,8 +240,8 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "A murder in a grove, and four irreconcilable accounts of it — including the dead man's own, spoken through a medium. From this simple crime Kurosawa builds a philosophical labyrinth about whether truth can be known at all. For the first time a camera points boldly up through the forest canopy at the sun, the dappled light standing in for the ambiguity of the human heart. Each witness tells the version that guards his own dignity, and the truth recedes forever into the fog of self-interest. “Rashomon” has since become a word the whole world uses for exactly this predicament, in which everyone speaks and no one can be judged. Yet the closing image — a woodcutter taking an abandoned infant into his arms — leaves this doubt about human nature one small, stubborn thread of trust. It was the film that first made the world look at Japanese cinema.",
     cast: [
-      { name: "Toshiro Mifune", zhName: "三船敏郎", character: "多襄丸" },
-      { name: "Machiko Kyō", zhName: "京町子", character: "真砂" },
+      { name: "Toshiro Mifune", zhName: "三船敏郎", characterZh: "多襄丸" },
+      { name: "Machiko Kyō", zhName: "京町子", characterZh: "真砂" },
     ],
     directorSlugs: ["akira-kurosawa"],
   },
@@ -260,7 +260,7 @@ export const seedFilms: SeedFilm[] = [
       "一个庸碌了三十年、只会盖章的市政科长，被诊断出胃癌只剩数月可活。在纵酒与彷徨之后，他决定用最后的时间，顶着官僚系统的层层推诿，把一片臭水沟建成一座小公园。黑泽明用近乎残酷的诚实拷问：人怎样才算真正活过？影片后半程干脆跳到主人公的葬礼，让同事们在酒后争论他究竟做了什么——记忆与推诿之间，一个人的意义被反复称量。志村乔在雪夜的秋千上轻声哼唱的一幕，是电影史上最动人的死亡与新生。它提醒每一个在体制中麻木的人：意义不在别处，只在你肯不肯为一件小事燃尽自己。",
     editorialNoteEn:
       "A municipal section chief who has done nothing for thirty years but stamp documents learns he has stomach cancer and a few months to live. After a bout of drinking and aimless wandering, he resolves to spend what time is left forcing a fetid drainage ditch, against every layer of bureaucratic evasion, into a small neighborhood park. Kurosawa asks with almost cruel honesty what it means to have truly lived. The second half leaps ahead to the man's wake, where his colleagues, drunk, argue over what exactly he accomplished — his significance weighed back and forth between memory and self-serving denial. The image of Takashi Shimura softly singing on a swing in the falling snow is one of the most moving deaths, and rebirths, in all of cinema. It reminds everyone numbed by the machinery of their days that meaning lies nowhere but in whether you are willing to burn yourself down for one small thing.",
-    cast: [{ name: "Takashi Shimura", zhName: "志村乔", character: "渡边勘治" }],
+    cast: [{ name: "Takashi Shimura", zhName: "志村乔", characterZh: "渡边勘治" }],
     directorSlugs: ["akira-kurosawa"],
   },
   {
@@ -278,7 +278,7 @@ export const seedFilms: SeedFilm[] = [
       "一个无名浪人踱进一座被两帮恶势力撕扯的小镇，索性把自己卖给双方，坐看他们自相残杀。黑泽明把西部片的骨架移植到幕末的日本，又用三船敏郎耸肩、抓痒、痞气十足的表演，造出了一个全新的反英雄。风卷尘沙的空镜、干脆利落的杀阵，把冷峻与黑色幽默调成一味。这部电影反过来又催生了莱昂内的《荒野大镖客》，一个形象就此在东西方之间来回投胎，成就了“独行客涤荡罪恶小镇”的永恒母题。冷峻的幽默之下，是黑泽明对暴力与贪婪毫不留情的嘲讽。它证明娱乐性与作者性从来不必二选一。",
     editorialNoteEn:
       "A nameless ronin ambles into a town being torn apart by two rival gangs and calmly hires himself out to both, the better to watch them annihilate each other. Kurosawa transplants the skeleton of the American Western into the last days of the shogunate, and out of Mifune's shoulder-shrugging, itch-scratching, thoroughly disreputable performance he conjures an entirely new kind of anti-hero. Dust blows through empty streets, the swordplay is crisp and sudden, and cool detachment is cut with pitch-black comedy. This film would in turn father Leone's A Fistful of Dollars, sending a single figure to be reincarnated back and forth between East and West and founding the deathless motif of the lone stranger who cleanses a wicked town. Under the cool jokes lies Kurosawa's merciless contempt for violence and greed. It proves once and for all that mass entertainment and personal authorship were never an either/or.",
-    cast: [{ name: "Toshiro Mifune", zhName: "三船敏郎", character: "桑畑三十郎" }],
+    cast: [{ name: "Toshiro Mifune", zhName: "三船敏郎", characterZh: "桑畑三十郎" }],
     directorSlugs: ["akira-kurosawa"],
   },
 
@@ -311,8 +311,8 @@ export const seedFilms: SeedFilm[] = [
       ),
     ]),
     cast: [
-      { name: "Chishū Ryū", zhName: "笠智众", character: "平山周吉" },
-      { name: "Setsuko Hara", zhName: "原节子", character: "纪子" },
+      { name: "Chishū Ryū", zhName: "笠智众", characterZh: "平山周吉" },
+      { name: "Setsuko Hara", zhName: "原节子", characterZh: "纪子" },
     ],
     directorSlugs: ["yasujiro-ozu"],
   },
@@ -332,8 +332,8 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "A daughter who keeps house for her widowed father keeps putting off marriage because she cannot bear to leave him — so he tells a lie, claiming that he means to remarry, in order to push her toward a life of her own. Ozu turns the most ordinary of arranged matches into a deep pool about giving and letting go. Setsuko Hara's smile is bright almost to the point of transparency, and beneath it move reluctance and understanding at once. In the final scene the father sits alone, peeling an apple; the peel drops away unbroken, the room has emptied — and the loneliness of setting one's child free condenses into a single small gesture. Not a line of dialogue names it, yet it carries the whole bittersweet burden of being a parent. Here Ozu's great theme of the daughter's marriage begins, and his most tender heartbreak; the pairing of Hara and Chishu Ryu opens the most moving run of family films he would ever make.",
     cast: [
-      { name: "Chishū Ryū", zhName: "笠智众", character: "曾宫周吉" },
-      { name: "Setsuko Hara", zhName: "原节子", character: "曾宫纪子" },
+      { name: "Chishū Ryū", zhName: "笠智众", characterZh: "曾宫周吉" },
+      { name: "Setsuko Hara", zhName: "原节子", characterZh: "曾宫纪子" },
     ],
     directorSlugs: ["yasujiro-ozu"],
   },
@@ -352,7 +352,7 @@ export const seedFilms: SeedFilm[] = [
       "一个到了适婚年龄的女儿，在家人为她张罗体面婚事时，却出人意料地选择嫁给邻家带着孩子的丧偶医生。小津把镜头对准三代同堂的大家庭，看它如何在一桩婚事中不动声色地走向解体。他不评判任何人的选择，只是让生活像麦子成熟那样自然发生。餐桌、走廊、海边沙丘上的空镜，把聚散离合酿成了淡淡的、带着咸味的诗。结尾老夫妇望着熟透的麦田感叹“我们已经很幸福了”，是小津对无常人生最豁达的注解：家终会散，而正因为会散，此刻的团圆才值得珍重。",
     editorialNoteEn:
       "A daughter of marriageable age, while her family busily arranges a respectable match for her, startles everyone by choosing instead to marry the widowed doctor next door, a man with a young child. Ozu turns his camera on a three-generation household and watches, without ever raising his voice, how a single marriage nudges it toward quiet dissolution. He passes judgment on no one's choice; he simply lets life unfold as naturally as wheat coming ripe. Empty frames of the dining table, the hallway, the dunes by the sea distill all this gathering and parting into a faint, salt-tinged poem. When the old couple, gazing out at the ripened fields, murmur that they have already been very happy, it becomes Ozu's most generous word on impermanence: the family will scatter, and it is precisely because it must scatter that this hour of being together is worth holding close.",
-    cast: [{ name: "Setsuko Hara", zhName: "原节子", character: "间宫纪子" }],
+    cast: [{ name: "Setsuko Hara", zhName: "原节子", characterZh: "间宫纪子" }],
     directorSlugs: ["yasujiro-ozu"],
   },
 

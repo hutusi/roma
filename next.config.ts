@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
       toZh("/about"),
       toZh("/film/:slug"),
       toZh("/director/:slug"),
+      toZh("/actor/:slug"),
       toZh("/list/:slug"),
       toZh("/sign-in"),
       toZh("/sign-up"),

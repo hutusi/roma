@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { directorFormSchema, publishEnProblems, publishProblems } from "./director";
+import { personFormSchema, publishEnProblems, publishProblems } from "./person";
 
 /**
  * These gates guard what stays live, and until now nothing tested them —
- * the zh gate lived inline in publishDirector, so saveDirector never ran
- * it and a published director could be saved with both fields empty.
+ * the zh gate lived inline in publishPerson, so savePerson never ran
+ * it and a published person could be saved with both fields empty.
  */
 
 describe("publishProblems", () => {
@@ -48,18 +48,18 @@ describe("publishEnProblems", () => {
   });
 });
 
-describe("directorFormSchema", () => {
-  const base = { slug: "federico-fellini", name: "Federico Fellini" };
+describe("personFormSchema", () => {
+  const base = { slug: "federico-fellini", name: "Federico Fellini", primaryRole: "director" };
 
-  test("a draft needs only a slug and a name — publishing is the strict step", () => {
-    expect(directorFormSchema.safeParse(base).success).toBe(true);
+  test("a draft needs only a slug, a name and a role — publishing is the strict step", () => {
+    expect(personFormSchema.safeParse(base).success).toBe(true);
   });
 
   test("rejects a slug with uppercase or spaces", () => {
-    expect(directorFormSchema.safeParse({ ...base, slug: "Federico Fellini" }).success).toBe(false);
+    expect(personFormSchema.safeParse({ ...base, slug: "Federico Fellini" }).success).toBe(false);
   });
 
   test("rejects an empty name", () => {
-    expect(directorFormSchema.safeParse({ ...base, name: "" }).success).toBe(false);
+    expect(personFormSchema.safeParse({ ...base, name: "" }).success).toBe(false);
   });
 });

@@ -2,11 +2,12 @@
 
 import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { lockDirectors, lockFilm } from "@/db/locks";
+import { lockFilm, lockPeople } from "@/db/locks";
 import type { TiptapDoc } from "@/db/schema";
 import {
   curatedListItems,
   directorViewingItems,
+  filmCast,
   filmDirectors,
   films,
   filmWatchLinks,
@@ -74,14 +75,20 @@ export async function saveFilm(
     essay: (v.essay as TiptapDoc) ?? null,
     editorialNoteEn: v.editorialNoteEn || null,
     essayEn: (v.essayEn as TiptapDoc) ?? null,
-    castJson: v.cast,
   };
 
   try {
     const outcome = await db.transaction(async (tx) => {
-      const lockedDirectors = await lockDirectors(tx, v.directorIds);
-      if (lockedDirectors.length !== new Set(v.directorIds).size) {
-        return { error: "关联的导演不存在，可能已被删除" } as const;
+      // One sorted multi-row lock over every referenced person (directing
+      // credits + linked cast rows) keeps the people → films order and
+      // closes the FK race with deletePerson.
+      const linkedPersonIds = [
+        ...v.directorIds,
+        ...v.cast.flatMap((m) => (m.personId ? [m.personId] : [])),
+      ];
+      const lockedPeople = await lockPeople(tx, linkedPersonIds);
+      if (lockedPeople.length !== new Set(linkedPersonIds).size) {
+        return { error: "关联的人物不存在，可能已被删除" } as const;
       }
 
       let targetId = id;
@@ -117,9 +124,23 @@ export async function saveFilm(
         await tx.update(films).set(row).where(eq(films.id, targetId));
         await tx.delete(filmWatchLinks).where(eq(filmWatchLinks.filmId, targetId));
         await tx.delete(filmDirectors).where(eq(filmDirectors.filmId, targetId));
+        await tx.delete(filmCast).where(eq(filmCast.filmId, targetId));
       } else {
         const [created] = await tx.insert(films).values(row).returning({ id: films.id });
         targetId = created.id;
+      }
+      if (v.cast.length) {
+        await tx.insert(filmCast).values(
+          v.cast.map((m, i) => ({
+            filmId: targetId,
+            position: i,
+            name: m.name,
+            nameZh: m.nameZh || null,
+            character: m.character || null,
+            characterZh: m.characterZh || null,
+            personId: m.personId || null,
+          })),
+        );
       }
       if (v.watchLinks.length) {
         await tx.insert(filmWatchLinks).values(
@@ -154,7 +175,7 @@ export async function saveFilm(
     return ok({ id: filmId });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
-    if (isForeignKeyViolation(error)) return fail("关联的导演不存在，可能已被删除");
+    if (isForeignKeyViolation(error)) return fail("关联的人物不存在，可能已被删除");
     throw error;
   }
 }
