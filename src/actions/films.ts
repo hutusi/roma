@@ -137,6 +137,7 @@ export async function saveFilm(
             name: m.name,
             nameZh: m.nameZh || null,
             character: m.character || null,
+            characterZh: m.characterZh || null,
             personId: m.personId || null,
           })),
         );

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { queryOne } from "./utils/db";
 
 // maxRedirects: 0 so we assert the 308 hop itself, not the destination.
 const hop = { maxRedirects: 0 } as const;
@@ -13,7 +14,17 @@ test("actor page renders bio and acted-in filmography with characters", async ({
     "href",
     "/zh/film/la-strada",
   );
-  await expect(page.getByText("饰 Gelsomina")).toBeVisible();
+  // zh prefers the zh role form when both exist.
+  await expect(page.getByText("饰 杰尔索米娜")).toBeVisible();
+});
+
+test("role names split by locale: zh-only roles never reach /en", async ({ page }) => {
+  await page.goto("/zh/film/otto-e-mezzo");
+  await expect(page.getByText("饰 路易莎")).toBeVisible();
+
+  await page.goto("/en/film/otto-e-mezzo");
+  await expect(page.getByText("as Guido")).toBeVisible();
+  await expect(page.getByText("路易莎")).toHaveCount(0);
 });
 
 test("the non-canonical person segment 308s to the canonical one", async ({ request }) => {
@@ -81,6 +92,17 @@ test("sitemap lists person canonical URLs with the en subset rule", async ({ req
 
 test.describe("admin cast round-trip", () => {
   test.use({ storageState: "e2e/.auth/admin.json" });
+
+  test("en person preview applies the en visibility rules", async ({ page }) => {
+    const masina = await queryOne<{ id: string }>("select id from people where slug = $1", [
+      "giulietta-masina",
+    ]);
+    await page.goto(`/admin/preview/person/${masina?.id}?locale=en`);
+    await expect(page.getByText("Films as Actor")).toBeVisible();
+    await expect(page.getByRole("link", { name: "8½", exact: true })).toBeVisible();
+    // zh-only film: the published /en page hides it, so the preview must too.
+    await expect(page.getByText("La strada")).toHaveCount(0);
+  });
 
   test("cast rows persist with a person link and render linked on the film page", async ({
     page,

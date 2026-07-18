@@ -18,7 +18,9 @@ export const EDITORIAL_NOTE_EN_MAX = 350;
 export const castMemberSchema = z.object({
   name: z.string().min(1, "姓名不能为空"),
   nameZh: z.string().optional(),
+  /** Latin/original role name — the /en form; zh prefers characterZh. */
   character: z.string().optional(),
+  characterZh: z.string().optional(),
   /** Optional link to a curated person ("" means unlinked in the form). */
   personId: z.string().optional(),
 });

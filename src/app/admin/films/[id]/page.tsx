@@ -120,6 +120,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
               name: m.name,
               nameZh: m.nameZh ?? "",
               character: m.character ?? "",
+              characterZh: m.characterZh ?? "",
               personId: m.personId ?? "",
             })),
             watchLinks: film.watchLinks.map((l) => ({

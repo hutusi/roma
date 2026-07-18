@@ -163,6 +163,8 @@ export function FilmPage({
               // translation-pending stub (ADR 0012 sanctions this).
               const linked = member.person && member.person.status === "published";
               const label = en ? member.name : (member.nameZh ?? member.name);
+              // Same split as names: /en shows the Latin/original role only.
+              const role = en ? member.character : (member.characterZh ?? member.character);
               return (
                 <li key={member.id} className="flex justify-between border-line border-b py-1.5">
                   <span>
@@ -182,9 +184,7 @@ export function FilmPage({
                       </span>
                     )}
                   </span>
-                  {member.character && (
-                    <span className="text-ink-muted">{dict.castAs(member.character)}</span>
-                  )}
+                  {role && <span className="text-ink-muted">{dict.castAs(role)}</span>}
                 </li>
               );
             })}

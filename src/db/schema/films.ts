@@ -101,7 +101,13 @@ export const filmCast = pgTable(
     /** Latin/original name, verbatim from curation. */
     name: text().notNull(),
     nameZh: text(),
+    /**
+     * Role name, split like name/nameZh (a character is a name, not
+     * prose): character = Latin/original, what /en shows; /zh prefers
+     * characterZh and falls back to character.
+     */
     character: text(),
+    characterZh: text(),
     personId: text().references(() => people.id, { onDelete: "set null" }),
   },
   (t) => [index("film_cast_film_idx").on(t.filmId), index("film_cast_person_idx").on(t.personId)],

@@ -17,7 +17,7 @@ export type TmdbPrefill = {
   year?: number;
   runtimeMinutes?: number;
   countries: string;
-  cast: { name: string; character?: string }[];
+  cast: { name: string; character?: string; characterZh?: string }[];
 };
 
 const TMDB = "https://api.themoviedb.org/3";
@@ -39,9 +39,10 @@ export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbP
 
   try {
     const id = tmdbId.trim();
-    const [movie, translations, credits] = await Promise.all([
+    const [movie, translations, credits, creditsZh] = await Promise.all([
       get(`/movie/${id}?language=zh-CN`),
       get(`/movie/${id}/translations`),
+      get(`/movie/${id}/credits?language=en-US`),
       get(`/movie/${id}/credits?language=zh-CN`),
     ]);
 
@@ -67,9 +68,20 @@ export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbP
           ?.map((c) => c.name)
           .join("、") ?? "",
       cast:
-        (credits.cast as { name: string; character?: string }[] | undefined)
+        (credits.cast as { id: number; name: string; character?: string }[] | undefined)
           ?.slice(0, 8)
-          .map((m) => ({ name: m.name, character: m.character || undefined })) ?? [],
+          .map((m) => {
+            // zh-CN credits fall back to English when untranslated, so a
+            // value equal to the en one means "no zh role name".
+            const zh = (creditsZh.cast as { id: number; character?: string }[] | undefined)?.find(
+              (c) => c.id === m.id,
+            )?.character;
+            return {
+              name: m.name,
+              character: m.character || undefined,
+              characterZh: zh && zh !== m.character ? zh : undefined,
+            };
+          }) ?? [],
     });
   } catch (error) {
     return fail(

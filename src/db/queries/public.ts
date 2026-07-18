@@ -83,13 +83,13 @@ export async function getPublishedFilmBySlug(slug: string, locale: Locale = "zh"
   return normalizeFilm(film, locale);
 }
 
-export async function getFilmForPreview(id: string) {
+export async function getFilmForPreview(id: string, locale: Locale = "zh") {
   const film = await db.query.films.findFirst({
     where: eq(films.id, id),
     with: filmDetailRelations,
   });
   if (!film) return null;
-  return normalizeFilm(film);
+  return normalizeFilm(film, locale);
 }
 
 /** Ordering is the query's job now; this only resolves the locale view. */
@@ -167,12 +167,12 @@ export async function getPublishedPersonBySlug(slug: string, locale: Locale = "z
   return person ? normalizePerson(person, locale) : null;
 }
 
-export async function getPersonForPreview(id: string) {
+export async function getPersonForPreview(id: string, locale: Locale = "zh") {
   const person = await db.query.people.findFirst({
     where: eq(people.id, id),
     with: personRelations,
   });
-  return person ? normalizePerson(person) : null;
+  return person ? normalizePerson(person, locale) : null;
 }
 
 const personRelations = {

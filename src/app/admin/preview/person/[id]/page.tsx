@@ -17,7 +17,9 @@ export default async function PersonPreviewPage({
   const { id } = await params;
   const { locale: localeParam } = await searchParams;
   const locale = localeParam === "en" ? "en" : "zh";
-  const person = await getPersonForPreview(id);
+  // Locale must reach normalization too, or the en preview keeps films
+  // the published /en page hides.
+  const person = await getPersonForPreview(id, locale);
   if (!person) notFound();
 
   return (

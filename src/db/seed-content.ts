@@ -183,6 +183,7 @@ async function main() {
         name: m.name,
         nameZh: m.zhName ?? null,
         character: m.character ?? null,
+        characterZh: m.characterZh ?? null,
       })),
     );
   if (castValues.length) await db.insert(filmCast).values(castValues);

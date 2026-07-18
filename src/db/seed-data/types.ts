@@ -25,7 +25,9 @@ export type SeedDirector = {
 export type SeedCastMember = {
   name: string;
   zhName?: string;
+  /** Latin/original role name (what /en shows). */
   character?: string;
+  characterZh?: string;
 };
 
 export type SeedWatchLink = {

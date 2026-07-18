@@ -220,13 +220,14 @@ await db.insert(filmCast).values([
     nameZh: "马塞洛·马斯楚安尼",
     character: "Guido",
   },
-  // Linked to a zh-only person — /en cast link lands on her stub.
+  // Linked to a zh-only person — /en cast link lands on her stub. The
+  // zh-only role must render on /zh and stay off /en.
   {
     filmId: bySlug["otto-e-mezzo"].id,
     position: 1,
     name: "Anouk Aimée",
     nameZh: "阿努克·艾梅",
-    character: "Luisa",
+    characterZh: "路易莎",
     personId: anouk.id,
   },
   // Linked to the zh+en person on the en-published film, so her /en
@@ -238,12 +239,14 @@ await db.insert(filmCast).values([
     nameZh: "茱莉艾塔·玛西娜",
     personId: masina.id,
   },
+  // Both role forms: /zh prefers the zh one, /en shows the Latin one.
   {
     filmId: bySlug["la-strada"].id,
     position: 0,
     name: "Giulietta Masina",
     nameZh: "茱莉艾塔·玛西娜",
     character: "Gelsomina",
+    characterZh: "杰尔索米娜",
     personId: masina.id,
   },
 ]);

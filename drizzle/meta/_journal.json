@@ -57,6 +57,13 @@
       "when": 1784345734991,
       "tag": "0007_worried_tempest",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1784348956210,
+      "tag": "0008_steady_rawhide_kid",
+      "breakpoints": true
     }
   ]
 }

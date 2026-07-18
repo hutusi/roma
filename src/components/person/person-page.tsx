@@ -136,6 +136,8 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
               const filmTitle = en
                 ? (credit.film.titleEn ?? credit.film.titleOriginal)
                 : credit.film.titleZh;
+              // Same split as names: /en shows the Latin/original role only.
+              const role = en ? credit.character : (credit.characterZh ?? credit.character);
               return (
                 <li key={credit.id} className="flex justify-between border-line border-b py-2">
                   <span>
@@ -153,9 +155,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
                       {credit.film.year}
                     </span>
                   </span>
-                  {credit.character && (
-                    <span className="text-ink-muted">{castAs(credit.character)}</span>
-                  )}
+                  {role && <span className="text-ink-muted">{castAs(role)}</span>}
                 </li>
               );
             })}

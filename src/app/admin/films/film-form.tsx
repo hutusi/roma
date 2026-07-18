@@ -118,7 +118,13 @@ export function FilmForm({
                 year: d.year ?? getValues("year"),
                 runtimeMinutes: d.runtimeMinutes ?? "",
                 countries: d.countries,
-                cast: d.cast.map((m) => ({ ...m, nameZh: "", personId: "" })),
+                cast: d.cast.map((m) => ({
+                  name: m.name,
+                  nameZh: "",
+                  character: m.character ?? "",
+                  characterZh: m.characterZh ?? "",
+                  personId: "",
+                })),
               });
               toast.success("已从 TMDB 预填，请核对并补写编辑札记");
             }}
@@ -282,10 +288,11 @@ export function FilmForm({
       <Section title="演员表">
         {castArray.fields.map((field, i) => (
           <div key={field.id}>
-            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-2">
+            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-2">
               <Input placeholder="姓名（原文）" {...register(`cast.${i}.name`)} />
               <Input placeholder="中文名" {...register(`cast.${i}.nameZh`)} />
-              <Input placeholder="角色" {...register(`cast.${i}.character`)} />
+              <Input placeholder="角色（原文）" {...register(`cast.${i}.character`)} />
+              <Input placeholder="中文角色" {...register(`cast.${i}.characterZh`)} />
               <select
                 className="h-9 border border-input bg-transparent px-2 text-sm"
                 {...register(`cast.${i}.personId`)}
@@ -307,7 +314,9 @@ export function FilmForm({
         <Button
           type="button"
           variant="outline"
-          onClick={() => castArray.append({ name: "", nameZh: "", character: "", personId: "" })}
+          onClick={() =>
+            castArray.append({ name: "", nameZh: "", character: "", characterZh: "", personId: "" })
+          }
         >
           添加演员
         </Button>
