@@ -30,7 +30,12 @@ export function FilmsFilter({ locale, films }: { locale: Locale; films: FilmCard
     <FilmsView
       locale={locale}
       films={films}
-      selection={{ decade, country: params.get("country") ?? undefined, palette }}
+      selection={{
+        decade,
+        country: params.get("country") ?? undefined,
+        palette,
+        tag: params.get("tag") ?? undefined,
+      }}
     />
   );
 }

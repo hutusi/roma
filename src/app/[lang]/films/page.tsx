@@ -51,6 +51,10 @@ export default async function FilmsIndexPage({ params }: { params: Promise<{ lan
       // display language, so translate once here rather than per compare.
       countries: en ? film.countries.map(countryToEn) : film.countries,
       isBlackAndWhite: film.isBlackAndWhite,
+      tags: film.filmTags.map((ft) => ({
+        slug: ft.tag.slug,
+        label: en ? ft.tag.nameEn : ft.tag.nameZh,
+      })),
     };
   });
 

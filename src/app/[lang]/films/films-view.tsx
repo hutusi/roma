@@ -22,6 +22,7 @@ export const COPY = {
     allPalettes: "全部色彩",
     paletteBw: "黑白",
     paletteColor: "彩色",
+    allTags: "全部标签",
     filter: "筛选",
     empty: "没有符合条件的影片。",
   },
@@ -36,6 +37,7 @@ export const COPY = {
     allPalettes: "Color & B&W",
     paletteBw: "B&W",
     paletteColor: "Color",
+    allTags: "All tags",
     filter: "Filter",
     empty: "No films match this filter yet.",
   },
@@ -55,6 +57,11 @@ export function FilmsView({
 }) {
   const t = COPY[locale];
   const countries = Array.from(new Set(films.flatMap((f) => f.countries))).sort();
+  // Options come from the films themselves (like countries), so the
+  // facet never offers a tag with zero matches.
+  const tagOptions = Array.from(
+    new Map(films.flatMap((f) => f.tags).map((tag) => [tag.slug, tag])).values(),
+  ).sort((a, b) => a.label.localeCompare(b.label, locale));
   const shown = filterFilms(films, selection);
 
   return (
@@ -96,6 +103,20 @@ export function FilmsView({
           <option value="bw">{t.paletteBw}</option>
           <option value="color">{t.paletteColor}</option>
         </select>
+        {tagOptions.length > 0 && (
+          <select
+            name="tag"
+            defaultValue={selection.tag ?? ""}
+            className="h-9 border border-line bg-paper px-2 text-sm"
+          >
+            <option value="">{t.allTags}</option>
+            {tagOptions.map((tag) => (
+              <option key={tag.slug} value={tag.slug}>
+                {tag.label}
+              </option>
+            ))}
+          </select>
+        )}
         <button
           type="submit"
           className="h-9 border border-ink px-4 text-sm tracking-[0.2em] transition-colors hover:border-brand hover:text-brand"

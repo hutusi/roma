@@ -12,13 +12,21 @@ function card(over: Partial<FilmCardData> & Pick<FilmCardData, "id">): FilmCardD
     imageAlt: null,
     countries: [],
     isBlackAndWhite: true,
+    tags: [],
     ...over,
   };
 }
 
+const modernism = { slug: "modernism", label: "现代主义" };
+
 const films = [
-  card({ id: "otto-e-mezzo", year: 1963, countries: ["意大利", "法国"] }),
-  card({ id: "psycho", year: 1960, countries: ["美国"] }),
+  card({ id: "otto-e-mezzo", year: 1963, countries: ["意大利", "法国"], tags: [modernism] }),
+  card({
+    id: "psycho",
+    year: 1960,
+    countries: ["美国"],
+    tags: [{ slug: "suspense", label: "悬疑" }],
+  }),
   card({ id: "giulietta", year: 1965, countries: ["意大利"], isBlackAndWhite: false }),
 ];
 
@@ -48,9 +56,14 @@ describe("filterFilms", () => {
     expect(ids(filterFilms(films, { palette: "color" }))).toEqual(["giulietta"]);
   });
 
+  test("tag matches by slug; films without the tag drop out", () => {
+    expect(ids(filterFilms(films, { tag: "modernism" }))).toEqual(["otto-e-mezzo"]);
+    expect(filterFilms(films, { tag: "film-noir" })).toHaveLength(0);
+  });
+
   test("facets combine with AND", () => {
-    expect(ids(filterFilms(films, { decade: 1960, country: "意大利", palette: "bw" }))).toEqual([
-      "otto-e-mezzo",
-    ]);
+    expect(
+      ids(filterFilms(films, { decade: 1960, country: "意大利", palette: "bw", tag: "modernism" })),
+    ).toEqual(["otto-e-mezzo"]);
   });
 });

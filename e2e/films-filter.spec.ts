@@ -45,6 +45,12 @@ test("?palette filters from a cold URL, both ways", async ({ page }) => {
   await expect(card(page, "giulietta-degli-spiriti")).toHaveCount(0);
 });
 
+test("?tag filters by slug from a cold URL", async ({ page }) => {
+  await page.goto("/zh/films?tag=modernism");
+  await expect(card(page, "otto-e-mezzo")).toBeVisible();
+  await expect(card(page, "la-strada")).toHaveCount(0);
+});
+
 test("submitting the form puts the selection in the URL", async ({ page }) => {
   await page.goto("/zh/films");
   await page.selectOption('select[name="decade"]', "1960");

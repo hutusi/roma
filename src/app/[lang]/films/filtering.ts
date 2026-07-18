@@ -23,18 +23,21 @@ export type FilmCardData = {
   imageAlt: string | null;
   countries: string[];
   isBlackAndWhite: boolean;
+  /** `label` is already localized; `slug` matches the ?tag param in both editions. */
+  tags: { slug: string; label: string }[];
 };
 
 /** ?palette values are locale-neutral literals, shared by both editions. */
 export type Palette = "bw" | "color";
 
-export type Selection = { decade?: number; country?: string; palette?: Palette };
+export type Selection = { decade?: number; country?: string; palette?: Palette; tag?: string };
 
-export function filterFilms(films: FilmCardData[], { decade, country, palette }: Selection) {
+export function filterFilms(films: FilmCardData[], { decade, country, palette, tag }: Selection) {
   return films.filter(
     (f) =>
       (decade === undefined || (f.year >= decade && f.year <= decade + 9)) &&
       (!country || f.countries.includes(country)) &&
-      (palette === undefined || (palette === "bw") === f.isBlackAndWhite),
+      (palette === undefined || (palette === "bw") === f.isBlackAndWhite) &&
+      (!tag || f.tags.some((t) => t.slug === tag)),
   );
 }
