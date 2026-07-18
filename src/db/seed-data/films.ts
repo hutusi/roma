@@ -40,7 +40,12 @@ export const seedFilms: SeedFilm[] = [
       quote("Only by accepting the whole of life can you begin to make a film."),
     ]),
     cast: [
-      { name: "Marcello Mastroianni", zhName: "马塞洛·马斯楚安尼", character: "Guido" },
+      {
+        name: "Marcello Mastroianni",
+        zhName: "马塞洛·马斯楚安尼",
+        character: "Guido",
+        personSlug: "marcello-mastroianni",
+      },
       { name: "Claudia Cardinale", zhName: "克劳迪娅·卡汀娜", character: "Claudia" },
       { name: "Anouk Aimée", zhName: "阿努克·艾梅", character: "Luisa" },
     ],
@@ -68,7 +73,12 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "Fellini had not yet left neorealism, but the wings were already growing. La strada follows Gelsomina, a simple-hearted girl sold to the traveling strongman Zampano, who bullies her across the roads of postwar Italy until death finally teaches this stone of a man what he has lost. Giulietta Masina plays her with a clown's face and a holy fool's innocence, letting the humblest of lives shine with something close to grace. This is not a film of social protest; it is a parable about love and loneliness \u2014 we tend to recognize what we had only after it is gone. Zampano's sobbing collapse on the beach in the final scene is one of cinema's heaviest arrivals of understanding, and it arrives, as understanding usually does, too late.",
     cast: [
-      { name: "Giulietta Masina", zhName: "朱丽叶塔·马西纳", character: "Gelsomina" },
+      {
+        name: "Giulietta Masina",
+        zhName: "朱丽叶塔·马西纳",
+        character: "Gelsomina",
+        personSlug: "giulietta-masina",
+      },
       { name: "Anthony Quinn", zhName: "安东尼·奎因", character: "Zampanò" },
     ],
     directorSlugs: ["federico-fellini"],
@@ -87,7 +97,14 @@ export const seedFilms: SeedFilm[] = [
       "一个罗马街头的妓女卡比利亚，一次次被欺骗、被抢劫、被抛弃，却一次次重新相信爱情。费里尼与马西纳这对夫妻，把一个最容易被写成悲剧的题材，拍成了对人类韧性的礼赞。影片最后那个著名的长镜头——卡比利亚刚被未婚夫骗走全部积蓄，眼含泪水走在路上，一群年轻人载歌载舞地经过，她抬起头，对着镜头几乎是对着我们，露出一个破碎又倔强的微笑。那一刻，绝望与希望同时在场。马西纳凭这个角色摘得戛纳影后，她那张仿佛不谙世事的脸，把苦难与天真同时写尽。这是电影送给所有跌倒又爬起的人的一封情书。",
     editorialNoteEn:
       "A Roman streetwalker named Cabiria is cheated, robbed, and abandoned, over and over \u2014 and over and over she decides to believe in love again. Fellini and Masina, husband and wife, took a subject that invites easy tragedy and made a tribute to human resilience instead. In the famous final shot, Cabiria \u2014 freshly swindled out of her savings by the fiance she trusted \u2014 walks down a road with tears in her eyes as a band of young revelers passes around her; she lifts her head and gives the camera, gives us, a broken and stubborn smile. Despair and hope stand in the same frame. Masina won Best Actress at Cannes for the role; her seemingly guileless face carries suffering and innocence in a single expression. This is cinema's love letter to everyone who has fallen down and gotten up again.",
-    cast: [{ name: "Giulietta Masina", zhName: "朱丽叶塔·马西纳", character: "Cabiria" }],
+    cast: [
+      {
+        name: "Giulietta Masina",
+        zhName: "朱丽叶塔·马西纳",
+        character: "Cabiria",
+        personSlug: "giulietta-masina",
+      },
+    ],
     directorSlugs: ["federico-fellini"],
   },
 
@@ -124,7 +141,12 @@ export const seedFilms: SeedFilm[] = [
       ),
     ]),
     cast: [
-      { name: "Max von Sydow", zhName: "马克斯·冯·叙多", character: "Antonius Block" },
+      {
+        name: "Max von Sydow",
+        zhName: "马克斯·冯·叙多",
+        character: "Antonius Block",
+        personSlug: "max-von-sydow",
+      },
       { name: "Bengt Ekerot", zhName: "本格特·埃克罗特", character: "Death" },
     ],
     directorSlugs: ["ingmar-bergman"],
@@ -212,8 +234,18 @@ export const seedFilms: SeedFilm[] = [
       ),
     ]),
     cast: [
-      { name: "Toshiro Mifune", zhName: "三船敏郎", characterZh: "菊千代" },
-      { name: "Takashi Shimura", zhName: "志村乔", characterZh: "岛田勘兵卫" },
+      {
+        name: "Toshiro Mifune",
+        zhName: "三船敏郎",
+        characterZh: "菊千代",
+        personSlug: "toshiro-mifune",
+      },
+      {
+        name: "Takashi Shimura",
+        zhName: "志村乔",
+        characterZh: "岛田勘兵卫",
+        personSlug: "takashi-shimura",
+      },
     ],
     directorSlugs: ["akira-kurosawa"],
     watchLinks: [
@@ -240,7 +272,12 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "A murder in a grove, and four irreconcilable accounts of it — including the dead man's own, spoken through a medium. From this simple crime Kurosawa builds a philosophical labyrinth about whether truth can be known at all. For the first time a camera points boldly up through the forest canopy at the sun, the dappled light standing in for the ambiguity of the human heart. Each witness tells the version that guards his own dignity, and the truth recedes forever into the fog of self-interest. “Rashomon” has since become a word the whole world uses for exactly this predicament, in which everyone speaks and no one can be judged. Yet the closing image — a woodcutter taking an abandoned infant into his arms — leaves this doubt about human nature one small, stubborn thread of trust. It was the film that first made the world look at Japanese cinema.",
     cast: [
-      { name: "Toshiro Mifune", zhName: "三船敏郎", characterZh: "多襄丸" },
+      {
+        name: "Toshiro Mifune",
+        zhName: "三船敏郎",
+        characterZh: "多襄丸",
+        personSlug: "toshiro-mifune",
+      },
       { name: "Machiko Kyō", zhName: "京町子", characterZh: "真砂" },
     ],
     directorSlugs: ["akira-kurosawa"],
@@ -260,7 +297,14 @@ export const seedFilms: SeedFilm[] = [
       "一个庸碌了三十年、只会盖章的市政科长，被诊断出胃癌只剩数月可活。在纵酒与彷徨之后，他决定用最后的时间，顶着官僚系统的层层推诿，把一片臭水沟建成一座小公园。黑泽明用近乎残酷的诚实拷问：人怎样才算真正活过？影片后半程干脆跳到主人公的葬礼，让同事们在酒后争论他究竟做了什么——记忆与推诿之间，一个人的意义被反复称量。志村乔在雪夜的秋千上轻声哼唱的一幕，是电影史上最动人的死亡与新生。它提醒每一个在体制中麻木的人：意义不在别处，只在你肯不肯为一件小事燃尽自己。",
     editorialNoteEn:
       "A municipal section chief who has done nothing for thirty years but stamp documents learns he has stomach cancer and a few months to live. After a bout of drinking and aimless wandering, he resolves to spend what time is left forcing a fetid drainage ditch, against every layer of bureaucratic evasion, into a small neighborhood park. Kurosawa asks with almost cruel honesty what it means to have truly lived. The second half leaps ahead to the man's wake, where his colleagues, drunk, argue over what exactly he accomplished — his significance weighed back and forth between memory and self-serving denial. The image of Takashi Shimura softly singing on a swing in the falling snow is one of the most moving deaths, and rebirths, in all of cinema. It reminds everyone numbed by the machinery of their days that meaning lies nowhere but in whether you are willing to burn yourself down for one small thing.",
-    cast: [{ name: "Takashi Shimura", zhName: "志村乔", characterZh: "渡边勘治" }],
+    cast: [
+      {
+        name: "Takashi Shimura",
+        zhName: "志村乔",
+        characterZh: "渡边勘治",
+        personSlug: "takashi-shimura",
+      },
+    ],
     directorSlugs: ["akira-kurosawa"],
   },
   {
@@ -278,7 +322,14 @@ export const seedFilms: SeedFilm[] = [
       "一个无名浪人踱进一座被两帮恶势力撕扯的小镇，索性把自己卖给双方，坐看他们自相残杀。黑泽明把西部片的骨架移植到幕末的日本，又用三船敏郎耸肩、抓痒、痞气十足的表演，造出了一个全新的反英雄。风卷尘沙的空镜、干脆利落的杀阵，把冷峻与黑色幽默调成一味。这部电影反过来又催生了莱昂内的《荒野大镖客》，一个形象就此在东西方之间来回投胎，成就了“独行客涤荡罪恶小镇”的永恒母题。冷峻的幽默之下，是黑泽明对暴力与贪婪毫不留情的嘲讽。它证明娱乐性与作者性从来不必二选一。",
     editorialNoteEn:
       "A nameless ronin ambles into a town being torn apart by two rival gangs and calmly hires himself out to both, the better to watch them annihilate each other. Kurosawa transplants the skeleton of the American Western into the last days of the shogunate, and out of Mifune's shoulder-shrugging, itch-scratching, thoroughly disreputable performance he conjures an entirely new kind of anti-hero. Dust blows through empty streets, the swordplay is crisp and sudden, and cool detachment is cut with pitch-black comedy. This film would in turn father Leone's A Fistful of Dollars, sending a single figure to be reincarnated back and forth between East and West and founding the deathless motif of the lone stranger who cleanses a wicked town. Under the cool jokes lies Kurosawa's merciless contempt for violence and greed. It proves once and for all that mass entertainment and personal authorship were never an either/or.",
-    cast: [{ name: "Toshiro Mifune", zhName: "三船敏郎", characterZh: "桑畑三十郎" }],
+    cast: [
+      {
+        name: "Toshiro Mifune",
+        zhName: "三船敏郎",
+        characterZh: "桑畑三十郎",
+        personSlug: "toshiro-mifune",
+      },
+    ],
     directorSlugs: ["akira-kurosawa"],
   },
 
@@ -311,8 +362,8 @@ export const seedFilms: SeedFilm[] = [
       ),
     ]),
     cast: [
-      { name: "Chishū Ryū", zhName: "笠智众", characterZh: "平山周吉" },
-      { name: "Setsuko Hara", zhName: "原节子", characterZh: "纪子" },
+      { name: "Chishū Ryū", zhName: "笠智众", characterZh: "平山周吉", personSlug: "chishu-ryu" },
+      { name: "Setsuko Hara", zhName: "原节子", characterZh: "纪子", personSlug: "setsuko-hara" },
     ],
     directorSlugs: ["yasujiro-ozu"],
   },
@@ -332,8 +383,13 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "A daughter who keeps house for her widowed father keeps putting off marriage because she cannot bear to leave him — so he tells a lie, claiming that he means to remarry, in order to push her toward a life of her own. Ozu turns the most ordinary of arranged matches into a deep pool about giving and letting go. Setsuko Hara's smile is bright almost to the point of transparency, and beneath it move reluctance and understanding at once. In the final scene the father sits alone, peeling an apple; the peel drops away unbroken, the room has emptied — and the loneliness of setting one's child free condenses into a single small gesture. Not a line of dialogue names it, yet it carries the whole bittersweet burden of being a parent. Here Ozu's great theme of the daughter's marriage begins, and his most tender heartbreak; the pairing of Hara and Chishu Ryu opens the most moving run of family films he would ever make.",
     cast: [
-      { name: "Chishū Ryū", zhName: "笠智众", characterZh: "曾宫周吉" },
-      { name: "Setsuko Hara", zhName: "原节子", characterZh: "曾宫纪子" },
+      { name: "Chishū Ryū", zhName: "笠智众", characterZh: "曾宫周吉", personSlug: "chishu-ryu" },
+      {
+        name: "Setsuko Hara",
+        zhName: "原节子",
+        characterZh: "曾宫纪子",
+        personSlug: "setsuko-hara",
+      },
     ],
     directorSlugs: ["yasujiro-ozu"],
   },
@@ -352,7 +408,14 @@ export const seedFilms: SeedFilm[] = [
       "一个到了适婚年龄的女儿，在家人为她张罗体面婚事时，却出人意料地选择嫁给邻家带着孩子的丧偶医生。小津把镜头对准三代同堂的大家庭，看它如何在一桩婚事中不动声色地走向解体。他不评判任何人的选择，只是让生活像麦子成熟那样自然发生。餐桌、走廊、海边沙丘上的空镜，把聚散离合酿成了淡淡的、带着咸味的诗。结尾老夫妇望着熟透的麦田感叹“我们已经很幸福了”，是小津对无常人生最豁达的注解：家终会散，而正因为会散，此刻的团圆才值得珍重。",
     editorialNoteEn:
       "A daughter of marriageable age, while her family busily arranges a respectable match for her, startles everyone by choosing instead to marry the widowed doctor next door, a man with a young child. Ozu turns his camera on a three-generation household and watches, without ever raising his voice, how a single marriage nudges it toward quiet dissolution. He passes judgment on no one's choice; he simply lets life unfold as naturally as wheat coming ripe. Empty frames of the dining table, the hallway, the dunes by the sea distill all this gathering and parting into a faint, salt-tinged poem. When the old couple, gazing out at the ripened fields, murmur that they have already been very happy, it becomes Ozu's most generous word on impermanence: the family will scatter, and it is precisely because it must scatter that this hour of being together is worth holding close.",
-    cast: [{ name: "Setsuko Hara", zhName: "原节子", characterZh: "间宫纪子" }],
+    cast: [
+      {
+        name: "Setsuko Hara",
+        zhName: "原节子",
+        characterZh: "间宫纪子",
+        personSlug: "setsuko-hara",
+      },
+    ],
     directorSlugs: ["yasujiro-ozu"],
   },
 
@@ -458,8 +521,18 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "A husband and wife whose marriage has quietly ended spend one night — visiting a dying friend, drifting through a loud party, having it out at dawn on a golf course — confirming that the love between them is gone. Antonioni makes the modern architecture of Milan a cold accomplice, its glass curtain walls reflecting an emptiness with nowhere to settle. Jeanne Moreau's long, near-wordless walk through the city writes a woman's disenchantment in full. At the end his wife reads aloud a love letter he wrote her years earlier, and he cannot recall that he was the one who wrote it — because the sharpest wound is not betrayal but the way passion evaporates, without a sound, inside daily life. This is the most glacial film in the alienation trilogy, and it belongs to everyone who has felt like a stranger inside a long relationship.",
     cast: [
-      { name: "Jeanne Moreau", zhName: "让娜·莫罗", character: "Lidia" },
-      { name: "Marcello Mastroianni", zhName: "马塞洛·马斯楚安尼", character: "Giovanni" },
+      {
+        name: "Jeanne Moreau",
+        zhName: "让娜·莫罗",
+        character: "Lidia",
+        personSlug: "jeanne-moreau",
+      },
+      {
+        name: "Marcello Mastroianni",
+        zhName: "马塞洛·马斯楚安尼",
+        character: "Giovanni",
+        personSlug: "marcello-mastroianni",
+      },
     ],
     directorSlugs: ["michelangelo-antonioni"],
   },
@@ -529,7 +602,9 @@ export const seedFilms: SeedFilm[] = [
       "一个想当演员的年轻女子娜娜，一步步沦为妓女，最终死于一场荒谬的交易。戈达尔用十二个带标题的段落，像论文又像素描地拆解一个女人的堕落与尊严。安娜·卡里娜的脸在片中被反复凝视——她在影院里对着德莱叶的《圣女贞德》落泪的一幕，把两个受难的女性隔着三十年重叠在一起。影片穿插哲学对话、街头实录与直视镜头的独白，冷静得近乎残酷，却又饱含爱意。它既是新浪潮对类型的又一次解构，也是戈达尔写给卡里娜的一封情书。自由与被出卖，在这里只有一线之隔。",
     editorialNoteEn:
       "A young woman who dreams of acting, Nana, slides step by step into prostitution and dies at last in an absurd transaction. In twelve titled chapters — part essay, part sketch — Godard dissects a woman's fall and her dignity at once. Anna Karina's face is gazed at again and again; the scene of her weeping in a cinema before Dreyer's Joan of Arc lays two suffering women over each other across thirty years. The film interleaves philosophical dialogue, street documentary, and monologue delivered straight to the camera, cool nearly to the point of cruelty and yet brimming with love. It is at once another New Wave dismantling of genre and Godard's love letter to Karina. Here freedom and being sold off are separated by only the thinnest of lines.",
-    cast: [{ name: "Anna Karina", zhName: "安娜·卡里娜", character: "Nana" }],
+    cast: [
+      { name: "Anna Karina", zhName: "安娜·卡里娜", character: "Nana", personSlug: "anna-karina" },
+    ],
     directorSlugs: ["jean-luc-godard"],
   },
 
@@ -570,7 +645,12 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "A secretary who has just absconded with a wad of cash stops at a remote motel, meets its shy proprietor Norman Bates, and is stabbed to death in the shower — and this is only the first half of the film. With that earth-shattering murder of his own protagonist halfway through, Hitchcock overturns every expectation of safety the audience has brought with them. The knife-sharp cutting of the shower scene's seventy-odd shots, set to Bernard Herrmann's shrieking strings, is among the most famous passages ever filmed. He drags horror out of the gothic castle and into an ordinary roadside motel, suggesting the real monster hides inside the most ordinary human heart. This low-budget black-and-white picture redefined both the reach and the ethics of the thriller — and left a whole generation unable to shower in peace. The master of suspense's sharpest strike.",
     cast: [
-      { name: "Anthony Perkins", zhName: "安东尼·博金斯", character: "Norman Bates" },
+      {
+        name: "Anthony Perkins",
+        zhName: "安东尼·博金斯",
+        character: "Norman Bates",
+        personSlug: "anthony-perkins",
+      },
       { name: "Janet Leigh", zhName: "珍妮特·利", character: "Marion Crane" },
     ],
     directorSlugs: ["alfred-hitchcock"],
@@ -620,7 +700,14 @@ export const seedFilms: SeedFilm[] = [
         "Welles keeps foreground and background equally sharp, trapping his characters inside the vast spaces they have built. Deep focus is not merely technique here; it is the subject: Kane owns the whole frame and cannot fill the emptiness inside it.",
       ),
     ]),
-    cast: [{ name: "Orson Welles", zhName: "奥逊·威尔斯", character: "Charles Foster Kane" }],
+    cast: [
+      {
+        name: "Orson Welles",
+        zhName: "奥逊·威尔斯",
+        character: "Charles Foster Kane",
+        personSlug: "orson-welles",
+      },
+    ],
     directorSlugs: ["orson-welles"],
   },
   {
@@ -640,7 +727,12 @@ export const seedFilms: SeedFilm[] = [
       "A car bombing in a town on the U.S.–Mexico border sets a Mexican narcotics officer against a corrupt, bloated American police captain. Welles both directs and plays that morally rotted lawman, pushing the decadent aesthetic of film noir to its summit. The famous opening — a single take of more than three minutes that crosses blocks and the border itself, following a planted bomb until it detonates — is a miracle of staging. Canted frames, cramped shadows, and neon turn the border into a moral swamp where good and evil blur past telling apart. “He was some kind of a man,” runs the film's epitaph, and it says everything about Welles's fascination with human ambiguity. As the gorgeous last chapter of classic noir, its dark magic has never been matched.",
     cast: [
       { name: "Charlton Heston", zhName: "查尔顿·赫斯顿", character: "Ramon Vargas" },
-      { name: "Orson Welles", zhName: "奥逊·威尔斯", character: "Hank Quinlan" },
+      {
+        name: "Orson Welles",
+        zhName: "奥逊·威尔斯",
+        character: "Hank Quinlan",
+        personSlug: "orson-welles",
+      },
     ],
     directorSlugs: ["orson-welles"],
   },
@@ -823,7 +915,12 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "A down-and-out screenwriter drifts into the mansion of a forgotten silent-screen queen and becomes both prisoner and lover in her dream of a comeback — a story narrated, with magnificent gall, by his own corpse floating face-down in her swimming pool. Billy Wilder hands Hollywood the scalpel and lets it perform its own autopsy, and the result is a black love letter to the industry that made and unmade them both. Gloria Swanson's Norma Desmond lives inside the halo of her vanished stardom and refuses to wake; when she insists it is the pictures that got small, she speaks for everyone the age has left behind, and her delusion curdles into something at once monstrous and unbearably sad. The closing descent of that staircase, her face turned to the newsreel cameras as she murmurs that she is ready for her close-up, fuses madness and beauty into one of the screen's imperishable final images. Wilder is cynical, acid-tongued, merciless — and yet he grieves, tenderly, for every failure the machinery of fame has chewed up and spat out. This is the most gorgeous elegy film noir ever composed.",
     cast: [
-      { name: "Gloria Swanson", zhName: "葛洛丽亚·斯旺森", character: "Norma Desmond" },
+      {
+        name: "Gloria Swanson",
+        zhName: "葛洛丽亚·斯旺森",
+        character: "Norma Desmond",
+        personSlug: "gloria-swanson",
+      },
       { name: "William Holden", zhName: "威廉·霍尔登", character: "Joe Gillis" },
     ],
     directorSlugs: ["billy-wilder"],
@@ -844,7 +941,12 @@ export const seedFilms: SeedFilm[] = [
     editorialNoteEn:
       "Two down-on-their-luck musicians witness a gangland massacre and, to save their skins, dress as women and slip into an all-female band — where each promptly tumbles into a romance more absurd than the last. Wilder runs the machinery of drag, mistaken identity, and pursuit at full throttle, and the wonder is how effortless it all feels: the pace flows like water while the jokes stay razor-sharp and perfectly timed. Marilyn Monroe makes her lovelorn singer at once innocent and forlorn, lacing the farce with a thread of sweetness and ache. Best of all is the closing line, widely crowned the finest in movie history: when the man finally confesses that he is a man, the smitten millionaire only shrugs — \"Nobody's perfect.\" With that shrug, every anxiety about who anyone really is simply dissolves, and the generosity of it makes you want to applaud. That is the film's secret: the greatest comedy tends to hide, at its core, the most magnanimous view of how to live. An evergreen delight that only grows more lovable with time.",
     cast: [
-      { name: "Marilyn Monroe", zhName: "玛丽莲·梦露", character: "Sugar Kane" },
+      {
+        name: "Marilyn Monroe",
+        zhName: "玛丽莲·梦露",
+        character: "Sugar Kane",
+        personSlug: "marilyn-monroe",
+      },
       { name: "Jack Lemmon", zhName: "杰克·莱蒙", character: "Jerry / Daphne" },
     ],
     directorSlugs: ["billy-wilder"],
@@ -975,7 +1077,14 @@ export const seedFilms: SeedFilm[] = [
       "有声时代已经到来，卓别林却固执地为流浪汉夏尔洛拍了一部近乎默片的杰作。他爱上一个卖花的盲女，为筹钱替她治眼，又是拳击又是讨好醉汉富翁，闹出无数笑料，最终自己进了监狱。喜剧的引擎一路轰鸣，却全为那个催泪的结尾蓄力：重见光明的姑娘认不出眼前这个落魄的恩人，直到握住他的手才恍然大悟。“是你吗？”——夏尔洛半是羞涩半是期盼的最后一个笑容，被公认为影史最动人的收场。笑与泪在这里合为一体，把小人物的深情托到了极致。卓别林用它证明：默片的表达力，从未过时。",
     editorialNoteEn:
       'Sound had already arrived, and Chaplin, stubborn as ever, answered it by making the Tramp a near-silent masterpiece. Charlie falls for a blind flower girl and sets out to pay for the operation that will restore her sight, submitting to a boxing match, flattering a fickle drunken millionaire, and tumbling from one glorious gag into the next until he lands, penniless, in jail. The comic engine never stops roaring, yet every laugh is quietly storing power for that famously tear-jerking ending. The girl, able to see at last, cannot recognize the shabby stranger who saved her, until her fingers close around his hand and she understands everything at once. "You?" — and the Tramp\'s final smile, half bashful, half hoping against hope, is by common consent the most moving last shot ever filmed. Here laughter and tears stop being opposites and fuse, carrying the tenderness of a nobody to a pitch nothing else in the movies quite reaches. Chaplin made the film to prove a point, and proved it for good: the expressive power of silent cinema has never once gone out of date.',
-    cast: [{ name: "Charlie Chaplin", zhName: "查理·卓别林", character: "The Tramp" }],
+    cast: [
+      {
+        name: "Charlie Chaplin",
+        zhName: "查理·卓别林",
+        character: "The Tramp",
+        personSlug: "charlie-chaplin",
+      },
+    ],
     directorSlugs: ["charlie-chaplin"],
   },
   {
@@ -993,7 +1102,14 @@ export const seedFilms: SeedFilm[] = [
       "在流水线上拧螺丝拧到精神崩溃的夏尔洛，被卷进机器的齿轮、被当成测试喂食机的小白鼠，又阴差阳错卷入罢工与牢狱，只为在大萧条里挣一口饭吃。卓别林用最欢乐的肢体喜剧，包裹起对工业文明最尖锐的批判：人如何在机械与效率的碾压下沦为零件。喂食机失控、齿轮间穿行的段落，是对异化最生动的漫画。影片结尾，夏尔洛与流浪女孩相互搀扶，走向朝阳下未知的前路——纵然一无所有，也要笑着走下去。作为默片时代的谢幕之作，它把喜剧、抗议与温情熔于一炉，至今仍是小人物对抗时代的一面旗帜。",
     editorialNoteEn:
       "Chaplin's Tramp tightens bolts on the assembly line until his body — and then his mind — gives way, and from there the machine simply swallows him: fed into its gears, strapped into an automatic feeding machine as its test subject, then swept by pure mischance into a strike and a jail cell, all for the sake of one square meal in the depths of the Depression. Chaplin wraps the sharpest indictment of industrial civilization inside the most joyous physical comedy ever staged, showing how a man is ground down into a spare part beneath the twin millstones of machinery and efficiency; the runaway feeding machine and his glide through the great cogs remain the most vivid cartoons of alienation the cinema has drawn. And yet the film closes not in despair but in tenderness — the Tramp and the gamine steady each other and walk toward an unknown road under the rising sun, penniless and undefeated, resolved to keep going with a smile. As the silent era's farewell, it fuses comedy, protest, and warmth in a single breath, and remains a banner raised by the small man against the age that would flatten him.",
-    cast: [{ name: "Charlie Chaplin", zhName: "查理·卓别林", character: "A Factory Worker" }],
+    cast: [
+      {
+        name: "Charlie Chaplin",
+        zhName: "查理·卓别林",
+        character: "A Factory Worker",
+        personSlug: "charlie-chaplin",
+      },
+    ],
     directorSlugs: ["charlie-chaplin"],
   },
 
@@ -1051,7 +1167,14 @@ export const seedFilms: SeedFilm[] = [
       "一个当过拳击手、如今给码头黑帮跑腿的青年，在良心与义气之间挣扎，最终决定站出来指证盘剥工人的工会恶霸。卡赞调教出的马龙·白兰度，把方法派表演带上了新的高度——那段在出租车里对哥哥说出“我本可以是个人物，本可以是个真正的角色”的独白，成了美国电影史上最著名的时刻之一。粗粝的码头实景、赫尔曼式的配乐、赤裸的道德挣扎，让影片既是社会剧也是灵魂的救赎。有人从中读出卡赞为自己在麦卡锡时代作证的辩护，这层暧昧反而让它更加复杂动人。关于告密、勇气与自我救赎，它给出了灼热的回答。",
     editorialNoteEn:
       "A washed-up ex-boxer running errands for the mob that rules the docks, Terry Malloy is caught between the loyalty that has kept him alive and the conscience that will not let him stay silent — until he decides to testify against the union bosses who prey on the very men who work the piers. Under Elia Kazan's direction, Marlon Brando pushed Method acting to a new frontier: the scene in the back of a taxi, where Terry tells his brother that he could have been a contender, could have been somebody, remains one of the most quoted, most heartbreaking moments in all of American cinema. The gritty, real-location grime of the waterfront, a surging orchestral score, and a raw moral reckoning make this at once a social drama and a story of the soul's redemption. Some viewers read Kazan's own defense of his HUAC testimony into Terry's choice to inform — and that ambiguity, far from cheapening the film, only deepens it, turning a labor melodrama into a genuinely troubled meditation on where courage ends and betrayal begins. On snitching, on nerve, on the hard work of redeeming yourself, it offers a searing answer. Watch it for Brando, and stay for the ache of a conscience that will not be bought.",
-    cast: [{ name: "Marlon Brando", zhName: "马龙·白兰度", character: "Terry Malloy" }],
+    cast: [
+      {
+        name: "Marlon Brando",
+        zhName: "马龙·白兰度",
+        character: "Terry Malloy",
+        personSlug: "marlon-brando",
+      },
+    ],
     directorSlugs: ["elia-kazan"],
   },
 ];
