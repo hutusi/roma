@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { EDITORIAL_NOTE_EN_MAX, EDITORIAL_NOTE_EN_MIN, wordCount } from "../../lib/validators/film";
+import { seedActors } from "./actors";
 import { seedDirectors } from "./directors";
 import { seedFilms } from "./films";
 import { seedLists } from "./lists";
@@ -35,16 +36,42 @@ describe("English film editions", () => {
   });
 });
 
-describe("English director editions", () => {
-  test("every director with careerEssayEn also has a non-empty bioEn", () => {
-    const bad = seedDirectors.filter((d) => d.careerEssayEn && !d.bioEn?.trim()).map((d) => d.slug);
+describe("English person editions", () => {
+  const seedPeople = [...seedDirectors, ...seedActors];
+
+  test("every person with careerEssayEn also has a non-empty bioEn", () => {
+    const bad = seedPeople.filter((d) => d.careerEssayEn && !d.bioEn?.trim()).map((d) => d.slug);
     expect(bad).toEqual([]);
   });
 
   test("every careerEssayEn is a tiptap doc", () => {
-    const bad = seedDirectors
+    const bad = seedPeople
       .filter((d) => d.careerEssayEn && !isTiptapDoc(d.careerEssayEn))
       .map((d) => d.slug);
+    expect(bad).toEqual([]);
+  });
+});
+
+describe("Curated actors", () => {
+  test("every actor is actor-primary with a nonempty bio, bioEn, and pinned TMDB id", () => {
+    // bioEn required: the corpus is fully bilingual, and seed-content
+    // en-publishes on bioEn presence. tmdbPersonId required: the portrait
+    // search fallback cannot be trusted for actors with namesakes.
+    const bad = seedActors
+      .filter(
+        (a) => a.primaryRole !== "actor" || !a.bio?.trim() || !a.bioEn?.trim() || !a.tmdbPersonId,
+      )
+      .map((a) => a.slug);
+    expect(bad).toEqual([]);
+  });
+
+  test("every personSlug in film cast resolves to a seeded person", () => {
+    // Protects link-cast.ts: a typo here would abort the prod backfill.
+    const known = new Set([...seedDirectors, ...seedActors].map((p) => p.slug));
+    const bad = seedFilms
+      .flatMap((f) => (f.cast ?? []).map((m) => ({ film: f.slug, personSlug: m.personSlug })))
+      .filter((c) => c.personSlug && !known.has(c.personSlug))
+      .map((c) => `${c.film}→${c.personSlug}`);
     expect(bad).toEqual([]);
   });
 });

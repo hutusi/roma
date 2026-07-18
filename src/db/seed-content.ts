@@ -1,5 +1,6 @@
 /**
- * Seeds the editorial corpus — the curated films, their directors, and the
+ * Seeds the editorial corpus — the curated films, their people (directors
+ * and curated actors), and the
  * curated 片单 — plus TMDB imagery. Run with `bun run db:seed:content`
  * (Bun loads .env / .env.local automatically).
  *
@@ -43,6 +44,7 @@ import {
   people,
   users,
 } from "./schema";
+import { seedActors } from "./seed-data/actors";
 import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
 import { seedLists } from "./seed-data/lists";
@@ -51,7 +53,10 @@ const NOW = Date.now();
 /** Stagger publishedAt so the array order drives the home "近期收录" strip. */
 const publishedAtFor = (index: number) => new Date(NOW - index * 3_600_000);
 
-const counts = { directors: 0, films: 0, lists: 0, items: 0, images: 0, imagesSkipped: 0 };
+const counts = { people: 0, films: 0, lists: 0, items: 0, images: 0, imagesSkipped: 0 };
+
+/** Everyone who gets a people row — the original directors plus curated actors. */
+const seedPeople = [...seedDirectors, ...seedActors];
 
 const TMDB_API = "https://api.themoviedb.org/3";
 const TMDB_IMG = "https://image.tmdb.org/t/p/original";
@@ -87,14 +92,15 @@ async function main() {
   const admin = await db.query.users.findFirst({ where: eq(users.email, adminEmail) });
   const createdBy = admin?.id ?? null;
 
-  // ── Directors ──────────────────────────────────────────────────────
-  const insertedDirectors = await db
+  // ── People (directors + curated actors) ────────────────────────────
+  const insertedPeople = await db
     .insert(people)
     .values(
-      seedDirectors.map((d) => ({
+      seedPeople.map((d) => ({
         slug: d.slug,
         name: d.name,
         nameZh: d.nameZh,
+        primaryRole: d.primaryRole ?? ("director" as const),
         bio: d.bio,
         careerEssay: d.careerEssay ?? null,
         bioEn: d.bioEn ?? null,
@@ -108,18 +114,18 @@ async function main() {
     )
     .onConflictDoNothing({ target: people.slug })
     .returning({ slug: people.slug });
-  counts.directors = insertedDirectors.length;
+  counts.people = insertedPeople.length;
 
-  const directorRows = await db
+  const personRows = await db
     .select({ id: people.id, slug: people.slug })
     .from(people)
     .where(
       inArray(
         people.slug,
-        seedDirectors.map((d) => d.slug),
+        seedPeople.map((d) => d.slug),
       ),
     );
-  const directorIdBySlug = new Map(directorRows.map((r) => [r.slug, r.id]));
+  const personIdBySlug = new Map(personRows.map((r) => [r.slug, r.id]));
 
   // ── Films ──────────────────────────────────────────────────────────
   const insertedFilms = await db
@@ -167,7 +173,7 @@ async function main() {
   const fdValues = seedFilms.flatMap((f) =>
     f.directorSlugs.flatMap((ds, position) => {
       const filmId = filmIdBySlug.get(f.slug);
-      const directorId = directorIdBySlug.get(ds);
+      const directorId = personIdBySlug.get(ds);
       return filmId && directorId ? [{ filmId, directorId, position }] : [];
     }),
   );
@@ -184,6 +190,8 @@ async function main() {
         nameZh: m.zhName ?? null,
         character: m.character ?? null,
         characterZh: m.characterZh ?? null,
+        // Fresh seeds come out fully linked; existing DBs use link-cast.ts.
+        personId: m.personSlug ? (personIdBySlug.get(m.personSlug) ?? null) : null,
       })),
     );
   if (castValues.length) await db.insert(filmCast).values(castValues);
@@ -206,7 +214,7 @@ async function main() {
 
   // ── 建议观看顺序 — chronological path for directors with ≥2 films ───
   const viValues = seedDirectors.flatMap((d) => {
-    const directorId = directorIdBySlug.get(d.slug);
+    const directorId = personIdBySlug.get(d.slug);
     if (!directorId) return [];
     const dFilms = seedFilms
       .filter((f) => f.directorSlugs.includes(d.slug))
@@ -281,7 +289,7 @@ async function main() {
   }
 
   // ── Images (TMDB → storage seam) ────────────────────────────────────
-  await seedImages(filmIdBySlug, directorIdBySlug);
+  await seedImages(filmIdBySlug, personIdBySlug);
 
   // ── List covers — reuse the cover film's hero/poster, if not already set ─
   await setListCovers(listIdBySlug, filmIdBySlug);
@@ -290,17 +298,14 @@ async function main() {
   await assertPublishable(filmIdBySlug);
 
   console.log(
-    `\nSeed complete. Newly inserted — directors:${counts.directors} films:${counts.films} ` +
+    `\nSeed complete. Newly inserted — people:${counts.people} films:${counts.films} ` +
       `lists:${counts.lists} listItems:${counts.items}. ` +
       `Images stored:${counts.images} skipped:${counts.imagesSkipped}.`,
   );
   process.exit(0);
 }
 
-async function seedImages(
-  filmIdBySlug: Map<string, string>,
-  directorIdBySlug: Map<string, string>,
-) {
+async function seedImages(filmIdBySlug: Map<string, string>, personIdBySlug: Map<string, string>) {
   const token = process.env.TMDB_API_TOKEN;
   if (!token) {
     console.warn(
@@ -375,22 +380,24 @@ async function seedImages(
     }
   }
 
-  for (const d of seedDirectors) {
-    const directorId = directorIdBySlug.get(d.slug);
-    if (!directorId) continue;
-    if (await db.query.media.findFirst({ where: eq(media.personId, directorId) })) continue;
+  for (const d of seedPeople) {
+    const personId = personIdBySlug.get(d.slug);
+    if (!personId) continue;
+    if (await db.query.media.findFirst({ where: eq(media.personId, personId) })) continue;
     try {
       let person: Record<string, unknown> | undefined;
       if (d.tmdbPersonId) {
         person = await tmdbGet(`/person/${d.tmdbPersonId}`, token);
       } else {
         // Namesakes are common (a director and an actor share a name). Prefer
-        // a directing credit that actually has a photo before falling back.
+        // a credit in the person's own department that actually has a photo
+        // before falling back.
+        const wantDept = d.primaryRole === "actor" ? "Acting" : "Directing";
         const results = (await tmdbGet(`/search/person?query=${encodeURIComponent(d.name)}`, token))
           .results as Record<string, unknown>[] | undefined;
         person =
           results?.find(
-            (r) => r.known_for_department === "Directing" && typeof r.profile_path === "string",
+            (r) => r.known_for_department === wantDept && typeof r.profile_path === "string",
           ) ??
           results?.find((r) => typeof r.profile_path === "string") ??
           results?.[0];
@@ -406,15 +413,13 @@ async function seedImages(
         alt: `${d.nameZh}肖像`,
         credit: "TMDB",
         kind: "portrait",
-        personId: directorId,
+        personId,
         sortOrder: 0,
       });
       counts.images++;
-      console.log(`  director image ✓ ${d.slug}`);
+      console.log(`  portrait ✓ ${d.slug}`);
     } catch (error) {
-      console.warn(
-        `  director image ✗ ${d.slug}: ${error instanceof Error ? error.message : error}`,
-      );
+      console.warn(`  portrait ✗ ${d.slug}: ${error instanceof Error ? error.message : error}`);
       counts.imagesSkipped++;
     }
   }
