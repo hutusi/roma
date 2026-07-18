@@ -4,6 +4,7 @@ import { type Locale, localePath } from "@/i18n/locales";
 import { AuthMenu } from "./auth-menu";
 import { BrandMark } from "./brand-mark";
 import { LangToggle } from "./lang-toggle";
+import { SearchDialog } from "./search-dialog";
 
 export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
   const dict = getDict(locale);
@@ -33,6 +34,7 @@ export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
               {label}
             </Link>
           ))}
+          <SearchDialog locale={locale} labels={dict.search} />
           <AuthMenu locale={locale} labels={dict.authMenu} />
           <LangToggle />
         </nav>
