@@ -190,6 +190,19 @@ const filmRows = await db
       publishedAt: new Date(),
     },
     {
+      // The one color film in the fixture set — the ?palette facet needs
+      // both palettes present to filter either way.
+      slug: "giulietta-degli-spiriti",
+      titleZh: "朱丽叶与魔鬼",
+      titleOriginal: "Giulietta degli spiriti",
+      year: 1965,
+      countries: ["意大利", "法国"],
+      isBlackAndWhite: false,
+      editorialNote: NOTE,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
       // Draft on purpose: must 404 publicly, render in preview, stay
       // hidden inside the published list below (draft-leak regression).
       slug: "il-bidone",

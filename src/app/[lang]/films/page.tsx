@@ -7,7 +7,8 @@ import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
 import { FilmsFilter } from "./films-filter";
-import { COPY, type FilmCardData, FilmsView } from "./films-view";
+import { COPY, FilmsView } from "./films-view";
+import type { FilmCardData } from "./filtering";
 
 export async function generateMetadata({
   params,
@@ -49,6 +50,7 @@ export default async function FilmsIndexPage({ params }: { params: Promise<{ lan
       // Countries are stored in Chinese; the ?country param speaks the
       // display language, so translate once here rather than per compare.
       countries: en ? film.countries.map(countryToEn) : film.countries,
+      isBlackAndWhite: film.isBlackAndWhite,
     };
   });
 

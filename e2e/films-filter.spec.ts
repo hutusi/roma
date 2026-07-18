@@ -7,8 +7,9 @@ import { expect, test } from "@playwright/test";
  * survives in the static HTML — the island reads the query only after
  * hydration, so anything it renders is invisible to crawlers.
  *
- * Fixtures: la-strada (1954, 意大利) and otto-e-mezzo (1963, 意大利+法国).
- * Both are seeded and never mutated; publish-flow-film is created by
+ * Fixtures: la-strada (1954, 意大利, B&W), otto-e-mezzo (1963,
+ * 意大利+法国, B&W) and giulietta-degli-spiriti (1965, color). All are
+ * seeded and never mutated; publish-flow-film is created by
  * editorial.spec at runtime, so nothing here depends on it.
  */
 
@@ -32,6 +33,16 @@ test("?country filters, and the param speaks the display language", async ({ pag
   await page.goto(`/zh/films?country=${encodeURIComponent("法国")}`);
   await expect(card(page, "otto-e-mezzo")).toBeVisible();
   await expect(card(page, "la-strada")).toHaveCount(0);
+});
+
+test("?palette filters from a cold URL, both ways", async ({ page }) => {
+  await page.goto("/zh/films?palette=color");
+  await expect(card(page, "giulietta-degli-spiriti")).toBeVisible();
+  await expect(card(page, "otto-e-mezzo")).toHaveCount(0);
+
+  await page.goto("/zh/films?palette=bw");
+  await expect(card(page, "otto-e-mezzo")).toBeVisible();
+  await expect(card(page, "giulietta-degli-spiriti")).toHaveCount(0);
 });
 
 test("submitting the form puts the selection in the URL", async ({ page }) => {

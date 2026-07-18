@@ -142,7 +142,7 @@ async function main() {
         countries: f.countries,
         runtimeMinutes: f.runtimeMinutes ?? null,
         aspectRatio: f.aspectRatio ?? null,
-        isBlackAndWhite: f.isBlackAndWhite ?? true,
+        isBlackAndWhite: f.isBlackAndWhite,
         editorialNote: f.editorialNote,
         essay: f.essay ?? null,
         editorialNoteEn: f.editorialNoteEn ?? null,

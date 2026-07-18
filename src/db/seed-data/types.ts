@@ -60,8 +60,8 @@ export type SeedFilm = {
   runtimeMinutes?: number;
   /** e.g. "1.37:1" */
   aspectRatio?: string;
-  /** Defaults to true when omitted. */
-  isBlackAndWhite?: boolean;
+  /** Explicit on every film — the catalogue no longer presumes B&W. */
+  isBlackAndWhite: boolean;
   /** 编辑札记 — plain text, must be 200–500 code points to publish. */
   editorialNote: string;
   essay?: TiptapDoc;

@@ -40,7 +40,7 @@ export default async function NewFilmPage() {
             countries: "",
             runtimeMinutes: "",
             aspectRatio: "1.37:1",
-            isBlackAndWhite: true,
+            isBlackAndWhite: false,
             editorialNote: "",
             essay: null,
             editorialNoteEn: "",

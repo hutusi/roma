@@ -2,7 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import type { Locale } from "@/i18n/locales";
-import { type FilmCardData, FilmsView } from "./films-view";
+import { FilmsView } from "./films-view";
+import type { FilmCardData } from "./filtering";
 
 /**
  * Reads ?decade/?country on the client so the page itself can stay
@@ -22,11 +23,14 @@ export function FilmsFilter({ locale, films }: { locale: Locale; films: FilmCard
   const parsed = Number(decadeParam);
   const decade = decadeParam && Number.isFinite(parsed) ? parsed : undefined;
 
+  const paletteParam = params.get("palette");
+  const palette = paletteParam === "bw" || paletteParam === "color" ? paletteParam : undefined;
+
   return (
     <FilmsView
       locale={locale}
       films={films}
-      selection={{ decade, country: params.get("country") ?? undefined }}
+      selection={{ decade, country: params.get("country") ?? undefined, palette }}
     />
   );
 }
