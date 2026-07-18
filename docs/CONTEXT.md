@@ -11,6 +11,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 | Term | Meaning |
 |---|---|
 | 影片 (film) | A curated film — never an exhaustive database entry. Publishing requires a 200–500 code-point 编辑札记 and ≥1 director. |
+| 人物 (person) | A curated human — director, actor, or both; ONE row and one page per person (`people` table). `primaryRole` picks the canonical URL segment (`/director/` vs `/actor/`); the other segment 308s to it (ADR 0013). Directing credits live in `film_directors`; the 演员表 is curated `film_cast` rows (denormalized name + 角色, optional `personId` link). 收录即推荐 applies to people too: cast rows exist for every credit, but person rows/pages only for people the editors curate. |
 | 编辑札记 | The editorial note; plain text, counted in Unicode code points (CJK-correct). The heart of a film page. |
 | 译名 | Title variants: 大陆 (primary), 港, 台, plus original and English. Explicit columns, not a child table. |
 | 片单 (curated list) | THE core product. Theme + intro essay + per-film 入选理由 + deliberate ordering ("顺序即立场"). URL namespace `/list/` is editorial-only. |
@@ -30,7 +31,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 - `src/lib/seo.ts` — every indexable page composes canonical + hreflang + og/twitter identity by spreading `seoMetadata()`; never hand-roll `alternates` on a page. It deliberately sets no titles/descriptions/images — Next inherits those and merges the file-convention OG images.
 - `scripts/generate-brand-assets.ts` → `src/assets/brand/` — the 8½ monogram (live) and 红印章 seal (candidate; compare in `src/assets/brand/preview.html`), plus every icon (favicon/apple/manifest/header paths). All generated and deterministic: edit the script, `bun run brand:generate` — never the assets.
 - `src/lib/storage.ts` — the storage seam (Vercel Blob in prod, `public/uploads` in dev). Keep all storage behind it (ADR 0008).
-- `src/db/locks.ts` — editorial mutations serialize on `SELECT … FOR UPDATE` row locks taken ONLY through this module, in the canonical order **directors → films → lists** (multi-row helpers sort by id). Acquiring locks in any other order can deadlock. Gates and writes run inside one transaction; `revalidate*`/IndexNow run only after commit.
+- `src/db/locks.ts` — editorial mutations serialize on `SELECT … FOR UPDATE` row locks taken ONLY through this module, in the canonical order **people → films → lists** (multi-row helpers sort by id). Acquiring locks in any other order can deadlock. Gates and writes run inside one transaction; `revalidate*`/IndexNow run only after commit.
 - `src/lib/rum-retention.ts` — opportunistic RUM maintenance. Successful beacons schedule a post-response cleanup; an atomic daily claim retains raw events for 90 days.
 
 ## QA
