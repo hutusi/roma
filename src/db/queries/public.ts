@@ -184,6 +184,10 @@ const personRelations = {
     with: { film: { with: { media: { orderBy: mediaOrder } } } },
     orderBy: creditOrder,
   },
+  castCredits: {
+    with: { film: true as const },
+    orderBy: [asc(filmCast.position), asc(filmCast.id)],
+  },
   media: { orderBy: mediaOrder },
 };
 
@@ -198,6 +202,11 @@ function normalizePerson(
       .map((fd) => fd.film)
       .filter((film) => visibleIn(film, locale))
       .sort((a, b) => a.year - b.year),
+    // A film the person both directed and acted in appears in BOTH lists:
+    // the acted-in row carries the character, which is the point.
+    actedIn: person.castCredits
+      .filter((credit) => visibleIn(credit.film, locale))
+      .sort((a, b) => a.film.year - b.film.year),
   };
 }
 
@@ -207,11 +216,13 @@ async function rawPerson() {
 
 export type PublicPerson = NonNullable<Awaited<ReturnType<typeof getPublishedPersonBySlug>>>;
 
-export async function getPublishedPersonSlugs(locale: Locale = "zh") {
+export async function getPublishedPersonSlugs(locale: Locale = "zh", role?: "director" | "actor") {
+  const conds = personStatusConds(locale);
+  if (role) conds.push(eq(people.primaryRole, role));
   return db
-    .select({ slug: people.slug, updatedAt: people.updatedAt })
+    .select({ slug: people.slug, updatedAt: people.updatedAt, primaryRole: people.primaryRole })
     .from(people)
-    .where(and(...personStatusConds(locale)));
+    .where(and(...conds));
 }
 
 const listRelations = {
@@ -320,7 +331,9 @@ export async function getFilmStubBySlug(slug: string) {
 
 export async function getPersonStubBySlug(slug: string) {
   const person = await db.query.people.findFirst({
-    columns: { slug: true, name: true },
+    // primaryRole is not prose — the stub needs it to resolve its
+    // canonical segment (and 308 away from the other one).
+    columns: { slug: true, name: true, primaryRole: true },
     where: and(eq(people.slug, slug), eq(people.status, "published")),
   });
   return person ?? null;

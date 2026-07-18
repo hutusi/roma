@@ -65,6 +65,7 @@ export const zh = {
     career: "创作历程",
     suggestedOrder: "建议观看顺序",
     films: "收录影片",
+    actedIn: "出演作品",
   },
   auth: {
     email: "邮箱",

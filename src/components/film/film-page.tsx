@@ -7,6 +7,7 @@ import { heroOf, type PublicFilm } from "@/db/queries/public";
 import { countryToEn } from "@/i18n/countries";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
+import { personPath } from "@/lib/routes";
 
 /** Latin eyebrows are locale-neutral; zh pairs them with a zh title, en drops them. */
 const EYEBROWS = {
@@ -45,6 +46,9 @@ export function FilmPage({
 
   const directorNames = film.filmDirectors.map((fd) => ({
     slug: fd.director.slug,
+    // Canonical segment per person — an actor-primary co-director links
+    // straight to /actor/… instead of bouncing through a 308.
+    path: personPath(fd.director),
     label: en ? fd.director.name : (fd.director.nameZh ?? fd.director.name),
     linked: fd.director.status === "published",
   }));
@@ -95,10 +99,7 @@ export function FilmPage({
               <span key={d.slug}>
                 {i > 0 && dict.nameSeparator}
                 {d.linked ? (
-                  <Link
-                    href={localePath(locale, `/director/${d.slug}`)}
-                    className="text-brand hover:underline"
-                  >
+                  <Link href={localePath(locale, d.path)} className="text-brand hover:underline">
                     {d.label}
                   </Link>
                 ) : (
@@ -156,19 +157,37 @@ export function FilmPage({
         <section className="mt-14">
           <TitleCard eyebrow={eyebrow("cast")} title={dict.cast} />
           <ul className="mx-auto mt-8 max-w-md space-y-2 text-[15px]">
-            {film.cast.slice(0, 10).map((member) => (
-              <li key={member.id} className="flex justify-between border-line border-b py-1.5">
-                <span>
-                  {en ? member.name : (member.nameZh ?? member.name)}
-                  {!en && member.nameZh && (
-                    <span className="ml-2 font-display text-ink-muted text-sm">{member.name}</span>
+            {film.cast.slice(0, 10).map((member) => {
+              // Same gate as the directedBy line: zh-published links even
+              // on /en, where an en-pending person resolves to the
+              // translation-pending stub (ADR 0012 sanctions this).
+              const linked = member.person && member.person.status === "published";
+              const label = en ? member.name : (member.nameZh ?? member.name);
+              return (
+                <li key={member.id} className="flex justify-between border-line border-b py-1.5">
+                  <span>
+                    {linked && member.person ? (
+                      <Link
+                        href={localePath(locale, personPath(member.person))}
+                        className="text-brand hover:underline"
+                      >
+                        {label}
+                      </Link>
+                    ) : (
+                      label
+                    )}
+                    {!en && member.nameZh && (
+                      <span className="ml-2 font-display text-ink-muted text-sm">
+                        {member.name}
+                      </span>
+                    )}
+                  </span>
+                  {member.character && (
+                    <span className="text-ink-muted">{dict.castAs(member.character)}</span>
                   )}
-                </span>
-                {member.character && (
-                  <span className="text-ink-muted">{dict.castAs(member.character)}</span>
-                )}
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}

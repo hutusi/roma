@@ -34,6 +34,7 @@ export async function savePerson(
     slug: v.slug,
     name: v.name,
     nameZh: v.nameZh || null,
+    primaryRole: v.primaryRole,
     bio: v.bio || null,
     careerEssay: (v.careerEssay as TiptapDoc) ?? null,
     bioEn: v.bioEn || null,
@@ -45,6 +46,7 @@ export async function savePerson(
       const existing = targetId ? await lockPerson(tx, targetId) : undefined;
       if (targetId && !existing) return { error: "人物不存在，可能已被删除" } as const;
       const previousSlug = existing?.slug;
+      const previousRole = existing?.primaryRole;
       const isPublic = existing?.status === "published";
 
       if (isPublic) {
@@ -73,13 +75,20 @@ export async function savePerson(
         const [created] = await tx.insert(people).values(row).returning({ id: people.id });
         targetId = created.id;
       }
-      return { id: targetId, previousSlug, isPublic } as const;
+      return { id: targetId, previousSlug, previousRole, isPublic } as const;
     });
     if ("error" in outcome && outcome.error) return fail(outcome.error);
-    const { id: targetId, previousSlug, isPublic } = outcome;
-    revalidatePerson(v.slug, { notify: isPublic });
-    if (isPublic && previousSlug && previousSlug !== v.slug) {
-      revalidatePerson(previousSlug, { notify: true });
+    const { id: targetId, previousSlug, previousRole, isPublic } = outcome;
+    revalidatePerson(v.slug, v.primaryRole, { notify: isPublic });
+    // A moved canonical URL (slug or role change) leaves the old one
+    // 308ing — notify it so crawlers recrawl and follow.
+    if (
+      isPublic &&
+      previousSlug &&
+      previousRole &&
+      (previousSlug !== v.slug || previousRole !== v.primaryRole)
+    ) {
+      revalidatePerson(previousSlug, previousRole, { notify: true });
     }
     return ok({ id: targetId });
   } catch (error) {
@@ -124,10 +133,14 @@ export async function setViewingOrder(
         })),
       );
     }
-    return { slug: person.slug, isPublic: person.status === "published" } as const;
+    return {
+      slug: person.slug,
+      role: person.primaryRole,
+      isPublic: person.status === "published",
+    } as const;
   });
   if (!hasSlug(outcome)) return fail(outcome.error ?? "人物操作失败");
-  revalidatePerson(outcome.slug, { notify: outcome.isPublic });
+  revalidatePerson(outcome.slug, outcome.role, { notify: outcome.isPublic });
   return ok();
 }
 
@@ -142,10 +155,10 @@ export async function publishPerson(id: string): Promise<ActionResult> {
       .update(people)
       .set({ status: "published", publishedAt: person.publishedAt ?? new Date() })
       .where(eq(people.id, id));
-    return { slug: person.slug } as const;
+    return { slug: person.slug, role: person.primaryRole } as const;
   });
   if (!hasSlug(outcome)) return fail(outcome.error ?? "人物操作失败");
-  revalidatePerson(outcome.slug, { notify: true });
+  revalidatePerson(outcome.slug, outcome.role, { notify: true });
   return ok();
 }
 
@@ -160,10 +173,14 @@ export async function publishPersonEn(id: string): Promise<ActionResult> {
       .update(people)
       .set({ statusEn: "published", publishedEnAt: person.publishedEnAt ?? new Date() })
       .where(eq(people.id, id));
-    return { slug: person.slug, isPublic: person.status === "published" } as const;
+    return {
+      slug: person.slug,
+      role: person.primaryRole,
+      isPublic: person.status === "published",
+    } as const;
   });
   if (!hasSlug(outcome)) return fail(outcome.error ?? "人物操作失败");
-  revalidatePerson(outcome.slug, { notify: outcome.isPublic });
+  revalidatePerson(outcome.slug, outcome.role, { notify: outcome.isPublic });
   return ok();
 }
 
@@ -173,10 +190,10 @@ export async function unpublishPersonEn(id: string): Promise<ActionResult> {
     const person = await lockPerson(tx, id);
     if (!person) return null;
     await tx.update(people).set({ statusEn: "draft" }).where(eq(people.id, id));
-    return { slug: person.slug, isPublic: person.status === "published" };
+    return { slug: person.slug, role: person.primaryRole, isPublic: person.status === "published" };
   });
   if (!outcome) return fail("人物不存在");
-  revalidatePerson(outcome.slug, { notify: outcome.isPublic });
+  revalidatePerson(outcome.slug, outcome.role, { notify: outcome.isPublic });
   return ok();
 }
 
@@ -186,10 +203,14 @@ export async function unpublishPerson(id: string): Promise<ActionResult> {
     const person = await lockPerson(tx, id);
     if (!person) return null;
     await tx.update(people).set({ status: "draft" }).where(eq(people.id, id));
-    return { slug: person.slug, wasPublic: person.status === "published" };
+    return {
+      slug: person.slug,
+      role: person.primaryRole,
+      wasPublic: person.status === "published",
+    };
   });
   if (!outcome) return fail("人物不存在");
-  revalidatePerson(outcome.slug, { notify: outcome.wasPublic });
+  revalidatePerson(outcome.slug, outcome.role, { notify: outcome.wasPublic });
   return ok();
 }
 
@@ -222,9 +243,13 @@ export async function deletePerson(id: string): Promise<ActionResult> {
       } as const;
     }
     await tx.delete(people).where(eq(people.id, id));
-    return { slug: person.slug, wasPublic: person.status === "published" } as const;
+    return {
+      slug: person.slug,
+      role: person.primaryRole,
+      wasPublic: person.status === "published",
+    } as const;
   });
   if ("error" in outcome && outcome.error) return fail(outcome.error);
-  revalidatePerson(outcome.slug, { notify: outcome.wasPublic });
+  revalidatePerson(outcome.slug, outcome.role, { notify: outcome.wasPublic });
   return ok();
 }

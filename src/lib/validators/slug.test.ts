@@ -3,7 +3,7 @@ import { listFormSchema } from "./list";
 import { personFormSchema } from "./person";
 
 describe("slug rules are consistent across entities", () => {
-  const person = { name: "Federico Fellini" };
+  const person = { name: "Federico Fellini", primaryRole: "director" };
   const list = { title: "费里尼入门", sortOrder: "0" };
 
   test.each(["federico-fellini", "8-and-a-half", "a"])("accepts %s", (slug) => {

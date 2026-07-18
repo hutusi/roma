@@ -3,6 +3,7 @@ import type { PublicFilm, PublicList, PublicPerson } from "@/db/queries/public";
 import { visibleIn } from "@/db/queries/visibility";
 import { countryToEn } from "@/i18n/countries";
 import { HTML_LANG, type Locale, localePath } from "@/i18n/locales";
+import { personPath } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -145,7 +146,7 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
 
 export function personJsonLd(person: PublicPerson, locale: Locale = "zh"): JsonLdNode {
   const en = locale === "en";
-  const url = abs(locale, `/director/${person.slug}`);
+  const url = abs(locale, personPath(person));
   const displayName = en ? person.name : (person.nameZh ?? person.name);
   const subName = en ? person.nameZh : person.name;
   const description = (en ? person.bioEn : person.bio)?.slice(0, 300);
@@ -167,7 +168,7 @@ export function personJsonLd(person: PublicPerson, locale: Locale = "zh"): JsonL
     personNode,
     breadcrumb(locale, [
       { name: crumb.home, path: "/" },
-      { name: displayName, path: `/director/${person.slug}` },
+      { name: displayName, path: personPath(person) },
     ]),
   ]);
 }

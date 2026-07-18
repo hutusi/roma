@@ -85,6 +85,7 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
             slug: person.slug,
             name: person.name,
             nameZh: person.nameZh ?? "",
+            primaryRole: person.primaryRole,
             bio: person.bio ?? "",
             careerEssay: person.careerEssay ?? null,
             bioEn: person.bioEn ?? "",

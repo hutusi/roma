@@ -25,6 +25,7 @@ export default async function NewPersonPage() {
             slug: "",
             name: "",
             nameZh: "",
+            primaryRole: "director",
             bio: "",
             careerEssay: null,
             bioEn: "",

@@ -66,6 +66,19 @@ export function PersonForm({
         {errors.slug && <p className="text-destructive text-xs">{errors.slug.message}</p>}
       </div>
       <div className="space-y-1.5">
+        <Label>类型（决定公开页地址：/director 或 /actor）</Label>
+        <div className="flex gap-4 text-sm">
+          <label className="flex items-center gap-1.5">
+            <input type="radio" value="director" {...register("primaryRole")} />
+            导演
+          </label>
+          <label className="flex items-center gap-1.5">
+            <input type="radio" value="actor" {...register("primaryRole")} />
+            演员
+          </label>
+        </div>
+      </div>
+      <div className="space-y-1.5">
         <Label htmlFor="bio">简介（纯文本）</Label>
         <Textarea id="bio" rows={4} {...register("bio")} className="font-body" />
       </div>

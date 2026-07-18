@@ -1,6 +1,7 @@
 import "server-only";
 import { revalidatePath } from "next/cache";
 import { pingIndexNow } from "@/lib/indexnow";
+import { type PersonUrlRole, personPath } from "@/lib/routes";
 
 /**
  * The single seam every editorial mutation invalidates through, so no
@@ -61,9 +62,14 @@ export function revalidateFilm(slug: string, { notify = false }: Options = {}) {
   if (notify) pingIndexNow([`/film/${slug}`, "/films", "/"]);
 }
 
-export function revalidatePerson(slug: string, { notify = false }: Options = {}) {
+/** role picks the canonical segment IndexNow is pointed at. */
+export function revalidatePerson(
+  slug: string,
+  role: PersonUrlRole,
+  { notify = false }: Options = {},
+) {
   revalidateEditorialPages();
-  if (notify) pingIndexNow([`/director/${slug}`]);
+  if (notify) pingIndexNow([personPath({ slug, primaryRole: role })]);
 }
 
 export function revalidateList(slug: string, { notify = false }: Options = {}) {

@@ -8,6 +8,8 @@ export const personFormSchema = z.object({
     .regex(/^[a-z0-9-]+$/, "仅小写字母、数字和连字符"),
   name: z.string().min(1, "姓名不能为空"),
   nameZh: z.string().optional(),
+  /** Picks the canonical URL segment (/director vs /actor). */
+  primaryRole: z.enum(["director", "actor"]),
   bio: z.string().optional(),
   careerEssay: tiptapDocSchema,
   bioEn: z.string().optional(),

@@ -35,6 +35,7 @@ export default async function AdminPeoplePage() {
         <TableHeader>
           <TableRow>
             <TableHead>姓名</TableHead>
+            <TableHead>类型</TableHead>
             <TableHead>slug</TableHead>
             <TableHead>状态</TableHead>
             <TableHead>更新时间</TableHead>
@@ -48,6 +49,9 @@ export default async function AdminPeoplePage() {
                   {d.nameZh ?? d.name}
                 </Link>
                 <span className="ml-2 text-ink-muted text-xs">{d.name}</span>
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline">{d.primaryRole === "actor" ? "演员" : "导演"}</Badge>
               </TableCell>
               <TableCell className="text-ink-muted">{d.slug}</TableCell>
               <TableCell>
@@ -65,7 +69,7 @@ export default async function AdminPeoplePage() {
           ))}
           {rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4} className="text-center text-ink-muted">
+              <TableCell colSpan={5} className="text-center text-ink-muted">
                 还没有人物条目
               </TableCell>
             </TableRow>

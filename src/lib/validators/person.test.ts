@@ -49,9 +49,9 @@ describe("publishEnProblems", () => {
 });
 
 describe("personFormSchema", () => {
-  const base = { slug: "federico-fellini", name: "Federico Fellini" };
+  const base = { slug: "federico-fellini", name: "Federico Fellini", primaryRole: "director" };
 
-  test("a draft needs only a slug and a name — publishing is the strict step", () => {
+  test("a draft needs only a slug, a name and a role — publishing is the strict step", () => {
     expect(personFormSchema.safeParse(base).success).toBe(true);
   });
 

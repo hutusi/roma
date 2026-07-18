@@ -7,6 +7,7 @@ import { TiptapContent } from "@/components/tiptap/render";
 import { type PublicPerson, posterOf } from "@/db/queries/public";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
+import { personPath } from "@/lib/routes";
 
 /**
  * Pure presentation of a person for both locales; the en edition
@@ -14,7 +15,9 @@ import { type Locale, localePath } from "@/i18n/locales";
  * films/viewing items to the locale's visible subset.
  */
 export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; locale?: Locale }) {
-  const dict = getDict(locale).person;
+  const fullDict = getDict(locale);
+  const dict = fullDict.person;
+  const castAs = fullDict.film.castAs;
   const en = locale === "en";
   const portrait = person.media.find((m) => m.kind === "portrait") ?? person.media[0] ?? null;
   const displayName = en ? person.name : (person.nameZh ?? person.name);
@@ -31,7 +34,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
         )}
         {person.status === "published" && (
           <p className="mt-3">
-            <LocaleSwitch locale={locale} path={`/director/${person.slug}`} />
+            <LocaleSwitch locale={locale} path={personPath(person)} />
           </p>
         )}
       </header>
@@ -120,6 +123,43 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
               );
             })}
           </div>
+        </section>
+      )}
+
+      {person.actedIn.length > 0 && (
+        <section className="mt-14 pb-4">
+          <TitleCard eyebrow={en ? undefined : "As Actor"} title={dict.actedIn} />
+          {/* A film the person also directed repeats here on purpose: this
+              row carries the character, which the directed grid can't. */}
+          <ul className="mx-auto mt-8 max-w-xl space-y-2 text-[15px]">
+            {person.actedIn.map((credit) => {
+              const filmTitle = en
+                ? (credit.film.titleEn ?? credit.film.titleOriginal)
+                : credit.film.titleZh;
+              return (
+                <li key={credit.id} className="flex justify-between border-line border-b py-2">
+                  <span>
+                    {credit.film.status === "published" ? (
+                      <Link
+                        href={localePath(locale, `/film/${credit.film.slug}`)}
+                        className="font-bold hover:text-brand"
+                      >
+                        {filmTitle}
+                      </Link>
+                    ) : (
+                      <span className="font-bold">{filmTitle}</span>
+                    )}
+                    <span className="ml-2 font-display text-ink-muted text-sm">
+                      {credit.film.year}
+                    </span>
+                  </span>
+                  {credit.character && (
+                    <span className="text-ink-muted">{castAs(credit.character)}</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
     </article>

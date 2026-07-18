@@ -60,14 +60,19 @@ describe("revalidateFilm", () => {
 
 describe("revalidatePerson", () => {
   test("sweeps the public tree, so film cards carrying the name refresh too", () => {
-    revalidatePerson("tarkovsky");
+    revalidatePerson("tarkovsky", "director");
     expectFullSweep();
     expect(pinged).toEqual([]);
   });
 
   test("notifies the person page when asked", () => {
-    revalidatePerson("tarkovsky", { notify: true });
+    revalidatePerson("tarkovsky", "director", { notify: true });
     expect(pinged).toEqual([["/director/tarkovsky"]]);
+  });
+
+  test("an actor-primary person notifies the /actor canonical URL", () => {
+    revalidatePerson("masina", "actor", { notify: true });
+    expect(pinged).toEqual([["/actor/masina"]]);
   });
 });
 

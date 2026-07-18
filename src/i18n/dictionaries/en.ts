@@ -61,6 +61,7 @@ export const en = {
     career: "Career",
     suggestedOrder: "Suggested Viewing Order",
     films: "Films",
+    actedIn: "Films as Actor",
   },
   auth: {
     email: "Email",
