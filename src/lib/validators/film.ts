@@ -17,8 +17,10 @@ export const EDITORIAL_NOTE_EN_MAX = 350;
 
 export const castMemberSchema = z.object({
   name: z.string().min(1, "姓名不能为空"),
-  zhName: z.string().optional(),
+  nameZh: z.string().optional(),
   character: z.string().optional(),
+  /** Optional link to a curated person ("" means unlinked in the form). */
+  personId: z.string().optional(),
 });
 
 export const watchLinkSchema = z.object({

@@ -79,9 +79,16 @@ export async function saveFilm(
 
   try {
     const outcome = await db.transaction(async (tx) => {
-      const lockedPeople = await lockPeople(tx, v.directorIds);
-      if (lockedPeople.length !== new Set(v.directorIds).size) {
-        return { error: "关联的导演不存在，可能已被删除" } as const;
+      // One sorted multi-row lock over every referenced person (directing
+      // credits + linked cast rows) keeps the people → films order and
+      // closes the FK race with deletePerson.
+      const linkedPersonIds = [
+        ...v.directorIds,
+        ...v.cast.flatMap((m) => (m.personId ? [m.personId] : [])),
+      ];
+      const lockedPeople = await lockPeople(tx, linkedPersonIds);
+      if (lockedPeople.length !== new Set(linkedPersonIds).size) {
+        return { error: "关联的人物不存在，可能已被删除" } as const;
       }
 
       let targetId = id;
@@ -128,8 +135,9 @@ export async function saveFilm(
             filmId: targetId,
             position: i,
             name: m.name,
-            nameZh: m.zhName || null,
+            nameZh: m.nameZh || null,
             character: m.character || null,
+            personId: m.personId || null,
           })),
         );
       }
@@ -166,7 +174,7 @@ export async function saveFilm(
     return ok({ id: filmId });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
-    if (isForeignKeyViolation(error)) return fail("关联的导演不存在，可能已被删除");
+    if (isForeignKeyViolation(error)) return fail("关联的人物不存在，可能已被删除");
     throw error;
   }
 }

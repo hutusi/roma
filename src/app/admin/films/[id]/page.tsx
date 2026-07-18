@@ -31,7 +31,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
   });
   if (!film) notFound();
 
-  const [directorRows, mediaRows] = await Promise.all([
+  const [personRows, mediaRows] = await Promise.all([
     db
       .select({ id: people.id, name: people.name, nameZh: people.nameZh })
       .from(people)
@@ -98,7 +98,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
       <div className="mt-6">
         <FilmForm
           filmId={film.id}
-          directors={directorRows}
+          people={personRows}
           media={mediaRows}
           defaultValues={{
             slug: film.slug,
@@ -118,8 +118,9 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             essayEn: film.essayEn ?? null,
             cast: film.cast.map((m) => ({
               name: m.name,
-              zhName: m.nameZh ?? "",
+              nameZh: m.nameZh ?? "",
               character: m.character ?? "",
+              personId: m.personId ?? "",
             })),
             watchLinks: film.watchLinks.map((l) => ({
               platform: l.platform,

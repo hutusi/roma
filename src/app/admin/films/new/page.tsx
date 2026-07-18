@@ -8,7 +8,7 @@ export const metadata = { title: "新建影片" };
 
 export default async function NewFilmPage() {
   await requireEditor();
-  const [directorRows, mediaRows] = await Promise.all([
+  const [personRows, mediaRows] = await Promise.all([
     db
       .select({ id: people.id, name: people.name, nameZh: people.nameZh })
       .from(people)
@@ -26,7 +26,7 @@ export default async function NewFilmPage() {
       <div className="mt-6">
         <FilmForm
           filmId={null}
-          directors={directorRows}
+          people={personRows}
           media={mediaRows}
           tmdbEnabled={Boolean(process.env.TMDB_API_TOKEN)}
           defaultValues={{
