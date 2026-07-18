@@ -26,14 +26,16 @@ function fetchIndex(locale: Locale): Promise<SearchIndex> {
 
 /**
  * Lazily loads the locale's search index the first time `enabled` is
- * true (dialog opened / page mounted). Effect deps are [locale,
- * enabled] only — a failure does NOT auto-retry in a loop; it retries
- * on the next enable transition because the cache entry was dropped.
+ * true (dialog opened / page mounted). A failure does NOT auto-retry
+ * in a loop; it retries on the next enable transition or an explicit
+ * retry() call (both refetch, since the cache entry was dropped).
  */
 export function useSearchIndex(locale: Locale, enabled: boolean) {
   const [docs, setDocs] = useState<SearchDoc[]>([]);
   const [status, setStatus] = useState<SearchIndexStatus>("idle");
+  const [attempt, setAttempt] = useState(0);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `attempt` is a deliberate re-trigger — retry() bumps it to refetch after a failure.
   useEffect(() => {
     if (!enabled) return;
     let cancelled = false;
@@ -51,7 +53,7 @@ export function useSearchIndex(locale: Locale, enabled: boolean) {
     return () => {
       cancelled = true;
     };
-  }, [locale, enabled]);
+  }, [locale, enabled, attempt]);
 
-  return { docs, status };
+  return { docs, status, retry: () => setAttempt((a) => a + 1) };
 }

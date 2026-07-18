@@ -37,11 +37,15 @@ export type SearchIndex = { docs: SearchDoc[] };
 
 /**
  * NFKC folds the full-width Latin/digits CJK IMEs produce
- * (Ｃａｓａｂｌａｎｃａ → casablanca). Applied to both doc strings and
- * the query, so quirks like 8½ → "81⁄2" stay self-consistent.
+ * (Ｃａｓａｂｌａｎｃａ → casablanca); the NFD pass then strips
+ * combining marks so accentless input finds accented names — a zh
+ * reader types "anouk aimee", the corpus says "Anouk Aimée" (CJK
+ * carries no combining marks, so it passes through untouched).
+ * Applied to both doc strings and the query, so quirks like
+ * 8½ → "81⁄2" stay self-consistent.
  */
 export function normalizeForSearch(s: string): string {
-  return s.normalize("NFKC").toLowerCase().trim();
+  return s.normalize("NFKC").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().trim();
 }
 
 /**
@@ -58,7 +62,7 @@ export function isQueryLongEnough(rawQuery: string): boolean {
 
 const TYPE_WEIGHT: Record<SearchDocType, number> = { film: 4, person: 3, list: 2, tag: 1 };
 
-function scoreDoc(doc: SearchDoc, q: string, rawQuery: string): number {
+function scoreDoc(doc: SearchDoc, q: string): number {
   let best = 0;
   for (const name of doc.names) {
     const n = normalizeForSearch(name);
@@ -67,8 +71,8 @@ function scoreDoc(doc: SearchDoc, q: string, rawQuery: string): number {
     else if (n.includes(q)) best = Math.max(best, 2);
   }
   // Exact year only — "196" tier-matching every 1960s film would drown
-  // the name tiers in noise.
-  if (best < 2 && doc.year !== undefined && rawQuery.trim() === String(doc.year)) best = 2;
+  // the name tiers in noise. q is normalized, so full-width digits fold.
+  if (best < 2 && doc.year !== undefined && q === String(doc.year)) best = 2;
   if (best < 1 && doc.prose && normalizeForSearch(doc.prose).includes(q)) best = 1;
   return best;
 }
@@ -77,7 +81,7 @@ export function matchDocs(docs: SearchDoc[], rawQuery: string, limit = 20): Sear
   if (!isQueryLongEnough(rawQuery)) return [];
   const q = normalizeForSearch(rawQuery);
   return docs
-    .map((doc, index) => ({ doc, index, tier: scoreDoc(doc, q, rawQuery) }))
+    .map((doc, index) => ({ doc, index, tier: scoreDoc(doc, q) }))
     .filter((s) => s.tier > 0)
     .sort(
       (a, b) =>

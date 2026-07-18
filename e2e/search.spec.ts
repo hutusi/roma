@@ -61,7 +61,9 @@ test("header dialog finds 费里尼 and navigates", async ({ page }) => {
 test("every title variant finds the same film", async ({ page }) => {
   await page.goto("/zh/search");
   const input = page.getByRole("searchbox", { name: "搜索" });
-  for (const q of ["八又二分之一", "Otto e mezzo", "8½"]) {
+  // The last query is accentless for "Anouk Aimée" (a cast name on the
+  // film) — diacritics fold, since zh readers type ASCII.
+  for (const q of ["八又二分之一", "Otto e mezzo", "8½", "aimee"]) {
     await input.fill(q);
     await expect(page.locator('a[href="/zh/film/otto-e-mezzo"]')).toBeVisible();
   }
@@ -94,6 +96,23 @@ test("/en search respects the subset", async ({ page }) => {
 
   await input.fill("fellini");
   await expect(page.locator('a[href="/en/director/federico-fellini"]')).toBeVisible();
+});
+
+test("a same-route ?q navigation updates the mounted /search page", async ({ page }) => {
+  // The page island stays mounted across /search?q=… → /search?q=… — the
+  // input and results must adopt the new query, not keep the old state.
+  await page.goto("/zh/search?q=fellini");
+  await expect(page.locator('a[href="/zh/director/federico-fellini"]')).toBeVisible();
+
+  await page.getByRole("banner").getByRole("button", { name: "搜索" }).click();
+  const dialogInput = page.getByRole("dialog").getByRole("searchbox", { name: "搜索" });
+  await dialogInput.fill("卡比利亚");
+  await page.getByRole("dialog").getByRole("link", { name: "查看全部结果" }).click();
+
+  await expect(page).toHaveURL(/\/zh\/search\?q=/);
+  await expect(page.getByRole("searchbox", { name: "搜索" })).toHaveValue("卡比利亚");
+  await expect(page.locator('a[href="/zh/film/le-notti-di-cabiria"]')).toBeVisible();
+  await expect(page.locator('a[href="/zh/director/federico-fellini"]')).toHaveCount(0);
 });
 
 test("Enter in the dialog jumps to the top result", async ({ page }) => {

@@ -30,8 +30,15 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const { docs, status } = useSearchIndex(locale, open);
+  const { docs, status, retry } = useSearchIndex(locale, open);
   const results = useMemo(() => matchDocs(docs, query), [docs, query]);
+
+  // Every close path clears the query — radix only fires onOpenChange
+  // for its own triggers (ESC, overlay), not for external setOpen calls.
+  const close = () => {
+    setOpen(false);
+    setQuery("");
+  };
 
   // ⌘K / Ctrl+K anywhere; "/" when not typing. The admin tree has its
   // own root layout without this header, so no conflict with its forms.
@@ -53,16 +60,8 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
     query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : "/search",
   );
 
-  const close = () => setOpen(false);
-
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(next) => {
-        setOpen(next);
-        if (!next) setQuery("");
-      }}
-    >
+    <Dialog open={open} onOpenChange={(next) => (next ? setOpen(true) : close())}>
       <DialogTrigger asChild>
         <button
           type="button"
@@ -79,7 +78,11 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
           placeholder={labels.placeholder}
           aria-label={labels.title}
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            // Typing after a transient index failure retries the fetch.
+            if (status === "failed") retry();
+            setQuery(e.target.value);
+          }}
           onKeyDown={(e) => {
             // Enter goes to the top-ranked result; with nothing matched
             // yet it falls through to the full page.

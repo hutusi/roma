@@ -29,6 +29,13 @@ describe("normalizeForSearch", () => {
     expect(normalizeForSearch("ＣＡＳＡｂｌａｎｃａ")).toBe("casablanca");
     expect(normalizeForSearch("  Fellini ")).toBe("fellini");
   });
+
+  test("strips diacritics so accentless input matches; CJK untouched", () => {
+    expect(normalizeForSearch("Anouk Aimée")).toBe("anouk aimee");
+    expect(normalizeForSearch("François Truffaut")).toBe("francois truffaut");
+    expect(normalizeForSearch("Buñuel")).toBe("bunuel");
+    expect(normalizeForSearch("八部半")).toBe("八部半");
+  });
 });
 
 describe("isQueryLongEnough", () => {
@@ -88,9 +95,16 @@ describe("matchDocs", () => {
     expect(hrefs).toEqual(["/zh/film/otto", "/zh/director/fellini", "/zh/list/primer"]);
   });
 
-  test("year matches exactly, never by prefix", () => {
+  test("year matches exactly, never by prefix — full-width digits included", () => {
     expect(matchDocs([casablanca], "1942")).toHaveLength(1);
+    expect(matchDocs([casablanca], "１９４２")).toHaveLength(1);
     expect(matchDocs([casablanca], "194")).toHaveLength(0);
+  });
+
+  test("accentless queries find accented names", () => {
+    const d = doc({ href: "/aimee", type: "person", names: ["Anouk Aimée"] });
+    expect(matchDocs([d], "anouk aimee")).toHaveLength(1);
+    expect(matchDocs([d], "aimee")).toHaveLength(1);
   });
 
   test("single CJK char matches prose; single ASCII char matches nothing", () => {

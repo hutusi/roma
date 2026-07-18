@@ -25,8 +25,19 @@ export function SearchPageBody({
   initialQuery: string;
 }) {
   const [query, setQuery] = useState(initialQuery);
-  const { docs, status } = useSearchIndex(locale, true);
+  const { docs, status, retry } = useSearchIndex(locale, true);
   const results = useMemo(() => matchDocs(docs, query), [docs, query]);
+
+  // Same-route navigations (View-all-results from the dialog while on
+  // /search, back/forward between ?q states) change the prop without
+  // remounting — adopt the URL's query. The guard makes our own
+  // debounced replaceState round-trip (which always writes the
+  // then-current query) a no-op instead of clobbering typing.
+  const [lastInitial, setLastInitial] = useState(initialQuery);
+  if (initialQuery !== lastInitial) {
+    setLastInitial(initialQuery);
+    if (initialQuery !== query) setQuery(initialQuery);
+  }
 
   // Keep ?q shareable without re-rendering the server tree per
   // keystroke: native history.replaceState (App Router keeps
@@ -48,7 +59,12 @@ export function SearchPageBody({
         placeholder={labels.placeholder}
         aria-label={labels.title}
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => {
+          // A transient index failure retries as soon as the reader
+          // keeps typing — no reload needed.
+          if (status === "failed") retry();
+          setQuery(e.target.value);
+        }}
         autoFocus
       />
       <SearchResults labels={labels} query={query} results={results} status={status} />
