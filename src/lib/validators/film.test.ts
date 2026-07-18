@@ -100,12 +100,18 @@ describe("filmFormSchema", () => {
     cast: [],
     watchLinks: [],
     directorIds: [],
+    tagIds: [],
   };
 
   test("accepts a minimal valid film and coerces year", () => {
     const parsed = filmFormSchema.safeParse(valid);
     expect(parsed.success).toBe(true);
     if (parsed.success) expect(parsed.data.year).toBe(1963);
+  });
+
+  test("rejects duplicate tag links", () => {
+    expect(filmFormSchema.safeParse({ ...valid, tagIds: ["t1", "t1"] }).success).toBe(false);
+    expect(filmFormSchema.safeParse({ ...valid, tagIds: ["t1", "t2"] }).success).toBe(true);
   });
 
   test("rejects slugs with uppercase or CJK", () => {

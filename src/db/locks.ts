@@ -1,14 +1,14 @@
 import "server-only";
 import { asc, eq, inArray } from "drizzle-orm";
 import type { db } from "@/db";
-import { curatedLists, films, people, userLists, users } from "@/db/schema";
+import { curatedLists, films, people, tags, userLists, users } from "@/db/schema";
 
 export type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 /**
- * Canonical editorial lock order: people → films → lists. Callers that
- * need more than one kind must follow it; multi-row helpers sort by id so
- * two requests cannot acquire the same set in opposite order.
+ * Canonical editorial lock order: people → tags → films → lists. Callers
+ * that need more than one kind must follow it; multi-row helpers sort by
+ * id so two requests cannot acquire the same set in opposite order.
  */
 export async function lockPerson(tx: DbTransaction, id: string) {
   const [row] = await tx.select().from(people).where(eq(people.id, id)).for("update");
@@ -23,6 +23,22 @@ export async function lockPeople(tx: DbTransaction, ids: string[]) {
     .from(people)
     .where(inArray(people.id, uniqueIds))
     .orderBy(asc(people.id))
+    .for("update");
+}
+
+export async function lockTag(tx: DbTransaction, id: string) {
+  const [row] = await tx.select().from(tags).where(eq(tags.id, id)).for("update");
+  return row;
+}
+
+export async function lockTags(tx: DbTransaction, ids: string[]) {
+  const uniqueIds = [...new Set(ids)].sort();
+  if (uniqueIds.length === 0) return [];
+  return tx
+    .select({ id: tags.id })
+    .from(tags)
+    .where(inArray(tags.id, uniqueIds))
+    .orderBy(asc(tags.id))
     .for("update");
 }
 

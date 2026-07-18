@@ -1,0 +1,1 @@
+ALTER TABLE "films" ALTER COLUMN "is_black_and_white" SET DEFAULT false;

@@ -46,9 +46,11 @@ const {
   filmCast,
   filmDirectors,
   films,
+  filmTags,
   filmWatchLinks,
   media,
   people,
+  tags,
   users,
 } = await import("@/db/schema");
 const { auth } = await import("@/lib/auth");
@@ -190,6 +192,19 @@ const filmRows = await db
       publishedAt: new Date(),
     },
     {
+      // The one color film in the fixture set — the ?palette facet needs
+      // both palettes present to filter either way.
+      slug: "giulietta-degli-spiriti",
+      titleZh: "朱丽叶与魔鬼",
+      titleOriginal: "Giulietta degli spiriti",
+      year: 1965,
+      countries: ["意大利", "法国"],
+      isBlackAndWhite: false,
+      editorialNote: NOTE,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
       // Draft on purpose: must 404 publicly, render in preview, stay
       // hidden inside the published list below (draft-leak regression).
       slug: "il-bidone",
@@ -258,6 +273,21 @@ await db.insert(filmWatchLinks).values({
   url: "https://www.criterionchannel.com/",
   sortOrder: 0,
 });
+
+// Curated vocabulary — chips must read nameEn on /en (never 现代主义)
+// and the ?tag facet filters by slug in both editions.
+const tagRows = await db
+  .insert(tags)
+  .values([
+    { slug: "modernism", nameZh: "现代主义", nameEn: "Modernism" },
+    { slug: "neorealism", nameZh: "新现实主义", nameEn: "Neorealism" },
+  ])
+  .returning();
+const tagBySlug = Object.fromEntries(tagRows.map((t) => [t.slug, t]));
+await db.insert(filmTags).values([
+  { filmId: bySlug["otto-e-mezzo"].id, tagId: tagBySlug.modernism.id },
+  { filmId: bySlug["la-strada"].id, tagId: tagBySlug.neorealism.id },
+]);
 
 // Credited images so the image-credit caption renders — it's the only
 // shared string that used to leak zh onto /en. Host must match

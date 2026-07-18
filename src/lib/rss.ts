@@ -25,13 +25,13 @@ export type FeedFilm = {
 const CHANNEL = {
   zh: {
     title: "八部半",
-    description: "经典电影策展：黑白影像、导演谱系，与值得按顺序看完的片单。",
+    description: "经典电影策展：跨越百年的影像、导演谱系，与值得按顺序看完的片单。",
     language: "zh-CN",
   },
   en: {
     title: "Babuban",
     description:
-      "Classic cinema, curated: black-and-white films, director lineages, and lists worth watching in order.",
+      "Classic cinema, curated: a century of images, director lineages, and lists worth watching in order.",
     language: "en",
   },
 } as const;

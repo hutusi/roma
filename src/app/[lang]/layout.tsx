@@ -28,7 +28,7 @@ const META: Record<Locale, Metadata> = {
       template: "%s — 八部半",
     },
     description:
-      "八部半（Babuban）是一份关于经典电影的中文策展手册：黑白影片、导演谱系与精心编排的片单。",
+      "八部半（Babuban）是一份关于经典电影的中文策展手册：精选影片、导演谱系与精心编排的片单。",
   },
   en: {
     title: {
@@ -36,7 +36,7 @@ const META: Record<Locale, Metadata> = {
       template: "%s — Babuban",
     },
     description:
-      "Babuban (八部半) is a curatorial handbook for classic cinema: black-and-white films, director lineages, and lists worth watching in order.",
+      "Babuban (八部半) is a curatorial handbook for classic cinema: curated films, director lineages, and lists worth watching in order.",
   },
 };
 

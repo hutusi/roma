@@ -11,6 +11,9 @@ test("en film page renders the English edition with lang=en", async ({ page }) =
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("heading", { name: "8½" })).toBeVisible();
   await expect(page.getByText("word1 word2 word3")).toBeVisible();
+  // Tag chips read the English name, never the zh one.
+  await expect(page.locator('a[href="/en/films?tag=modernism"]')).toHaveText("Modernism");
+  await expect(page.getByText("现代主义")).toHaveCount(0);
   // No zh prose leaks onto the en page.
   await expect(page.getByText("编辑札记")).toHaveCount(0);
 });

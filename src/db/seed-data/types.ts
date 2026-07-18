@@ -45,6 +45,13 @@ export type SeedWatchLink = {
   noteEn?: string;
 };
 
+/** Curated bilingual vocabulary — both names required (ADR 0014). */
+export type SeedTag = {
+  slug: string;
+  nameZh: string;
+  nameEn: string;
+};
+
 export type SeedFilm = {
   slug: string;
   /** 大陆译名 — primary display title. */
@@ -60,8 +67,8 @@ export type SeedFilm = {
   runtimeMinutes?: number;
   /** e.g. "1.37:1" */
   aspectRatio?: string;
-  /** Defaults to true when omitted. */
-  isBlackAndWhite?: boolean;
+  /** Explicit on every film — the catalogue no longer presumes B&W. */
+  isBlackAndWhite: boolean;
   /** 编辑札记 — plain text, must be 200–500 code points to publish. */
   editorialNote: string;
   essay?: TiptapDoc;
@@ -74,6 +81,8 @@ export type SeedFilm = {
   cast?: SeedCastMember[];
   /** Director slugs, ordered (co-directors keep their order). */
   directorSlugs: string[];
+  /** Tag slugs from seed-data/tags.ts (unordered set). */
+  tagSlugs?: string[];
   watchLinks?: SeedWatchLink[];
   /** Optional explicit TMDB movie id; otherwise resolved by title + year. */
   tmdbId?: number;

@@ -5,6 +5,7 @@ import { invitations } from "./invitations";
 import { curatedListItems, curatedLists } from "./lists";
 import { media } from "./media";
 import { people } from "./people";
+import { filmTags, tags } from "./tags";
 import { listFollows, userListItems, userLists, userMarks } from "./user-content";
 
 export const filmsRelations = relations(films, ({ many }) => ({
@@ -13,6 +14,22 @@ export const filmsRelations = relations(films, ({ many }) => ({
   watchLinks: many(filmWatchLinks),
   media: many(media),
   listItems: many(curatedListItems),
+  filmTags: many(filmTags),
+}));
+
+export const tagsRelations = relations(tags, ({ many }) => ({
+  filmTags: many(filmTags),
+}));
+
+export const filmTagsRelations = relations(filmTags, ({ one }) => ({
+  film: one(films, {
+    fields: [filmTags.filmId],
+    references: [films.id],
+  }),
+  tag: one(tags, {
+    fields: [filmTags.tagId],
+    references: [tags.id],
+  }),
 }));
 
 export const peopleRelations = relations(people, ({ many }) => ({

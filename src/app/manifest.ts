@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "八部半 · Babuban",
     short_name: "八部半",
-    description: "关于经典电影的策展手册：黑白影片、导演谱系与片单。",
+    description: "关于经典电影的策展手册：精选影片、导演谱系与片单。",
     start_url: "/zh",
     display: "minimal-ui",
     background_color: "#faf8f4",

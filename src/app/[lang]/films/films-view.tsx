@@ -1,11 +1,13 @@
 import { FilmCard } from "@/components/site/film-card";
 import { type Locale, localePath } from "@/i18n/locales";
+import { type FilmCardData, filterFilms, type Selection } from "./filtering";
 
 /**
  * Presentational shell for /films, shared by the static server render and
  * the client filtering island — which is why it takes the selection as
- * props and holds no hooks of its own. Filtering happens here so both
- * paths filter identically.
+ * props and holds no hooks of its own. The filter predicate lives in
+ * `filtering.ts` so both paths filter identically (and it unit-tests
+ * without rendering).
  */
 
 export const COPY = {
@@ -17,6 +19,10 @@ export const COPY = {
     allDecades: "全部年代",
     decadeLabel: (d: number) => `${d} 年代`,
     allCountries: "全部地区",
+    allPalettes: "全部色彩",
+    paletteBw: "黑白",
+    paletteColor: "彩色",
+    allTags: "全部标签",
     filter: "筛选",
     empty: "没有符合条件的影片。",
   },
@@ -28,42 +34,16 @@ export const COPY = {
     allDecades: "All decades",
     decadeLabel: (d: number) => `${d}s`,
     allCountries: "All countries",
+    allPalettes: "Color & B&W",
+    paletteBw: "B&W",
+    paletteColor: "Color",
+    allTags: "All tags",
     filter: "Filter",
     empty: "No films match this filter yet.",
   },
 } as const;
 
 const DECADES = [1920, 1930, 1940, 1950, 1960, 1970, 1980];
-
-/**
- * Plain, already-localized card data. The server resolves titles, poster
- * and director names so the island never needs the media/director
- * relations — or the server-only query layer — on the client.
- *
- * `countries` is in the DISPLAY language, matching the ?country param, so
- * neither side has to map between editions to compare.
- */
-export type FilmCardData = {
-  id: string;
-  href: string;
-  title: string;
-  subtitle: string | null;
-  year: number;
-  directorsLabel: string;
-  imageUrl: string | null;
-  imageAlt: string | null;
-  countries: string[];
-};
-
-export type Selection = { decade?: number; country?: string };
-
-export function filterFilms(films: FilmCardData[], { decade, country }: Selection) {
-  return films.filter(
-    (f) =>
-      (decade === undefined || (f.year >= decade && f.year <= decade + 9)) &&
-      (!country || f.countries.includes(country)),
-  );
-}
 
 export function FilmsView({
   locale,
@@ -77,6 +57,11 @@ export function FilmsView({
 }) {
   const t = COPY[locale];
   const countries = Array.from(new Set(films.flatMap((f) => f.countries))).sort();
+  // Options come from the films themselves (like countries), so the
+  // facet never offers a tag with zero matches.
+  const tagOptions = Array.from(
+    new Map(films.flatMap((f) => f.tags).map((tag) => [tag.slug, tag])).values(),
+  ).sort((a, b) => a.label.localeCompare(b.label, locale));
   const shown = filterFilms(films, selection);
 
   return (
@@ -84,7 +69,10 @@ export function FilmsView({
       {/* A plain GET form, not an onChange handler: it keeps the filter in
           the URL (shareable, and what the island reads back), and it still
           navigates without JS — the page just renders unfiltered there. */}
-      <form className="mt-10 flex justify-center gap-3" action={localePath(locale, "/films")}>
+      <form
+        className="mt-10 flex flex-wrap justify-center gap-3"
+        action={localePath(locale, "/films")}
+      >
         <select
           name="decade"
           defaultValue={selection.decade ?? ""}
@@ -109,6 +97,29 @@ export function FilmsView({
             </option>
           ))}
         </select>
+        <select
+          name="palette"
+          defaultValue={selection.palette ?? ""}
+          className="h-9 border border-line bg-paper px-2 text-sm"
+        >
+          <option value="">{t.allPalettes}</option>
+          <option value="bw">{t.paletteBw}</option>
+          <option value="color">{t.paletteColor}</option>
+        </select>
+        {tagOptions.length > 0 && (
+          <select
+            name="tag"
+            defaultValue={selection.tag ?? ""}
+            className="h-9 border border-line bg-paper px-2 text-sm"
+          >
+            <option value="">{t.allTags}</option>
+            {tagOptions.map((tag) => (
+              <option key={tag.slug} value={tag.slug}>
+                {tag.label}
+              </option>
+            ))}
+          </select>
+        )}
         <button
           type="submit"
           className="h-9 border border-ink px-4 text-sm tracking-[0.2em] transition-colors hover:border-brand hover:text-brand"

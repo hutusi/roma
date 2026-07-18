@@ -64,6 +64,20 @@
       "when": 1784348956210,
       "tag": "0008_steady_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1784357197384,
+      "tag": "0009_nasty_stellaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1784357450480,
+      "tag": "0010_lowly_devos",
+      "breakpoints": true
     }
   ]
 }

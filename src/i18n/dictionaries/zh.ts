@@ -12,7 +12,7 @@ export const zh = {
     about: "关于",
   },
   footer: {
-    tagline: "八部半 —— 献给黑白电影的策展手册",
+    tagline: "八部半 —— 献给经典电影的策展手册",
     aboutLink: "关于本站",
   },
   imageCredit: "图片来源：",

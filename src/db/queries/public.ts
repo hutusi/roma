@@ -8,6 +8,7 @@ import {
   filmCast,
   filmDirectors,
   films,
+  filmTags,
   filmWatchLinks,
   media,
   people,
@@ -32,6 +33,9 @@ const creditOrder = [asc(filmDirectors.position), asc(filmDirectors.directorId)]
 const filmCardRelations = {
   filmDirectors: { with: { director: true as const }, orderBy: creditOrder },
   media: { orderBy: mediaOrder },
+  // Junction order is stability only — display sorts by localized label.
+  // Tags carry no status and nameEn is NOT NULL, so no locale gate here.
+  filmTags: { with: { tag: true as const }, orderBy: [asc(filmTags.tagId)] },
 };
 
 /**

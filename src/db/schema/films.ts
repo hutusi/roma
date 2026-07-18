@@ -32,7 +32,7 @@ export const films = pgTable(
     runtimeMinutes: integer(),
     /** e.g. "1.37:1" */
     aspectRatio: text(),
-    isBlackAndWhite: boolean().notNull().default(true),
+    isBlackAndWhite: boolean().notNull().default(false),
     /**
      * 编辑札记 — plain text. Publishing requires 200–500 code points
      * (enforced in the app layer so CJK counts correctly); drafts may be

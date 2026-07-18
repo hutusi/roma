@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { type FilmFormValues, filmFormSchema } from "@/lib/validators/film";
 
 export type PersonOption = { id: string; name: string; nameZh: string | null };
+export type TagOption = { id: string; nameZh: string };
 
 const ASPECT_RATIOS = ["1.37:1", "1.33:1", "1.66:1", "1.85:1", "2.35:1"];
 const REGIONS = [
@@ -42,12 +43,14 @@ export function FilmForm({
   filmId,
   defaultValues,
   people,
+  tags,
   media,
   tmdbEnabled = false,
 }: {
   filmId: string | null;
   defaultValues: FilmFormValues;
   people: PersonOption[];
+  tags: TagOption[];
   media: MediaOption[];
   tmdbEnabled?: boolean;
 }) {
@@ -229,6 +232,36 @@ export function FilmForm({
                       }
                     />
                     {d.nameZh ?? d.name}
+                  </label>
+                ))}
+              </div>
+            )}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label>标签</Label>
+          <Controller
+            control={control}
+            name="tagIds"
+            render={({ field }) => (
+              <div className="flex flex-wrap gap-3 border border-line bg-card p-3">
+                {tags.length === 0 && (
+                  <p className="text-ink-muted text-sm">还没有标签——请先在「标签」中创建。</p>
+                )}
+                {tags.map((t) => (
+                  <label key={t.id} className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={field.value.includes(t.id)}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.checked
+                            ? [...field.value, t.id]
+                            : field.value.filter((id) => id !== t.id),
+                        )
+                      }
+                    />
+                    {t.nameZh}
                   </label>
                 ))}
               </div>

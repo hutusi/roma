@@ -48,6 +48,7 @@ const film = {
     { id: "c2", name: "Marcello Mastroianni", nameZh: "马塞洛·马斯楚安尼", person: null },
   ],
   media: [{ kind: "poster", url: "https://blob.example/8.jpg" }],
+  filmTags: [{ tag: { slug: "modernism", nameZh: "现代主义", nameEn: "Modernism" } }],
 } as unknown as PublicFilm;
 
 const graphOf = (node: Record<string, unknown>) => node["@graph"] as Record<string, unknown>[];
@@ -65,6 +66,7 @@ describe("filmJsonLd", () => {
       "https://babuban.com/zh/director/fellini",
     );
     expect((movie.countryOfOrigin as { name: string }[])[0].name).toBe("法国");
+    expect(movie.genre).toEqual(["现代主义"]);
     expect(crumbs["@type"]).toBe("BreadcrumbList");
     expect((crumbs.itemListElement as unknown[]).length).toBe(3);
   });
@@ -77,6 +79,13 @@ describe("filmJsonLd", () => {
       "https://babuban.com/en/director/fellini",
     );
     expect((movie.countryOfOrigin as { name: string }[])[0].name).toBe("France");
+    expect(movie.genre).toEqual(["Modernism"]);
+  });
+
+  test("a film with no tags emits no genre", () => {
+    const untagged = { ...film, filmTags: [] } as unknown as PublicFilm;
+    const [movie] = graphOf(filmJsonLd(untagged, "zh"));
+    expect(movie.genre).toBeUndefined();
   });
 
   test("en does not link a co-director who isn't en-published", () => {

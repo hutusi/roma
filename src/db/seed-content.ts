@@ -39,15 +39,18 @@ import {
   filmCast,
   filmDirectors,
   films,
+  filmTags,
   filmWatchLinks,
   media,
   people,
+  tags,
   users,
 } from "./schema";
 import { seedActors } from "./seed-data/actors";
 import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
 import { seedLists } from "./seed-data/lists";
+import { seedTags } from "./seed-data/tags";
 
 const NOW = Date.now();
 /** Stagger publishedAt so the array order drives the home "近期收录" strip. */
@@ -142,7 +145,7 @@ async function main() {
         countries: f.countries,
         runtimeMinutes: f.runtimeMinutes ?? null,
         aspectRatio: f.aspectRatio ?? null,
-        isBlackAndWhite: f.isBlackAndWhite ?? true,
+        isBlackAndWhite: f.isBlackAndWhite,
         editorialNote: f.editorialNote,
         essay: f.essay ?? null,
         editorialNoteEn: f.editorialNoteEn ?? null,
@@ -178,6 +181,40 @@ async function main() {
     }),
   );
   if (fdValues.length) await db.insert(filmDirectors).values(fdValues).onConflictDoNothing();
+
+  // ── Tags + film ↔ tag junction — FIRST RUN ONLY ─────────────────────
+  // The whole block is gated on an empty vocabulary. On that first run,
+  // junctions seed for ALL seed films (like film_directors, unlike the
+  // newFilmSlugs-gated cast path) so a prod DB whose films pre-date tags
+  // still gets its assignments backfilled. Once any tag exists, the
+  // vocabulary is admin-owned: an upsert-and-readd re-run would
+  // resurrect tags an editor renamed or deleted, breaking the "a re-run
+  // never clobbers admin edits" contract above.
+  const vocabularyExists = await db.query.tags.findFirst({ columns: { id: true } });
+  if (vocabularyExists) {
+    console.log("Tags: vocabulary already exists (admin-owned) — skipping the starter seed.");
+  } else {
+    await db.insert(tags).values(seedTags);
+    const tagRows = await db
+      .select({ id: tags.id, slug: tags.slug })
+      .from(tags)
+      .where(
+        inArray(
+          tags.slug,
+          seedTags.map((t) => t.slug),
+        ),
+      );
+    const tagIdBySlug = new Map(tagRows.map((r) => [r.slug, r.id]));
+
+    const ftValues = seedFilms.flatMap((f) =>
+      (f.tagSlugs ?? []).flatMap((ts) => {
+        const filmId = filmIdBySlug.get(f.slug);
+        const tagId = tagIdBySlug.get(ts);
+        return filmId && tagId ? [{ filmId, tagId }] : [];
+      }),
+    );
+    if (ftValues.length) await db.insert(filmTags).values(ftValues).onConflictDoNothing();
+  }
 
   // ── 演员表 — only for newly-created films (no natural unique key) ────
   const castValues = seedFilms
@@ -470,6 +507,11 @@ async function assertPublishable(filmIdBySlug: Map<string, string>) {
         );
       }
       if (!f.titleEn) problems.push(`film ${f.slug}: English note without titleEn`);
+    }
+    // A typo'd tag slug would silently drop the junction row above.
+    const knownTags = new Set(seedTags.map((t) => t.slug));
+    for (const ts of f.tagSlugs ?? []) {
+      if (!knownTags.has(ts)) problems.push(`film ${f.slug}: unknown tag slug "${ts}"`);
     }
   }
 

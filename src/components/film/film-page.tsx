@@ -61,6 +61,12 @@ export function FilmPage({
     film.isBlackAndWhite ? dict.blackAndWhite : dict.color,
   ].filter(Boolean);
 
+  // Chips are safe on /en without a gate: nameEn is NOT NULL by schema
+  // (ADR 0014), and a tag's visibility rides on the film itself.
+  const tagChips = film.filmTags
+    .map((ft) => ({ slug: ft.tag.slug, label: en ? ft.tag.nameEn : ft.tag.nameZh }))
+    .sort((a, b) => a.label.localeCompare(b.label, en ? "en" : "zh"));
+
   const translations = [
     { label: dict.titleLabels.mainland, value: film.titleZh },
     { label: dict.titleLabels.hongkong, value: film.titleZhHk },
@@ -106,6 +112,19 @@ export function FilmPage({
                   d.label
                 )}
               </span>
+            ))}
+          </p>
+        )}
+        {tagChips.length > 0 && (
+          <p className="mt-4 flex flex-wrap justify-center gap-2">
+            {tagChips.map((t) => (
+              <Link
+                key={t.slug}
+                href={localePath(locale, `/films?tag=${t.slug}`)}
+                className="border border-line px-2 py-0.5 text-ink-muted text-xs tracking-[0.15em] transition-colors hover:border-brand hover:text-brand"
+              >
+                {t.label}
+              </Link>
             ))}
           </p>
         )}

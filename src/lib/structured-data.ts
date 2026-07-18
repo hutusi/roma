@@ -149,6 +149,9 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
         }
       : {}),
     ...(film.runtimeMinutes ? { duration: `PT${film.runtimeMinutes}M` } : {}),
+    ...(film.filmTags.length
+      ? { genre: film.filmTags.map((ft) => (en ? ft.tag.nameEn : ft.tag.nameZh)) }
+      : {}),
     ...(image ? { image } : {}),
   };
 

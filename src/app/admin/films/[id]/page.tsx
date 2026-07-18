@@ -10,7 +10,7 @@ import {
   unpublishFilmEn,
 } from "@/actions/films";
 import { db } from "@/db";
-import { films, media, people } from "@/db/schema";
+import { films, media, people, tags } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { FilmForm } from "../film-form";
 import { PublishControls } from "../publish-controls";
@@ -24,6 +24,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
     where: eq(films.id, id),
     with: {
       filmDirectors: true,
+      filmTags: true,
       cast: { orderBy: (t, { asc }) => asc(t.position) },
       watchLinks: { orderBy: (t, { asc }) => asc(t.sortOrder) },
       media: { orderBy: (t, { asc }) => asc(t.sortOrder) },
@@ -31,11 +32,12 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
   });
   if (!film) notFound();
 
-  const [personRows, mediaRows] = await Promise.all([
+  const [personRows, tagRows, mediaRows] = await Promise.all([
     db
       .select({ id: people.id, name: people.name, nameZh: people.nameZh })
       .from(people)
       .orderBy(asc(people.name)),
+    db.select({ id: tags.id, nameZh: tags.nameZh }).from(tags).orderBy(asc(tags.slug)),
     db
       .select({ id: media.id, url: media.url, alt: media.alt })
       .from(media)
@@ -99,6 +101,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
         <FilmForm
           filmId={film.id}
           people={personRows}
+          tags={tagRows}
           media={mediaRows}
           defaultValues={{
             slug: film.slug,
@@ -133,6 +136,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             directorIds: film.filmDirectors
               .sort((a, b) => a.position - b.position)
               .map((fd) => fd.directorId),
+            tagIds: film.filmTags.map((ft) => ft.tagId),
           }}
         />
       </div>
