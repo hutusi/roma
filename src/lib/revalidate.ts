@@ -84,3 +84,12 @@ export function revalidateList(slug: string, { notify = false }: Options = {}) {
 export function revalidateMedia() {
   revalidateEditorialPages();
 }
+
+/**
+ * Same shape as media: tags render as chips inside film pages and the
+ * /films facet, never at a URL of their own, so a rename or delete
+ * invalidates the tree without notifying (ADR 0014).
+ */
+export function revalidateTags() {
+  revalidateEditorialPages();
+}
