@@ -11,11 +11,16 @@ export type SeedDirector = {
   /** Latin/original name, e.g. "Federico Fellini". */
   name: string;
   nameZh: string;
+  /**
+   * Picks the canonical URL segment (/director vs /actor); defaults to
+   * "director" for the original corpus.
+   */
+  primaryRole?: "director" | "actor";
   /** Short plain-text bio (cards + metadata). */
   bio: string;
   /** 创作历程 — long-form essay. */
   careerEssay?: TiptapDoc;
-  /** English edition; a seeded bioEn marks the director en-published. */
+  /** English edition; a seeded bioEn marks the person en-published. */
   bioEn?: string;
   careerEssayEn?: TiptapDoc;
   /** Optional explicit TMDB person id; otherwise resolved by name search. */
@@ -28,6 +33,8 @@ export type SeedCastMember = {
   /** Latin/original role name (what /en shows). */
   character?: string;
   characterZh?: string;
+  /** Optional link to a curated person (directors.ts ∪ actors.ts slug). */
+  personSlug?: string;
 };
 
 export type SeedWatchLink = {
