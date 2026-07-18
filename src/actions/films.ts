@@ -2,7 +2,7 @@
 
 import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { lockFilm, lockPeople } from "@/db/locks";
+import { lockFilm, lockPeople, lockTags } from "@/db/locks";
 import type { TiptapDoc } from "@/db/schema";
 import {
   curatedListItems,
@@ -10,6 +10,7 @@ import {
   filmCast,
   filmDirectors,
   films,
+  filmTags,
   filmWatchLinks,
   userListItems,
   userMarks,
@@ -90,6 +91,12 @@ export async function saveFilm(
       if (lockedPeople.length !== new Set(linkedPersonIds).size) {
         return { error: "关联的人物不存在，可能已被删除" } as const;
       }
+      // people → tags → films: tags lock second, closing the FK race
+      // with deleteTag the same way the people locks close deletePerson's.
+      const lockedTags = await lockTags(tx, v.tagIds);
+      if (lockedTags.length !== new Set(v.tagIds).size) {
+        return { error: "关联的标签不存在，可能已被删除" } as const;
+      }
 
       let targetId = id;
       const existing = targetId ? await lockFilm(tx, targetId) : undefined;
@@ -125,6 +132,7 @@ export async function saveFilm(
         await tx.delete(filmWatchLinks).where(eq(filmWatchLinks.filmId, targetId));
         await tx.delete(filmDirectors).where(eq(filmDirectors.filmId, targetId));
         await tx.delete(filmCast).where(eq(filmCast.filmId, targetId));
+        await tx.delete(filmTags).where(eq(filmTags.filmId, targetId));
       } else {
         const [created] = await tx.insert(films).values(row).returning({ id: films.id });
         targetId = created.id;
@@ -164,6 +172,9 @@ export async function saveFilm(
           })),
         );
       }
+      if (v.tagIds.length) {
+        await tx.insert(filmTags).values(v.tagIds.map((tagId) => ({ filmId: targetId, tagId })));
+      }
       return { id: targetId, previousSlug, isPublic } as const;
     });
     if ("error" in outcome && outcome.error) return fail(outcome.error);
@@ -175,7 +186,7 @@ export async function saveFilm(
     return ok({ id: filmId });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
-    if (isForeignKeyViolation(error)) return fail("关联的人物不存在，可能已被删除");
+    if (isForeignKeyViolation(error)) return fail("关联的人物或标签不存在，可能已被删除");
     throw error;
   }
 }

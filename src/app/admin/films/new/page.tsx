@@ -1,6 +1,6 @@
 import { asc, desc } from "drizzle-orm";
 import { db } from "@/db";
-import { media, people } from "@/db/schema";
+import { media, people, tags } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { FilmForm } from "../film-form";
 
@@ -8,11 +8,12 @@ export const metadata = { title: "新建影片" };
 
 export default async function NewFilmPage() {
   await requireEditor();
-  const [personRows, mediaRows] = await Promise.all([
+  const [personRows, tagRows, mediaRows] = await Promise.all([
     db
       .select({ id: people.id, name: people.name, nameZh: people.nameZh })
       .from(people)
       .orderBy(asc(people.name)),
+    db.select({ id: tags.id, nameZh: tags.nameZh }).from(tags).orderBy(asc(tags.slug)),
     db
       .select({ id: media.id, url: media.url, alt: media.alt })
       .from(media)
@@ -27,6 +28,7 @@ export default async function NewFilmPage() {
         <FilmForm
           filmId={null}
           people={personRows}
+          tags={tagRows}
           media={mediaRows}
           tmdbEnabled={Boolean(process.env.TMDB_API_TOKEN)}
           defaultValues={{
@@ -48,6 +50,7 @@ export default async function NewFilmPage() {
             cast: [],
             watchLinks: [],
             directorIds: [],
+            tagIds: [],
           }}
         />
       </div>

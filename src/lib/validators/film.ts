@@ -70,6 +70,9 @@ export const filmFormSchema = z.object({
   directorIds: z
     .array(z.string())
     .refine((ids) => ids.length === new Set(ids).size, "不能重复关联同一位导演"),
+  tagIds: z
+    .array(z.string())
+    .refine((ids) => ids.length === new Set(ids).size, "不能重复关联同一标签"),
 });
 
 export type FilmFormValues = z.infer<typeof filmFormSchema>;
