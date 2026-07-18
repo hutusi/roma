@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPublishedDirectorBySlug } from "@/db/queries/public";
+import { getPublishedPersonBySlug } from "@/db/queries/public";
 import { parseLocale } from "@/i18n/params";
 import { OG_SIZE, ogCard } from "@/lib/og";
 
@@ -15,8 +15,8 @@ export default async function Image({
   const { lang, slug } = await params;
   parseLocale(lang);
   // zh visibility — see the film OG card (stub pages need a card too).
-  const director = await getPublishedDirectorBySlug(slug);
-  if (!director) notFound();
+  const person = await getPublishedPersonBySlug(slug);
+  if (!person) notFound();
   // ogCard renders the title in Playfair (Latin), so use the romanized name.
-  return ogCard({ title: director.name, kicker: "The Directors" });
+  return ogCard({ title: person.name, kicker: "The Directors" });
 }

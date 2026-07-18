@@ -57,7 +57,7 @@ export const en = {
     watchDisclaimer:
       "Where-to-watch links are maintained by hand and may lapse as platforms change.",
   },
-  director: {
+  person: {
     career: "Career",
     suggestedOrder: "Suggested Viewing Order",
     films: "Films",

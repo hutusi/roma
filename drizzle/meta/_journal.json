@@ -43,6 +43,13 @@
       "when": 1784244371014,
       "tag": "0005_flashy_molten_man",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1784345559542,
+      "tag": "0006_cloudy_doomsday",
+      "breakpoints": true
     }
   ]
 }

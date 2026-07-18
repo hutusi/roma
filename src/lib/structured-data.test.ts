@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import type { PublicDirector, PublicFilm, PublicList } from "@/db/queries/public";
+import type { PublicFilm, PublicList, PublicPerson } from "@/db/queries/public";
 import {
-  directorJsonLd,
   filmJsonLd,
   listJsonLd,
+  personJsonLd,
   serializeJsonLd,
   websiteJsonLd,
 } from "./structured-data";
@@ -69,22 +69,22 @@ describe("filmJsonLd", () => {
   });
 });
 
-describe("directorJsonLd", () => {
+describe("personJsonLd", () => {
   test("emits a Person with name, alternateName, and jobTitle", () => {
-    const director = {
+    const person = {
       slug: "fellini",
       name: "Federico Fellini",
       nameZh: "费德里科·费里尼",
       bio: "生平",
       bioEn: "Life",
       media: [{ kind: "portrait", url: "https://blob.example/f.jpg" }],
-    } as unknown as PublicDirector;
-    const [person] = graphOf(directorJsonLd(director, "en"));
-    expect(person["@type"]).toBe("Person");
-    expect(person.name).toBe("Federico Fellini");
-    expect(person.alternateName).toBe("费德里科·费里尼");
-    expect(person.jobTitle).toBe("Film director");
-    expect(person.url).toBe("https://babuban.com/en/director/fellini");
+    } as unknown as PublicPerson;
+    const [node] = graphOf(personJsonLd(person, "en"));
+    expect(node["@type"]).toBe("Person");
+    expect(node.name).toBe("Federico Fellini");
+    expect(node.alternateName).toBe("费德里科·费里尼");
+    expect(node.jobTitle).toBe("Film director");
+    expect(node.url).toBe("https://babuban.com/en/director/fellini");
   });
 });
 

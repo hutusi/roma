@@ -1,6 +1,6 @@
 import { asc, desc } from "drizzle-orm";
 import { db } from "@/db";
-import { directors, media } from "@/db/schema";
+import { media, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { FilmForm } from "../film-form";
 
@@ -10,9 +10,9 @@ export default async function NewFilmPage() {
   await requireEditor();
   const [directorRows, mediaRows] = await Promise.all([
     db
-      .select({ id: directors.id, name: directors.name, nameZh: directors.nameZh })
-      .from(directors)
-      .orderBy(asc(directors.name)),
+      .select({ id: people.id, name: people.name, nameZh: people.nameZh })
+      .from(people)
+      .orderBy(asc(people.name)),
     db
       .select({ id: media.id, url: media.url, alt: media.alt })
       .from(media)

@@ -9,9 +9,9 @@ import {
   timestamp,
   unique,
 } from "drizzle-orm/pg-core";
-import { directors } from "./directors";
 import { contentStatus } from "./enums";
 import { createdAt, primaryId, updatedAt } from "./helpers";
+import { people } from "./people";
 import type { CastMember, TiptapDoc } from "./types";
 
 export const films = pgTable(
@@ -76,7 +76,7 @@ export const filmDirectors = pgTable(
       .references(() => films.id, { onDelete: "cascade" }),
     directorId: text()
       .notNull()
-      .references(() => directors.id, { onDelete: "cascade" }),
+      .references(() => people.id, { onDelete: "cascade" }),
     position: integer().notNull().default(0),
   },
   (t) => [
@@ -114,7 +114,7 @@ export const directorViewingItems = pgTable(
     id: primaryId(),
     directorId: text()
       .notNull()
-      .references(() => directors.id, { onDelete: "cascade" }),
+      .references(() => people.id, { onDelete: "cascade" }),
     filmId: text()
       .notNull()
       .references(() => films.id, { onDelete: "restrict" }),

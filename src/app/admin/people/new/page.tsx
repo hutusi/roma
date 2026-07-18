@@ -2,11 +2,11 @@ import { desc } from "drizzle-orm";
 import { db } from "@/db";
 import { media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
-import { DirectorForm } from "../director-form";
+import { PersonForm } from "../person-form";
 
-export const metadata = { title: "新建导演" };
+export const metadata = { title: "新建人物" };
 
-export default async function NewDirectorPage() {
+export default async function NewPersonPage() {
   await requireEditor();
   const mediaRows = await db
     .select({ id: media.id, url: media.url, alt: media.alt })
@@ -16,10 +16,10 @@ export default async function NewDirectorPage() {
 
   return (
     <div>
-      <h1 className="font-bold text-xl">新建导演</h1>
+      <h1 className="font-bold text-xl">新建人物</h1>
       <div className="mt-6">
-        <DirectorForm
-          directorId={null}
+        <PersonForm
+          personId={null}
           media={mediaRows}
           defaultValues={{
             slug: "",

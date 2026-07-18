@@ -10,7 +10,7 @@ import {
   unpublishFilmEn,
 } from "@/actions/films";
 import { db } from "@/db";
-import { directors, films, media } from "@/db/schema";
+import { films, media, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { FilmForm } from "../film-form";
 import { PublishControls } from "../publish-controls";
@@ -32,9 +32,9 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
 
   const [directorRows, mediaRows] = await Promise.all([
     db
-      .select({ id: directors.id, name: directors.name, nameZh: directors.nameZh })
-      .from(directors)
-      .orderBy(asc(directors.name)),
+      .select({ id: people.id, name: people.name, nameZh: people.nameZh })
+      .from(people)
+      .orderBy(asc(people.name)),
     db
       .select({ id: media.id, url: media.url, alt: media.alt })
       .from(media)

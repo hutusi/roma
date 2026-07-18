@@ -1,9 +1,10 @@
 import { jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { contentStatus } from "./enums";
+import { contentStatus, personRole } from "./enums";
 import { createdAt, primaryId, updatedAt } from "./helpers";
 import type { TiptapDoc } from "./types";
 
-export const directors = pgTable("directors", {
+/** Curated people — directors and actors alike; one row per human. */
+export const people = pgTable("people", {
   id: primaryId(),
   slug: text().notNull().unique(),
   /** Latin/original name, e.g. "Federico Fellini". */
@@ -15,9 +16,15 @@ export const directors = pgTable("directors", {
   careerEssay: jsonb().$type<TiptapDoc>(),
   bioEn: text(),
   careerEssayEn: jsonb().$type<TiptapDoc>(),
+  /**
+   * Editorial primary role; picks the canonical URL segment
+   * (/director vs /actor). Credits, not this flag, decide which
+   * filmography sections a person page shows.
+   */
+  primaryRole: personRole().notNull().default("director"),
   status: contentStatus().notNull().default("draft"),
   /**
-   * English edition on the same row; a director is en-visible only via
+   * English edition on the same row; a person is en-visible only via
    * this flag (editorial call), never derived from their films.
    */
   statusEn: contentStatus().notNull().default("draft"),

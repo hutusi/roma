@@ -27,7 +27,7 @@
 import { and, eq, inArray, isNotNull, isNull, sql } from "drizzle-orm";
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import { db } from "./index";
-import { curatedListItems, curatedLists, directors, films } from "./schema";
+import { curatedListItems, curatedLists, films, people } from "./schema";
 import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
 import { seedLists } from "./seed-data/lists";
@@ -86,11 +86,11 @@ async function main() {
   const directorSeeds = seedDirectors.filter((d) => d.bioEn);
   const directorState = directorSeeds.length
     ? await db
-        .select({ slug: directors.slug, statusEn: directors.statusEn, bioEn: directors.bioEn })
-        .from(directors)
+        .select({ slug: people.slug, statusEn: people.statusEn, bioEn: people.bioEn })
+        .from(people)
         .where(
           inArray(
-            directors.slug,
+            people.slug,
             directorSeeds.map((d) => d.slug),
           ),
         )
@@ -224,17 +224,15 @@ async function main() {
     let directorsN = 0;
     for (const d of directorSeeds) {
       const res = await tx
-        .update(directors)
+        .update(people)
         .set({
           bioEn: d.bioEn ?? null,
           careerEssayEn: d.careerEssayEn ?? null,
           statusEn: "published",
-          publishedEnAt: publishedEnAt(directors.publishedAt),
+          publishedEnAt: publishedEnAt(people.publishedAt),
         })
-        .where(
-          and(eq(directors.slug, d.slug), eq(directors.statusEn, "draft"), isNull(directors.bioEn)),
-        )
-        .returning({ slug: directors.slug });
+        .where(and(eq(people.slug, d.slug), eq(people.statusEn, "draft"), isNull(people.bioEn)))
+        .returning({ slug: people.slug });
       directorsN += res.length;
     }
 

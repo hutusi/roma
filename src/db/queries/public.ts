@@ -4,12 +4,12 @@ import { db } from "@/db";
 import {
   curatedListItems,
   curatedLists,
-  directors,
   directorViewingItems,
   filmDirectors,
   films,
   filmWatchLinks,
   media,
+  people,
 } from "@/db/schema";
 import type { Locale } from "@/i18n/locales";
 import { visibleIn } from "./visibility";
@@ -135,28 +135,28 @@ export async function getRecentPublishedFilms(locale: Locale = "zh", limit = 30)
   });
 }
 
-const directorStatusConds = (locale: Locale) =>
+const personStatusConds = (locale: Locale) =>
   locale === "en"
-    ? [eq(directors.status, "published"), eq(directors.statusEn, "published")]
-    : [eq(directors.status, "published")];
+    ? [eq(people.status, "published"), eq(people.statusEn, "published")]
+    : [eq(people.status, "published")];
 
-export async function getPublishedDirectorBySlug(slug: string, locale: Locale = "zh") {
-  const director = await db.query.directors.findFirst({
-    where: and(eq(directors.slug, slug), ...directorStatusConds(locale)),
-    with: directorRelations,
+export async function getPublishedPersonBySlug(slug: string, locale: Locale = "zh") {
+  const person = await db.query.people.findFirst({
+    where: and(eq(people.slug, slug), ...personStatusConds(locale)),
+    with: personRelations,
   });
-  return director ? normalizeDirector(director, locale) : null;
+  return person ? normalizePerson(person, locale) : null;
 }
 
-export async function getDirectorForPreview(id: string) {
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, id),
-    with: directorRelations,
+export async function getPersonForPreview(id: string) {
+  const person = await db.query.people.findFirst({
+    where: eq(people.id, id),
+    with: personRelations,
   });
-  return director ? normalizeDirector(director) : null;
+  return person ? normalizePerson(person) : null;
 }
 
-const directorRelations = {
+const personRelations = {
   viewingItems: {
     with: { film: true as const },
     orderBy: [asc(directorViewingItems.position), asc(directorViewingItems.id)],
@@ -168,31 +168,31 @@ const directorRelations = {
   media: { orderBy: mediaOrder },
 };
 
-function normalizeDirector(
-  director: NonNullable<Awaited<ReturnType<typeof rawDirector>>>,
+function normalizePerson(
+  person: NonNullable<Awaited<ReturnType<typeof rawPerson>>>,
   locale: Locale = "zh",
 ) {
   return {
-    ...director,
-    viewingItems: director.viewingItems.filter((item) => visibleIn(item.film, locale)),
-    films: director.filmDirectors
+    ...person,
+    viewingItems: person.viewingItems.filter((item) => visibleIn(item.film, locale)),
+    films: person.filmDirectors
       .map((fd) => fd.film)
       .filter((film) => visibleIn(film, locale))
       .sort((a, b) => a.year - b.year),
   };
 }
 
-async function rawDirector() {
-  return db.query.directors.findFirst({ with: directorRelations });
+async function rawPerson() {
+  return db.query.people.findFirst({ with: personRelations });
 }
 
-export type PublicDirector = NonNullable<Awaited<ReturnType<typeof getPublishedDirectorBySlug>>>;
+export type PublicPerson = NonNullable<Awaited<ReturnType<typeof getPublishedPersonBySlug>>>;
 
-export async function getPublishedDirectorSlugs(locale: Locale = "zh") {
+export async function getPublishedPersonSlugs(locale: Locale = "zh") {
   return db
-    .select({ slug: directors.slug, updatedAt: directors.updatedAt })
-    .from(directors)
-    .where(and(...directorStatusConds(locale)));
+    .select({ slug: people.slug, updatedAt: people.updatedAt })
+    .from(people)
+    .where(and(...personStatusConds(locale)));
 }
 
 const listRelations = {
@@ -299,12 +299,12 @@ export async function getFilmStubBySlug(slug: string) {
   return film ?? null;
 }
 
-export async function getDirectorStubBySlug(slug: string) {
-  const director = await db.query.directors.findFirst({
+export async function getPersonStubBySlug(slug: string) {
+  const person = await db.query.people.findFirst({
     columns: { slug: true, name: true },
-    where: and(eq(directors.slug, slug), eq(directors.status, "published")),
+    where: and(eq(people.slug, slug), eq(people.status, "published")),
   });
-  return director ?? null;
+  return person ?? null;
 }
 
 export async function getListStubBySlug(slug: string) {

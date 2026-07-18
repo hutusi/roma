@@ -1,9 +1,9 @@
 import { sql } from "drizzle-orm";
 import { check, index, integer, pgTable, text } from "drizzle-orm/pg-core";
-import { directors } from "./directors";
 import { mediaKind } from "./enums";
 import { films } from "./films";
 import { createdAt, primaryId } from "./helpers";
+import { people } from "./people";
 
 /**
  * Uploaded images (Vercel Blob). A film's poster is its first
@@ -25,15 +25,14 @@ export const media = pgTable(
     height: integer(),
     kind: mediaKind().notNull().default("still"),
     filmId: text().references(() => films.id, { onDelete: "set null" }),
-    directorId: text().references(() => directors.id, {
-      onDelete: "set null",
-    }),
+    /** Image of this person (portrait etc.) — a person link, not a credit. */
+    personId: text().references(() => people.id, { onDelete: "set null" }),
     sortOrder: integer().notNull().default(0),
     createdAt: createdAt(),
   },
   (t) => [
     index("media_film_idx").on(t.filmId),
-    index("media_director_idx").on(t.directorId),
+    index("media_person_idx").on(t.personId),
     check("media_credit_nonblank", sql`length(btrim(${t.credit})) > 0`),
   ],
 );

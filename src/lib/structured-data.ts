@@ -1,5 +1,5 @@
 import "server-only";
-import type { PublicDirector, PublicFilm, PublicList } from "@/db/queries/public";
+import type { PublicFilm, PublicList, PublicPerson } from "@/db/queries/public";
 import { visibleIn } from "@/db/queries/visibility";
 import { countryToEn } from "@/i18n/countries";
 import { HTML_LANG, type Locale, localePath } from "@/i18n/locales";
@@ -143,16 +143,16 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
   ]);
 }
 
-export function directorJsonLd(director: PublicDirector, locale: Locale = "zh"): JsonLdNode {
+export function personJsonLd(person: PublicPerson, locale: Locale = "zh"): JsonLdNode {
   const en = locale === "en";
-  const url = abs(locale, `/director/${director.slug}`);
-  const displayName = en ? director.name : (director.nameZh ?? director.name);
-  const subName = en ? director.nameZh : director.name;
-  const description = (en ? director.bioEn : director.bio)?.slice(0, 300);
-  const image = pickImage(director.media);
+  const url = abs(locale, `/director/${person.slug}`);
+  const displayName = en ? person.name : (person.nameZh ?? person.name);
+  const subName = en ? person.nameZh : person.name;
+  const description = (en ? person.bioEn : person.bio)?.slice(0, 300);
+  const image = pickImage(person.media);
   const crumb = CRUMB[locale];
 
-  const person: JsonLdNode = {
+  const personNode: JsonLdNode = {
     "@type": "Person",
     "@id": `${url}#person`,
     name: displayName,
@@ -164,10 +164,10 @@ export function directorJsonLd(director: PublicDirector, locale: Locale = "zh"):
   };
 
   return graph([
-    person,
+    personNode,
     breadcrumb(locale, [
       { name: crumb.home, path: "/" },
-      { name: displayName, path: `/director/${director.slug}` },
+      { name: displayName, path: `/director/${person.slug}` },
     ]),
   ]);
 }

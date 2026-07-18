@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { hasProse, tiptapDocSchema } from "./prose";
 
-export const directorFormSchema = z.object({
+export const personFormSchema = z.object({
   slug: z
     .string()
     .min(1, "slug 不能为空")
@@ -14,29 +14,27 @@ export const directorFormSchema = z.object({
   careerEssayEn: tiptapDocSchema,
 });
 
-export type DirectorFormValues = z.infer<typeof directorFormSchema>;
+export type PersonFormValues = z.infer<typeof personFormSchema>;
 
 /**
  * Publishing is stricter than saving a draft — mirrors
- * validators/film.ts. This lived inline in publishDirector, which is why
- * saveDirector never re-ran it: a published director could be saved with
+ * validators/film.ts. This lived inline in publishPerson, which is why
+ * savePerson never re-ran it: a published person could be saved with
  * both fields empty and stay live with neither. Keep gates here so both
  * the publish action and the save guard read the same rule.
  */
-export function publishProblems(director: {
+export function publishProblems(person: {
   bio: string | null;
   careerEssay: Record<string, unknown> | null;
 }): string[] {
   // careerEssay must actually render — an empty { type: "doc" } used to
   // pass as a truthy object while rendering nothing (see hasProse).
-  return director.bio?.trim() || hasProse(director.careerEssay)
-    ? []
-    : ["发布前请填写简介或创作历程"];
+  return person.bio?.trim() || hasProse(person.careerEssay) ? [] : ["发布前请填写简介或创作历程"];
 }
 
 /** Gate for the English edition; the career essay stays optional. */
-export function publishEnProblems(director: { bioEn: string | null }): string[] {
-  return director.bioEn?.trim() ? [] : ["缺少英文简介（bioEn）"];
+export function publishEnProblems(person: { bioEn: string | null }): string[] {
+  return person.bioEn?.trim() ? [] : ["缺少英文简介（bioEn）"];
 }
 
 export const viewingOrderSchema = z

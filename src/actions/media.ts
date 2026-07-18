@@ -47,7 +47,7 @@ export async function uploadMedia(
         height: image.height,
         kind: kind as (typeof mediaKind.enumValues)[number],
         filmId: String(formData.get("filmId") || "") || null,
-        directorId: String(formData.get("directorId") || "") || null,
+        personId: String(formData.get("personId") || "") || null,
       })
       .returning({ id: media.id, url: media.url });
   } catch (error) {
@@ -67,7 +67,7 @@ export async function updateMedia(
     credit?: string;
     kind?: string;
     filmId?: string | null;
-    directorId?: string | null;
+    personId?: string | null;
     sortOrder?: number;
   },
 ): Promise<ActionResult> {
@@ -90,7 +90,7 @@ export async function updateMedia(
         kind: fields.kind as (typeof mediaKind.enumValues)[number],
       }),
       ...(fields.filmId !== undefined && { filmId: fields.filmId }),
-      ...(fields.directorId !== undefined && { directorId: fields.directorId }),
+      ...(fields.personId !== undefined && { personId: fields.personId }),
       ...(fields.sortOrder !== undefined && { sortOrder: fields.sortOrder }),
     })
     .where(eq(media.id, id))

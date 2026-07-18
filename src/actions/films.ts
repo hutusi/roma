@@ -2,7 +2,7 @@
 
 import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { lockDirectors, lockFilm } from "@/db/locks";
+import { lockFilm, lockPeople } from "@/db/locks";
 import type { TiptapDoc } from "@/db/schema";
 import {
   curatedListItems,
@@ -79,8 +79,8 @@ export async function saveFilm(
 
   try {
     const outcome = await db.transaction(async (tx) => {
-      const lockedDirectors = await lockDirectors(tx, v.directorIds);
-      if (lockedDirectors.length !== new Set(v.directorIds).size) {
+      const lockedPeople = await lockPeople(tx, v.directorIds);
+      if (lockedPeople.length !== new Set(v.directorIds).size) {
         return { error: "关联的导演不存在，可能已被删除" } as const;
       }
 

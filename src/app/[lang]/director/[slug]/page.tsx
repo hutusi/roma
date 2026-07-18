@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { DirectorPage } from "@/components/director/director-page";
 import { TranslationPending } from "@/components/i18n/translation-pending";
+import { PersonPage } from "@/components/person/person-page";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
-  getDirectorStubBySlug,
-  getPublishedDirectorBySlug,
-  getPublishedDirectorSlugs,
+  getPersonStubBySlug,
+  getPublishedPersonBySlug,
+  getPublishedPersonSlugs,
 } from "@/db/queries/public";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
-import { directorJsonLd } from "@/lib/structured-data";
+import { personJsonLd } from "@/lib/structured-data";
 
-// zh slug set for both locales — en-pending directors prerender as
+// zh slug set for both locales — en-pending people prerender as
 // translation-pending stubs (ADR 0012).
 export async function generateStaticParams() {
-  const slugs = await getPublishedDirectorSlugs();
+  const slugs = await getPublishedPersonSlugs();
   return slugs.map(({ slug }) => ({ slug }));
 }
 
@@ -27,22 +27,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang, slug } = await params;
   const locale = parseLocale(lang);
-  const director = await getPublishedDirectorBySlug(slug, locale);
+  const person = await getPublishedPersonBySlug(slug, locale);
   const en = locale === "en";
-  if (!director) {
+  if (!person) {
     if (en) {
-      const stub = await getDirectorStubBySlug(slug);
+      const stub = await getPersonStubBySlug(slug);
       if (stub) return { title: stub.name, robots: { index: false } };
     }
     return {};
   }
   return {
-    title: en ? director.name : (director.nameZh ?? director.name),
+    title: en ? person.name : (person.nameZh ?? person.name),
     description: en
-      ? (director.bioEn?.slice(0, 160) ?? director.name)
-      : (director.bio?.slice(0, 120) ?? director.name),
+      ? (person.bioEn?.slice(0, 160) ?? person.name)
+      : (person.bio?.slice(0, 120) ?? person.name),
     ...seoMetadata(locale, `/director/${slug}`, {
-      en: en || director.statusEn === "published",
+      en: en || person.statusEn === "published",
       ogType: "profile",
     }),
   };
@@ -55,10 +55,10 @@ export default async function PublicDirectorPage({
 }) {
   const { lang, slug } = await params;
   const locale = parseLocale(lang);
-  const director = await getPublishedDirectorBySlug(slug, locale);
-  if (!director) {
+  const person = await getPublishedPersonBySlug(slug, locale);
+  if (!person) {
     if (locale === "en") {
-      const stub = await getDirectorStubBySlug(slug);
+      const stub = await getPersonStubBySlug(slug);
       if (stub) {
         return (
           <TranslationPending title={stub.name} zhHref={localePath("zh", `/director/${slug}`)} />
@@ -69,8 +69,8 @@ export default async function PublicDirectorPage({
   }
   return (
     <>
-      <JsonLd data={directorJsonLd(director, locale)} />
-      <DirectorPage director={director} locale={locale} />
+      <JsonLd data={personJsonLd(person, locale)} />
+      <PersonPage person={person} locale={locale} />
     </>
   );
 }

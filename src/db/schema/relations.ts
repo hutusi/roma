@@ -1,10 +1,10 @@
 import { relations } from "drizzle-orm";
 import { users } from "./auth";
-import { directors } from "./directors";
 import { directorViewingItems, filmDirectors, films, filmWatchLinks } from "./films";
 import { invitations } from "./invitations";
 import { curatedListItems, curatedLists } from "./lists";
 import { media } from "./media";
+import { people } from "./people";
 import { listFollows, userListItems, userLists, userMarks } from "./user-content";
 
 export const filmsRelations = relations(films, ({ many }) => ({
@@ -14,7 +14,7 @@ export const filmsRelations = relations(films, ({ many }) => ({
   listItems: many(curatedListItems),
 }));
 
-export const directorsRelations = relations(directors, ({ many }) => ({
+export const peopleRelations = relations(people, ({ many }) => ({
   filmDirectors: many(filmDirectors),
   viewingItems: many(directorViewingItems),
   media: many(media),
@@ -25,9 +25,9 @@ export const filmDirectorsRelations = relations(filmDirectors, ({ one }) => ({
     fields: [filmDirectors.filmId],
     references: [films.id],
   }),
-  director: one(directors, {
+  director: one(people, {
     fields: [filmDirectors.directorId],
-    references: [directors.id],
+    references: [people.id],
   }),
 }));
 
@@ -39,9 +39,9 @@ export const filmWatchLinksRelations = relations(filmWatchLinks, ({ one }) => ({
 }));
 
 export const directorViewingItemsRelations = relations(directorViewingItems, ({ one }) => ({
-  director: one(directors, {
+  director: one(people, {
     fields: [directorViewingItems.directorId],
-    references: [directors.id],
+    references: [people.id],
   }),
   film: one(films, {
     fields: [directorViewingItems.filmId],
@@ -51,9 +51,9 @@ export const directorViewingItemsRelations = relations(directorViewingItems, ({ 
 
 export const mediaRelations = relations(media, ({ one }) => ({
   film: one(films, { fields: [media.filmId], references: [films.id] }),
-  director: one(directors, {
-    fields: [media.directorId],
-    references: [directors.id],
+  person: one(people, {
+    fields: [media.personId],
+    references: [people.id],
   }),
 }));
 

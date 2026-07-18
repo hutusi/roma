@@ -43,11 +43,11 @@ const { db } = await import("@/db");
 const {
   curatedListItems,
   curatedLists,
-  directors,
   filmDirectors,
   films,
   filmWatchLinks,
   media,
+  people,
   users,
 } = await import("@/db/schema");
 const { auth } = await import("@/lib/auth");
@@ -89,7 +89,7 @@ const NOTE =
 const NOTE_EN = Array.from({ length: 130 }, (_, i) => `word${i + 1}`).join(" ");
 
 const [fellini] = await db
-  .insert(directors)
+  .insert(people)
   .values({
     slug: "federico-fellini",
     name: "Federico Fellini",
@@ -207,7 +207,7 @@ await db.insert(media).values([
     alt: "Federico Fellini",
     credit: "TMDB",
     kind: "portrait",
-    directorId: fellini.id,
+    personId: fellini.id,
     sortOrder: 0,
   },
 ]);

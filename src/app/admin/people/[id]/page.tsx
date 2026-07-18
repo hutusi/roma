@@ -2,28 +2,28 @@ import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  deleteDirector,
-  publishDirector,
-  publishDirectorEn,
-  unpublishDirector,
-  unpublishDirectorEn,
-} from "@/actions/directors";
+  deletePerson,
+  publishPerson,
+  publishPersonEn,
+  unpublishPerson,
+  unpublishPersonEn,
+} from "@/actions/people";
 import { db } from "@/db";
-import { directors, films, media } from "@/db/schema";
+import { films, media, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { PublishControls } from "../../films/publish-controls";
-import { DirectorForm } from "../director-form";
+import { PersonForm } from "../person-form";
 import { ViewingOrderPanel } from "../viewing-order-panel";
 
-export const metadata = { title: "编辑导演" };
+export const metadata = { title: "编辑人物" };
 
-export default async function EditDirectorPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditPersonPage({ params }: { params: Promise<{ id: string }> }) {
   await requireEditor();
   const { id } = await params;
-  const director = await db.query.directors.findFirst({
-    where: eq(directors.id, id),
+  const person = await db.query.people.findFirst({
+    where: eq(people.id, id),
   });
-  if (!director) notFound();
+  if (!person) notFound();
 
   const [viewingItems, filmRows, mediaRows] = await Promise.all([
     db.query.directorViewingItems.findMany({
@@ -46,15 +46,15 @@ export default async function EditDirectorPage({ params }: { params: Promise<{ i
     <div>
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-xl">
-          编辑导演 · {director.nameZh ?? director.name}
+          编辑人物 · {person.nameZh ?? person.name}
           <Link
-            href={`/admin/preview/director/${director.id}`}
+            href={`/admin/preview/person/${person.id}`}
             className="ml-3 font-normal text-brand text-sm hover:underline"
           >
             预览
           </Link>
           <Link
-            href={`/admin/preview/director/${director.id}?locale=en`}
+            href={`/admin/preview/person/${person.id}?locale=en`}
             className="ml-2 font-normal text-brand text-sm hover:underline"
           >
             EN 预览
@@ -62,38 +62,38 @@ export default async function EditDirectorPage({ params }: { params: Promise<{ i
         </h1>
         <div className="flex items-center gap-6">
           <PublishControls
-            status={director.status}
-            onPublish={publishDirector.bind(null, director.id)}
-            onUnpublish={unpublishDirector.bind(null, director.id)}
-            onDelete={deleteDirector.bind(null, director.id)}
-            deleteConfirmText={`确定删除「${director.nameZh ?? director.name}」？该操作不可撤销。`}
-            afterDeleteHref="/admin/directors"
+            status={person.status}
+            onPublish={publishPerson.bind(null, person.id)}
+            onUnpublish={unpublishPerson.bind(null, person.id)}
+            onDelete={deletePerson.bind(null, person.id)}
+            deleteConfirmText={`确定删除「${person.nameZh ?? person.name}」？该操作不可撤销。`}
+            afterDeleteHref="/admin/people"
           />
           <PublishControls
-            status={director.statusEn}
+            status={person.statusEn}
             label="英文版"
-            onPublish={publishDirectorEn.bind(null, director.id)}
-            onUnpublish={unpublishDirectorEn.bind(null, director.id)}
+            onPublish={publishPersonEn.bind(null, person.id)}
+            onUnpublish={unpublishPersonEn.bind(null, person.id)}
           />
         </div>
       </div>
       <div className="mt-6">
-        <DirectorForm
-          directorId={director.id}
+        <PersonForm
+          personId={person.id}
           media={mediaRows}
           defaultValues={{
-            slug: director.slug,
-            name: director.name,
-            nameZh: director.nameZh ?? "",
-            bio: director.bio ?? "",
-            careerEssay: director.careerEssay ?? null,
-            bioEn: director.bioEn ?? "",
-            careerEssayEn: director.careerEssayEn ?? null,
+            slug: person.slug,
+            name: person.name,
+            nameZh: person.nameZh ?? "",
+            bio: person.bio ?? "",
+            careerEssay: person.careerEssay ?? null,
+            bioEn: person.bioEn ?? "",
+            careerEssayEn: person.careerEssayEn ?? null,
           }}
         />
       </div>
       <ViewingOrderPanel
-        directorId={director.id}
+        personId={person.id}
         filmOptions={filmRows}
         initialItems={viewingItems.map((item) => ({
           id: item.film.id,

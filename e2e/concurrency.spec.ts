@@ -111,7 +111,7 @@ test("concurrent film save and publish never leave invalid published content", a
 }) => {
   const id = randomUUID();
   const director = await queryOne<{ id: string }>(
-    "select id from directors where slug = 'federico-fellini'",
+    "select id from people where slug = 'federico-fellini'",
   );
   if (!director) throw new Error("director fixture missing");
   await queryOne(

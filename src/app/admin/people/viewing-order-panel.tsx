@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { setViewingOrder } from "@/actions/directors";
+import { setViewingOrder } from "@/actions/people";
 import { SortableList } from "@/components/admin/sortable-list";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,11 +23,11 @@ export type FilmOption = { id: string; title: string; year: number };
  * action call — reordering, notes, adds and removes all land together.
  */
 export function ViewingOrderPanel({
-  directorId,
+  personId,
   initialItems,
   filmOptions,
 }: {
-  directorId: string;
+  personId: string;
   initialItems: ViewingItem[];
   filmOptions: FilmOption[];
 }) {
@@ -46,7 +46,7 @@ export function ViewingOrderPanel({
   const save = () =>
     startTransition(async () => {
       const result = await setViewingOrder(
-        directorId,
+        personId,
         items.map(({ filmId, note, noteEn }) => ({
           filmId,
           note: note || undefined,

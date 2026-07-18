@@ -1,11 +1,11 @@
 import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { curatedLists, directors, films } from "@/db/schema";
+import { curatedLists, films, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 
 export const metadata = { title: "编辑部" };
 
-async function countByStatus(table: typeof films | typeof directors | typeof curatedLists) {
+async function countByStatus(table: typeof films | typeof people | typeof curatedLists) {
   const [total] = await db.select({ n: count() }).from(table);
   const [drafts] = await db.select({ n: count() }).from(table).where(eq(table.status, "draft"));
   return { total: total.n, drafts: drafts.n };
@@ -13,15 +13,15 @@ async function countByStatus(table: typeof films | typeof directors | typeof cur
 
 export default async function AdminDashboard() {
   await requireEditor();
-  const [filmStats, directorStats, listStats] = await Promise.all([
+  const [filmStats, peopleStats, listStats] = await Promise.all([
     countByStatus(films),
-    countByStatus(directors),
+    countByStatus(people),
     countByStatus(curatedLists),
   ]);
 
   const cards = [
     { label: "影片", stats: filmStats },
-    { label: "导演", stats: directorStats },
+    { label: "人物", stats: peopleStats },
     { label: "片单", stats: listStats },
   ];
 
