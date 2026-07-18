@@ -33,7 +33,10 @@ function revalidateEditorialPages() {
   revalidatePath("/sitemap.xml");
   // Route handlers are invalidated by their own path; a layout sweep
   // covers pages beneath it, not handlers.
-  for (const prefix of ["/zh", "/en"]) revalidatePath(`${prefix}/rss.xml`);
+  for (const prefix of ["/zh", "/en"]) {
+    revalidatePath(`${prefix}/rss.xml`);
+    revalidatePath(`${prefix}/search-index.json`);
+  }
 }
 
 /**

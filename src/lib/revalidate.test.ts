@@ -39,6 +39,8 @@ function expectFullSweep() {
   // Route handlers need their own path.
   expect(paths).toContainEqual(["/zh/rss.xml", undefined]);
   expect(paths).toContainEqual(["/en/rss.xml", undefined]);
+  expect(paths).toContainEqual(["/zh/search-index.json", undefined]);
+  expect(paths).toContainEqual(["/en/search-index.json", undefined]);
 }
 
 describe("revalidateFilm", () => {
