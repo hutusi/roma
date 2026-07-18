@@ -25,7 +25,7 @@ export async function generateMetadata({
 // is a type error at the use site.
 const COPY = {
   zh: {
-    tagline: "一份关于经典电影的策展手册。黑白影像、导演谱系，与值得按顺序看完的片单。",
+    tagline: "一份关于经典电影的策展手册。跨越百年的影像、导演谱系，与值得按顺序看完的片单。",
     taglineWidth: "max-w-[36ch]",
     browseCta: "浏览片单",
     featuredEyebrow: "Featured List",
@@ -37,7 +37,7 @@ const COPY = {
   },
   en: {
     tagline:
-      "A curatorial handbook for classic cinema. Black-and-white images, director lineages, and lists worth watching in order.",
+      "A curatorial handbook for classic cinema. A century of images, director lineages, and lists worth watching in order.",
     taglineWidth: "max-w-[40ch]",
     browseCta: "Browse the lists",
     featuredEyebrow: undefined,

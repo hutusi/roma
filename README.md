@@ -1,6 +1,6 @@
 # Roma
 
-**Roma** is the codename for [babuban.com](https://babuban.com) — **八部半 (Babuban)**, a Chinese-language curatorial site for classic cinema, with a focus on black-and-white film. Both names are Fellini's: *Roma* (1972) for the project, *8½* (1963) for the product.
+**Roma** is the codename for [babuban.com](https://babuban.com) — **八部半 (Babuban)**, a Chinese-language curatorial site for classic cinema, with a standing fondness for black-and-white. Both names are Fellini's: *Roma* (1972) for the project, *8½* (1963) for the product.
 
 Curation-first, in the spirit of the Criterion Collection or MUBI — not a database. Editorial content (curated lists, film pages, director pages) is the core product; user features (accounts, watch marks, personal lists, follows) are deliberately light.
 

@@ -4,7 +4,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 
 ## What this is
 
-**Roma** (codename, never user-facing) builds **八部半 / Babuban** (babuban.com): a Chinese-language curatorial site for classic cinema, black-and-white first. Curation-first with light UGC — Criterion/MUBI in spirit, not Douban/IMDb. 收录即推荐: inclusion *is* the recommendation.
+**Roma** (codename, never user-facing) builds **八部半 / Babuban** (babuban.com): a Chinese-language curatorial site for classic cinema — black-and-white is a house preference, not the catalogue's boundary. Curation-first with light UGC — Criterion/MUBI in spirit, not Douban/IMDb. 收录即推荐: inclusion *is* the recommendation.
 
 ## Domain language
 

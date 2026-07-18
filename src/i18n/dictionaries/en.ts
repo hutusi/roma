@@ -7,7 +7,7 @@ export const en = {
     about: "About",
   },
   footer: {
-    tagline: "Babuban — a curatorial handbook for black-and-white cinema",
+    tagline: "Babuban — a curatorial handbook for classic cinema",
     aboutLink: "About",
   },
   imageCredit: "Source: ",
