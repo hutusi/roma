@@ -1,4 +1,4 @@
-import type { CastMember, TiptapDoc } from "@/db/schema/types";
+import type { TiptapDoc } from "@/db/schema/types";
 
 /**
  * Shapes for the editorial seed corpus. These are richer than the DB rows:
@@ -20,6 +20,12 @@ export type SeedDirector = {
   careerEssayEn?: TiptapDoc;
   /** Optional explicit TMDB person id; otherwise resolved by name search. */
   tmdbPersonId?: number;
+};
+
+export type SeedCastMember = {
+  name: string;
+  zhName?: string;
+  character?: string;
 };
 
 export type SeedWatchLink = {
@@ -56,7 +62,7 @@ export type SeedFilm = {
    */
   editorialNoteEn?: string;
   essayEn?: TiptapDoc;
-  cast?: CastMember[];
+  cast?: SeedCastMember[];
   /** Director slugs, ordered (co-directors keep their order). */
   directorSlugs: string[];
   watchLinks?: SeedWatchLink[];

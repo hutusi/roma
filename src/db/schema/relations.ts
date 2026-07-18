@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { users } from "./auth";
-import { directorViewingItems, filmDirectors, films, filmWatchLinks } from "./films";
+import { directorViewingItems, filmCast, filmDirectors, films, filmWatchLinks } from "./films";
 import { invitations } from "./invitations";
 import { curatedListItems, curatedLists } from "./lists";
 import { media } from "./media";
@@ -9,6 +9,7 @@ import { listFollows, userListItems, userLists, userMarks } from "./user-content
 
 export const filmsRelations = relations(films, ({ many }) => ({
   filmDirectors: many(filmDirectors),
+  cast: many(filmCast),
   watchLinks: many(filmWatchLinks),
   media: many(media),
   listItems: many(curatedListItems),
@@ -16,8 +17,20 @@ export const filmsRelations = relations(films, ({ many }) => ({
 
 export const peopleRelations = relations(people, ({ many }) => ({
   filmDirectors: many(filmDirectors),
+  castCredits: many(filmCast),
   viewingItems: many(directorViewingItems),
   media: many(media),
+}));
+
+export const filmCastRelations = relations(filmCast, ({ one }) => ({
+  film: one(films, {
+    fields: [filmCast.filmId],
+    references: [films.id],
+  }),
+  person: one(people, {
+    fields: [filmCast.personId],
+    references: [people.id],
+  }),
 }));
 
 export const filmDirectorsRelations = relations(filmDirectors, ({ one }) => ({

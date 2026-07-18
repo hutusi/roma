@@ -35,6 +35,7 @@ import {
   curatedListItems,
   curatedLists,
   directorViewingItems,
+  filmCast,
   filmDirectors,
   films,
   filmWatchLinks,
@@ -140,7 +141,6 @@ async function main() {
         essay: f.essay ?? null,
         editorialNoteEn: f.editorialNoteEn ?? null,
         essayEn: f.essayEn ?? null,
-        castJson: f.cast ?? null,
         status: "published" as const,
         statusEn: (f.editorialNoteEn && f.titleEn ? "published" : "draft") as "published" | "draft",
         publishedAt: publishedAtFor(i),
@@ -172,6 +172,20 @@ async function main() {
     }),
   );
   if (fdValues.length) await db.insert(filmDirectors).values(fdValues).onConflictDoNothing();
+
+  // ── 演员表 — only for newly-created films (no natural unique key) ────
+  const castValues = seedFilms
+    .filter((f) => newFilmSlugs.has(f.slug) && f.cast?.length)
+    .flatMap((f) =>
+      (f.cast ?? []).map((m, position) => ({
+        filmId: filmIdBySlug.get(f.slug) as string,
+        position,
+        name: m.name,
+        nameZh: m.zhName ?? null,
+        character: m.character ?? null,
+      })),
+    );
+  if (castValues.length) await db.insert(filmCast).values(castValues);
 
   // ── 哪里能看 — only for newly-created films (no natural unique key) ──
   const wlValues = seedFilms

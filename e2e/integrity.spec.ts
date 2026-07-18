@@ -27,6 +27,18 @@ test("every reader/editorial film reference restricts hard deletion", async () =
   });
 });
 
+test("film_cast credits cascade with their film and survive person deletion", async () => {
+  const row = await queryOne<{ rules: Record<string, string> }>(`
+    select json_object_agg(c.confrelid::regclass::text,
+             case c.confdeltype when 'c' then 'cascade'
+                                when 'n' then 'set null'
+                                else c.confdeltype::text end) as rules
+    from pg_constraint c
+    where c.contype = 'f' and c.conrelid = 'film_cast'::regclass
+  `);
+  expect(row?.rules).toEqual({ films: "cascade", people: "set null" });
+});
+
 test("ordered list positions are unique and non-negative in the database", async () => {
   const listId = randomUUID();
   const first = await queryOne<{ id: string }>("select id from films where slug = 'la-strada'");

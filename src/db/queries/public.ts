@@ -5,6 +5,7 @@ import {
   curatedListItems,
   curatedLists,
   directorViewingItems,
+  filmCast,
   filmDirectors,
   films,
   filmWatchLinks,
@@ -51,6 +52,24 @@ const filmStatusConds = (locale: Locale) =>
 
 const filmDetailRelations = {
   ...filmCardRelations,
+  cast: {
+    // The person columns are the link gate: slug + status decide whether
+    // a cast row renders as a link, and never leak prose.
+    with: {
+      person: {
+        columns: {
+          id: true,
+          slug: true,
+          name: true,
+          nameZh: true,
+          status: true,
+          statusEn: true,
+          primaryRole: true,
+        },
+      } as const,
+    },
+    orderBy: [asc(filmCast.position), asc(filmCast.id)],
+  },
   watchLinks: { orderBy: [asc(filmWatchLinks.sortOrder), asc(filmWatchLinks.id)] },
   listItems: { with: { list: true as const } },
 };

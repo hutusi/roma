@@ -7,6 +7,7 @@ import type { TiptapDoc } from "@/db/schema";
 import {
   curatedListItems,
   directorViewingItems,
+  filmCast,
   filmDirectors,
   films,
   filmWatchLinks,
@@ -74,7 +75,6 @@ export async function saveFilm(
     essay: (v.essay as TiptapDoc) ?? null,
     editorialNoteEn: v.editorialNoteEn || null,
     essayEn: (v.essayEn as TiptapDoc) ?? null,
-    castJson: v.cast,
   };
 
   try {
@@ -117,9 +117,21 @@ export async function saveFilm(
         await tx.update(films).set(row).where(eq(films.id, targetId));
         await tx.delete(filmWatchLinks).where(eq(filmWatchLinks.filmId, targetId));
         await tx.delete(filmDirectors).where(eq(filmDirectors.filmId, targetId));
+        await tx.delete(filmCast).where(eq(filmCast.filmId, targetId));
       } else {
         const [created] = await tx.insert(films).values(row).returning({ id: films.id });
         targetId = created.id;
+      }
+      if (v.cast.length) {
+        await tx.insert(filmCast).values(
+          v.cast.map((m, i) => ({
+            filmId: targetId,
+            position: i,
+            name: m.name,
+            nameZh: m.zhName || null,
+            character: m.character || null,
+          })),
+        );
       }
       if (v.watchLinks.length) {
         await tx.insert(filmWatchLinks).values(

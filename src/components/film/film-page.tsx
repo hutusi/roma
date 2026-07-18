@@ -152,15 +152,15 @@ export function FilmPage({
         </section>
       )}
 
-      {film.castJson && film.castJson.length > 0 && (
+      {film.cast.length > 0 && (
         <section className="mt-14">
           <TitleCard eyebrow={eyebrow("cast")} title={dict.cast} />
           <ul className="mx-auto mt-8 max-w-md space-y-2 text-[15px]">
-            {film.castJson.slice(0, 10).map((member) => (
-              <li key={member.name} className="flex justify-between border-line border-b py-1.5">
+            {film.cast.slice(0, 10).map((member) => (
+              <li key={member.id} className="flex justify-between border-line border-b py-1.5">
                 <span>
-                  {en ? member.name : (member.zhName ?? member.name)}
-                  {!en && member.zhName && (
+                  {en ? member.name : (member.nameZh ?? member.name)}
+                  {!en && member.nameZh && (
                     <span className="ml-2 font-display text-ink-muted text-sm">{member.name}</span>
                   )}
                 </span>

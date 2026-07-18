@@ -43,6 +43,7 @@ const { db } = await import("@/db");
 const {
   curatedListItems,
   curatedLists,
+  filmCast,
   filmDirectors,
   films,
   filmWatchLinks,
@@ -125,7 +126,6 @@ const filmRows = await db
         p("光影承担了原本属于色彩的全部叙事责任。"),
         quote("告别本来就不该匆忙。"),
       ]),
-      castJson: [{ name: "Marcello Mastroianni", zhName: "马塞洛·马斯楚安尼", character: "Guido" }],
       // The en edition of the e2e corpus: la-strada below stays zh-only
       // so the subset 404 is testable.
       editorialNoteEn: NOTE_EN,
@@ -178,6 +178,15 @@ const bySlug = Object.fromEntries(filmRows.map((f) => [f.slug, f]));
 await db
   .insert(filmDirectors)
   .values(filmRows.map((film) => ({ filmId: film.id, directorId: fellini.id, position: 0 })));
+
+// An unlinked cast credit (no person row) — renders as plain text.
+await db.insert(filmCast).values({
+  filmId: bySlug["otto-e-mezzo"].id,
+  position: 0,
+  name: "Marcello Mastroianni",
+  nameZh: "马塞洛·马斯楚安尼",
+  character: "Guido",
+});
 
 await db.insert(filmWatchLinks).values({
   filmId: bySlug["otto-e-mezzo"].id,

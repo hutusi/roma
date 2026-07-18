@@ -24,6 +24,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
     where: eq(films.id, id),
     with: {
       filmDirectors: true,
+      cast: { orderBy: (t, { asc }) => asc(t.position) },
       watchLinks: { orderBy: (t, { asc }) => asc(t.sortOrder) },
       media: { orderBy: (t, { asc }) => asc(t.sortOrder) },
     },
@@ -115,7 +116,11 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             essay: film.essay ?? null,
             editorialNoteEn: film.editorialNoteEn ?? "",
             essayEn: film.essayEn ?? null,
-            cast: film.castJson ?? [],
+            cast: film.cast.map((m) => ({
+              name: m.name,
+              zhName: m.nameZh ?? "",
+              character: m.character ?? "",
+            })),
             watchLinks: film.watchLinks.map((l) => ({
               platform: l.platform,
               region: l.region as "CN" | "HK" | "TW" | "INTL",
