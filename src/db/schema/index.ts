@@ -7,5 +7,6 @@ export * from "./media";
 export * from "./people";
 export * from "./relations";
 export * from "./rum";
+export * from "./tags";
 export * from "./types";
 export * from "./user-content";
