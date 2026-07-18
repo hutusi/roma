@@ -200,6 +200,15 @@ describe("websiteJsonLd", () => {
     expect(enSite.inLanguage).toBe("en");
   });
 
+  test("each locale's SearchAction targets its own /search page", () => {
+    const [zhSite] = graphOf(websiteJsonLd("zh"));
+    const [enSite] = graphOf(websiteJsonLd("en"));
+    const target = (site: Record<string, unknown>) =>
+      (site.potentialAction as { target: { urlTemplate: string } }).target.urlTemplate;
+    expect(target(zhSite)).toBe("https://babuban.com/zh/search?q={search_term_string}");
+    expect(target(enSite)).toBe("https://babuban.com/en/search?q={search_term_string}");
+  });
+
   test("both locales publish the same Organization entity", () => {
     const [zhSite, zhOrg] = graphOf(websiteJsonLd("zh"));
     const [, enOrg] = graphOf(websiteJsonLd("en"));

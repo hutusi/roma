@@ -15,6 +15,16 @@ export const zh = {
     tagline: "八部半 —— 献给经典电影的策展手册",
     aboutLink: "关于本站",
   },
+  search: {
+    open: "搜索",
+    title: "搜索",
+    placeholder: "片名、导演、片单…",
+    empty: "没有找到相关内容。",
+    loading: "加载中…",
+    failed: "搜索暂不可用，请稍后再试。",
+    allResults: "查看全部结果",
+    groups: { film: "影片", person: "人物", list: "片单", tag: "标签" },
+  },
   imageCredit: "图片来源：",
   authMenu: {
     signIn: "登录",
