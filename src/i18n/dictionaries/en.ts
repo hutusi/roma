@@ -10,6 +10,16 @@ export const en = {
     tagline: "Babuban — a curatorial handbook for classic cinema",
     aboutLink: "About",
   },
+  search: {
+    open: "Search",
+    title: "Search",
+    placeholder: "Films, directors, lists…",
+    empty: "Nothing found.",
+    loading: "Loading…",
+    failed: "Search is unavailable right now.",
+    allResults: "View all results",
+    groups: { film: "Films", person: "People", list: "Lists", tag: "Tags" },
+  },
   imageCredit: "Source: ",
   authMenu: {
     signIn: "Sign in",

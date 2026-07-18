@@ -66,8 +66,10 @@ function graph(nodes: JsonLdNode[]): JsonLdNode {
  * Site-level identity for the home pages. The WebSite node is per-locale
  * (each locale home is its own page with its own name/inLanguage); the
  * Organization is one entity shared by both, so it keeps a single @id
- * and carries the other-language name as alternateName. No SearchAction:
- * the site has no search. The logo path is the generated brand icon.
+ * and carries the other-language name as alternateName. The
+ * SearchAction targets the locale's own /search page (client-side
+ * matching over the static index). The logo path is the generated
+ * brand icon.
  */
 export function websiteJsonLd(locale: Locale): JsonLdNode {
   const en = locale === "en";
@@ -81,6 +83,14 @@ export function websiteJsonLd(locale: Locale): JsonLdNode {
       url: abs(locale, "/"),
       inLanguage: HTML_LANG[locale],
       publisher: { "@id": orgId },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${abs(locale, "/search")}?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
     },
     {
       "@type": "Organization",

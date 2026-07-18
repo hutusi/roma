@@ -355,6 +355,75 @@ export async function getListStubBySlug(slug: string) {
 }
 
 /**
+ * Everything the search-index builder needs, in one round trip per
+ * kind. Search wants cast names, which filmCardRelations deliberately
+ * lacks — a dedicated, columns-restricted relation set keeps the card
+ * queries lean. Tags need no query of their own: the builder derives
+ * tag docs from the fetched films' filmTags, which makes "a tag is
+ * visible iff attached to ≥1 locale-visible film" fall out for free.
+ */
+const filmSearchRelations = {
+  filmDirectors: {
+    with: { director: { columns: { name: true, nameZh: true } } as const },
+    orderBy: creditOrder,
+  },
+  cast: {
+    columns: { name: true, nameZh: true } as const,
+    orderBy: [asc(filmCast.position), asc(filmCast.id)],
+  },
+  filmTags: {
+    with: { tag: { columns: { slug: true, nameZh: true, nameEn: true } } as const },
+    orderBy: [asc(filmTags.tagId)],
+  },
+};
+
+export async function getSearchCorpus(locale: Locale = "zh") {
+  const [searchFilms, searchPeople, searchLists] = await Promise.all([
+    db.query.films.findMany({
+      columns: {
+        slug: true,
+        titleZh: true,
+        titleZhHk: true,
+        titleZhTw: true,
+        titleOriginal: true,
+        titleEn: true,
+        year: true,
+        editorialNote: true,
+        editorialNoteEn: true,
+      },
+      where: and(...filmStatusConds(locale)),
+      orderBy: [asc(films.year), asc(films.slug)],
+      with: filmSearchRelations,
+    }),
+    db
+      .select({
+        slug: people.slug,
+        name: people.name,
+        nameZh: people.nameZh,
+        bio: people.bio,
+        bioEn: people.bioEn,
+        primaryRole: people.primaryRole,
+      })
+      .from(people)
+      .where(and(...personStatusConds(locale)))
+      .orderBy(asc(people.slug)),
+    db
+      .select({
+        slug: curatedLists.slug,
+        title: curatedLists.title,
+        titleEn: curatedLists.titleEn,
+        theme: curatedLists.theme,
+        themeEn: curatedLists.themeEn,
+        sortOrder: curatedLists.sortOrder,
+      })
+      .from(curatedLists)
+      .where(and(...listStatusConds(locale)))
+      .orderBy(asc(curatedLists.sortOrder), asc(curatedLists.slug)),
+  ]);
+  return { films: searchFilms, people: searchPeople, lists: searchLists };
+}
+
+/**
  * poster → still → hero, for cards.
  *
  * Takes the FIRST row of the preferred kind, so it inherits its caller's
