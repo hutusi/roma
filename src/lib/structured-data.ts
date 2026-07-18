@@ -23,7 +23,10 @@ const CRUMB = {
   en: { home: "Home", films: "Films", lists: "Curated Lists" },
 } as const;
 
-const JOB_TITLE = { zh: "电影导演", en: "Film director" } as const;
+const JOB_TITLE = {
+  director: { zh: "电影导演", en: "Film director" },
+  actor: { zh: "演员", en: "Actor" },
+} as const;
 
 function abs(locale: Locale, path: string): string {
   return `${SITE_URL}${localePath(locale, path)}`;
@@ -103,7 +106,21 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
       "@type": "Person",
       name: en ? fd.director.name : (fd.director.nameZh ?? fd.director.name),
     };
-    if (linked) person.url = abs(locale, `/director/${fd.director.slug}`);
+    if (linked) person.url = abs(locale, personPath(fd.director));
+    return person;
+  });
+
+  // Unlinked credits still emit a name-only Person; linked ones get a
+  // url only when the person is visible in this locale (strict gate,
+  // same as director Persons above).
+  const actor = film.cast.map((member) => {
+    const person: JsonLdNode = {
+      "@type": "Person",
+      name: en ? member.name : (member.nameZh ?? member.name),
+    };
+    if (member.person && visibleIn(member.person, locale)) {
+      person.url = abs(locale, personPath(member.person));
+    }
     return person;
   });
 
@@ -122,6 +139,7 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
     ...(alternateName.length ? { alternateName } : {}),
     ...(description ? { description } : {}),
     ...(director.length ? { director } : {}),
+    ...(actor.length ? { actor } : {}),
     ...(film.countries.length
       ? {
           countryOfOrigin: film.countries.map((c) => ({
@@ -158,7 +176,7 @@ export function personJsonLd(person: PublicPerson, locale: Locale = "zh"): JsonL
     "@id": `${url}#person`,
     name: displayName,
     url,
-    jobTitle: JOB_TITLE[locale],
+    jobTitle: JOB_TITLE[person.primaryRole][locale],
     ...(subName && subName !== displayName ? { alternateName: subName } : {}),
     ...(description ? { description } : {}),
     ...(image ? { image } : {}),

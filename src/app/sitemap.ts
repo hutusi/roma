@@ -6,6 +6,7 @@ import {
 } from "@/db/queries/public";
 import { languageAlternates } from "@/i18n/alternates";
 import { localePath } from "@/i18n/locales";
+import { personPath } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 
 /** Absolute-URL hreflang map (sitemaps don't get metadataBase). */
@@ -90,8 +91,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...filmSlugs.flatMap(({ slug, updatedAt }) =>
       entity(`/film/${slug}`, enFilms.has(slug), "monthly", 0.7, updatedAt),
     ),
-    ...personSlugs.flatMap(({ slug, updatedAt }) =>
-      entity(`/director/${slug}`, enPeople.has(slug), "monthly", 0.6, updatedAt),
+    // Canonical segment per person; the other segment 308s and stays out.
+    ...personSlugs.flatMap((person) =>
+      entity(personPath(person), enPeople.has(person.slug), "monthly", 0.6, person.updatedAt),
     ),
   ];
 }
