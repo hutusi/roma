@@ -182,31 +182,39 @@ async function main() {
   );
   if (fdValues.length) await db.insert(filmDirectors).values(fdValues).onConflictDoNothing();
 
-  // ── Tags + film ↔ tag junction ──────────────────────────────────────
-  // Junctions are seeded for ALL seed films (like film_directors, unlike
-  // the newFilmSlugs-gated cast path): the composite PK makes re-runs
-  // idempotent, so re-running the seeder against prod is the backfill
-  // path for assignments on already-seeded films.
-  await db.insert(tags).values(seedTags).onConflictDoNothing({ target: tags.slug });
-  const tagRows = await db
-    .select({ id: tags.id, slug: tags.slug })
-    .from(tags)
-    .where(
-      inArray(
-        tags.slug,
-        seedTags.map((t) => t.slug),
-      ),
-    );
-  const tagIdBySlug = new Map(tagRows.map((r) => [r.slug, r.id]));
+  // ── Tags + film ↔ tag junction — FIRST RUN ONLY ─────────────────────
+  // The whole block is gated on an empty vocabulary. On that first run,
+  // junctions seed for ALL seed films (like film_directors, unlike the
+  // newFilmSlugs-gated cast path) so a prod DB whose films pre-date tags
+  // still gets its assignments backfilled. Once any tag exists, the
+  // vocabulary is admin-owned: an upsert-and-readd re-run would
+  // resurrect tags an editor renamed or deleted, breaking the "a re-run
+  // never clobbers admin edits" contract above.
+  const vocabularyExists = await db.query.tags.findFirst({ columns: { id: true } });
+  if (vocabularyExists) {
+    console.log("Tags: vocabulary already exists (admin-owned) — skipping the starter seed.");
+  } else {
+    await db.insert(tags).values(seedTags);
+    const tagRows = await db
+      .select({ id: tags.id, slug: tags.slug })
+      .from(tags)
+      .where(
+        inArray(
+          tags.slug,
+          seedTags.map((t) => t.slug),
+        ),
+      );
+    const tagIdBySlug = new Map(tagRows.map((r) => [r.slug, r.id]));
 
-  const ftValues = seedFilms.flatMap((f) =>
-    (f.tagSlugs ?? []).flatMap((ts) => {
-      const filmId = filmIdBySlug.get(f.slug);
-      const tagId = tagIdBySlug.get(ts);
-      return filmId && tagId ? [{ filmId, tagId }] : [];
-    }),
-  );
-  if (ftValues.length) await db.insert(filmTags).values(ftValues).onConflictDoNothing();
+    const ftValues = seedFilms.flatMap((f) =>
+      (f.tagSlugs ?? []).flatMap((ts) => {
+        const filmId = filmIdBySlug.get(f.slug);
+        const tagId = tagIdBySlug.get(ts);
+        return filmId && tagId ? [{ filmId, tagId }] : [];
+      }),
+    );
+    if (ftValues.length) await db.insert(filmTags).values(ftValues).onConflictDoNothing();
+  }
 
   // ── 演员表 — only for newly-created films (no natural unique key) ────
   const castValues = seedFilms

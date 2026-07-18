@@ -69,7 +69,10 @@ export function FilmsView({
       {/* A plain GET form, not an onChange handler: it keeps the filter in
           the URL (shareable, and what the island reads back), and it still
           navigates without JS — the page just renders unfiltered there. */}
-      <form className="mt-10 flex justify-center gap-3" action={localePath(locale, "/films")}>
+      <form
+        className="mt-10 flex flex-wrap justify-center gap-3"
+        action={localePath(locale, "/films")}
+      >
         <select
           name="decade"
           defaultValue={selection.decade ?? ""}

@@ -19,4 +19,15 @@ describe("tagFormSchema", () => {
     expect(tagFormSchema.safeParse({ ...valid, nameZh: "标".repeat(31) }).success).toBe(false);
     expect(tagFormSchema.safeParse({ ...valid, nameEn: "x".repeat(61) }).success).toBe(false);
   });
+
+  test("whitespace-only names are rejected — a blank chip is worse than no tag", () => {
+    expect(tagFormSchema.safeParse({ ...valid, nameZh: "  " }).success).toBe(false);
+    expect(tagFormSchema.safeParse({ ...valid, nameEn: " " }).success).toBe(false);
+  });
+
+  test("padded names are stored trimmed", () => {
+    const parsed = tagFormSchema.safeParse({ ...valid, nameEn: " Film Noir " });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.nameEn).toBe("Film Noir");
+  });
 });

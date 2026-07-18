@@ -21,4 +21,4 @@ Repositioning the product around classic cinema in general (rather than "black-a
 - Renaming a tag rewrites every chip through one editorial-tree sweep; no per-entity invalidation map to maintain.
 - Movie JSON-LD gains a locale-appropriate `genre` array from the film's tags.
 - Deleting a tag attached only to drafts just works (junction cascades); detaching it from published films is a deliberate per-film editorial act first.
-- The seeded vocabulary (~12 movements/genres/themes) is a starting point, not a taxonomy commitment — the admin can rename or retire any of it.
+- The seeded vocabulary (~12 movements/genres/themes) is a starting point, not a taxonomy commitment — the admin can rename or retire any of it. The seeder only bootstraps an empty vocabulary (first-run semantics); once any tag exists, re-runs never resurrect renamed or deleted tags.

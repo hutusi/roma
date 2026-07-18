@@ -10,8 +10,8 @@ export const tagFormSchema = z.object({
     .string()
     .min(1, "slug 不能为空")
     .regex(/^[a-z0-9-]+$/, "仅小写字母、数字和连字符"),
-  nameZh: z.string().min(1, "中文名不能为空").max(30, "中文名不能超过 30 字"),
-  nameEn: z.string().min(1, "英文名不能为空").max(60, "英文名不能超过 60 字符"),
+  nameZh: z.string().trim().min(1, "中文名不能为空").max(30, "中文名不能超过 30 字"),
+  nameEn: z.string().trim().min(1, "英文名不能为空").max(60, "英文名不能超过 60 字符"),
 });
 
 export type TagFormValues = z.infer<typeof tagFormSchema>;
