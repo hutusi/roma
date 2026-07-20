@@ -306,9 +306,16 @@ async function main() {
 
   // ── Report (never write): existing films whose seed tags are missing ──
   // A tagSlugs change to a film that already exists is invisible to this
-  // seeder by design, and the operator cannot be expected to know which
-  // films a given content branch touched. Naming them here — in the output
-  // they are already reading — is what turns a silent no-op into a decision.
+  // seeder by design, so without this the change ships silently incomplete.
+  //
+  // But note carefully what this list is: DATABASE DRIFT, not release scope.
+  // It cannot distinguish a tag the current release adds from one an editor
+  // deliberately removed in /admin — both look identical here, and the
+  // difference lives in the seed-data diff, not in any table. So it prints
+  // the drift and stops. It deliberately does NOT emit a runnable
+  // --films=… command: handing over a paste-ready list computed from DB
+  // state is exactly how a deploy would silently reattach tags an editor
+  // had removed on purpose.
   {
     const preexisting = seedFilms.filter(
       (f) => f.tagSlugs?.length && filmIdBySlug.has(f.slug) && !newFilmSlugs.has(f.slug),
@@ -337,12 +344,15 @@ async function main() {
       });
       if (behind.length) {
         console.log(
-          `\nℹ ${behind.length} existing film(s) carry tags in seed-data that this database ` +
-            `lacks.\n  They pre-date this run, so the seeder does not touch them (only films it ` +
-            `creates).\n  If that is a content change you are shipping — dry run first, ` +
-            `then add --apply:\n` +
-            `    bun run src/db/resync-content.ts --films=${behind.map((f) => f.slug).join(",")}\n` +
-            `  If an editor removed those tags on purpose, ignore this.\n`,
+          `\n⚠ ${behind.length} existing film(s) have tags in seed-data that this database lacks:\n` +
+            `    ${behind.map((f) => f.slug).join(", ")}\n\n` +
+            `  They pre-date this run, so the seeder does not touch them (it only tags films it\n` +
+            `  creates). This is DATABASE DRIFT, not release scope — it cannot tell a tag this\n` +
+            `  release adds from one an editor removed on purpose, and that difference lives in\n` +
+            `  the seed-data diff, not in any table. Do not resync straight from this list.\n\n` +
+            `  Take the films to resync from the release notes for the deploy you are running:\n` +
+            `    bun run src/db/resync-content.ts --films=<from release notes> --tags-only\n` +
+            `  (--tags-only never writes prose, so it cannot revert an editor's note.)\n`,
         );
       }
     }

@@ -46,12 +46,18 @@ The muddle underneath all of this was never answering *who owns a film's tags*. 
 |---|---|---|
 | At creation | seed-data | `seed-content.ts`, scoped to `newFilmSlugs` |
 | Thereafter | `/admin` | the film form; the seeder never revisits |
-| An explicit seed-driven correction | operator | `resync-content.ts --films=…`, add-only |
+| An explicit seed-driven correction | operator | `resync-content.ts --films=… --tags-only`, add-only |
 | The vocabulary itself | `/admin` | `apply-tags.ts -- --create-tags=…` for named slugs |
 
-`resync-content.ts` already existed for exactly the middle case — "overwrite the editorial content fields of specific rows from seed-data, by slug" — and tags were simply missing from its remit. Since `seed-content.ts` writes junctions only for films it creates, a `tagSlugs` change to a film that already exists reaches production through resync and nowhere else. Its tag handling is **add-only**: a tag in the database but not in seed-data is reported and left alone. That asymmetry with the prose fields it overwrites is deliberate — prose is single-valued so overwriting is the only coherent option, whereas tags are a set under admin ownership, and fixing a typo in an `editorialNote` must not silently discard curation as a side effect. Removing a tag stays an `/admin` act.
+`resync-content.ts` already existed for exactly the middle case — "overwrite the editorial content fields of specific rows from seed-data, by slug" — and tags were simply missing from its remit. Since `seed-content.ts` writes junctions only for films it creates, a `tagSlugs` change to a film that already exists reaches production through `resync-content --films=… --tags-only` and nowhere else. Its tag handling is **add-only**: a tag in the database but not in seed-data is reported and left alone, because removing one is an `/admin` act.
 
-Because a silent no-op is what caused this in the first place, `seed-content.ts` also **reports** existing films whose seed tags the database lacks, printing the resync command. It never acts on that itself: a film appears in that list just as easily because an editor removed the tag on purpose.
+### Two rules that took three review rounds to arrive at
+
+**One invocation writes one kind of thing.** `resync-content` writes prose *or* tags, never both. The first attempt synced them together, so the command recommended for a missing tag also reverted any note an editor had rewritten in `/admin` — silently, while the output mentioned only the tag. The direction that was guarded (a prose fix must not disturb tags) and the direction that was not (a tag fix must not disturb prose) are the same coupling read two ways; only splitting the modes removes both.
+
+**Release scope comes from the release, never from the database.** No query can distinguish a tag the current release adds from one an editor deliberately removed: both appear simply as "seed has it, the DB does not." That difference exists only in the seed-data diff. So `seed-content.ts` **warns** that N existing films have drifted and stops — it deliberately emits no runnable `--films=` list, because handing over a paste-ready set computed from database state is how a deploy silently reattaches tags an editor removed on purpose. The warning says a resync is *needed*; the release notes say *what*.
+
+The failure mode this last rule guards against is subtle enough to be worth naming: the earlier version did not write anything itself, it merely printed a command for a human to run. Moving an unsound inference from the writer to the reporter does not fix it — the human in the middle has no information the query lacked.
 
 `apply-tags.ts` is therefore reduced to one job — creating **named** vocabulary entries. With no flags it does nothing and says so. It never infers intent from database state.
 

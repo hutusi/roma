@@ -107,11 +107,16 @@ bun --env-file=.env.production.local --conditions=react-server run src/db/seed-c
 # 4. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
 psql "$PROD_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
 
-# 5. REQUIRED if the batch changed tags on films that already exist. Step 3 prints the exact
-#    command — it ends with an "ℹ N existing film(s) carry tags …" block naming them. Copy it.
-#    Nothing prints when nothing pre-existing changed, and then this step is genuinely skippable.
-bun --env-file=.env.production.local run src/db/resync-content.ts --films=<from step 3>
-bun --env-file=.env.production.local run src/db/resync-content.ts --films=<from step 3> --apply
+# 5. REQUIRED if the release changed tags on films that already exist.
+#    Step 3 prints a "⚠ N existing film(s) have tags …" warning — that is your prompt that this
+#    step applies, NOT the list to run. That list is database drift: it cannot tell a tag this
+#    release adds from one an editor removed on purpose. Take the films from the RELEASE NOTES.
+#    --tags-only is not optional: without it, resync also overwrites editorial prose and would
+#    revert any note or essay edited through /admin.
+bun --env-file=.env.production.local run src/db/resync-content.ts \
+  --films=<from release notes> --tags-only
+bun --env-file=.env.production.local run src/db/resync-content.ts \
+  --films=<from release notes> --tags-only --apply
 
 # 6. Any OTHER change to an existing row must be made in /admin — e.g. moving the featured list
 #    (sortOrder 0), which the seeder will not do. Admin actions call revalidate.ts, which
@@ -126,13 +131,20 @@ bun --env-file=.env.production.local run src/db/resync-content.ts --films=<from 
 | Situation | What handles it |
 |---|---|
 | Film created by this seed run | `seed-content.ts`, automatically (step 3) |
-| Film already in the DB, seed `tagSlugs` changed | `resync-content.ts --films=…` (step 5) — **the seeder will not do this** |
+| Film already in the DB, seed `tagSlugs` changed | `resync-content.ts --films=… --tags-only` (step 5) — **the seeder will not do this** |
 | A tag that does not exist yet | `apply-tags.ts -- --create-tags=…` (step 2), or `/admin/tags` |
 | Removing a tag from a film | `/admin` only — resync is add-only and never deletes |
+| Correcting a film's prose from seed-data | `resync-content.ts --films=…` (no `--tags-only`) |
 
-Each of these acts **only on what you name**, because neither "this tag is missing" nor "this
-film has no tags" distinguishes a gap from an editorial decision (ADR 0014 amendment). The
-seeder's step-3 report is what tells you a resync is needed; it never acts on its own.
+Two rules make these safe, and both were learned the hard way:
+
+1. **One invocation writes one kind of thing.** `resync-content` writes prose *or* tags, never
+   both — otherwise a command run to add a tag silently reverts an editor's note, and the output
+   would not even mention it. Need both? Run it twice.
+2. **Release scope comes from the release, never from the database.** Every one of these acts
+   only on films you name, because no query can distinguish a tag this release adds from one an
+   editor deliberately removed — that difference exists only in the seed-data diff. The seeder's
+   step-3 warning tells you a resync is *needed*; the release notes tell you *what*.
 
 Then run the §7 post-deploy checks, plus: new slugs present in `/sitemap.xml` in both
 locales; `/en/film/<new-slug>` is a real page and not a translation-pending stub;

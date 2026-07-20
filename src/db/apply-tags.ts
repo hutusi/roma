@@ -21,7 +21,8 @@
  * What this script does NOT do:
  *   - It does not attach tags to films. Films the seeder creates are tagged
  *     there; a tagSlugs change to a film that already exists is a content
- *     update to an existing row, which is `resync-content.ts --films=…`.
+ *     update to an existing row, which is
+ *     `resync-content.ts --films=… --tags-only`.
  *   - It never renames. A tag whose DB names differ from tags.ts is reported
  *     and left alone.
  *   - It never deletes.
@@ -69,7 +70,7 @@ async function main() {
         "To tag films:\n" +
         "  films the seeder creates are tagged by seed-content.ts itself;\n" +
         "  a tag change to a film that already exists is a content update —\n" +
-        "  bun run src/db/resync-content.ts --films=slug,slug --apply",
+        "  bun run src/db/resync-content.ts --films=slug,slug --tags-only --apply",
     );
     process.exit(0);
   }
