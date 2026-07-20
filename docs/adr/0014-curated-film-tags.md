@@ -56,4 +56,3 @@ Row two is what all four bugs got wrong. Row four keeps removal an `/admin` act:
 - **The baseline records what seed-data asked for, including entries left alone**, so a retired tag stays retired on every future run instead of flipping back to "new".
 - **One-time blind spot.** The bootstrap migration seeds the baseline from whatever the database already holds, so a tag removed *before* it cannot be seen and will be re-applied once. Confirm the target's tags match seed-data before migrating where that is possible.
 - The decision rules are pure functions in `src/db/tag-plan.ts` with unit tests carrying each bug as a named case. All four lived in scripts that touch a database and therefore had no automated coverage at all.
-

@@ -32,6 +32,7 @@ import {
   wordCount,
 } from "../lib/validators/film";
 import { db } from "./index";
+import { lockFilms, lockTags } from "./locks";
 import {
   curatedListItems,
   curatedLists,
@@ -97,6 +98,67 @@ async function main() {
   const adminEmail = process.env.SEED_ADMIN_EMAIL ?? "admin@babuban.com";
   const admin = await db.query.users.findFirst({ where: eq(users.email, adminEmail) });
   const createdBy = admin?.id ?? null;
+
+  // ── Pre-flight: does this release assign a tag an editor retired? ───
+  // The merge below cannot write such a junction: the tag is gone and this
+  // seeder will not recreate it — refusing to is the point of the baseline.
+  // That leaves a genuine conflict between seed-data and an editorial
+  // decision, and only a human can settle it.
+  //
+  // It is caught HERE, before the first insert, for a specific reason: the
+  // seeder publishes on commit with no draft step, so a film must never go
+  // live already knowing one of its curated tags was dropped. Nothing has
+  // been written on this path, so the run stays replayable — which is what
+  // makes aborting cheap here and expensive anywhere later.
+  {
+    const tagBaseline = new Set(
+      (await db.select({ slug: seedTagBaseline.slug }).from(seedTagBaseline)).map((r) => r.slug),
+    );
+    const tagsInDb = new Set((await db.select({ slug: tags.slug }).from(tags)).map((r) => r.slug));
+    const { retired } = planVocabulary(
+      seedTags.map((t) => t.slug),
+      tagBaseline,
+      tagsInDb,
+    );
+    const retiredSlugs = new Set(retired);
+    if (retiredSlugs.size) {
+      const junctionBaseline = new Set(
+        (
+          await db
+            .select({
+              filmSlug: seedFilmTagBaseline.filmSlug,
+              tagSlug: seedFilmTagBaseline.tagSlug,
+            })
+            .from(seedFilmTagBaseline)
+        ).map(filmTagKey),
+      );
+      // Only NEW assignments conflict. A pair already in the baseline is
+      // the legitimate "an editor removed this" case, which the merge
+      // leaves alone and which needs no write at all.
+      const conflicts = seedFilms.flatMap((f) =>
+        (f.tagSlugs ?? [])
+          .filter(
+            (tagSlug) =>
+              retiredSlugs.has(tagSlug) &&
+              !junctionBaseline.has(filmTagKey({ filmSlug: f.slug, tagSlug })),
+          )
+          .map((tagSlug) => `${f.slug} → ${tagSlug}`),
+      );
+      if (conflicts.length) {
+        console.error(
+          `\n✗ seed-data assigns ${conflicts.length} tag(s) that were retired in /admin:\n` +
+            `    ${conflicts.join("\n    ")}\n\n` +
+            `  The vocabulary is admin-owned, so the seeder will not recreate a tag somebody\n` +
+            `  deleted (ADR 0014) — and it will not publish a film knowing a curated tag of\n` +
+            `  its was dropped. Settle it one way or the other:\n` +
+            `    · restore the tag in /admin/tags, then re-run; or\n` +
+            `    · remove it from the film's tagSlugs in src/db/seed-data/films.ts.\n` +
+            `  Nothing has been written.\n`,
+        );
+        process.exit(1);
+      }
+    }
+  }
 
   // ── People (directors + curated actors) ────────────────────────────
   const insertedPeople = await db
@@ -202,6 +264,19 @@ async function main() {
   // and the next run would read those additions as editor removals — a
   // fresh way to reach the same bug.
   const tagSummary = await db.transaction(async (tx) => {
+    // Serialise against /admin, in the canonical order tags → films
+    // (ADR 0014), the same order saveFilm takes. Locks come BEFORE the
+    // reads below: without them an editor's save can land between reading
+    // `film_tags` and inserting, and the seeder reattaches a tag that save
+    // had just removed — the very thing the baseline exists to prevent,
+    // arriving by a race instead. Both helpers sort by id, so concurrent
+    // callers cannot deadlock.
+    await lockTags(
+      tx,
+      (await tx.select({ id: tags.id }).from(tags)).map((r) => r.id),
+    );
+    await lockFilms(tx, [...filmIdBySlug.values()]);
+
     const seedTagSlugs = seedTags.map((t) => t.slug);
     const tagBaseline = new Set(
       (await tx.select({ slug: seedTagBaseline.slug }).from(seedTagBaseline)).map((r) => r.slug),
@@ -243,23 +318,38 @@ async function main() {
     const presentFilms = seedFilms.filter((f) => filmIdBySlug.has(f.slug));
     const { apply, removedByEditor } = planFilmTags(presentFilms, junctionBaseline, junctionsInDb);
 
-    const rows = apply.flatMap((p) => {
+    const rows = apply.map((p) => {
       const filmId = filmIdBySlug.get(p.filmSlug);
       const tagId = tagIdBySlug.get(p.tagSlug);
-      return filmId && tagId ? [{ filmId, tagId }] : [];
+      if (!filmId || !tagId) {
+        // Never drop this silently. Skipping the junction while the
+        // baseline below records it makes the next run read the gap as an
+        // editor's removal, and the assignment is then lost for good — a
+        // published film quietly missing a curated tag, unrecoverable even
+        // if the tag is restored. The pre-flight in main() should make this
+        // unreachable; throwing rolls the transaction back, so the baseline
+        // stays untouched and a retry still sees "never seeded".
+        throw new Error(
+          `cannot link ${p.filmSlug} → ${p.tagSlug}: the tag is not in the vocabulary. ` +
+            "Restore it in /admin/tags or drop it from seed-data, then re-run.",
+        );
+      }
+      return { filmId, tagId };
     });
     if (rows.length) await tx.insert(filmTags).values(rows).onConflictDoNothing();
 
     // Record what seed-data asked for this run — including entries left
     // alone, so a retired tag stays retired on every future run instead
-    // of flipping back to "new".
+    // of flipping back to "new". Scoped to films actually present here:
+    // the baseline must describe what was evaluated, never what was
+    // merely hoped for.
     if (seedTagSlugs.length) {
       await tx
         .insert(seedTagBaseline)
         .values(seedTagSlugs.map((slug) => ({ slug })))
         .onConflictDoNothing();
     }
-    const asserted = seededFilmTags(seedFilms);
+    const asserted = seededFilmTags(presentFilms);
     if (asserted.length) {
       await tx.insert(seedFilmTagBaseline).values(asserted).onConflictDoNothing();
     }
