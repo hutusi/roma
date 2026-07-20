@@ -9,6 +9,129 @@ import type { SeedList } from "./types";
  */
 export const seedLists: SeedList[] = [
   {
+    slug: "chinese-canon",
+    title: "华语经典",
+    theme: "从费穆到王家卫，八部撑起华语电影的作品",
+    titleEn: "The Chinese-Language Canon",
+    themeEn: "From Fei Mu to Wong Kar-wai — eight films that hold up Chinese-language cinema",
+    intro: doc([
+      p(
+        "华语电影不是世界影史的一个地方分支，它有自己的源头、自己的高峰，以及自己被中断过两次的谱系。这份片单从 1934 年的上海一直走到 2000 年的香港：默片末期的阮玲玉，战后废墟上的一段私情，被封存三十年的杰作，台北眷村里的一把刀，竹林中的一次顿悟。它不追求覆盖，只想说明一件事——这些电影放在任何一个国家的影史里，都站得住。",
+      ),
+    ]),
+    introEn: doc([
+      p(
+        "Chinese-language cinema is not a regional branch of world film history. It has its own headwaters, its own summits, and its own lineage — one that has been severed twice. This list runs from Shanghai in 1934 to Hong Kong in 2000: Ruan Lingyu at the close of the silent era, a private affair among postwar ruins, a masterpiece shelved for thirty years, a knife in a Taipei military village, a moment of enlightenment in a bamboo grove. It does not attempt coverage. It means to establish one thing — that these films would stand up in the film history of any country on earth.",
+      ),
+    ]),
+    sortOrder: 0,
+    // Deliberately a B&W film: list covers render through a hard grayscale
+    // filter (see ADR 0015), so a colour cover would arrive desaturated.
+    coverFilmSlug: "spring-in-a-small-town",
+    items: [
+      {
+        filmSlug: "spring-in-a-small-town",
+        reasoning: doc([
+          p(
+            "从顶点开始。如果只能用一部电影证明华语电影的高度，是这一部：五个人，一座废园，全部欲望停在门槛前。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Begin at the summit. If one film had to establish how high Chinese-language cinema reaches, it is this one: five people, a ruined garden, and every desire stopped at the threshold.",
+          ),
+        ]),
+      },
+      {
+        filmSlug: "the-goddess",
+        reasoning: doc([
+          p(
+            "再回到源头。1934 年，中国默片在这里达到顶点——而它最了不起的地方，是把摄影机放在与主人公平视的高度。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Now back to the source. In 1934 Chinese silent cinema reached its summit here — and what is most remarkable about it is simply that the camera sits level with its heroine.",
+          ),
+        ]),
+      },
+      {
+        filmSlug: "street-angel",
+        reasoning: doc([
+          p("上海左翼电影最好的一面：先让你笑，再让你明白笑的是什么。周璇的歌至今还在被传唱。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "The Shanghai left-wing cinema at its best: it gets you laughing first and only then lets you work out what you were laughing at. Zhou Xuan's songs are still sung today.",
+          ),
+        ]),
+      },
+      {
+        filmSlug: "the-spring-river-flows-east",
+        reasoning: doc([
+          p(
+            "华语通俗剧的巅峰。三个多小时把抗战八年压进一个家庭，1947 年的观众在影院里哭成一片——那份煽情是有出处的。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "The summit of Chinese melodrama. Three hours compress eight years of war into one family, and audiences in 1947 wept in the aisles — the sentiment had somewhere to come from.",
+          ),
+        ]),
+      },
+      {
+        filmSlug: "a-touch-of-zen",
+        reasoning: doc([
+          p(
+            "类型片也可以是艺术。竹林一战养活了此后所有华语动作片，而它真正的野心在后半段：厮杀让位于禅。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Genre can be art. The bamboo-forest duel fed every Chinese-language action film that followed, but the real ambition arrives in the second half, where combat gives way to Zen.",
+          ),
+        ]),
+      },
+      {
+        filmSlug: "a-time-to-live-a-time-to-die",
+        reasoning: doc([
+          p("台湾新电影的方法在这里成型：镜头放远、放定，不追高潮，让时间自己把一个家庭走完。"),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Here the method of Taiwan New Cinema takes shape: set the camera far back, lock it down, refuse the dramatic peak, and let time walk a family to its end by itself.",
+          ),
+        ]),
+      },
+      {
+        filmSlug: "a-brighter-summer-day",
+        reasoning: doc([
+          p(
+            "四小时的代价换来一整个社会的横截面。看完你会明白，那一刀不是意外，而是整张电路图算出来的结果。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "Four hours buys you the cross-section of an entire society. By the end you understand that the knife is not an accident but the figure the whole circuit was computing.",
+          ),
+        ]),
+      },
+      {
+        filmSlug: "in-the-mood-for-love",
+        reasoning: doc([
+          p(
+            "以最近也最广为人知的一部收尾。前面七部让你看见谱系，这一部让你看见它长成了什么——关于错过的极致。",
+          ),
+        ]),
+        reasoningEn: doc([
+          p(
+            "End on the most recent and most widely known. The seven films before it show you the lineage; this one shows you what the lineage grew into — the last word on missed chances.",
+          ),
+        ]),
+      },
+    ],
+  },
+  {
     slug: "into-black-and-white",
     title: "黑白影像入门",
     theme: "如果你想从黑白电影开始，先看这八部",
@@ -19,7 +142,7 @@ export const seedLists: SeedList[] = [
         'Black and white was never merely "before color arrived" — it is an active choice, one that hands the whole burden of storytelling over to light and shadow. This list gathers eight masterpieces, wildly different in style, spanning silent film to the New Wave and Europe to Asia, as the first door into a vast treasury. You need not watch them in order, but any one of them is enough to convince you: strip away the color, and cinema somehow comes into sharper focus.',
       ),
     ]),
-    sortOrder: 0,
+    sortOrder: 1,
     coverFilmSlug: "seven-samurai",
     intro: doc([
       p(
@@ -142,7 +265,7 @@ export const seedLists: SeedList[] = [
         "Fellini's films are one dream that keeps getting bigger. Watched in this order, they show him setting out from the streets of neorealism and flying, step by step, toward the circus-ring confession that belongs to him alone. Three are enough — after that you will want the rest on your own.",
       ),
     ]),
-    sortOrder: 1,
+    sortOrder: 2,
     coverFilmSlug: "otto-e-mezzo",
     intro: doc([
       p(
@@ -202,7 +325,7 @@ export const seedLists: SeedList[] = [
         "On the rubble of the Second World War, a handful of Italians shouldered their cameras into the streets and, with non-professional actors and real poverty, filmed the struggle and the dignity of ordinary people. The movement was brief but its reach was immense — it very nearly reset the moral coordinates of postwar cinema the world over.",
       ),
     ]),
-    sortOrder: 2,
+    sortOrder: 3,
     coverFilmSlug: "bicycle-thieves",
     intro: doc([
       p(
@@ -262,7 +385,7 @@ export const seedLists: SeedList[] = [
         "In the late 1950s, a clutch of young critics at Cahiers du Cinéma grew tired of the polished conventions of France's \"tradition of quality\" and simply stepped behind the camera themselves. Shooting handheld, on real streets, improvising as they went, they hauled cinema out of the studio and into the open air. They weren't only making films; they were using films to argue about what a film should be.",
       ),
     ]),
-    sortOrder: 3,
+    sortOrder: 4,
     coverFilmSlug: "breathless",
     intro: doc([
       p(
@@ -322,7 +445,7 @@ export const seedLists: SeedList[] = [
         "In the 1950s the Japanese screen blazed with talent all at once: Kurosawa's force, Ozu's restraint, Mizoguchi's sorrowful beauty, each reaching its own summit within the same decade. These films fused an Eastern aesthetic with the most universal of human truths, and let the world see for the first time just how deep Japanese cinema truly ran.",
       ),
     ]),
-    sortOrder: 4,
+    sortOrder: 5,
     coverFilmSlug: "tokyo-story",
     intro: doc([
       p(
@@ -409,7 +532,7 @@ export const seedLists: SeedList[] = [
         "The coming of sound cut the silent film off at the very moment of its maturity. Yet it was precisely that last decade in which silent cinema pushed purely visual storytelling to heights it would rarely reach again. These six films are the proof: without a single line of dialogue, the movies can say everything there is to say about fear, revolution, love, and redemption.",
       ),
     ]),
-    sortOrder: 5,
+    sortOrder: 6,
     coverFilmSlug: "sunrise",
     intro: doc([
       p(
@@ -494,7 +617,7 @@ export const seedLists: SeedList[] = [
         "Femmes fatales, cynical voiceover, frames sliced apart by shadow, and a fate that draws tighter with every step — film noir poured postwar America's anxiety and desire into a style at once icy and lavish. This list runs from the genre's German roots all the way to its most gorgeous elegy.",
       ),
     ]),
-    sortOrder: 6,
+    sortOrder: 7,
     coverFilmSlug: "sunset-boulevard",
     intro: doc([
       p(

@@ -2,12 +2,19 @@ import { doc, h2, p, quote } from "./tiptap";
 import type { SeedFilm } from "./types";
 
 /**
- * The seeded canon — ~50 classics in the Criterion/MUBI spirit, all
- * black-and-white so far. Every `editorialNote` is original prose,
- * 200–500 code points (the publish gate). `directorSlugs` reference
- * `directors.ts`; images and `publishedAt` are wired by
- * `seed-content.ts`. `isBlackAndWhite` is stated on every film — the
- * catalogue no longer presumes it.
+ * The seeded canon — classics in the Criterion/MUBI spirit. Every
+ * `editorialNote` is original prose, 200–500 code points (the publish
+ * gate). `directorSlugs` reference `directors.ts`; images and
+ * `publishedAt` are wired by `seed-content.ts`.
+ *
+ * The catalogue's boundary is classic cinema, not black-and-white and not
+ * pre-1967 (ADR 0015). B&W is a house preference, stated per film via
+ * `isBlackAndWhite`, never presumed and never a tag. Chinese-language
+ * cinema is a first-class axis rather than a regional footnote.
+ *
+ * Array order is load-bearing: `publishedAtFor(i)` derives `publishedAt`
+ * from the index, so position here decides the homepage 近期收录 strip for
+ * any film this run actually inserts.
  */
 export const seedFilms: SeedFilm[] = [
   // ── Federico Fellini ──────────────────────────────────────────────
@@ -1277,5 +1284,333 @@ export const seedFilms: SeedFilm[] = [
       },
     ],
     directorSlugs: ["elia-kazan"],
+  },
+
+  // ── 华语经典 ───────────────────────────────────────────────────────
+  // Ordered deliberately: publishedAt is derived from array index, so the
+  // first four here become the homepage 近期收录 strip.
+  {
+    slug: "spring-in-a-small-town",
+    titleZh: "小城之春",
+    titleZhHk: "小城之春",
+    titleZhTw: "小城之春",
+    titleOriginal: "小城之春",
+    titleEn: "Spring in a Small Town",
+    year: 1948,
+    countries: ["中国"],
+    runtimeMinutes: 98,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["romance", "family-drama"],
+    tmdbId: 21058,
+    editorialNote:
+      "五个人，一座炸塌了一半的园子，一段没有发生的私奔。费穆把中国电影史上最危险的题材——已婚妇人重逢旧日情人——拍成了最克制的作品：所有欲望都停在门槛前，所有台词都少说半句。玉纹在残破城墙上来回走的那几个镜头，是华语电影最早也最好的心理空间；摄影机几乎不动，人物却在原地把一生走完了。1948 年上映时正逢天翻地覆，它因「不问世事」被搁置了三十多年；重见天日之后，几乎每一次华语影史评选它都排在第一位。看它需要安静，也需要一点耐心，而那份耐心会被加倍偿还。",
+    editorialNoteEn:
+      "Five people, a garden half destroyed by bombing, and an elopement that never happens. Fei Mu took the most dangerous subject available to Chinese cinema — a married woman reunited with the man she once loved — and made from it the most restrained film imaginable: every desire stops at the threshold, every line stops half a sentence short. The shots of Yuwen walking back and forth along the broken city wall are the earliest and still the finest psychological space in Chinese-language film; the camera barely moves, and yet she walks an entire life without going anywhere. Released in 1948 as the country turned over, it was condemned as indifferent to the world and shelved for more than thirty years. Since its rediscovery it has finished first in nearly every poll of Chinese cinema ever conducted. It asks for quiet and a little patience, and it repays that patience several times over. If you watch one film in this collection, watch this one.",
+    essay: doc([
+      h2("停在门槛上的电影"),
+      p(
+        "《小城之春》的全部张力都建立在没有发生的事情上。志忱来了，玉纹去了他的房间，门开着，两人隔着一张桌子说了几句无关的话——费穆没有给任何一个可以让观众松一口气的时刻，也没有给任何一个可以让人指责的时刻。",
+      ),
+      p(
+        "这种克制不是道德保守，而是形式上的自觉。他知道一旦拍出越轨，电影就变成了事件；而只要不拍，它就一直是状态。八十年后我们仍在为这个选择震动。",
+      ),
+      quote("发乎情，止乎礼——这句老话，费穆把它拍成了摄影机的运动。"),
+    ]),
+    essayEn: doc([
+      h2("A Film That Stops at the Threshold"),
+      p(
+        "The whole tension of Spring in a Small Town rests on what does not happen. Zhichen arrives, Yuwen goes to his room, the door stays open, and the two of them exchange a few irrelevant sentences across a table. Fei Mu grants no moment where the audience can exhale, and none where it can accuse.",
+      ),
+      p(
+        "That restraint is not moral conservatism but formal self-awareness. He understood that the moment transgression is filmed the picture becomes an event, and that so long as it is withheld the picture remains a condition. Eighty years on, the choice still stuns.",
+      ),
+      quote(
+        "Feeling may begin, but it stops at propriety — an old maxim that Fei Mu turned into camera movement.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Wei Wei",
+        zhName: "韦伟",
+        character: "Zhou Yuwen",
+        characterZh: "周玉纹",
+        personSlug: "wei-wei",
+      },
+      { name: "Li Wei", zhName: "李纬", character: "Zhang Zhichen", characterZh: "章志忱" },
+      { name: "Shi Yu", zhName: "石羽", character: "Dai Liyan", characterZh: "戴礼言" },
+    ],
+    directorSlugs: ["fei-mu"],
+  },
+  {
+    slug: "in-the-mood-for-love",
+    titleZh: "花样年华",
+    titleZhHk: "花樣年華",
+    titleZhTw: "花樣年華",
+    titleOriginal: "花樣年華",
+    titleEn: "In the Mood for Love",
+    year: 2000,
+    countries: ["中国香港"],
+    runtimeMinutes: 98,
+    aspectRatio: "1.66:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["romance"],
+    tmdbId: 843,
+    editorialNote:
+      "两个被各自配偶背叛的人，在同一道楼梯上反复错身，用排练的方式演练一场不敢发生的爱情。王家卫把所有关键情节都拿掉了：出轨没有被拍，告白没有被说出，连那两位配偶的脸都始终不在画面里。剩下的是旗袍、走廊、慢镜里飘散的烟，以及梅林茂那段一响起就让人心口发紧的圆舞曲。张曼玉换了二十多件旗袍，每一件都在替她说她不能说的话；结尾梁朝伟对着吴哥窟的石洞低语，我们一个字也听不见。这是关于「错过」最精致的一部电影，也是最狠的一部。",
+    editorialNoteEn:
+      "Two people betrayed by their respective spouses keep passing each other on the same staircase, rehearsing an affair neither will allow to happen. Wong Kar-wai removed every plot point that mattered: the adultery is never shown, the declaration is never spoken, and the faces of the two unfaithful spouses never once enter the frame. What is left is cheongsams, corridors, cigarette smoke drifting through slow motion, and Shigeru Umebayashi's waltz, which tightens the chest the instant it starts. Maggie Cheung wears more than twenty dresses and each one says what she is not permitted to say. At the close, Tony Leung murmurs into a hollow in the stone at Angkor Wat and we hear not a single word of it. This is the most exquisite film ever made about missed chances, and also the cruelest — it understands that what haunts people is rarely what they did, and almost always what they were too decent to do.",
+    essay: doc([
+      h2("克制作为一种纪律"),
+      p(
+        "王家卫没有完整剧本，成片的优雅其实是大量删减之后的残余——据说关于那场婚外情本身，他拍下的素材远多于留在片中的。留下来的，是一套关于「差一点」的结构。",
+      ),
+      p(
+        "重复本身就是论证。同一条走廊、同一个面摊、同一场雨：电影很少敢于只靠复现让观众感到时间流逝，而这部片子证明了它可以。",
+      ),
+    ]),
+    essayEn: doc([
+      h2("The Discipline of Withholding"),
+      p(
+        "Wong shot without a finished script, and the film's famous elegance is the residue of enormous subtraction — reportedly far more footage of the affair was shot than survives. What remains is a structure of near-misses.",
+      ),
+      p(
+        "The repetition is the argument. The same corridor, the same noodle stall, the same rain: cinema rarely trusts an audience to feel time passing through recurrence alone, and this is the film that proves it can.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Maggie Cheung",
+        zhName: "张曼玉",
+        character: "Su Li-zhen",
+        characterZh: "苏丽珍",
+        personSlug: "maggie-cheung",
+      },
+      {
+        name: "Tony Leung Chiu-wai",
+        zhName: "梁朝伟",
+        character: "Chow Mo-wan",
+        characterZh: "周慕云",
+        personSlug: "tony-leung-chiu-wai",
+      },
+    ],
+    directorSlugs: ["wong-kar-wai"],
+  },
+  {
+    slug: "a-brighter-summer-day",
+    titleZh: "牯岭街少年杀人事件",
+    titleZhHk: "牯嶺街少年殺人事件",
+    titleZhTw: "牯嶺街少年殺人事件",
+    titleOriginal: "牯嶺街少年殺人事件",
+    titleEn: "A Brighter Summer Day",
+    year: 1991,
+    countries: ["中国台湾"],
+    runtimeMinutes: 237,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["taiwan-new-cinema", "family-drama"],
+    tmdbId: 15804,
+    editorialNote:
+      "近四小时，上百个角色，一座 1961 年的台北。杨德昌用工程师般的耐心，把眷村少年的帮派、父亲被带走的白色恐怖审讯、教室的停电与一支手电筒，编进同一张电路图里——你以为在看成长故事，其实在看一整个社会如何一步步把十四岁的小四逼到刀口上。全片大量夜戏，光源常常只有一支手电或一盏昏灯，黑暗不是风格而是处境：那是一代外省家庭悬在半空、随时准备再次搬家的处境。片长会吓退很多人，但这是华语电影里少有的、真正配得上「史诗」二字的作品，也是杨德昌最完整的一次演算。",
+    editorialNoteEn:
+      "Nearly four hours, a cast of more than a hundred, and the city of Taipei in 1961. Edward Yang applies an engineer's patience to wiring a single circuit diagram out of a teenage gang, a father hauled in for interrogation under the White Terror, a classroom blackout, and one flashlight — you think you are watching a coming-of-age story, and you are in fact watching an entire society walk a fourteen-year-old boy step by step onto the point of a knife. Much of the film is shot at night with a torch or a single dim bulb as the only source, and the darkness is not a style but a condition: the condition of a generation of mainlander families suspended in mid-air, always packed to move again. The running time will frighten people off. It should not. This is one of the rare Chinese-language films that genuinely earns the word epic, and it is Yang's most complete piece of reasoning about how a place shapes the people who grow up inside it.",
+    essay: doc([
+      h2("电路图"),
+      p(
+        "杨德昌读的是电机工程，这不是花边，是理解他的钥匙。片中上百个角色彼此不识，却通过父亲的职务、帮派的地盘、一把手电筒的归属互相咬合，任何一个节点松动，整条线路都会改变电流的方向。",
+      ),
+      p("所以结尾的那一刀既是意外，也是必然。小四不是坏孩子，他只是那个电路里电压最集中的位置。"),
+    ]),
+    essayEn: doc([
+      h2("The Circuit Diagram"),
+      p(
+        "Yang trained in electrical engineering, which is not trivia but the key to reading him. The film's hundred-odd characters do not know one another, yet they interlock through a father's job, a gang's turf, the ownership of a single flashlight; loosen any node and the current changes direction everywhere.",
+      ),
+      p(
+        "Which is why the knife at the end is at once an accident and an inevitability. Xiao Si'r is not a bad boy. He is simply the point in the circuit where the voltage concentrates.",
+      ),
+    ]),
+    cast: [
+      { name: "Chang Chen", zhName: "张震", character: "Xiao Si'r", characterZh: "小四" },
+      { name: "Lisa Yang", zhName: "杨静怡", character: "Ming", characterZh: "小明" },
+      { name: "Chang Kuo-chu", zhName: "张国柱", character: "The Father", characterZh: "父亲" },
+    ],
+    directorSlugs: ["edward-yang"],
+  },
+  {
+    slug: "the-goddess",
+    titleZh: "神女",
+    titleZhHk: "神女",
+    titleZhTw: "神女",
+    titleOriginal: "神女",
+    titleEn: "The Goddess",
+    year: 1934,
+    countries: ["中国"],
+    runtimeMinutes: 85,
+    aspectRatio: "1.33:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["silent-cinema"],
+    tmdbId: 112698,
+    editorialNote:
+      "一个母亲白天带孩子，夜里站在街边。吴永刚拍这个题材时只有二十七岁，却做出了整个时代最成熟的选择：不控诉、不怜悯，把摄影机放在与她平视的高度，连盘剥她的流氓也只是环境的一部分，而不是供人唾骂的反派。阮玲玉的表演几乎不需要字幕卡——她把攒下的钱一张张塞进墙砖缝里的那个动作，比任何台词都清楚地说明了什么叫尊严。中国默片在这里到达顶点，而拍完次年，阮玲玉在二十四岁自尽。今天再看，最动人的仍是它对主人公的信任：她不是一个社会问题，她是一个人。",
+    editorialNoteEn:
+      "A mother raises her child by day and stands on the street by night. Wu Yonggang was twenty-seven when he made this, and he made the most mature choice available to his era: no indictment, no pity, the camera set level with her, and even the thug who bleeds her registering as part of the environment rather than a villain to be hissed at. Ruan Lingyu barely needs an intertitle — the way she pushes her saved banknotes one by one into a gap in the brickwork states what dignity is more precisely than any line could. Chinese silent cinema reaches its summit here, and the year after finishing it Ruan took her own life at twenty-four. What still moves most on a fresh viewing is the film's trust in its protagonist. She is not a social problem to be solved or wept over. She is a person, filmed as one, at a moment when almost no cinema anywhere was willing to do that for a woman in her position.",
+    essay: doc([
+      h2("平视的高度"),
+      p(
+        "默片时代拍妓女，通常有两条路：控诉社会，或者渲染堕落。吴永刚两条都没走。他把机位放平，让观众和她坐在同一条板凳上，于是道德判断变成了多余的东西。",
+      ),
+      p("这一选择在 1934 年是激进的，今天依然是。很多当代电影仍在俯拍它们的主人公。"),
+    ]),
+    essayEn: doc([
+      h2("The Height of the Eye"),
+      p(
+        "Silent cinema had two standard routes for filming a prostitute: indict society, or luxuriate in the fall. Wu Yonggang took neither. He levelled the camera and sat the audience on the same bench as his heroine, at which point moral judgment simply became surplus to requirements.",
+      ),
+      p(
+        "That was a radical choice in 1934 and it remains one now. A great many contemporary films still shoot down at the people they are about.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Ruan Lingyu",
+        zhName: "阮玲玉",
+        character: "The Mother",
+        characterZh: "阮嫂",
+        personSlug: "ruan-lingyu",
+      },
+      { name: "Zhang Zhizhi", zhName: "章志直", character: "The Boss", characterZh: "流氓" },
+    ],
+    directorSlugs: ["wu-yonggang"],
+  },
+  {
+    slug: "street-angel",
+    titleZh: "马路天使",
+    titleZhHk: "馬路天使",
+    titleZhTw: "馬路天使",
+    titleOriginal: "馬路天使",
+    titleEn: "Street Angel",
+    year: 1937,
+    countries: ["中国"],
+    runtimeMinutes: 91,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["comedy", "romance"],
+    tmdbId: 112699,
+    editorialNote:
+      "上海的一条弄堂里，歌女、妓女、吹鼓手和剃头匠挤在一起过日子。袁牧之把好莱坞的喜剧节奏、苏联的剪辑与上海的市井小调焊在一起，做出了一部前所未见的中国电影：前一分钟还在窗对窗地插科打诨，后一分钟就有人被卖掉。周璇唱《四季歌》与《天涯歌女》的段落，是华语电影配乐史的起点之一，那两首歌至今还在被人传唱。笑声底下始终垫着一层薄冰——这正是三十年代上海左翼电影最厉害的地方：它从不说教，只是先让你笑，再让你明白自己笑的究竟是什么。",
+    editorialNoteEn:
+      "In one Shanghai lane a singsong girl, a prostitute, a trumpeter and a barber live crammed together. Yuan Muzhi welded Hollywood comic timing, Soviet cutting, and Shanghai street song into a Chinese film unlike any before it: one minute the neighbours are clowning at each other window to window, the next a young woman has been sold. Zhou Xuan's performances of the Four Seasons Song and The Wandering Songstress are among the founding moments of Chinese film music, and both songs are still sung today. There is always thin ice under the laughter, and that is exactly what made the Shanghai left-wing cinema of the 1930s so formidable — it never lectures. It gets you laughing first, and only then lets you work out what it is you have been laughing at. Made months before the Japanese invasion closed the studios, it is a comedy with a trapdoor under it.",
+    cast: [
+      {
+        name: "Zhou Xuan",
+        zhName: "周璇",
+        character: "Xiao Hong",
+        characterZh: "小红",
+        personSlug: "zhou-xuan",
+      },
+      { name: "Zhao Dan", zhName: "赵丹", character: "Chen Shaoping", characterZh: "陈少平" },
+      { name: "Zhao Huishen", zhName: "赵慧深", character: "Xiao Yun", characterZh: "小云" },
+    ],
+    directorSlugs: ["yuan-muzhi"],
+  },
+  {
+    slug: "the-spring-river-flows-east",
+    titleZh: "一江春水向东流",
+    titleZhHk: "一江春水向東流",
+    titleZhTw: "一江春水向東流",
+    titleOriginal: "一江春水向東流",
+    titleEn: "The Spring River Flows East",
+    year: 1947,
+    countries: ["中国"],
+    runtimeMinutes: 190,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["war", "family-drama"],
+    tmdbId: 140260,
+    editorialNote:
+      "三个多小时，一个家庭，抗战八年。蔡楚生与郑君里让同一个丈夫在重庆步步高升，让妻子在沦陷的上海一寸寸沉下去，最后在一场宴会上把两条线狠狠撞在一起。这是中国通俗剧的巅峰：结构精确得像一部长篇小说，情感却毫不吝啬。1947 年上映时连映三个多月，观众在影院里哭成一片。它不掩饰自己的煽情，因为那份煽情是有出处的——战争刚刚结束，账还没有算完，而算账的方式就是让所有人看见谁在受难、谁在赴宴。素芬最后望向江水的那个镜头，是一代人的判决书。",
+    editorialNoteEn:
+      "Three hours and more, one family, eight years of war. Cai Chusheng and Zheng Junli let the same husband rise through wartime Chongqing while his wife sinks inch by inch in occupied Shanghai, then slam the two lines together at a banquet. This is the summit of Chinese melodrama: a structure as precise as a long novel, and an emotional register with nothing held back. On release in 1947 it ran for over three months to full houses and audiences wept in the aisles. It makes no apology for its sentiment, because the sentiment had somewhere to come from — the war had only just ended, the accounting was not finished, and the way this film does the accounting is to make everyone see plainly who suffered and who went to the party. Sufen's final look out at the river is a verdict handed down on behalf of a whole generation.",
+    cast: [
+      { name: "Bai Yang", zhName: "白杨", character: "Sufen", characterZh: "素芬" },
+      { name: "Tao Jin", zhName: "陶金", character: "Zhang Zhongliang", characterZh: "张忠良" },
+      { name: "Shu Xiuwen", zhName: "舒绣文", character: "Wang Lizhen", characterZh: "王丽珍" },
+    ],
+    directorSlugs: ["cai-chusheng", "zheng-junli"],
+  },
+  {
+    slug: "a-time-to-live-a-time-to-die",
+    titleZh: "童年往事",
+    titleZhHk: "童年往事",
+    titleZhTw: "童年往事",
+    titleOriginal: "童年往事",
+    titleEn: "A Time to Live, a Time to Die",
+    year: 1985,
+    countries: ["中国台湾"],
+    runtimeMinutes: 138,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["taiwan-new-cinema", "family-drama"],
+    tmdbId: 45999,
+    editorialNote:
+      "侯孝贤把摄影机架远、架定，让一个家庭的十几年自己走完。父亲死在藤椅上，母亲的病一点点加重，祖母始终念叨着要走路回大陆——这些事大多发生在画面深处或画外，没有配乐提醒你此刻该难过。这正是台湾新电影的方法：不追戏剧高潮，让时间承担全部重量，观众必须自己走进去看。片名直译是「一段活着的时间，一段死去的时间」，看完你会明白那不是文艺腔，而是对这部电影最准确的描述。它也是理解侯孝贤的最好入口：他后来所有的远景与省略，都从这里长出来。适合在一个不赶时间的晚上看，最好是一个人。",
+    editorialNoteEn:
+      "Hou Hsiao-hsien sets the camera far back, locks it down, and lets a decade of one family's life walk itself to the end. The father dies in a rattan chair, the mother's illness deepens by degrees, the grandmother keeps announcing she will walk back to the mainland — and most of this happens deep in the frame or just outside it, with no score to tell you when to grieve. That is the method of Taiwan New Cinema: refuse the dramatic peak, let time carry the weight, and make the viewer come in and look. The Chinese title translates as a time to live and a time to die, and by the end you understand that this is not a literary flourish but the most accurate description of the film available. It is also the best door into Hou: every distant framing and every ellipsis in his later work grows from here. Watch it on an evening when you are not in a hurry, preferably alone.",
+    cast: [
+      { name: "You An-shun", zhName: "游安顺", character: "Ah-ha (teenage)", characterZh: "阿孝" },
+      { name: "Tang Ru-yun", zhName: "唐如韫", character: "Grandmother", characterZh: "祖母" },
+      { name: "Mei Fang", zhName: "梅芳", character: "Mother", characterZh: "母亲" },
+    ],
+    directorSlugs: ["hou-hsiao-hsien"],
+  },
+  {
+    slug: "a-touch-of-zen",
+    titleZh: "侠女",
+    titleZhHk: "俠女",
+    titleZhTw: "俠女",
+    titleOriginal: "俠女",
+    titleEn: "A Touch of Zen",
+    year: 1971,
+    countries: ["中国台湾"],
+    runtimeMinutes: 200,
+    aspectRatio: "2.35:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["wuxia"],
+    tmdbId: 44154,
+    editorialNote:
+      "胡金铨把武侠从打斗提升成了一种关于气与空的电影。竹林里那场埋伏——阳光穿过竹叶，刀光在叶隙间闪现，人在半空中被剪辑托住——是后来所有华语武侠动作的源头，李安在《卧虎藏龙》里几乎照着重拍了一遍。但真正让这部片子伟大的是它的后半段：厮杀忽然让位于禅，血污被日光吞没，一个和尚流出金色的血。它拒绝在类型片该结束的地方结束，而是继续往上走，走到动作片很少抵达的地方。1975 年它在戛纳拿下技术大奖，是华语电影第一次在那里被认真对待。三个多小时，前松后紧，值得那份耐心。",
+    editorialNoteEn:
+      "King Hu lifted wuxia out of fighting and into a cinema of breath and emptiness. The bamboo-forest ambush — sunlight coming through the leaves, blades flashing in the gaps, bodies held in mid-air by the cutting itself — is the headwater of all Chinese-language action that followed, and Ang Lee restaged it almost shot for shot in Crouching Tiger, Hidden Dragon. But what makes the film great is its second half, where combat abruptly gives way to Zen, gore is swallowed by daylight, and a monk bleeds gold. It refuses to end where the genre says it should and instead keeps climbing, into territory action cinema almost never reaches. It took a technical prize at Cannes in 1975, the first time a Chinese-language film was taken seriously there. Three hours and twenty minutes, slow to gather and then relentless — worth the patience it asks for.",
+    essay: doc([
+      h2("从武打到顿悟"),
+      p(
+        "胡金铨受过京剧训练，他的动作场面从不追求真实的搏斗感，而是追求锣鼓点般的节奏：起势、停顿、爆发。人物在竹林中的腾跃并不合乎物理，却完全合乎音乐。",
+      ),
+      p(
+        "而当影片进入后段，这套节奏被推到了它的尽头——打斗不再解决任何问题，于是电影只好换一种方式收场。那个流着金血的和尚，是类型片史上最大胆的一次越界。",
+      ),
+    ]),
+    essayEn: doc([
+      h2("From Combat to Enlightenment"),
+      p(
+        "King Hu trained in Peking opera, and his action was never after the feel of a real fight; it was after the beat of drum and gong — gather, hold, burst. The leaps through the bamboo obey no physics whatever and obey music completely.",
+      ),
+      p(
+        "When the film enters its final movement that rhythm is pushed to its limit: fighting no longer settles anything, so the picture has to find another way to end. The monk bleeding gold is the boldest transgression in the history of the genre.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Hsu Feng",
+        zhName: "徐枫",
+        character: "Yang Hui-zhen",
+        characterZh: "杨慧贞",
+        personSlug: "hsu-feng",
+      },
+      { name: "Shih Chun", zhName: "石隽", character: "Gu Sheng-zhai", characterZh: "顾省斋" },
+      { name: "Roy Chiao", zhName: "乔宏", character: "Abbot Hui Yuan", characterZh: "慧圆大师" },
+    ],
+    directorSlugs: ["king-hu"],
   },
 ];
