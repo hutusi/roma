@@ -20,4 +20,6 @@ export const seedTags: SeedTag[] = [
   { slug: "faith-and-redemption", nameZh: "信仰与救赎", nameEn: "Faith and Redemption" },
   { slug: "surrealism", nameZh: "超现实主义", nameEn: "Surrealism" },
   { slug: "suspense", nameZh: "悬疑", nameEn: "Suspense" },
+  { slug: "war", nameZh: "战争", nameEn: "War" },
+  { slug: "romance", nameZh: "爱情", nameEn: "Romance" },
 ];
