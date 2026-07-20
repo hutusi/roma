@@ -81,11 +81,20 @@ New films get their tag junctions from the seeder itself. It will **refuse to st
 incoming film references a tag the admin-owned vocabulary does not hold, naming the slugs —
 create those first. Nothing is written on that refusal, so the run stays replayable.
 
+The seeder bootstraps the starter vocabulary **only on a database holding no films at all**.
+An empty `tags` table is not the signal, because `deleteTag` lets an editor reach that state
+deliberately — so on any populated database the vocabulary is left alone, even if it is
+currently empty.
+
 Films that **already exist** are a separate case: the seeder never touches their tags, so a
 `tagSlugs` change to one reaches production only through step 5. The seeder reports which
 films those are — read its output, do not assume there are none.
 
 ```bash
+# 0. Get production credentials locally. Every command below reads them from this file;
+#    delete it when you are done.
+vercel env pull --environment=production .env.production.local
+
 # 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
 
 # 2. Create any new tags the batch introduces. Always explicit: an absent slug might be new,
@@ -105,7 +114,11 @@ bun --env-file=.env.production.local --conditions=react-server run src/db/seed-c
 #    person whose TMDB lookup failed and needs its id pinned by hand.
 
 # 4. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
-psql "$PROD_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
+#    Source the prod env first — an unset/empty connection string does NOT make psql fail,
+#    it falls back to libpq defaults and quietly queries your LOCAL database, so this check
+#    would "pass" against the wrong data.
+set -a; source .env.production.local; set +a
+psql "$DATABASE_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
 
 # 5. REQUIRED if the release changed tags on films that already exist.
 #    Step 3 prints a "⚠ N existing film(s) have tags …" warning — that is your prompt that this

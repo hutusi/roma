@@ -59,6 +59,19 @@ The muddle underneath all of this was never answering *who owns a film's tags*. 
 
 The failure mode this last rule guards against is subtle enough to be worth naming: the earlier version did not write anything itself, it merely printed a command for a human to run. Moving an unsound inference from the writer to the reporter does not fix it — the human in the middle has no information the query lacked.
 
+### The first-run signal is film presence, not an empty tag table
+
+The gate above answers "is this a fresh database?" It originally answered it with `tags` being empty — which is a state an editor can *reach on purpose*. `deleteTag` refuses only while a **published** film carries the tag, so detaching a tag film by film and then deleting it is a supported workflow; do that for the whole vocabulary and the table is empty. The next deploy then read "fresh database", recreated all of the seeded tags, and relinked junctions across the entire catalogue. Retiring the vocabulary was self-undoing.
+
+The signal is now **whether any film exists**. The seeder creates films and tags together, so films present is a durable record of "seeded before", whatever the vocabulary looks like now. Emptying it would require deleting every film — and if that happened, re-seeding is the correct response, which is exactly what makes this signal sound where the old one was not.
+
+Two consequences worth recording:
+
+- The first-run junction backfill is gone. On a films-empty first run every film is in `newFilmSlugs`, so the per-new-film path already covers them; keeping a branch that writes junctions for *all* seed films only preserved the blast radius that made this bug severe.
+- A first run that inserts films and then fails before tags leaves those films unseeded-for-tags, since a retry no longer sees them as new. That is visible (the drift report names them) and recoverable (`resync-content --films=… --tags-only`) — the same path as any existing-film tag change.
+
+The decision rules — first-run detection, the add-only diff, vocabulary resolution — now live as pure functions in `src/db/tag-plan.ts` with unit tests. Four review rounds found four bugs of one class in this logic, all of it in scripts that touch a database and therefore had no automated coverage at all. `isFirstRun` takes a film count and nothing else: the signature itself makes the original bug unexpressible.
+
 `apply-tags.ts` is therefore reduced to one job — creating **named** vocabulary entries. With no flags it does nothing and says so. It never infers intent from database state.
 
 `tags.ts` remains the source of truth for the starter vocabulary on an *empty* database (local dev, e2e, any future environment). It is not optional to keep it current: `assertPublishable` hard-exits on a `tagSlugs` entry with no matching `seedTags` row, so a tag created only through `/admin` would break `db:seed:content` on every fresh checkout. `src/db/seed-data/tags.test.ts` lifts that check into CI.

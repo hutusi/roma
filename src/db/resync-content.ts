@@ -43,6 +43,7 @@ import { db } from "./index";
 import { films, filmTags, people, tags } from "./schema";
 import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
+import { diffFilmTags } from "./tag-plan";
 
 const APPLY = process.argv.includes("--apply");
 const listArg = (name: string): string[] => {
@@ -129,9 +130,9 @@ async function main() {
           .innerJoin(tags, eq(tags.id, filmTags.tagId))
           .where(eq(filmTags.filmId, cur.id));
         const heldSlugs = new Set(held.map((r) => r.slug));
-        const wantSlugs = f.tagSlugs ?? [];
-        const missing = wantSlugs.filter((s) => !heldSlugs.has(s));
-        const extra = [...heldSlugs].filter((s) => !wantSlugs.includes(s));
+        // Add-only semantics live in one tested place (src/db/tag-plan.ts):
+        // the return type has no field a caller could turn into a DELETE.
+        const { missing, extra } = diffFilmTags(f.tagSlugs ?? [], heldSlugs);
 
         let tagRows: { id: string; slug: string }[] = [];
         if (missing.length) {
