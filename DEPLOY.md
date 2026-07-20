@@ -59,3 +59,50 @@ Dashboard → Domains → add `babuban.com` (+ `www` redirect).
 bun run db:generate   # after editing src/db/schema — review the SQL in drizzle/
 bun run db:migrate    # against Neon (direct URL), before deploying the code that needs it
 ```
+
+## Ongoing content changes
+
+For a batch of new films/people/lists added to `src/db/seed-data/`. Pure data — no
+migration; confirm `drizzle/` is untouched in the diff.
+
+**Three things about production are not obvious and will bite:**
+
+1. `seed-content.ts` inserts with `status: "published"`, so content is **live the moment
+   the transaction commits** — there is no draft step.
+2. It runs outside Next and cannot call `revalidate.ts`. `/[lang]/film/[slug]` has
+   `dynamicParams: true` so a new film's own page renders on demand, but every **listing**
+   surface (`/zh`, `/zh/films`, `/zh/lists`, `/sitemap.xml`, person pages) is prerendered
+   and stale. **The redeploy is the invalidation mechanism.**
+3. Everything is `onConflictDoNothing`. Re-running never fixes an existing row — that is
+   `resync-content.ts --films=…`. It also means edits to *existing* rows in seed data
+   (a list's `sortOrder`, a corrected note) apply only to a fresh database.
+
+```bash
+# 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
+
+# 2. Seed production from a local checkout of main.
+bun --env-file=.env.production.local --conditions=react-server run src/db/seed-content.ts
+#    Read the last line: "Newly inserted — people:N films:N …" plus "Images stored:N skipped:N".
+#    films:0 means a slug collision. A non-zero exit means a publish gate caught something —
+#    fix and re-run; onConflictDoNothing makes that safe. Any "✗" line names a film or person
+#    whose TMDB lookup failed and needs its id pinned by hand.
+
+# 3. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
+psql "$PROD_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
+
+# 4. Tags — REQUIRED for new films. The seeder skips the tag block entirely on a database
+#    whose vocabulary exists, so new films arrive untagged and nothing says so.
+bun --env-file=.env.production.local run src/db/apply-tags.ts          # dry run — read every line
+bun --env-file=.env.production.local run src/db/apply-tags.ts --apply
+bun --env-file=.env.production.local run src/db/apply-tags.ts          # must now report 0
+
+# 5. Any change to an EXISTING row must be made in /admin, not by re-seeding — e.g. moving the
+#    featured list (sortOrder 0). Admin actions do call revalidate.ts, which sweeps the tree.
+
+# 6. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
+#    pages rebuild against the populated database.
+```
+
+Then run the §7 post-deploy checks, plus: new slugs present in `/sitemap.xml` in both
+locales; `/en/film/<new-slug>` is a real page and not a translation-pending stub;
+`/zh/films?tag=<new-tag>` returns results; `/zh/search-index.json` contains the new titles.

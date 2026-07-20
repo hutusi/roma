@@ -6,6 +6,15 @@ import type { SeedTag } from "./types";
  * taxonomy commitment: /admin/tags can rename or retire any of it.
  * Black-and-white is deliberately absent — it is a film attribute
  * (`isBlackAndWhite`), never a tag (ADR 0014).
+ *
+ * Keep this current even though `seed-content.ts` seeds tags on the FIRST
+ * RUN ONLY: `assertPublishable` hard-exits on a film `tagSlugs` entry with
+ * no row here, so a tag that exists only in /admin breaks db:seed:content
+ * on every fresh checkout. `tags.test.ts` guards that in CI.
+ *
+ * On a database whose vocabulary already exists, adding rows here changes
+ * nothing by itself — the gate skips the whole block. Use
+ * `bun run apply:tags` to reconcile additively (ADR 0014 amendment).
  */
 export const seedTags: SeedTag[] = [
   { slug: "silent-cinema", nameZh: "默片", nameEn: "Silent Cinema" },

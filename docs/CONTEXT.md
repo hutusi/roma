@@ -4,7 +4,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 
 ## What this is
 
-**Roma** (codename, never user-facing) builds **八部半 / Babuban** (babuban.com): a Chinese-language curatorial site for classic cinema — black-and-white is a house preference, not the catalogue's boundary. Curation-first with light UGC — Criterion/MUBI in spirit, not Douban/IMDb. 收录即推荐: inclusion *is* the recommendation.
+**Roma** (codename, never user-facing) builds **八部半 / Babuban** (babuban.com): a Chinese-language curatorial site for classic cinema — black-and-white is a house preference, not the catalogue's boundary, and Chinese-language film is a first-class axis rather than a regional footnote (ADR 0015). Curation-first with light UGC — Criterion/MUBI in spirit, not Douban/IMDb. 收录即推荐: inclusion *is* the recommendation.
 
 ## Domain language
 
@@ -34,6 +34,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 - `src/lib/storage.ts` — the storage seam (Vercel Blob in prod, `public/uploads` in dev). Keep all storage behind it (ADR 0008).
 - `src/db/locks.ts` — editorial mutations serialize on `SELECT … FOR UPDATE` row locks taken ONLY through this module, in the canonical order **people → tags → films → lists** (multi-row helpers sort by id). Acquiring locks in any other order can deadlock. Gates and writes run inside one transaction; `revalidate*`/IndexNow run only after commit.
 - `src/lib/rum-retention.ts` — opportunistic RUM maintenance. Successful beacons schedule a post-response cleanup; an atomic daily claim retains raw events for 90 days.
+- `src/db/seed-data/` + the content CLIs — the editorial corpus is checked-in TypeScript, written by `db:seed:content` (idempotent, `onConflictDoNothing`, never clobbers admin edits). Siblings for the cases it cannot handle: `apply-tags.ts` reconciles tags on a database whose vocabulary is already admin-owned (the first-run gate means new films otherwise arrive untagged, silently — ADR 0014 amendment), `resync-content.ts` overwrites content fields of named slugs, `backfill-en.ts` fills NULL/draft English fields, `link-cast.ts` links existing cast rows to people. All run **outside Next**, so none can call `revalidate.ts` — redeploy after writing. See DEPLOY.md's content runbook.
 
 ## QA
 

@@ -22,3 +22,15 @@ Repositioning the product around classic cinema in general (rather than "black-a
 - Movie JSON-LD gains a locale-appropriate `genre` array from the film's tags.
 - Deleting a tag attached only to drafts just works (junction cascades); detaching it from published films is a deliberate per-film editorial act first.
 - The seeded vocabulary (~12 movements/genres/themes) is a starting point, not a taxonomy commitment — the admin can rename or retire any of it. The seeder only bootstraps an empty vocabulary (first-run semantics); once any tag exists, re-runs never resurrect renamed or deleted tags.
+
+## Amendment (2026-07-20) — reconciling an already-owned vocabulary
+
+The first-run gate has a consequence that was not obvious when it was written: because it skips the *entire* tags block, new seed films arriving on a populated database get no `film_tags` rows at all, and nothing reports it. The failure is silent — the films publish, and simply carry no tags. [ADR 0015](0015-corpus-scope-beyond-black-and-white.md)'s batch of twenty-four films would have landed that way.
+
+The gate is still correct and stays. Reconciling an already-owned vocabulary is a different operation and gets a different tool: **`src/db/apply-tags.ts`** (`bun run apply:tags`, dry-run by default, `--apply` to write). It does not weaken the contract above:
+
+- It only ever INSERTs. A tag whose names have drifted from `tags.ts` is reported and left alone, because renaming is the admin's prerogative.
+- It fills only films carrying **zero** junctions. A film with no tags has demonstrably never been curated in `/admin`, which is what makes filling it safe — and it is what prevents a tag an editor deliberately detached from being re-attached on the next run. `--force-films=` overrides this for named slugs when a film genuinely needs topping up.
+- Seed films absent from the target database are named in the output rather than skipped in silence, since a quietly short junction count is the exact failure the script exists to prevent.
+
+`tags.ts` therefore remains the source of truth for the starter vocabulary on an *empty* database (local dev, e2e, any future environment). It is not optional to keep it current: `assertPublishable` hard-exits on a `tagSlugs` entry with no matching `seedTags` row, so a tag created only through `/admin` would break `db:seed:content` on every fresh checkout. `src/db/seed-data/tags.test.ts` lifts that check into CI.

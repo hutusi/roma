@@ -29,6 +29,8 @@ bun dev
 | `bun run db:generate` | Generate SQL migrations from schema changes |
 | `bun run db:migrate` | Apply migrations |
 | `bun run db:seed` | Seed the first admin user |
+| `bun run db:seed:content` | Seed/refresh the editorial corpus (idempotent; never clobbers admin edits) |
+| `bun run apply:tags` | Additively reconcile tags on a database whose vocabulary is already admin-owned (dry-run; `-- --apply` to write) |
 
 ## QA & docs
 
