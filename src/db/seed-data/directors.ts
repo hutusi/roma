@@ -820,4 +820,215 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
   },
+
+  // ── 战后与彩色 ──────────────────────────────────────────────────────
+  {
+    slug: "roberto-rossellini",
+    name: "Roberto Rossellini",
+    nameZh: "罗伯托·罗西里尼",
+    tmdbPersonId: 4410,
+    bio: "意大利导演，1906–1977。新现实主义的开山者：战争还没结束就扛着摄影机上街，用剩胶片拍下了一座城市的真实体温。",
+    careerEssay: doc([
+      p(
+        "《罗马，不设防的城市》几乎是在废墟里抢拍出来的——胶片是零星凑来的，街道是真的街道，群众演员刚刚经历过片中的事。它一举确立了新现实主义：不要摄影棚，不要明星，不要圆满。",
+      ),
+      p(
+        "但罗西里尼很快离开了自己开创的运动。与英格丽·褒曼合作的《意大利之旅》几乎没有情节，只有一对夫妻在异乡的沉默里逐渐看清彼此——这部片子后来被新浪潮奉为现代电影的起点。",
+      ),
+    ]),
+    bioEn:
+      "Italian director, 1906–1977. The founder of neorealism, who took a camera into the street before the war had even finished and shot a city's real body temperature on scavenged stock.",
+    careerEssayEn: doc([
+      p(
+        "Rome, Open City was very nearly stolen out of the rubble — the film stock was scraped together in short ends, the streets were real streets, and the extras had lived through what the picture depicts. It established neorealism at a stroke: no studio, no stars, no resolution.",
+      ),
+      p(
+        "But Rossellini left the movement he had started almost immediately. Journey to Italy, made with Ingrid Bergman, has almost no plot at all — only a married couple coming to see each other clearly through the silence of a foreign country. The New Wave later canonized it as the beginning of modern cinema.",
+      ),
+    ]),
+  },
+  {
+    slug: "masaki-kobayashi",
+    name: "Masaki Kobayashi",
+    nameZh: "小林正树",
+    tmdbPersonId: 76978,
+    bio: "日本导演，1916–1996。战时拒绝晋升、被派往满洲的士兵，一生的电影都在做同一件事：让个人站出来，指着制度说不。",
+    careerEssay: doc([
+      p(
+        "小林正树本人当过兵，且刻意拒绝升迁以示抗议，这份经历烧进了他所有作品。长达九小时的《人间的条件》几乎是他的自传，一个善良的人如何被战争一层层剥掉，直到只剩下不肯低头这一件事。",
+      ),
+      p(
+        "《切腹》把同样的怒火装进了时代剧的外壳：一个浪人走进大名的庭院，用一个故事把整套武士道的体面拆得粉碎。到了《怪谈》他转向色彩与鬼故事，画面华丽如屏风，底下依旧是那份对权力的不信任。",
+      ),
+    ]),
+    bioEn:
+      "Japanese director, 1916–1996. A conscript who refused promotion in protest and was sent to Manchuria, he spent his career doing one thing: putting an individual on his feet to say no to a system.",
+    careerEssayEn: doc([
+      p(
+        "Kobayashi served, and deliberately refused promotion as a protest, and that experience is burned into everything he made. The nine-hour Human Condition is close to autobiography: a decent man stripped layer by layer by war until nothing is left but his refusal to bow.",
+      ),
+      p(
+        "Harakiri packs the same anger into the shell of a period picture — a masterless samurai walks into a lord's courtyard and, by telling a story, dismantles the entire decorum of bushido. By Kwaidan he had turned to color and ghost stories, images as lavish as painted screens, with the same distrust of power underneath.",
+      ),
+    ]),
+  },
+  {
+    slug: "mikio-naruse",
+    name: "Mikio Naruse",
+    nameZh: "成濑巳喜男",
+    tmdbPersonId: 125690,
+    bio: "日本导演，1905–1969。小津与沟口之外的第三条路：拍女人如何在没有出口的日常里继续走下去，不给救赎，也不给控诉。",
+    careerEssay: doc([
+      p(
+        "成濑一生拍了八十多部片子，主角几乎都是女人——酒吧女招待、寡妇、被丈夫拖累的妻子。他不像沟口那样把她们写成受难者，也不像小津那样让她们体面地退场，而是让她们在账本、房租和一次次算计里熬下去。",
+      ),
+      p(
+        "《浮云》是这条路的终点。一对在战时殖民地相爱的男女回到破败的东京，感情早已耗尽，却谁也走不开。有人说成濑的电影像水，看起来平静，底下的流速会把人卷走。",
+      ),
+    ]),
+    bioEn:
+      "Japanese director, 1905–1969. The third path beside Ozu and Mizoguchi: films about how women keep walking through a daily life with no exit, offered neither redemption nor indictment.",
+    careerEssayEn: doc([
+      p(
+        "Naruse made more than eighty films and the protagonist is almost always a woman — a bar hostess, a widow, a wife dragged down by her husband. He does not write them as martyrs the way Mizoguchi does, nor let them exit with dignity the way Ozu does; he makes them endure, through account books and rent and one calculation after another.",
+      ),
+      p(
+        "Floating Clouds is the end of that road. A man and a woman who fell in love in a wartime colony return to a ruined Tokyo with the feeling long since spent, and neither can leave. Naruse's films have been likened to water: placid on the surface, with a current underneath fast enough to carry you off.",
+      ),
+    ]),
+  },
+  {
+    slug: "jacques-tati",
+    name: "Jacques Tati",
+    nameZh: "雅克·塔蒂",
+    tmdbPersonId: 5763,
+    bio: "法国导演、演员，1907–1982。用身体、声音与建筑做喜剧，几乎不用台词；他镜头里的现代世界光洁、便利，而且完全不适合人类居住。",
+    careerEssay: doc([
+      p(
+        "塔蒂出身默剧，于洛先生这个角色——高个子、雨衣、烟斗、永远迈错一步——是他对现代生活的固定测量仪。《于洛先生的假期》里，他让海滨旅馆的每一个声音都成为笑点，而不是靠一句台词。",
+      ),
+      p(
+        "《游戏时间》则近乎疯狂：他花光身家搭出一座钢铁玻璃的“塔蒂城”，用 70mm 宽银幕拍摄，画面里同时发生七八件事，观众得自己去找笑点。影片票房惨败，令他破产，却在今天被视作电影史上最精密的喜剧建筑。",
+      ),
+    ]),
+    bioEn:
+      "French director and actor, 1907–1982. He built comedy out of bodies, sound, and architecture with almost no dialogue; the modern world in his films is sleek, convenient, and entirely unfit for humans to live in.",
+    careerEssayEn: doc([
+      p(
+        "Tati came out of mime, and Monsieur Hulot — tall, raincoated, pipe in mouth, forever half a step wrong — is his fixed instrument for measuring modern life. In Monsieur Hulot's Holiday he turns every sound in a seaside hotel into a joke, without recourse to a single line.",
+      ),
+      p(
+        "Playtime is close to madness: he spent his entire fortune building a city of steel and glass, shot it in 70mm, and staged seven or eight things at once in every frame so that the audience has to find the jokes for itself. It failed catastrophically and bankrupted him. It is now regarded as the most precisely engineered comic architecture in cinema.",
+      ),
+    ]),
+  },
+  {
+    slug: "stanley-kubrick",
+    name: "Stanley Kubrick",
+    nameZh: "斯坦利·库布里克",
+    tmdbPersonId: 240,
+    bio: "美国导演，1928–1999。摄影记者出身，把每一种类型都拍了一遍，又把每一种都拍成了别的东西：冷、对称、精确到偏执，却始终在问人究竟是不是野兽。",
+    careerEssay: doc([
+      p(
+        "库布里克的每部片子几乎都换一个类型——战争、黑色喜剧、科幻、恐怖、古装——但方法从不变：对称构图、缓慢推进的镜头、把人放在巨大结构的正中央，然后看着他缩小。",
+      ),
+      p(
+        "《2001 太空漫游》是他最极端的一次实验，用近乎无声的十分钟开场与一段没有解释的结尾，逼观众自己完成意义。此后的《发条橙》《闪灵》都在同一个问题上打转：文明这层壳到底有多薄。",
+      ),
+    ]),
+    bioEn:
+      "American director, 1928–1999. A former photojournalist who worked through every genre and turned each one into something else: cold, symmetrical, precise to the point of obsession, and always asking whether the human animal is an animal.",
+    careerEssayEn: doc([
+      p(
+        "Kubrick changed genre with nearly every film — war, black comedy, science fiction, horror, costume drama — but never changed method: symmetrical framing, the slow advancing camera, a man placed dead centre of an enormous structure and then watched as he shrinks.",
+      ),
+      p(
+        "2001: A Space Odyssey is his most extreme experiment, opening with ten near-silent minutes and closing on an ending he refuses to explain, forcing the audience to complete the meaning itself. A Clockwork Orange and The Shining circle the same question afterwards: exactly how thin the shell of civilization is.",
+      ),
+    ]),
+  },
+  {
+    slug: "michael-powell",
+    name: "Michael Powell",
+    nameZh: "迈克尔·鲍威尔",
+    tmdbPersonId: 68424,
+    bio: "英国导演，1905–1990。与普雷斯伯格合组“射箭者”，在一个崇尚写实的国度里坚持拍浓烈的色彩、歌剧式的激情与近乎危险的美。",
+    careerEssay: doc([
+      p(
+        "鲍威尔与普雷斯伯格以“射箭者”的名义联合署名，编剧与导演共享一个头衔，这在电影史上几乎绝无仅有。在崇尚纪录式冷静的英国影坛，他们偏要拍浓得化不开的特艺七彩情节剧——《黑水仙》《平步青云》《红菱艳》。",
+      ),
+      p(
+        "鲍威尔的事业毁于《偷窥狂》：一个用摄影机杀人的故事，1960 年被批为下流，今天却成了关于「观看即暴力」的奠基文本。多年后是斯科塞斯等人把他从遗忘里请了回来。",
+      ),
+    ]),
+    bioEn:
+      "British director, 1905–1990. With Pressburger he formed The Archers and, in a country that prized realism, insisted on saturated color, operatic passion, and a beauty verging on dangerous.",
+    careerEssayEn: doc([
+      p(
+        "Powell and Emeric Pressburger signed their films jointly as The Archers, an almost unheard-of arrangement in which writer and director shared a single credit. Against a British film culture that prized documentary sobriety, they made Technicolor melodramas of overwhelming intensity — Black Narcissus, A Matter of Life and Death, The Red Shoes.",
+      ),
+      p(
+        "Powell's career was effectively ended by Peeping Tom, a film about a killer who films his victims that critics found obscene in 1960 and that is now taught as a founding text on the violence of looking. Scorsese was among those who later brought him back from obscurity.",
+      ),
+    ]),
+  },
+  {
+    slug: "emeric-pressburger",
+    name: "Emeric Pressburger",
+    nameZh: "埃默里克·普雷斯伯格",
+    tmdbPersonId: 37846,
+    bio: "匈牙利裔英国编剧、导演，1902–1988。从纳粹德国逃出的流亡者，为英国电影写出了最不英国的故事：狂热、异色、执着于牺牲。",
+    bioEn:
+      "Hungarian-born British writer and director, 1902–1988. An exile who fled Nazi Germany and then wrote the least English stories in English cinema: feverish, exotic, and fixated on sacrifice.",
+  },
+  {
+    slug: "david-lean",
+    name: "David Lean",
+    nameZh: "大卫·里恩",
+    tmdbPersonId: 12238,
+    bio: "英国导演，1908–1991。剪辑师出身，先拍出英国最细腻的室内片，再转身把沙漠、铁路与雪原拍成了后世衡量史诗的尺子。",
+    careerEssay: doc([
+      p(
+        "很多人只记得后期的里恩，但他真正的功底在早年：《相见恨晚》全片发生在一个车站茶室，两个中年人克制的告别，是英国电影最精确的一次情感手术。",
+      ),
+      p(
+        "《桂河大桥》之后他转向大银幕。《阿拉伯的劳伦斯》几乎重新定义了「史诗」——沙漠不是背景而是角色，而那位英雄越走越大，人却越来越碎。剪辑师的出身让他知道：真正的宏大来自节奏，而不是尺寸。",
+      ),
+    ]),
+    bioEn:
+      "British director, 1908–1991. An editor by training who first made the most delicate interiors in British cinema, then turned around and made deserts, railways, and snowfields into the standard by which epics are measured.",
+    careerEssayEn: doc([
+      p(
+        "Lean is remembered for the late films, but the craft was laid down early: Brief Encounter takes place almost entirely in a station tea room, and the restrained parting of two middle-aged people is the most precise piece of emotional surgery in British cinema.",
+      ),
+      p(
+        "After The Bridge on the River Kwai he moved onto the wide screen. Lawrence of Arabia effectively redefined the epic — the desert is a character rather than a backdrop, and the hero grows larger as the man inside him comes apart. The editor in him knew that real scale comes from rhythm, not from size.",
+      ),
+    ]),
+  },
+  {
+    slug: "francis-ford-coppola",
+    name: "Francis Ford Coppola",
+    nameZh: "弗朗西斯·福特·科波拉",
+    tmdbPersonId: 1776,
+    bio: "美国导演，1939 年生。新好莱坞最敢赌的人：把黑帮片拍成家族悲剧，又把战争片拍成一场几乎毁掉自己的溯河之旅。",
+    careerEssay: doc([
+      p(
+        "七十年代属于科波拉。《教父》两部把类型片提升为美国资本与家族的史诗，《对话》则安静得像一部欧洲电影——同一个人在同一个十年里做到了这两件事。",
+      ),
+      p(
+        "《现代启示录》几乎摧毁了他：菲律宾拍摄失控，台风毁掉布景，主演心脏病发，预算靠他抵押家产撑着。成片却因此带上了一种别的电影没有的疯狂——它不是关于越战的电影，它本身就是一次战争。",
+      ),
+    ]),
+    bioEn:
+      "American director, born 1939. The biggest gambler of the New Hollywood: he made a gangster picture into a family tragedy, then made a war picture into a journey upriver that nearly destroyed him.",
+    careerEssayEn: doc([
+      p(
+        "The seventies belonged to Coppola. The two Godfather films lifted genre into an epic of American capital and family, while The Conversation is as quiet as a European art film — the same man did both inside the same decade.",
+      ),
+      p(
+        "Apocalypse Now almost finished him: the Philippine shoot ran out of control, a typhoon destroyed the sets, his lead actor had a heart attack, and he mortgaged his own property to keep the budget alive. The finished film carries a derangement no other film has, precisely because of it. It is not a picture about the war in Vietnam so much as a war in its own right.",
+      ),
+    ]),
+  },
 ];

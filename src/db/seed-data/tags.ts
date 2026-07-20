@@ -24,4 +24,7 @@ export const seedTags: SeedTag[] = [
   { slug: "romance", nameZh: "爱情", nameEn: "Romance" },
   { slug: "wuxia", nameZh: "武侠", nameEn: "Wuxia" },
   { slug: "taiwan-new-cinema", nameZh: "台湾新电影", nameEn: "Taiwan New Cinema" },
+  { slug: "science-fiction", nameZh: "科幻", nameEn: "Science Fiction" },
+  { slug: "epic", nameZh: "史诗", nameEn: "Epic" },
+  { slug: "musical", nameZh: "歌舞", nameEn: "Musical" },
 ];
