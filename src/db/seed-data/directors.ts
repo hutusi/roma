@@ -6,6 +6,13 @@ import type { SeedDirector } from "./types";
  * bio (enough on its own to publish) and, for the major figures, a
  * 创作历程 essay. Prose is original; no exhaustive filmographies — this is
  * a curatorial site, not a database.
+ *
+ * `tmdbPersonId` is pinned on every entry added from the 华语电影 block
+ * onward. The portrait fallback searches by Latin name and takes the first
+ * result with a photo, which happens to be right today but is a silent
+ * failure when it is not — TMDB re-ranks, and a wrong portrait looks
+ * exactly like a right one. The earlier entries predate that policy and
+ * already carry seeded portraits, so backfilling them would be inert.
  */
 export const seedDirectors: SeedDirector[] = [
   {
@@ -583,6 +590,233 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "Brando's \"I coulda been a contender\" in On the Waterfront is the summit of that acting, and it quietly mirrors Kazan's own controversy over the names he gave in his McCarthy-era testimony. His films are forever smoldering in the gap between social conscience and personal weakness.",
+      ),
+    ]),
+  },
+
+  // ── 华语电影 ────────────────────────────────────────────────────────
+  {
+    slug: "fei-mu",
+    name: "Fei Mu",
+    nameZh: "费穆",
+    tmdbPersonId: 233200,
+    bio: "中国导演，1906–1951。把中国古典诗的留白带进电影：镜头缓慢游移，人物欲言又止，一段战后废墟上的私情因此有了千年的重量。",
+    careerEssay: doc([
+      p(
+        "费穆是三十年代上海影坛最不像同代人的那一个。同行忙着把电影当武器，他却在《城市之夜》《香雪海》里琢磨光线与静默；沦陷期间拍《孔夫子》，用一个不合时宜的圣人说不能明说的话。1948 年他与梅兰芳合作《生死恨》，拍出了中国第一部彩色影片。",
+      ),
+      p(
+        "《小城之春》是他唯一一次把全部本领用在一件小事上：五个人，一座破园子，一段没有发生的私奔。上映时正值天翻地覆，批评者嫌它耽于个人情绪，影片随即被封存数十年。八十年代重新出土后，它几乎在每一次华语影史评选中位居榜首。费穆 1951 年病逝于香港，四十五岁，只留下这一部完成度极高的杰作。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1906–1951. He carried the negative space of classical Chinese poetry into cinema: the camera drifts, the characters stop short of saying what they mean, and a private affair among postwar ruins takes on the weight of a thousand years.",
+    careerEssayEn: doc([
+      p(
+        "Fei Mu was the least typical figure in 1930s Shanghai cinema. While his contemporaries were busy treating film as a weapon, he was studying light and silence in Night in the City and Sea of Fragrant Snow; under the occupation he made Confucius, using an unfashionable sage to say what could not be said outright. In 1948, working with the opera master Mei Lanfang, he shot Remorse at Death — the first Chinese film in color.",
+      ),
+      p(
+        "Spring in a Small Town is the one time he spent everything he knew on something small: five people, a ruined garden, an elopement that never happens. It opened as the country was turning upside down, critics found it self-absorbed, and it was shelved for decades. Unearthed in the 1980s, it has since topped nearly every poll of Chinese-language cinema ever conducted. Fei Mu died in Hong Kong in 1951 at forty-five, leaving this one fully realized masterpiece behind.",
+      ),
+    ]),
+  },
+  {
+    slug: "wu-yonggang",
+    name: "Wu Yonggang",
+    nameZh: "吴永刚",
+    tmdbPersonId: 1073182,
+    bio: "中国导演，1907–1982。二十七岁以处女作《神女》立身：不控诉、不说教，只是把摄影机架在与妓女平视的高度上。",
+    careerEssay: doc([
+      p(
+        "吴永刚做过美工，对画面的洁癖贯穿一生。《神女》是他的第一部片子，也是默片时代中国电影的最高点之一——他拒绝把主人公拍成道德案例，镜头始终与她平视，连那个流氓也只是环境的一部分，而不是可供唾骂的反派。",
+      ),
+      p(
+        "此后的《浪淘沙》走得更远，两个人困在荒岛上互相铐着，几乎是中国电影里少见的存在主义寓言。战后与新中国的数十年里他历经批判与沉默，直到 1980 年与吴贻弓合导《巴山夜雨》，才重新被看见。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1907–1982. He established himself at twenty-seven with his first film, The Goddess: no indictment, no sermon, simply a camera placed at eye level with a prostitute.",
+    careerEssayEn: doc([
+      p(
+        "Wu Yonggang trained as a set designer, and a fastidiousness about the image never left him. The Goddess was his debut and remains one of the summits of Chinese silent cinema — he refused to turn his heroine into a moral case study, kept the camera level with her throughout, and let even the thug who exploits her register as part of the environment rather than a villain to be hissed at.",
+      ),
+      p(
+        "Waves Wash the Sand, two years later, went further still: two men shackled to each other on a desert island, an existential parable of a kind Chinese cinema rarely attempted. The decades that followed brought criticism and long silences, and it was not until 1980, co-directing Evening Rain with Wu Yigong, that he was properly seen again.",
+      ),
+    ]),
+  },
+  {
+    slug: "yuan-muzhi",
+    name: "Yuan Muzhi",
+    nameZh: "袁牧之",
+    tmdbPersonId: 1173642,
+    bio: "中国导演、演员，1909–1978。从话剧舞台走来的“千面人”，把好莱坞的节奏、苏联的剪辑与上海的市井小调焊成了一种全新的中国电影。",
+    careerEssay: doc([
+      p(
+        "袁牧之先以演技闻名，人称“千面人”。转到导演位置后，他做的第一件事是拿电影玩形式：《都市风光》用歌唱和西洋镜串起都市讽刺，被视作中国第一部音乐喜剧。",
+      ),
+      p(
+        "《马路天使》则把这份聪明收进了人情里。妓女、歌女、吹鼓手、报贩挤在同一条弄堂，周璇唱《四季歌》，赵丹插科打诨，笑声底下是随时可能塌掉的生活。抗战爆发后他北上延安，后来成为新中国电影事业的第一任主事者，从此几乎不再导戏。",
+      ),
+    ]),
+    bioEn:
+      'Chinese director and actor, 1909–1978. A stage-trained "man of a thousand faces" who welded Hollywood tempo, Soviet cutting, and Shanghai street song into a new kind of Chinese film.',
+    careerEssayEn: doc([
+      p(
+        "Yuan Muzhi made his name as an actor first, nicknamed the man of a thousand faces. His first move as a director was to play with form: Scenes of City Life strings urban satire through songs and a peep-show frame, and is generally counted China's first musical comedy.",
+      ),
+      p(
+        "Street Angel folds that cleverness back into feeling. A prostitute, a singsong girl, a trumpeter and a newspaper hawker are crowded into one lane; Zhou Xuan sings the Four Seasons Song, Zhao Dan clowns, and under the laughter is a life that could collapse at any moment. After the war with Japan broke out he went north to Yan'an, later becoming the first head of the new republic's film administration — and directed almost nothing again.",
+      ),
+    ]),
+  },
+  {
+    slug: "cai-chusheng",
+    name: "Cai Chusheng",
+    nameZh: "蔡楚生",
+    tmdbPersonId: 1112330,
+    bio: "中国导演，1906–1968。左翼电影最会讲故事的人：把家国离散写成通俗剧，让观众为时代哭，也为自己哭。",
+    careerEssay: doc([
+      p(
+        "蔡楚生出身贫寒，学徒出身，这让他始终相信电影必须先让普通人看懂。《渔光曲》讲渔家姐弟的破产与流离，1935 年在莫斯科拿下荣誉奖，是中国电影第一次在国际上获奖。",
+      ),
+      p(
+        "《一江春水向东流》是这条路的终点，也是顶点。他与郑君里用三个多小时、一个家庭的八年，把抗战的全部代价具体到一个女人的脸上。影片连映三个多月，万人空巷。文革中他遭到批斗，1968 年含冤去世。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1906–1968. The finest storyteller of the left-wing cinema, he wrote national catastrophe as melodrama so audiences would weep for the age and for themselves at once.",
+    careerEssayEn: doc([
+      p(
+        "Cai Chusheng was born poor and apprenticed young, and he never stopped believing a film had to be legible to ordinary people first. Song of the Fishermen follows a fishing family's ruin and dispersal; it took an honorable mention at Moscow in 1935, the first international prize any Chinese film had won.",
+      ),
+      p(
+        "The Spring River Flows East is both the end of that road and its summit. With Zheng Junli he spent more than three hours and eight years of one family's life bringing the entire cost of the war to rest on a single woman's face. It ran for over three months to packed houses. During the Cultural Revolution he was denounced, and he died under persecution in 1968.",
+      ),
+    ]),
+  },
+  {
+    slug: "zheng-junli",
+    name: "Zheng Junli",
+    nameZh: "郑君里",
+    tmdbPersonId: 1112331,
+    bio: "中国导演，1911–1969。演员出身，因此最懂得把镜头交给脸；他镜头下的市井群像，是四十年代中国最锋利的一面镜子。",
+    careerEssay: doc([
+      p(
+        "郑君里三十年代是活跃的演员，也翻译表演理论。转做导演后，他把舞台上练出的对人的观察带进了片场——与蔡楚生合导《一江春水向东流》时，那些细碎的家庭场面几乎全是他的笔触。",
+      ),
+      p(
+        "真正属于他自己的是《乌鸦与麻雀》：一栋上海石库门楼房里，房东、房客、投机者各怀鬼胎，政权更迭就在楼梯间发生。这部片子在 1949 年前后偷偷拍完，是中国电影里少有的群戏杰作。他在文革中入狱，1969 年死于狱中。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1911–1969. An actor first, which is why he knew to give the camera to faces; his crowded tenements are the sharpest mirror 1940s China held up to itself.",
+    careerEssayEn: doc([
+      p(
+        "Zheng Junli was a working actor through the 1930s and a translator of acting theory besides. Turning director, he brought a stage-trained attention to people onto the set — co-directing The Spring River Flows East with Cai Chusheng, the small domestic scenes are almost entirely his hand.",
+      ),
+      p(
+        "What is wholly his is Crows and Sparrows: in one Shanghai tenement a landlord, his tenants and a speculator all scheme past each other while a change of regime happens on the stairwell. Shot half in secret across 1949, it is one of the rare great ensemble films in Chinese cinema. He was imprisoned during the Cultural Revolution and died in custody in 1969.",
+      ),
+    ]),
+  },
+  {
+    slug: "hou-hsiao-hsien",
+    name: "Hou Hsiao-hsien",
+    nameZh: "侯孝贤",
+    tmdbPersonId: 64992,
+    bio: "台湾导演，1947 年生。把摄影机放远、放定、放久，让时间自己走完一场戏——台湾新电影最沉着的那双眼睛。",
+    careerEssay: doc([
+      p(
+        "侯孝贤从商业片起步，直到《风柜来的人》才找到自己的语法：远景、长镜头、不追戏剧高潮。《童年往事》把这套方法对准他自己的成长，祖母一次次说要走路回大陆，成为整部片的节拍器。",
+      ),
+      p(
+        "《悲情城市》让他第一次直视台湾的历史伤口，也让华语电影第一次拿到威尼斯金狮。此后他越走越远：《戏梦人生》几乎不解释，《海上花》全片在室内的油灯下完成，《刺客聂隐娘》把武侠拍成了风与树叶的电影。",
+      ),
+    ]),
+    bioEn:
+      "Taiwanese director, born 1947. He set the camera far back, held it still, and let it run until time had finished the scene by itself — the most composed pair of eyes in Taiwan New Cinema.",
+    careerEssayEn: doc([
+      p(
+        "Hou began in commercial pictures and did not find his grammar until The Boys from Fengkuei: wide, long, uninterested in dramatic peaks. A Time to Live, a Time to Die turns that method on his own childhood, where a grandmother repeatedly announcing she will walk back to the mainland becomes the film's metronome.",
+      ),
+      p(
+        "A City of Sadness was his first direct look at Taiwan's historical wound, and the first Golden Lion for a Chinese-language film. He kept going further out: The Puppetmaster barely explains itself, Flowers of Shanghai unfolds entirely by interior oil lamp, and The Assassin turns wuxia into a film about wind and leaves.",
+      ),
+    ]),
+  },
+  {
+    slug: "edward-yang",
+    name: "Edward Yang",
+    nameZh: "杨德昌",
+    tmdbPersonId: 143035,
+    bio: "台湾导演，1947–2007。工程师出身，用建筑般的精确解剖台北：玻璃幕墙、公寓格局与人际关系是同一张图纸。",
+    careerEssay: doc([
+      p(
+        "杨德昌在美国读电机、做过电脑工程师，三十出头才回台湾拍片。这段经历留在他的结构里：《恐怖分子》像一道多线并置的方程式，人物彼此不识，命运却互相咬合。",
+      ),
+      p(
+        "《牯岭街少年杀人事件》是他最庞大的一次演算——近四小时，上百个角色，六十年代台北的眷村、帮派、教室与停电，全部收束到一把刀上。晚年的《一一》则温和下来，用一个小男孩拍别人后脑勺的举动，说尽了人看不见自己的困境。2007 年病逝于洛杉矶。",
+      ),
+    ]),
+    bioEn:
+      "Taiwanese director, 1947–2007. Trained as an engineer, he dissected Taipei with an architect's precision: curtain walls, apartment layouts, and human relations are all the same blueprint.",
+    careerEssayEn: doc([
+      p(
+        "Yang studied electrical engineering in the United States and worked as a computer engineer; he was past thirty before he came back to Taiwan to make films. The training stayed in his structures: Terrorizers runs like a simultaneous equation, its characters strangers to each other whose fates nonetheless interlock.",
+      ),
+      p(
+        "A Brighter Summer Day is his largest computation — nearly four hours, a cast of over a hundred, the military dependents' villages and gangs and classrooms and blackouts of 1960s Taipei all converging on a single knife. The late Yi Yi softens: a small boy photographing the backs of people's heads says everything about our inability to see ourselves. He died in Los Angeles in 2007.",
+      ),
+    ]),
+  },
+  {
+    slug: "wong-kar-wai",
+    name: "Wong Kar-wai",
+    nameZh: "王家卫",
+    tmdbPersonId: 12453,
+    bio: "香港导演，1958 年生。没有剧本，只有钟表：他的电影反复丈量错过的几分钟，把都市里的擦肩而过拍成了唯一的史诗。",
+    careerEssay: doc([
+      p(
+        "王家卫从编剧起家，成名后却几乎不写完整剧本，靠现场与演员一起长出电影。《阿飞正传》里“一分钟的朋友”和无脚鸟，已经定下他一生的主题：时间、错过、无法着陆。",
+      ),
+      p(
+        "与摄影师杜可风、美术张叔平的合作，把这份情绪变成了可见的东西——《重庆森林》的抽帧与霓虹，《春光乍泄》的布宜诺斯艾利斯，《花样年华》里张曼玉每一件不重样的旗袍。到《2046》，他索性把记忆本身写成了一列开不回去的火车。",
+      ),
+    ]),
+    bioEn:
+      "Hong Kong director, born 1958. No screenplay, only clocks: his films keep measuring the few minutes by which people miss each other, turning a brush past a stranger into the only epic worth having.",
+    careerEssayEn: doc([
+      p(
+        "Wong started as a screenwriter and then, once established, largely stopped writing finished scripts, growing his films on set with his actors instead. Days of Being Wild — the one-minute friend, the bird with no feet — already fixes the themes of his whole career: time, missed chances, the inability to land.",
+      ),
+      p(
+        "His work with cinematographer Christopher Doyle and designer William Chang made that mood visible: the step-printing and neon of Chungking Express, the Buenos Aires of Happy Together, the procession of never-repeated cheongsams Maggie Cheung wears in In the Mood for Love. By 2046 he had simply written memory itself as a train that cannot go back.",
+      ),
+    ]),
+  },
+  {
+    slug: "king-hu",
+    name: "King Hu",
+    nameZh: "胡金铨",
+    tmdbPersonId: 83698,
+    bio: "华语导演，1932–1997。把京剧的锣鼓点变成剪辑的节奏，让武侠从打斗升格为一种关于气韵与空的电影。",
+    careerEssay: doc([
+      p(
+        "胡金铨生于北平，做过演员与美术，对明代掌故、京剧与佛理都下过功夫。《大醉侠》《龙门客栈》先后确立了他的招牌：客栈里的对峙、一触即发的静默，以及从戏曲借来的锣鼓节奏。",
+      ),
+      p(
+        "《侠女》则把他推到了另一个层面。竹林一战至今是所有武侠动作的源头之一，而影片后半段忽然转入禅意，血战让位给了顿悟。1975 年它在戛纳拿下技术大奖，是华语电影首次在那里获得肯定。",
+      ),
+    ]),
+    bioEn:
+      "Chinese-language director, 1932–1997. He turned the drum-and-gong beat of Peking opera into a rhythm of cutting, lifting wuxia out of fighting and into a cinema of breath and emptiness.",
+    careerEssayEn: doc([
+      p(
+        "Born in Beijing, King Hu worked as an actor and a designer and read seriously in Ming history, Peking opera, and Buddhism. Come Drink with Me and Dragon Inn established his signatures in turn: the standoff inside an inn, the silence a hair before violence, and a cutting rhythm borrowed from the opera percussion.",
+      ),
+      p(
+        "A Touch of Zen pushed him somewhere else entirely. Its bamboo-forest duel remains one of the headwaters of all wuxia action, and then the film's second half turns abruptly contemplative, with bloodshed giving way to enlightenment. It won a technical prize at Cannes in 1975 — the first recognition a Chinese-language film received there.",
       ),
     ]),
   },
