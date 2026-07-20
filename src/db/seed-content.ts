@@ -95,6 +95,55 @@ async function main() {
   const admin = await db.query.users.findFirst({ where: eq(users.email, adminEmail) });
   const createdBy = admin?.id ?? null;
 
+  // ── Pre-flight: can every incoming film be fully tagged? ────────────
+  // Films this run will create get their tag junctions below, but tag ids
+  // come from the admin-owned vocabulary — we never create a tag here. A
+  // slug missing from it means the tag was never created, or was
+  // deliberately retired; either way the junction cannot be written.
+  //
+  // This check runs BEFORE any insert on purpose. Failing later would
+  // leave the films inserted, and a second run would find them already
+  // present — so they would fall out of `newFilmSlugs` and stay untagged
+  // permanently, needing an explicit `apply:tags --films=…` to repair.
+  // Aborting before the first write keeps the run replayable.
+  const presentFilmSlugs = new Set(
+    (
+      await db
+        .select({ slug: films.slug })
+        .from(films)
+        .where(
+          inArray(
+            films.slug,
+            seedFilms.map((f) => f.slug),
+          ),
+        )
+    ).map((r) => r.slug),
+  );
+  const incomingFilms = seedFilms.filter((f) => !presentFilmSlugs.has(f.slug));
+  const vocabularyExists = await db.query.tags.findFirst({ columns: { id: true } });
+  if (vocabularyExists && incomingFilms.length) {
+    const needed = [...new Set(incomingFilms.flatMap((f) => f.tagSlugs ?? []))];
+    if (needed.length) {
+      const known = new Set(
+        (await db.select({ slug: tags.slug }).from(tags).where(inArray(tags.slug, needed))).map(
+          (r) => r.slug,
+        ),
+      );
+      const absent = needed.filter((s) => !known.has(s));
+      if (absent.length) {
+        console.error(
+          `\n✗ ${absent.length} tag(s) referenced by incoming films are not in this database's ` +
+            `vocabulary:\n    ${absent.join(", ")}\n\n` +
+            `  The vocabulary is admin-owned, so the seeder will not create them (ADR 0014).\n` +
+            `  Create them in /admin/tags, or:\n` +
+            `    bun run apply:tags -- --create-tags=${absent.join(",")} --apply\n` +
+            `  then re-run this seeder. Nothing has been written.\n`,
+        );
+        process.exit(1);
+      }
+    }
+  }
+
   // ── People (directors + curated actors) ────────────────────────────
   const insertedPeople = await db
     .insert(people)
@@ -190,7 +239,6 @@ async function main() {
   // vocabulary is admin-owned: an upsert-and-readd re-run would
   // resurrect tags an editor renamed or deleted, breaking the "a re-run
   // never clobbers admin edits" contract above.
-  const vocabularyExists = await db.query.tags.findFirst({ columns: { id: true } });
   if (vocabularyExists) {
     console.log("Tags: vocabulary already exists (admin-owned) — skipping the starter seed.");
   } else {
@@ -214,6 +262,46 @@ async function main() {
       }),
     );
     if (ftValues.length) await db.insert(filmTags).values(ftValues).onConflictDoNothing();
+  }
+
+  // ── film ↔ tag junction — newly-created films, on EVERY run ─────────
+  // The block above is first-run-only because re-attaching tags to films
+  // that already exist would undo editorial work. Note precisely why
+  // "this film has no tags" cannot be used to detect that: `saveFilm`
+  // deletes every junction and re-inserts only a non-empty selection, so
+  // an editor clearing a film's tags leaves zero rows — indistinguishable
+  // from a film nobody ever touched.
+  //
+  // Films THIS run created carry no such ambiguity: they did not exist a
+  // moment ago, so there is no editorial history to undo. That is the
+  // same reasoning that gates the cast and watch-link paths below on
+  // `newFilmSlugs`, and it makes their junctions safe to write on any run.
+  //
+  // Tag ids are resolved from the DB, never from tags.ts — the vocabulary
+  // is admin-owned. The pre-flight in main() has already guaranteed every
+  // slug here resolves, so a missing one would be a bug, not an operator
+  // error; assertPublishable re-checks and fails the run if so.
+  const newFilmsWithTags = seedFilms.filter((f) => newFilmSlugs.has(f.slug) && f.tagSlugs?.length);
+  if (newFilmsWithTags.length) {
+    const slugs = [...new Set(newFilmsWithTags.flatMap((f) => f.tagSlugs ?? []))];
+    const tagRows = await db
+      .select({ id: tags.id, slug: tags.slug })
+      .from(tags)
+      .where(inArray(tags.slug, slugs));
+    const tagIdBySlug = new Map(tagRows.map((r) => [r.slug, r.id]));
+    const values = newFilmsWithTags.flatMap((f) =>
+      (f.tagSlugs ?? []).flatMap((ts) => {
+        const filmId = filmIdBySlug.get(f.slug);
+        const tagId = tagIdBySlug.get(ts);
+        return filmId && tagId ? [{ filmId, tagId }] : [];
+      }),
+    );
+    if (values.length) {
+      // onConflictDoNothing: on a first run the gated block above already
+      // wrote these, so this is a harmless no-op rather than a duplicate.
+      await db.insert(filmTags).values(values).onConflictDoNothing();
+      console.log(`Tags: linked ${values.length} junction(s) for newly-created films.`);
+    }
   }
 
   // ── 演员表 — only for newly-created films (no natural unique key) ────
@@ -332,7 +420,7 @@ async function main() {
   await setListCovers(listIdBySlug, filmIdBySlug);
 
   // ── Publish-gate assertions (fail the run rather than seed unpublishable) ─
-  await assertPublishable(filmIdBySlug);
+  await assertPublishable(filmIdBySlug, newFilmSlugs);
 
   console.log(
     `\nSeed complete. Newly inserted — people:${counts.people} films:${counts.films} ` +
@@ -489,7 +577,7 @@ async function setListCovers(listIdBySlug: Map<string, string>, filmIdBySlug: Ma
   }
 }
 
-async function assertPublishable(filmIdBySlug: Map<string, string>) {
+async function assertPublishable(filmIdBySlug: Map<string, string>, newFilmSlugs: Set<string>) {
   const problems: string[] = [];
 
   for (const f of seedFilms) {
@@ -526,6 +614,43 @@ async function assertPublishable(filmIdBySlug: Map<string, string>) {
     const withDirector = new Set(linked.map((r) => r.filmId));
     for (const [slug, id] of filmIdBySlug) {
       if (!withDirector.has(id)) problems.push(`film ${slug}: no director linked in DB`);
+    }
+  }
+
+  // Same shape, for tags: every film this run created must actually hold
+  // the junctions its tagSlugs imply. main()'s pre-flight should have made
+  // this unreachable — it is here so a silently dropped junction fails the
+  // run rather than shipping an untagged film.
+  const newWithTags = seedFilms.filter((f) => newFilmSlugs.has(f.slug) && f.tagSlugs?.length);
+  if (newWithTags.length) {
+    const ids = newWithTags.flatMap((f) => {
+      const id = filmIdBySlug.get(f.slug);
+      return id ? [id] : [];
+    });
+    const held = ids.length
+      ? await db
+          .select({ filmId: filmTags.filmId, slug: tags.slug })
+          .from(filmTags)
+          .innerJoin(tags, eq(tags.id, filmTags.tagId))
+          .where(inArray(filmTags.filmId, ids))
+      : [];
+    const heldByFilm = new Map<string, Set<string>>();
+    for (const row of held) {
+      const set = heldByFilm.get(row.filmId) ?? new Set<string>();
+      set.add(row.slug);
+      heldByFilm.set(row.filmId, set);
+    }
+    for (const f of newWithTags) {
+      const id = filmIdBySlug.get(f.slug);
+      if (!id) continue;
+      const have = heldByFilm.get(id) ?? new Set<string>();
+      for (const ts of f.tagSlugs ?? []) {
+        if (!have.has(ts)) {
+          problems.push(
+            `film ${f.slug}: tag "${ts}" not linked in DB (absent from the vocabulary?)`,
+          );
+        }
+      }
     }
   }
 

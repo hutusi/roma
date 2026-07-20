@@ -13,8 +13,13 @@ import type { SeedTag } from "./types";
  * on every fresh checkout. `tags.test.ts` guards that in CI.
  *
  * On a database whose vocabulary already exists, adding rows here changes
- * nothing by itself — the gate skips the whole block. Use
- * `bun run apply:tags` to reconcile additively (ADR 0014 amendment).
+ * nothing by itself — the gate skips the whole block. The seeder will
+ * refuse to insert a film referencing a slug the vocabulary does not hold,
+ * naming it; create it in /admin/tags or with
+ * `bun run apply:tags -- --create-tags=<slug> --apply`. Creation is always
+ * explicit: an absent slug may be a new tag, or one an editor retired on
+ * purpose, and nothing in the database distinguishes them (ADR 0014
+ * amendment).
  */
 export const seedTags: SeedTag[] = [
   { slug: "silent-cinema", nameZh: "默片", nameEn: "Silent Cinema" },

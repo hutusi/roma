@@ -77,31 +77,47 @@ migration; confirm `drizzle/` is untouched in the diff.
    `resync-content.ts --films=…`. It also means edits to *existing* rows in seed data
    (a list's `sortOrder`, a corrected note) apply only to a fresh database.
 
+New films get their tag junctions from the seeder itself. It will **refuse to start** if an
+incoming film references a tag the admin-owned vocabulary does not hold, naming the slugs —
+create those first. Nothing is written on that refusal, so the run stays replayable.
+
 ```bash
 # 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
 
-# 2. Seed production from a local checkout of main.
-bun --env-file=.env.production.local --conditions=react-server run src/db/seed-content.ts
-#    Read the last line: "Newly inserted — people:N films:N …" plus "Images stored:N skipped:N".
-#    films:0 means a slug collision. A non-zero exit means a publish gate caught something —
-#    fix and re-run; onConflictDoNothing makes that safe. Any "✗" line names a film or person
-#    whose TMDB lookup failed and needs its id pinned by hand.
+# 2. Create any new tags the batch introduces. Always explicit: an absent slug might be new,
+#    or one an editor deliberately retired, and the database cannot tell them apart.
+#    Do this in /admin/tags, or:
+bun --env-file=.env.production.local run src/db/apply-tags.ts \
+  -- --create-tags=slug-a,slug-b            # dry run first
+bun --env-file=.env.production.local run src/db/apply-tags.ts \
+  -- --create-tags=slug-a,slug-b --apply
 
-# 3. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
+# 3. Seed production from a local checkout of main. New films arrive WITH their junctions.
+bun --env-file=.env.production.local --conditions=react-server run src/db/seed-content.ts
+#    Read the last lines: "Tags: linked N junction(s) …" and
+#    "Newly inserted — people:N films:N …" plus "Images stored:N skipped:N".
+#    films:0 means a slug collision. Exit 1 means a gate caught something — the message says
+#    what; fix and re-run, onConflictDoNothing makes that safe. Any "✗" line names a film or
+#    person whose TMDB lookup failed and needs its id pinned by hand.
+
+# 4. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
 psql "$PROD_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
 
-# 4. Tags — REQUIRED for new films. The seeder skips the tag block entirely on a database
-#    whose vocabulary exists, so new films arrive untagged and nothing says so.
-bun --env-file=.env.production.local run src/db/apply-tags.ts          # dry run — read every line
-bun --env-file=.env.production.local run src/db/apply-tags.ts --apply
-bun --env-file=.env.production.local run src/db/apply-tags.ts          # must now report 0
+# 5. Only if you are backfilling films that PREDATE their tags — name them explicitly.
+#    Not needed for films step 3 just created.
+bun --env-file=.env.production.local run src/db/apply-tags.ts -- --films=slug-a,slug-b --apply
 
-# 5. Any change to an EXISTING row must be made in /admin, not by re-seeding — e.g. moving the
+# 6. Any change to an EXISTING row must be made in /admin, not by re-seeding — e.g. moving the
 #    featured list (sortOrder 0). Admin actions do call revalidate.ts, which sweeps the tree.
 
-# 6. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
+# 7. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
 #    pages rebuild against the populated database.
 ```
+
+`apply-tags.ts` acts **only on what you name**. With no flags it does nothing. It will not
+create a tag you did not list, and will not touch a film you did not list — because neither
+"this tag is missing" nor "this film has no tags" distinguishes a gap from an editorial
+decision (ADR 0014 amendment).
 
 Then run the §7 post-deploy checks, plus: new slugs present in `/sitemap.xml` in both
 locales; `/en/film/<new-slug>` is a real page and not a translation-pending stub;

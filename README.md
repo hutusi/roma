@@ -30,7 +30,7 @@ bun dev
 | `bun run db:migrate` | Apply migrations |
 | `bun run db:seed` | Seed the first admin user |
 | `bun run db:seed:content` | Seed/refresh the editorial corpus (idempotent; never clobbers admin edits) |
-| `bun run apply:tags` | Additively reconcile tags on a database whose vocabulary is already admin-owned (dry-run; `-- --apply` to write) |
+| `bun run apply:tags` | Repair tags on an admin-owned vocabulary — acts only on `--films=` / `--create-tags=` you name (dry-run; `-- --apply` to write) |
 
 ## QA & docs
 

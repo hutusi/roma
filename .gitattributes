@@ -1,0 +1,21 @@
+# Normalise line endings on checkin for everything git detects as text.
+* text=auto
+
+# Force a textual diff for source and docs, whatever bytes they contain.
+#
+# Git otherwise classifies a file as binary the moment it finds a NUL byte
+# and renders it as "Binary file not shown" — silently, during review. Not
+# hypothetical: a NUL used as a string separator in src/db/apply-tags.ts
+# hid that file's entire diff from PR #25, and it was the one file the PR
+# most needed reviewed. The bytes are gone; this makes the failure mode
+# impossible to repeat.
+*.ts   diff
+*.tsx  diff
+*.js   diff
+*.mjs  diff
+*.json diff
+*.md   diff
+*.css  diff
+*.sql  diff
+*.yml  diff
+*.yaml diff
