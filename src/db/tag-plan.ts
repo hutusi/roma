@@ -1,116 +1,103 @@
 /**
- * Pure decision logic for tag seeding and repair. No database access, no
- * imports from `./index` — so every rule here is unit-testable, which the
- * scripts that call it are not.
+ * Pure decision logic for seeding tags. No database access — so the rules
+ * are unit-testable, which the script wrapped around them is not.
  *
- * This exists because four review rounds found four bugs of one class in
- * this logic: **inferring editorial intent from mutable database state**.
- * Each function below encodes a rule that was got wrong once, and
- * `tag-plan.test.ts` asserts it, so a future edit breaks a test rather than
- * a production database. The rules, and where they came from:
+ * Everything here rests on one idea. Comparing seed-data against the
+ * database gives two inputs, and two inputs cannot express intent: a tag
+ * present in seed-data but absent from the database is *either* something
+ * this release adds *or* something an editor removed, and nothing
+ * distinguishes them. Recording what seed-data asserted at the last run
+ * supplies the missing third input and makes it a three-way merge:
  *
- *   - A database holding films has been seeded before, whatever its tag
- *     table looks like. Tag-table emptiness was the old signal, and
- *     `deleteTag` lets an admin flip it — so retiring the vocabulary read
- *     as "fresh database" and restored the whole thing on the next deploy.
- *   - A tag diff can express additions only. Removing a tag is an /admin
- *     act; no script infers one.
- *   - A tag absent from the vocabulary never reaches a junction. It may be
- *     new, or deliberately retired, and nothing here can tell the
- *     difference — so the caller aborts and asks.
- *   - "This film has zero tags" says nothing about intent. `saveFilm`
- *     leaves exactly that state when an editor clears a film. Safety comes
- *     from callers acting only on films they were explicitly given.
+ *   seed-data   baseline   database   →  meaning               action
+ *   ──────────────────────────────────────────────────────────────────
+ *   yes         no         —          →  this release adds it   APPLY
+ *   yes         yes        no         →  an editor removed it   leave
+ *   yes         yes        yes        →  already applied        nothing
+ *   no          yes        yes        →  release dropped it     leave
+ *
+ * The second row is the one every earlier design got wrong, in four
+ * different places. The fourth is add-only: seed-data dropping a tag is
+ * never a reason to delete an editor's row — removing a tag stays an
+ * /admin act (ADR 0014).
  */
 
-/** The only shape these rules need — deliberately not `SeedFilm`. */
+/** The only film shape these rules need — deliberately not `SeedFilm`. */
 export type TaggedFilm = { slug: string; tagSlugs?: string[] };
 
-/**
- * Has this database been seeded before?
- *
- * Note what this function cannot see: the tag table. That is the point.
- * The seeder creates films and tags together, so film presence is a
- * durable record of "seeded before", whereas an empty tag table is a
- * state an editor can reach deliberately through /admin.
- */
-export const isFirstRun = (filmCount: number): boolean => filmCount === 0;
+export type Decision =
+  /** In seed-data, never seeded before → this release introduces it. */
+  | "apply"
+  /** Seeded before and still in the database → nothing to do. */
+  | "present"
+  /** Seeded before, gone from the database → an editor removed it. */
+  | "removed-by-editor"
+  /** No longer in seed-data → the release dropped it; leave the row be. */
+  | "dropped-from-seed";
+
+export function decideTag(inSeed: boolean, inBaseline: boolean, inDb: boolean): Decision {
+  if (!inSeed) return "dropped-from-seed";
+  if (inDb) return "present";
+  return inBaseline ? "removed-by-editor" : "apply";
+}
+
+/** A (film, tag) pair, compared by slug so it survives rows being recreated. */
+export type FilmTag = { filmSlug: string; tagSlug: string };
+
+/** Membership key for a pair, so callers build their lookup sets the same way. */
+export const filmTagKey = (p: FilmTag) => `${p.filmSlug} ${p.tagSlug}`;
 
 /**
- * Tag slugs the given films need that the vocabulary does not hold.
- * Non-empty means the caller must stop and ask rather than create them:
- * an absent slug is equally likely to be new or deliberately retired.
+ * Which vocabulary entries this run should create.
+ *
+ * `retired` are slugs seed-data still lists that an editor has deleted.
+ * They are reported and never recreated — that is the whole point of the
+ * baseline, and it is what stops a deploy from restoring a vocabulary
+ * somebody deliberately dismantled.
  */
-export function missingVocabulary(films: TaggedFilm[], known: ReadonlySet<string>): string[] {
-  const needed = new Set<string>();
-  for (const f of films) for (const s of f.tagSlugs ?? []) if (!known.has(s)) needed.add(s);
-  return [...needed];
+export function planVocabulary(
+  seedSlugs: readonly string[],
+  baseline: ReadonlySet<string>,
+  inDb: ReadonlySet<string>,
+): { create: string[]; retired: string[] } {
+  const create: string[] = [];
+  const retired: string[] = [];
+  for (const slug of seedSlugs) {
+    const decision = decideTag(true, baseline.has(slug), inDb.has(slug));
+    if (decision === "apply") create.push(slug);
+    else if (decision === "removed-by-editor") retired.push(slug);
+  }
+  return { create, retired };
 }
 
 /**
- * Compare a film's seeded tags against what the database holds.
+ * Which junctions this run should write.
  *
- * `extra` is reported so a human can see it; it is deliberately NOT a
- * removal list. There is no shape in this return type that a caller could
- * turn into a DELETE, which is the add-only rule made structural instead
- * of conventional.
+ * New films and existing films are not different cases here: a film
+ * created moments ago has no baseline and no junctions, so every tag it
+ * carries is an addition. That is why this replaces both the
+ * newFilmSlugs-scoped path and the separate resync for existing films.
  */
-export function diffFilmTags(
-  want: readonly string[],
-  held: ReadonlySet<string>,
-): { missing: string[]; extra: string[] } {
-  const wanted = new Set(want);
-  return {
-    missing: want.filter((s) => !held.has(s)),
-    extra: [...held].filter((s) => !wanted.has(s)),
-  };
-}
-
-/**
- * Films whose seeded tags the database does not fully hold — the drift
- * report set.
- *
- * This is database drift, NOT release scope: it cannot distinguish a tag
- * the current release adds from one an editor removed on purpose. Callers
- * must present it as information and never as a list to act on.
- */
-export function filmsBehindSeedTags(
-  films: TaggedFilm[],
-  heldBySlug: ReadonlyMap<string, ReadonlySet<string>>,
-): string[] {
-  return films
-    .filter((f) => {
-      const held = heldBySlug.get(f.slug) ?? new Set<string>();
-      return (f.tagSlugs ?? []).some((s) => !held.has(s));
-    })
-    .map((f) => f.slug);
-}
-
-/**
- * The junction rows to insert for the given films.
- *
- * A tag slug that does not resolve is never silently dropped: it comes
- * back in `unresolved` so the caller can fail loudly. A film slug that
- * does not resolve is simply not in this database and is skipped.
- */
-export function planJunctions(
-  films: TaggedFilm[],
-  filmIdBySlug: ReadonlyMap<string, string>,
-  tagIdBySlug: ReadonlyMap<string, string>,
-): { pairs: { filmId: string; tagId: string }[]; unresolved: string[] } {
-  const pairs: { filmId: string; tagId: string }[] = [];
-  const unresolved = new Set<string>();
+export function planFilmTags(
+  films: readonly TaggedFilm[],
+  baseline: ReadonlySet<string>,
+  inDb: ReadonlySet<string>,
+): { apply: FilmTag[]; removedByEditor: FilmTag[] } {
+  const apply: FilmTag[] = [];
+  const removedByEditor: FilmTag[] = [];
   for (const f of films) {
-    const filmId = filmIdBySlug.get(f.slug);
-    if (!filmId) continue;
-    for (const slug of f.tagSlugs ?? []) {
-      const tagId = tagIdBySlug.get(slug);
-      if (!tagId) {
-        unresolved.add(slug);
-        continue;
-      }
-      pairs.push({ filmId, tagId });
+    for (const tagSlug of f.tagSlugs ?? []) {
+      const pair = { filmSlug: f.slug, tagSlug };
+      const k = filmTagKey(pair);
+      const decision = decideTag(true, baseline.has(k), inDb.has(k));
+      if (decision === "apply") apply.push(pair);
+      else if (decision === "removed-by-editor") removedByEditor.push(pair);
     }
   }
-  return { pairs, unresolved: [...unresolved] };
+  return { apply, removedByEditor };
+}
+
+/** Every (film, tag) seed-data currently asserts — the next run's baseline. */
+export function seededFilmTags(films: readonly TaggedFilm[]): FilmTag[] {
+  return films.flatMap((f) => (f.tagSlugs ?? []).map((tagSlug) => ({ filmSlug: f.slug, tagSlug })));
 }
