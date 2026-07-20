@@ -101,7 +101,13 @@ psql "$DATABASE_URL" -c "select slug, published_at from films order by published
 **Three things about production are not obvious and will bite:**
 
 1. `seed-content.ts` inserts with `status: "published"`, so content is **live the moment
-   the transaction commits** — there is no draft step.
+   the transaction commits** — there is no draft step. But the whole core seed, including
+   its publish-gate checks, is that one transaction: if a gate fails, or a tag conflict is
+   found, **nothing is written at all** and the run is safe to repeat once you have fixed
+   it. A failed run never leaves the database half-seeded.
+   While it runs it holds row locks on the seed corpus, so `/admin` saves block until it
+   commits — under a second for a text-only run. Images are fetched afterwards, outside
+   the transaction, so a missing poster never blocks or rolls back the content.
 2. It runs outside Next and cannot call `revalidate.ts`. `/[lang]/film/[slug]` has
    `dynamicParams: true` so a new film's own page renders on demand, but every **listing**
    surface (`/zh`, `/zh/films`, `/zh/lists`, `/sitemap.xml`, person pages) is prerendered

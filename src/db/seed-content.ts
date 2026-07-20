@@ -32,7 +32,7 @@ import {
   wordCount,
 } from "../lib/validators/film";
 import { db } from "./index";
-import { lockFilms, lockTags } from "./locks";
+import { type DbTransaction, lockCuratedLists, lockFilms, lockPeople, lockTags } from "./locks";
 import {
   curatedListItems,
   curatedLists,
@@ -99,184 +99,245 @@ async function main() {
   const admin = await db.query.users.findFirst({ where: eq(users.email, adminEmail) });
   const createdBy = admin?.id ?? null;
 
-  // ── Pre-flight: does this release assign a tag an editor retired? ───
-  // The merge below cannot write such a junction: the tag is gone and this
-  // seeder will not recreate it — refusing to is the point of the baseline.
-  // That leaves a genuine conflict between seed-data and an editorial
-  // decision, and only a human can settle it.
+  // ── The core seed, in ONE transaction ───────────────────────────────
+  // Everything that decides what readers see happens here and commits
+  // together. Two reasons, both learned from this file:
   //
-  // It is caught HERE, before the first insert, for a specific reason: the
-  // seeder publishes on commit with no draft step, so a film must never go
-  // live already knowing one of its curated tags was dropped. Nothing has
-  // been written on this path, so the run stays replayable — which is what
-  // makes aborting cheap here and expensive anywhere later.
-  {
-    const tagBaseline = new Set(
-      (await db.select({ slug: seedTagBaseline.slug }).from(seedTagBaseline)).map((r) => r.slug),
-    );
-    const tagsInDb = new Set((await db.select({ slug: tags.slug }).from(tags)).map((r) => r.slug));
-    const { retired } = planVocabulary(
-      seedTags.map((t) => t.slug),
-      tagBaseline,
-      tagsInDb,
-    );
-    const retiredSlugs = new Set(retired);
-    if (retiredSlugs.size) {
-      const junctionBaseline = new Set(
-        (
-          await db
-            .select({
-              filmSlug: seedFilmTagBaseline.filmSlug,
-              tagSlug: seedFilmTagBaseline.tagSlug,
-            })
-            .from(seedFilmTagBaseline)
-        ).map(filmTagKey),
-      );
-      // Only NEW assignments conflict. A pair already in the baseline is
-      // the legitimate "an editor removed this" case, which the merge
-      // leaves alone and which needs no write at all.
-      const conflicts = seedFilms.flatMap((f) =>
-        (f.tagSlugs ?? [])
-          .filter(
-            (tagSlug) =>
-              retiredSlugs.has(tagSlug) &&
-              !junctionBaseline.has(filmTagKey({ filmSlug: f.slug, tagSlug })),
+  //   · The publish gate used to run last, AFTER every insert had
+  //     committed — so a note outside its length gate, or a film with no
+  //     director, published the whole batch and only then failed. Inside
+  //     the transaction a gate failure rolls all of it back.
+  //   · The retired-tag conflict gate used to run before any lock, and
+  //     films published before the tag work was known to be possible. An
+  //     editor deleting a tag in that window slipped past it.
+  //
+  // Images are deliberately NOT in here: they are network I/O and
+  // best-effort (a failed poster logs and continues), and holding row
+  // locks across TMDB downloads would block /admin for minutes.
+  const { filmIdBySlug, personIdBySlug, listIdBySlug } = await db.transaction(async (tx) => {
+    // Locks first, in the canonical order people → tags → films → lists
+    // (ADR 0014) — the order saveFilm takes, so neither can deadlock the
+    // other. Only rows that already exist can be locked; rows this run
+    // creates need none, since nobody else can see them before commit.
+    // Holding these for the transaction means /admin saves block until it
+    // commits: under a second text-only, and the price of never
+    // publishing content that has not passed its gate.
+    await lockPeople(
+      tx,
+      (
+        await tx
+          .select({ id: people.id, slug: people.slug })
+          .from(people)
+          .where(
+            inArray(
+              people.slug,
+              seedPeople.map((d) => d.slug),
+            ),
           )
-          .map((tagSlug) => `${f.slug} → ${tagSlug}`),
-      );
-      if (conflicts.length) {
-        console.error(
-          `\n✗ seed-data assigns ${conflicts.length} tag(s) that were retired in /admin:\n` +
-            `    ${conflicts.join("\n    ")}\n\n` +
-            `  The vocabulary is admin-owned, so the seeder will not recreate a tag somebody\n` +
-            `  deleted (ADR 0014) — and it will not publish a film knowing a curated tag of\n` +
-            `  its was dropped. Settle it one way or the other:\n` +
-            `    · restore the tag in /admin/tags, then re-run; or\n` +
-            `    · remove it from the film's tagSlugs in src/db/seed-data/films.ts.\n` +
-            `  Nothing has been written.\n`,
-        );
-        process.exit(1);
-      }
-    }
-  }
-
-  // ── People (directors + curated actors) ────────────────────────────
-  const insertedPeople = await db
-    .insert(people)
-    .values(
-      seedPeople.map((d) => ({
-        slug: d.slug,
-        name: d.name,
-        nameZh: d.nameZh,
-        primaryRole: d.primaryRole ?? ("director" as const),
-        bio: d.bio,
-        careerEssay: d.careerEssay ?? null,
-        bioEn: d.bioEn ?? null,
-        careerEssayEn: d.careerEssayEn ?? null,
-        // A seeded English edition publishes with the zh one.
-        statusEn: (d.bioEn ? "published" : "draft") as "published" | "draft",
-        status: "published" as const,
-        publishedAt: new Date(NOW),
-        publishedEnAt: d.bioEn ? new Date(NOW) : null,
-      })),
-    )
-    .onConflictDoNothing({ target: people.slug })
-    .returning({ slug: people.slug });
-  counts.people = insertedPeople.length;
-
-  const personRows = await db
-    .select({ id: people.id, slug: people.slug })
-    .from(people)
-    .where(
-      inArray(
-        people.slug,
-        seedPeople.map((d) => d.slug),
-      ),
+      ).map((r) => r.id),
     );
-  const personIdBySlug = new Map(personRows.map((r) => [r.slug, r.id]));
-
-  // ── Films ──────────────────────────────────────────────────────────
-  const insertedFilms = await db
-    .insert(films)
-    .values(
-      seedFilms.map((f, i) => ({
-        slug: f.slug,
-        titleZh: f.titleZh,
-        titleZhHk: f.titleZhHk ?? null,
-        titleZhTw: f.titleZhTw ?? null,
-        titleOriginal: f.titleOriginal,
-        titleEn: f.titleEn ?? null,
-        year: f.year,
-        countries: f.countries,
-        runtimeMinutes: f.runtimeMinutes ?? null,
-        aspectRatio: f.aspectRatio ?? null,
-        isBlackAndWhite: f.isBlackAndWhite,
-        editorialNote: f.editorialNote,
-        essay: f.essay ?? null,
-        editorialNoteEn: f.editorialNoteEn ?? null,
-        essayEn: f.essayEn ?? null,
-        status: "published" as const,
-        statusEn: (f.editorialNoteEn && f.titleEn ? "published" : "draft") as "published" | "draft",
-        publishedAt: publishedAtFor(i),
-        publishedEnAt: f.editorialNoteEn && f.titleEn ? publishedAtFor(i) : null,
-      })),
-    )
-    .onConflictDoNothing({ target: films.slug })
-    .returning({ slug: films.slug });
-  counts.films = insertedFilms.length;
-  const newFilmSlugs = new Set(insertedFilms.map((r) => r.slug));
-
-  const filmRows = await db
-    .select({ id: films.id, slug: films.slug })
-    .from(films)
-    .where(
-      inArray(
-        films.slug,
-        seedFilms.map((f) => f.slug),
-      ),
-    );
-  const filmIdBySlug = new Map(filmRows.map((r) => [r.slug, r.id]));
-
-  // ── film ↔ director junction (position = order in directorSlugs) ────
-  const fdValues = seedFilms.flatMap((f) =>
-    f.directorSlugs.flatMap((ds, position) => {
-      const filmId = filmIdBySlug.get(f.slug);
-      const directorId = personIdBySlug.get(ds);
-      return filmId && directorId ? [{ filmId, directorId, position }] : [];
-    }),
-  );
-  if (fdValues.length) await db.insert(filmDirectors).values(fdValues).onConflictDoNothing();
-
-  // ── Tags: a three-way merge against the recorded baseline ──────────
-  // seed-data / baseline / database. Two of those cannot express intent —
-  // a tag in seed-data but missing from the database is either something
-  // this release adds or something an editor removed, and they look
-  // identical. `seed_*_baseline` records what seed-data asserted at the
-  // last successful run, which is the difference (ADR 0014).
-  //
-  // One path covers every case this used to special-case: a fresh
-  // database (empty baseline, so everything is an addition), a film
-  // created moments ago (no baseline, no junctions — same thing), a film
-  // whose tagSlugs changed in this release, and a tag an editor retired.
-  //
-  // Writes and the baseline update share one transaction. If they did
-  // not, a crash could leave a baseline claiming more than was applied,
-  // and the next run would read those additions as editor removals — a
-  // fresh way to reach the same bug.
-  const tagSummary = await db.transaction(async (tx) => {
-    // Serialise against /admin, in the canonical order tags → films
-    // (ADR 0014), the same order saveFilm takes. Locks come BEFORE the
-    // reads below: without them an editor's save can land between reading
-    // `film_tags` and inserting, and the seeder reattaches a tag that save
-    // had just removed — the very thing the baseline exists to prevent,
-    // arriving by a race instead. Both helpers sort by id, so concurrent
-    // callers cannot deadlock.
     await lockTags(
       tx,
       (await tx.select({ id: tags.id }).from(tags)).map((r) => r.id),
     );
-    await lockFilms(tx, [...filmIdBySlug.values()]);
+    await lockFilms(
+      tx,
+      (
+        await tx
+          .select({ id: films.id })
+          .from(films)
+          .where(
+            inArray(
+              films.slug,
+              seedFilms.map((f) => f.slug),
+            ),
+          )
+      ).map((r) => r.id),
+    );
+    await lockCuratedLists(
+      tx,
+      (
+        await tx
+          .select({ id: curatedLists.id })
+          .from(curatedLists)
+          .where(
+            inArray(
+              curatedLists.slug,
+              seedLists.map((l) => l.slug),
+            ),
+          )
+      ).map((r) => r.id),
+    );
 
+    // ── Pre-flight: does this release assign a tag an editor retired? ───
+    // The merge below cannot write such a junction: the tag is gone and this
+    // seeder will not recreate it — refusing to is the point of the baseline.
+    // That leaves a genuine conflict between seed-data and an editorial
+    // decision, and only a human can settle it.
+    //
+    // It is caught HERE, before the first insert, for a specific reason: the
+    // seeder publishes on commit with no draft step, so a film must never go
+    // live already knowing one of its curated tags was dropped. Nothing has
+    // been written on this path, so the run stays replayable — which is what
+    // makes aborting cheap here and expensive anywhere later.
+    {
+      const tagBaseline = new Set(
+        (await tx.select({ slug: seedTagBaseline.slug }).from(seedTagBaseline)).map((r) => r.slug),
+      );
+      const tagsInDb = new Set(
+        (await tx.select({ slug: tags.slug }).from(tags)).map((r) => r.slug),
+      );
+      const { retired } = planVocabulary(
+        seedTags.map((t) => t.slug),
+        tagBaseline,
+        tagsInDb,
+      );
+      const retiredSlugs = new Set(retired);
+      if (retiredSlugs.size) {
+        const junctionBaseline = new Set(
+          (
+            await tx
+              .select({
+                filmSlug: seedFilmTagBaseline.filmSlug,
+                tagSlug: seedFilmTagBaseline.tagSlug,
+              })
+              .from(seedFilmTagBaseline)
+          ).map(filmTagKey),
+        );
+        // Only NEW assignments conflict. A pair already in the baseline is
+        // the legitimate "an editor removed this" case, which the merge
+        // leaves alone and which needs no write at all.
+        const conflicts = seedFilms.flatMap((f) =>
+          (f.tagSlugs ?? [])
+            .filter(
+              (tagSlug) =>
+                retiredSlugs.has(tagSlug) &&
+                !junctionBaseline.has(filmTagKey({ filmSlug: f.slug, tagSlug })),
+            )
+            .map((tagSlug) => `${f.slug} → ${tagSlug}`),
+        );
+        if (conflicts.length) {
+          // Throws rather than exits: inside the core transaction, so the
+          // rollback is what guarantees "nothing has been written".
+          throw new Error(
+            `seed-data assigns ${conflicts.length} tag(s) that were retired in /admin:\n` +
+              `    ${conflicts.join("\n    ")}\n\n` +
+              `  The vocabulary is admin-owned, so the seeder will not recreate a tag somebody\n` +
+              `  deleted (ADR 0014) — and it will not publish a film knowing a curated tag of\n` +
+              `  its was dropped. Settle it one way or the other:\n` +
+              `    · restore the tag in /admin/tags, then re-run; or\n` +
+              `    · remove it from the film's tagSlugs in src/db/seed-data/films.ts.\n` +
+              `  Nothing has been written.`,
+          );
+        }
+      }
+    }
+
+    // ── People (directors + curated actors) ────────────────────────────
+    const insertedPeople = await tx
+      .insert(people)
+      .values(
+        seedPeople.map((d) => ({
+          slug: d.slug,
+          name: d.name,
+          nameZh: d.nameZh,
+          primaryRole: d.primaryRole ?? ("director" as const),
+          bio: d.bio,
+          careerEssay: d.careerEssay ?? null,
+          bioEn: d.bioEn ?? null,
+          careerEssayEn: d.careerEssayEn ?? null,
+          // A seeded English edition publishes with the zh one.
+          statusEn: (d.bioEn ? "published" : "draft") as "published" | "draft",
+          status: "published" as const,
+          publishedAt: new Date(NOW),
+          publishedEnAt: d.bioEn ? new Date(NOW) : null,
+        })),
+      )
+      .onConflictDoNothing({ target: people.slug })
+      .returning({ slug: people.slug });
+    counts.people = insertedPeople.length;
+
+    const personRows = await tx
+      .select({ id: people.id, slug: people.slug })
+      .from(people)
+      .where(
+        inArray(
+          people.slug,
+          seedPeople.map((d) => d.slug),
+        ),
+      );
+    const personIdBySlug = new Map(personRows.map((r) => [r.slug, r.id]));
+
+    // ── Films ──────────────────────────────────────────────────────────
+    const insertedFilms = await tx
+      .insert(films)
+      .values(
+        seedFilms.map((f, i) => ({
+          slug: f.slug,
+          titleZh: f.titleZh,
+          titleZhHk: f.titleZhHk ?? null,
+          titleZhTw: f.titleZhTw ?? null,
+          titleOriginal: f.titleOriginal,
+          titleEn: f.titleEn ?? null,
+          year: f.year,
+          countries: f.countries,
+          runtimeMinutes: f.runtimeMinutes ?? null,
+          aspectRatio: f.aspectRatio ?? null,
+          isBlackAndWhite: f.isBlackAndWhite,
+          editorialNote: f.editorialNote,
+          essay: f.essay ?? null,
+          editorialNoteEn: f.editorialNoteEn ?? null,
+          essayEn: f.essayEn ?? null,
+          status: "published" as const,
+          statusEn: (f.editorialNoteEn && f.titleEn ? "published" : "draft") as
+            | "published"
+            | "draft",
+          publishedAt: publishedAtFor(i),
+          publishedEnAt: f.editorialNoteEn && f.titleEn ? publishedAtFor(i) : null,
+        })),
+      )
+      .onConflictDoNothing({ target: films.slug })
+      .returning({ slug: films.slug });
+    counts.films = insertedFilms.length;
+    const newFilmSlugs = new Set(insertedFilms.map((r) => r.slug));
+
+    const filmRows = await tx
+      .select({ id: films.id, slug: films.slug })
+      .from(films)
+      .where(
+        inArray(
+          films.slug,
+          seedFilms.map((f) => f.slug),
+        ),
+      );
+    const filmIdBySlug = new Map(filmRows.map((r) => [r.slug, r.id]));
+
+    // ── film ↔ director junction (position = order in directorSlugs) ────
+    const fdValues = seedFilms.flatMap((f) =>
+      f.directorSlugs.flatMap((ds, position) => {
+        const filmId = filmIdBySlug.get(f.slug);
+        const directorId = personIdBySlug.get(ds);
+        return filmId && directorId ? [{ filmId, directorId, position }] : [];
+      }),
+    );
+    if (fdValues.length) await tx.insert(filmDirectors).values(fdValues).onConflictDoNothing();
+
+    // ── Tags: a three-way merge against the recorded baseline ──────────
+    // seed-data / baseline / database. Two of those cannot express intent —
+    // a tag in seed-data but missing from the database is either something
+    // this release adds or something an editor removed, and they look
+    // identical. `seed_*_baseline` records what seed-data asserted at the
+    // last successful run, which is the difference (ADR 0014).
+    //
+    // One path covers every case this used to special-case: a fresh
+    // database (empty baseline, so everything is an addition), a film
+    // created moments ago (no baseline, no junctions — same thing), a film
+    // whose tagSlugs changed in this release, and a tag an editor retired.
+    //
+    // Writes and the baseline update share one transaction. If they did
+    // not, a crash could leave a baseline claiming more than was applied,
+    // and the next run would read those additions as editor removals — a
+    // fresh way to reach the same bug.
     const seedTagSlugs = seedTags.map((t) => t.slug);
     const tagBaseline = new Set(
       (await tx.select({ slug: seedTagBaseline.slug }).from(seedTagBaseline)).map((r) => r.slug),
@@ -353,143 +414,148 @@ async function main() {
     if (asserted.length) {
       await tx.insert(seedFilmTagBaseline).values(asserted).onConflictDoNothing();
     }
+    const tagSummary = { created: create.length, linked: rows.length, retired, removedByEditor };
 
-    return { created: create.length, linked: rows.length, retired, removedByEditor };
-  });
-
-  console.log(
-    `Tags: created ${tagSummary.created} tag(s), linked ${tagSummary.linked} junction(s).`,
-  );
-  if (tagSummary.retired.length) {
     console.log(
-      `  ${tagSummary.retired.length} tag(s) in seed-data were removed in /admin — left alone: ` +
-        `${tagSummary.retired.join(", ")}`,
+      `Tags: created ${tagSummary.created} tag(s), linked ${tagSummary.linked} junction(s).`,
     );
-  }
-  if (tagSummary.removedByEditor.length) {
-    console.log(
-      `  ${tagSummary.removedByEditor.length} film-tag assignment(s) were removed in /admin — ` +
-        "left alone.",
-    );
-  }
+    if (tagSummary.retired.length) {
+      console.log(
+        `  ${tagSummary.retired.length} tag(s) in seed-data were removed in /admin — left alone: ` +
+          `${tagSummary.retired.join(", ")}`,
+      );
+    }
+    if (tagSummary.removedByEditor.length) {
+      console.log(
+        `  ${tagSummary.removedByEditor.length} film-tag assignment(s) were removed in /admin — ` +
+          "left alone.",
+      );
+    }
 
-  // ── 演员表 — only for newly-created films (no natural unique key) ────
-  const castValues = seedFilms
-    .filter((f) => newFilmSlugs.has(f.slug) && f.cast?.length)
-    .flatMap((f) =>
-      (f.cast ?? []).map((m, position) => ({
-        filmId: filmIdBySlug.get(f.slug) as string,
-        position,
-        name: m.name,
-        nameZh: m.zhName ?? null,
-        character: m.character ?? null,
-        characterZh: m.characterZh ?? null,
-        // Fresh seeds come out fully linked; existing DBs use link-cast.ts.
-        personId: m.personSlug ? (personIdBySlug.get(m.personSlug) ?? null) : null,
-      })),
-    );
-  if (castValues.length) await db.insert(filmCast).values(castValues);
+    // ── 演员表 — only for newly-created films (no natural unique key) ────
+    const castValues = seedFilms
+      .filter((f) => newFilmSlugs.has(f.slug) && f.cast?.length)
+      .flatMap((f) =>
+        (f.cast ?? []).map((m, position) => ({
+          filmId: filmIdBySlug.get(f.slug) as string,
+          position,
+          name: m.name,
+          nameZh: m.zhName ?? null,
+          character: m.character ?? null,
+          characterZh: m.characterZh ?? null,
+          // Fresh seeds come out fully linked; existing DBs use link-cast.ts.
+          personId: m.personSlug ? (personIdBySlug.get(m.personSlug) ?? null) : null,
+        })),
+      );
+    if (castValues.length) await tx.insert(filmCast).values(castValues);
 
-  // ── 哪里能看 — only for newly-created films (no natural unique key) ──
-  const wlValues = seedFilms
-    .filter((f) => newFilmSlugs.has(f.slug) && f.watchLinks?.length)
-    .flatMap((f) =>
-      (f.watchLinks ?? []).map((w, sortOrder) => ({
-        filmId: filmIdBySlug.get(f.slug) as string,
-        platform: w.platform,
-        region: w.region,
-        url: w.url ?? null,
-        note: w.note ?? null,
-        noteEn: w.noteEn ?? null,
-        sortOrder,
-      })),
-    );
-  if (wlValues.length) await db.insert(filmWatchLinks).values(wlValues);
+    // ── 哪里能看 — only for newly-created films (no natural unique key) ──
+    const wlValues = seedFilms
+      .filter((f) => newFilmSlugs.has(f.slug) && f.watchLinks?.length)
+      .flatMap((f) =>
+        (f.watchLinks ?? []).map((w, sortOrder) => ({
+          filmId: filmIdBySlug.get(f.slug) as string,
+          platform: w.platform,
+          region: w.region,
+          url: w.url ?? null,
+          note: w.note ?? null,
+          noteEn: w.noteEn ?? null,
+          sortOrder,
+        })),
+      );
+    if (wlValues.length) await tx.insert(filmWatchLinks).values(wlValues);
 
-  // ── 建议观看顺序 — chronological path for directors with ≥2 films ───
-  const viValues = seedDirectors.flatMap((d) => {
-    const directorId = personIdBySlug.get(d.slug);
-    if (!directorId) return [];
-    const dFilms = seedFilms
-      .filter((f) => f.directorSlugs.includes(d.slug))
-      .sort((a, b) => a.year - b.year);
-    if (dFilms.length < 2) return [];
-    return dFilms.flatMap((f, position) => {
-      const filmId = filmIdBySlug.get(f.slug);
-      return filmId ? [{ directorId, filmId, position, note: null }] : [];
+    // ── 建议观看顺序 — chronological path for directors with ≥2 films ───
+    const viValues = seedDirectors.flatMap((d) => {
+      const directorId = personIdBySlug.get(d.slug);
+      if (!directorId) return [];
+      const dFilms = seedFilms
+        .filter((f) => f.directorSlugs.includes(d.slug))
+        .sort((a, b) => a.year - b.year);
+      if (dFilms.length < 2) return [];
+      return dFilms.flatMap((f, position) => {
+        const filmId = filmIdBySlug.get(f.slug);
+        return filmId ? [{ directorId, filmId, position, note: null }] : [];
+      });
     });
-  });
-  if (viValues.length) await db.insert(directorViewingItems).values(viValues).onConflictDoNothing();
+    if (viValues.length)
+      await tx.insert(directorViewingItems).values(viValues).onConflictDoNothing();
 
-  // ── Curated lists ──────────────────────────────────────────────────
-  const insertedLists = await db
-    .insert(curatedLists)
-    .values(
-      seedLists.map((l) => ({
-        slug: l.slug,
-        title: l.title,
-        theme: l.theme ?? null,
-        intro: l.intro ?? null,
-        titleEn: l.titleEn ?? null,
-        themeEn: l.themeEn ?? null,
-        introEn: l.introEn ?? null,
-        status: "published" as const,
-        statusEn: (l.titleEn ? "published" : "draft") as "published" | "draft",
-        publishedAt: new Date(NOW),
-        publishedEnAt: l.titleEn ? new Date(NOW) : null,
-        sortOrder: l.sortOrder,
-        createdBy,
-      })),
-    )
-    .onConflictDoNothing({ target: curatedLists.slug })
-    .returning({ slug: curatedLists.slug });
-  counts.lists = insertedLists.length;
+    // ── Curated lists ──────────────────────────────────────────────────
+    const insertedLists = await tx
+      .insert(curatedLists)
+      .values(
+        seedLists.map((l) => ({
+          slug: l.slug,
+          title: l.title,
+          theme: l.theme ?? null,
+          intro: l.intro ?? null,
+          titleEn: l.titleEn ?? null,
+          themeEn: l.themeEn ?? null,
+          introEn: l.introEn ?? null,
+          status: "published" as const,
+          statusEn: (l.titleEn ? "published" : "draft") as "published" | "draft",
+          publishedAt: new Date(NOW),
+          publishedEnAt: l.titleEn ? new Date(NOW) : null,
+          sortOrder: l.sortOrder,
+          createdBy,
+        })),
+      )
+      .onConflictDoNothing({ target: curatedLists.slug })
+      .returning({ slug: curatedLists.slug });
+    counts.lists = insertedLists.length;
 
-  const listRows = await db
-    .select({ id: curatedLists.id, slug: curatedLists.slug })
-    .from(curatedLists)
-    .where(
-      inArray(
-        curatedLists.slug,
-        seedLists.map((l) => l.slug),
-      ),
+    const listRows = await tx
+      .select({ id: curatedLists.id, slug: curatedLists.slug })
+      .from(curatedLists)
+      .where(
+        inArray(
+          curatedLists.slug,
+          seedLists.map((l) => l.slug),
+        ),
+      );
+    const listIdBySlug = new Map(listRows.map((r) => [r.slug, r.id]));
+
+    const itemValues = seedLists.flatMap((l) =>
+      l.items.flatMap((it, position) => {
+        const listId = listIdBySlug.get(l.slug);
+        const filmId = filmIdBySlug.get(it.filmSlug);
+        return listId && filmId
+          ? [
+              {
+                listId,
+                filmId,
+                position,
+                reasoning: it.reasoning ?? null,
+                reasoningEn: it.reasoningEn ?? null,
+              },
+            ]
+          : [];
+      }),
     );
-  const listIdBySlug = new Map(listRows.map((r) => [r.slug, r.id]));
+    if (itemValues.length) {
+      const insertedItems = await tx
+        .insert(curatedListItems)
+        .values(itemValues)
+        .onConflictDoNothing()
+        .returning({ id: curatedListItems.id });
+      counts.items = insertedItems.length;
+    }
 
-  const itemValues = seedLists.flatMap((l) =>
-    l.items.flatMap((it, position) => {
-      const listId = listIdBySlug.get(l.slug);
-      const filmId = filmIdBySlug.get(it.filmSlug);
-      return listId && filmId
-        ? [
-            {
-              listId,
-              filmId,
-              position,
-              reasoning: it.reasoning ?? null,
-              reasoningEn: it.reasoningEn ?? null,
-            },
-          ]
-        : [];
-    }),
-  );
-  if (itemValues.length) {
-    const insertedItems = await db
-      .insert(curatedListItems)
-      .values(itemValues)
-      .onConflictDoNothing()
-      .returning({ id: curatedListItems.id });
-    counts.items = insertedItems.length;
-  }
+    // ── Publish-gate assertions — the last thing inside the transaction ──
+    // A failure here throws, so nothing above it is committed: no film goes
+    // live until the entire seed has been validated.
+    await assertPublishable(tx, filmIdBySlug, newFilmSlugs);
+
+    // Handed back for the image step, which runs outside the transaction.
+    return { filmIdBySlug, personIdBySlug, listIdBySlug };
+  });
 
   // ── Images (TMDB → storage seam) ────────────────────────────────────
   await seedImages(filmIdBySlug, personIdBySlug);
 
   // ── List covers — reuse the cover film's hero/poster, if not already set ─
   await setListCovers(listIdBySlug, filmIdBySlug);
-
-  // ── Publish-gate assertions (fail the run rather than seed unpublishable) ─
-  await assertPublishable(filmIdBySlug, newFilmSlugs);
 
   console.log(
     `\nSeed complete. Newly inserted — people:${counts.people} films:${counts.films} ` +
@@ -646,7 +712,11 @@ async function setListCovers(listIdBySlug: Map<string, string>, filmIdBySlug: Ma
   }
 }
 
-async function assertPublishable(filmIdBySlug: Map<string, string>, newFilmSlugs: Set<string>) {
+async function assertPublishable(
+  tx: DbTransaction,
+  filmIdBySlug: Map<string, string>,
+  newFilmSlugs: Set<string>,
+) {
   const problems: string[] = [];
 
   for (const f of seedFilms) {
@@ -676,7 +746,7 @@ async function assertPublishable(filmIdBySlug: Map<string, string>, newFilmSlugs
   // dropped junction row from a bad reference).
   const filmIds = [...filmIdBySlug.values()];
   if (filmIds.length) {
-    const linked = await db
+    const linked = await tx
       .select({ filmId: filmDirectors.filmId })
       .from(filmDirectors)
       .where(inArray(filmDirectors.filmId, filmIds));
@@ -697,7 +767,7 @@ async function assertPublishable(filmIdBySlug: Map<string, string>, newFilmSlugs
       return id ? [id] : [];
     });
     const held = ids.length
-      ? await db
+      ? await tx
           .select({ filmId: filmTags.filmId, slug: tags.slug })
           .from(filmTags)
           .innerJoin(tags, eq(tags.id, filmTags.tagId))
@@ -728,12 +798,16 @@ async function assertPublishable(filmIdBySlug: Map<string, string>, newFilmSlugs
   }
 
   if (problems.length) {
-    console.error(`\n✗ Publish-gate check failed:\n  ${problems.join("\n  ")}`);
-    process.exit(1);
+    // Throw rather than exit: this runs inside the core transaction, so
+    // raising rolls every insert back. Exiting here would leave the batch
+    // published and then abort — which is exactly what it used to do.
+    throw new Error(
+      `Publish-gate check failed:\n  ${problems.join("\n  ")}\n\nNothing was written.`,
+    );
   }
 }
 
 main().catch((error) => {
-  console.error(error);
+  console.error(`\n✗ ${error instanceof Error ? error.message : error}\n`);
   process.exit(1);
 });
