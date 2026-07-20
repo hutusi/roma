@@ -6,6 +6,20 @@ import type { SeedTag } from "./types";
  * taxonomy commitment: /admin/tags can rename or retire any of it.
  * Black-and-white is deliberately absent — it is a film attribute
  * (`isBlackAndWhite`), never a tag (ADR 0014).
+ *
+ * Keep this current even though `seed-content.ts` seeds tags on the FIRST
+ * RUN ONLY: `assertPublishable` hard-exits on a film `tagSlugs` entry with
+ * no row here, so a tag that exists only in /admin breaks db:seed:content
+ * on every fresh checkout. `tags.test.ts` guards that in CI.
+ *
+ * On a database whose vocabulary already exists, adding rows here changes
+ * nothing by itself — the gate skips the whole block. The seeder will
+ * refuse to insert a film referencing a slug the vocabulary does not hold,
+ * naming it; create it in /admin/tags or with
+ * `bun run apply:tags -- --create-tags=<slug> --apply`. Creation is always
+ * explicit: an absent slug may be a new tag, or one an editor retired on
+ * purpose, and nothing in the database distinguishes them (ADR 0014
+ * amendment).
  */
 export const seedTags: SeedTag[] = [
   { slug: "silent-cinema", nameZh: "默片", nameEn: "Silent Cinema" },
@@ -20,4 +34,11 @@ export const seedTags: SeedTag[] = [
   { slug: "faith-and-redemption", nameZh: "信仰与救赎", nameEn: "Faith and Redemption" },
   { slug: "surrealism", nameZh: "超现实主义", nameEn: "Surrealism" },
   { slug: "suspense", nameZh: "悬疑", nameEn: "Suspense" },
+  { slug: "war", nameZh: "战争", nameEn: "War" },
+  { slug: "romance", nameZh: "爱情", nameEn: "Romance" },
+  { slug: "wuxia", nameZh: "武侠", nameEn: "Wuxia" },
+  { slug: "taiwan-new-cinema", nameZh: "台湾新电影", nameEn: "Taiwan New Cinema" },
+  { slug: "science-fiction", nameZh: "科幻", nameEn: "Science Fiction" },
+  { slug: "epic", nameZh: "史诗", nameEn: "Epic" },
+  { slug: "musical", nameZh: "歌舞", nameEn: "Musical" },
 ];

@@ -20,7 +20,7 @@
  * BLOB_READ_WRITE_TOKEN set, storeImage() writes to Vercel Blob; otherwise to
  * public/uploads (local dev). Attribution lives on /about.
  */
-import { and, eq, inArray } from "drizzle-orm";
+import { and, count, eq, inArray } from "drizzle-orm";
 import { validateImageUpload } from "../lib/image-upload";
 import { storeImage } from "../lib/storage";
 import {
@@ -51,6 +51,7 @@ import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
 import { seedLists } from "./seed-data/lists";
 import { seedTags } from "./seed-data/tags";
+import { filmsBehindSeedTags, isFirstRun, missingVocabulary, planJunctions } from "./tag-plan";
 
 const NOW = Date.now();
 /** Stagger publishedAt so the array order drives the home "近期收录" strip. */
@@ -94,6 +95,65 @@ async function main() {
   const adminEmail = process.env.SEED_ADMIN_EMAIL ?? "admin@babuban.com";
   const admin = await db.query.users.findFirst({ where: eq(users.email, adminEmail) });
   const createdBy = admin?.id ?? null;
+
+  // ── Pre-flight: can every incoming film be fully tagged? ────────────
+  // Films this run will create get their tag junctions below, but tag ids
+  // come from the admin-owned vocabulary — we never create a tag here. A
+  // slug missing from it means the tag was never created, or was
+  // deliberately retired; either way the junction cannot be written.
+  //
+  // This check runs BEFORE any insert on purpose. Failing later would
+  // leave the films inserted, and a second run would find them already
+  // present — so they would fall out of `newFilmSlugs` and stay untagged
+  // permanently, needing an explicit `apply:tags --films=…` to repair.
+  // Aborting before the first write keeps the run replayable.
+  const presentFilmSlugs = new Set(
+    (
+      await db
+        .select({ slug: films.slug })
+        .from(films)
+        .where(
+          inArray(
+            films.slug,
+            seedFilms.map((f) => f.slug),
+          ),
+        )
+    ).map((r) => r.slug),
+  );
+  const incomingFilms = seedFilms.filter((f) => !presentFilmSlugs.has(f.slug));
+
+  // Is this a fresh database? Film presence, NOT tag-table emptiness.
+  // `deleteTag` lets an editor retire the last tag, so an empty `tags`
+  // table is a state the admin can reach deliberately — and reading it as
+  // "fresh" made a deploy restore the entire seeded vocabulary and retag
+  // every film, silently. Films are the durable record: this seeder always
+  // creates films and tags together, so films present means this database
+  // has been seeded before, whatever its vocabulary looks like now.
+  const [{ count: filmCount }] = await db.select({ count: count() }).from(films);
+  const firstRun = isFirstRun(filmCount);
+
+  if (!firstRun && incomingFilms.length) {
+    const needed = [...new Set(incomingFilms.flatMap((f) => f.tagSlugs ?? []))];
+    if (needed.length) {
+      const known = new Set(
+        (await db.select({ slug: tags.slug }).from(tags).where(inArray(tags.slug, needed))).map(
+          (r) => r.slug,
+        ),
+      );
+      const absent = missingVocabulary(incomingFilms, known);
+      if (absent.length) {
+        console.error(
+          `\n✗ ${absent.length} tag(s) referenced by incoming films are not in this database's ` +
+            `vocabulary:\n    ${absent.join(", ")}\n\n` +
+            `  The vocabulary is admin-owned, so the seeder will not create them (ADR 0014).\n` +
+            `  Create them in /admin/tags, or:\n` +
+            `    bun run apply:tags -- --create-tags=${absent.join(",")} --apply\n` +
+            `  then re-run this seeder. Nothing has been written.\n`,
+        );
+        process.exit(1);
+      }
+    }
+  }
 
   // ── People (directors + curated actors) ────────────────────────────
   const insertedPeople = await db
@@ -182,38 +242,116 @@ async function main() {
   );
   if (fdValues.length) await db.insert(filmDirectors).values(fdValues).onConflictDoNothing();
 
-  // ── Tags + film ↔ tag junction — FIRST RUN ONLY ─────────────────────
-  // The whole block is gated on an empty vocabulary. On that first run,
-  // junctions seed for ALL seed films (like film_directors, unlike the
-  // newFilmSlugs-gated cast path) so a prod DB whose films pre-date tags
-  // still gets its assignments backfilled. Once any tag exists, the
-  // vocabulary is admin-owned: an upsert-and-readd re-run would
-  // resurrect tags an editor renamed or deleted, breaking the "a re-run
-  // never clobbers admin edits" contract above.
-  const vocabularyExists = await db.query.tags.findFirst({ columns: { id: true } });
-  if (vocabularyExists) {
-    console.log("Tags: vocabulary already exists (admin-owned) — skipping the starter seed.");
+  // ── Vocabulary bootstrap — FIRST RUN ONLY ───────────────────────────
+  // Only ever on a genuinely fresh database (no films). Thereafter the
+  // vocabulary belongs to /admin and this seeder never adds to it: it
+  // cannot tell a tag that is missing because it is new from one an editor
+  // retired on purpose, so it does not guess (ADR 0014).
+  //
+  // No junction backfill here any more. On a first run every film is in
+  // `newFilmSlugs`, so the block below already covers them — and "write
+  // junctions for ALL seed films" is exactly the shape that, when the
+  // first-run signal misfired, retagged an entire catalogue.
+  if (firstRun) {
+    await db.insert(tags).values(seedTags).onConflictDoNothing({ target: tags.slug });
+    console.log(`Tags: bootstrapped ${seedTags.length} starter tag(s) on a fresh database.`);
   } else {
-    await db.insert(tags).values(seedTags);
+    console.log("Tags: vocabulary is admin-owned — not touched.");
+  }
+
+  // ── film ↔ tag junction — newly-created films, on EVERY run ─────────
+  // The block above is first-run-only because re-attaching tags to films
+  // that already exist would undo editorial work. Note precisely why
+  // "this film has no tags" cannot be used to detect that: `saveFilm`
+  // deletes every junction and re-inserts only a non-empty selection, so
+  // an editor clearing a film's tags leaves zero rows — indistinguishable
+  // from a film nobody ever touched.
+  //
+  // Films THIS run created carry no such ambiguity: they did not exist a
+  // moment ago, so there is no editorial history to undo. That is the
+  // same reasoning that gates the cast and watch-link paths below on
+  // `newFilmSlugs`, and it makes their junctions safe to write on any run.
+  //
+  // Tag ids are resolved from the DB, never from tags.ts — the vocabulary
+  // is admin-owned. The pre-flight in main() has already guaranteed every
+  // slug here resolves, so a missing one would be a bug, not an operator
+  // error; assertPublishable re-checks and fails the run if so.
+  const newFilmsWithTags = seedFilms.filter((f) => newFilmSlugs.has(f.slug) && f.tagSlugs?.length);
+  if (newFilmsWithTags.length) {
+    const slugs = [...new Set(newFilmsWithTags.flatMap((f) => f.tagSlugs ?? []))];
     const tagRows = await db
       .select({ id: tags.id, slug: tags.slug })
       .from(tags)
-      .where(
-        inArray(
-          tags.slug,
-          seedTags.map((t) => t.slug),
-        ),
-      );
+      .where(inArray(tags.slug, slugs));
     const tagIdBySlug = new Map(tagRows.map((r) => [r.slug, r.id]));
+    const { pairs, unresolved } = planJunctions(newFilmsWithTags, filmIdBySlug, tagIdBySlug);
+    if (unresolved.length) {
+      // Unreachable if the pre-flight did its job; loud rather than silent
+      // if it did not, because the alternative is publishing untagged films.
+      console.error(
+        `\n✗ tag(s) referenced by incoming films vanished between the pre-flight and now: ` +
+          `${unresolved.join(", ")}\n  Nothing further has been written.\n`,
+      );
+      process.exit(1);
+    }
+    if (pairs.length) {
+      await db.insert(filmTags).values(pairs).onConflictDoNothing();
+      console.log(`Tags: linked ${pairs.length} junction(s) for newly-created films.`);
+    }
+  }
 
-    const ftValues = seedFilms.flatMap((f) =>
-      (f.tagSlugs ?? []).flatMap((ts) => {
-        const filmId = filmIdBySlug.get(f.slug);
-        const tagId = tagIdBySlug.get(ts);
-        return filmId && tagId ? [{ filmId, tagId }] : [];
-      }),
+  // ── Report (never write): existing films whose seed tags are missing ──
+  // A tagSlugs change to a film that already exists is invisible to this
+  // seeder by design, so without this the change ships silently incomplete.
+  //
+  // But note carefully what this list is: DATABASE DRIFT, not release scope.
+  // It cannot distinguish a tag the current release adds from one an editor
+  // deliberately removed in /admin — both look identical here, and the
+  // difference lives in the seed-data diff, not in any table. So it prints
+  // the drift and stops. It deliberately does NOT emit a runnable
+  // --films=… command: handing over a paste-ready list computed from DB
+  // state is exactly how a deploy would silently reattach tags an editor
+  // had removed on purpose.
+  {
+    const preexisting = seedFilms.filter(
+      (f) => f.tagSlugs?.length && filmIdBySlug.has(f.slug) && !newFilmSlugs.has(f.slug),
     );
-    if (ftValues.length) await db.insert(filmTags).values(ftValues).onConflictDoNothing();
+    if (preexisting.length) {
+      const ids = preexisting.flatMap((f) => {
+        const id = filmIdBySlug.get(f.slug);
+        return id ? [id] : [];
+      });
+      const held = ids.length
+        ? await db
+            .select({ filmId: filmTags.filmId, slug: tags.slug })
+            .from(filmTags)
+            .innerJoin(tags, eq(tags.id, filmTags.tagId))
+            .where(inArray(filmTags.filmId, ids))
+        : [];
+      const slugById = new Map([...filmIdBySlug].map(([slug, id]) => [id, slug]));
+      const heldBySlug = new Map<string, Set<string>>();
+      for (const row of held) {
+        const slug = slugById.get(row.filmId);
+        if (!slug) continue;
+        const set = heldBySlug.get(slug) ?? new Set<string>();
+        set.add(row.slug);
+        heldBySlug.set(slug, set);
+      }
+      const behind = filmsBehindSeedTags(preexisting, heldBySlug);
+      if (behind.length) {
+        console.log(
+          `\n⚠ ${behind.length} existing film(s) have tags in seed-data that this database lacks:\n` +
+            `    ${behind.join(", ")}\n\n` +
+            `  They pre-date this run, so the seeder does not touch them (it only tags films it\n` +
+            `  creates). This is DATABASE DRIFT, not release scope — it cannot tell a tag this\n` +
+            `  release adds from one an editor removed on purpose, and that difference lives in\n` +
+            `  the seed-data diff, not in any table. Do not resync straight from this list.\n\n` +
+            `  Take the films to resync from the release notes for the deploy you are running:\n` +
+            `    bun run src/db/resync-content.ts --films=<from release notes> --tags-only\n` +
+            `  (--tags-only never writes prose, so it cannot revert an editor's note.)\n`,
+        );
+      }
+    }
   }
 
   // ── 演员表 — only for newly-created films (no natural unique key) ────
@@ -332,7 +470,7 @@ async function main() {
   await setListCovers(listIdBySlug, filmIdBySlug);
 
   // ── Publish-gate assertions (fail the run rather than seed unpublishable) ─
-  await assertPublishable(filmIdBySlug);
+  await assertPublishable(filmIdBySlug, newFilmSlugs);
 
   console.log(
     `\nSeed complete. Newly inserted — people:${counts.people} films:${counts.films} ` +
@@ -489,7 +627,7 @@ async function setListCovers(listIdBySlug: Map<string, string>, filmIdBySlug: Ma
   }
 }
 
-async function assertPublishable(filmIdBySlug: Map<string, string>) {
+async function assertPublishable(filmIdBySlug: Map<string, string>, newFilmSlugs: Set<string>) {
   const problems: string[] = [];
 
   for (const f of seedFilms) {
@@ -526,6 +664,43 @@ async function assertPublishable(filmIdBySlug: Map<string, string>) {
     const withDirector = new Set(linked.map((r) => r.filmId));
     for (const [slug, id] of filmIdBySlug) {
       if (!withDirector.has(id)) problems.push(`film ${slug}: no director linked in DB`);
+    }
+  }
+
+  // Same shape, for tags: every film this run created must actually hold
+  // the junctions its tagSlugs imply. main()'s pre-flight should have made
+  // this unreachable — it is here so a silently dropped junction fails the
+  // run rather than shipping an untagged film.
+  const newWithTags = seedFilms.filter((f) => newFilmSlugs.has(f.slug) && f.tagSlugs?.length);
+  if (newWithTags.length) {
+    const ids = newWithTags.flatMap((f) => {
+      const id = filmIdBySlug.get(f.slug);
+      return id ? [id] : [];
+    });
+    const held = ids.length
+      ? await db
+          .select({ filmId: filmTags.filmId, slug: tags.slug })
+          .from(filmTags)
+          .innerJoin(tags, eq(tags.id, filmTags.tagId))
+          .where(inArray(filmTags.filmId, ids))
+      : [];
+    const heldByFilm = new Map<string, Set<string>>();
+    for (const row of held) {
+      const set = heldByFilm.get(row.filmId) ?? new Set<string>();
+      set.add(row.slug);
+      heldByFilm.set(row.filmId, set);
+    }
+    for (const f of newWithTags) {
+      const id = filmIdBySlug.get(f.slug);
+      if (!id) continue;
+      const have = heldByFilm.get(id) ?? new Set<string>();
+      for (const ts of f.tagSlugs ?? []) {
+        if (!have.has(ts)) {
+          problems.push(
+            `film ${f.slug}: tag "${ts}" not linked in DB (absent from the vocabulary?)`,
+          );
+        }
+      }
     }
   }
 

@@ -4,7 +4,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 
 ## What this is
 
-**Roma** (codename, never user-facing) builds **八部半 / Babuban** (babuban.com): a Chinese-language curatorial site for classic cinema — black-and-white is a house preference, not the catalogue's boundary. Curation-first with light UGC — Criterion/MUBI in spirit, not Douban/IMDb. 收录即推荐: inclusion *is* the recommendation.
+**Roma** (codename, never user-facing) builds **八部半 / Babuban** (babuban.com): a Chinese-language curatorial site for classic cinema — black-and-white is a house preference, not the catalogue's boundary, and Chinese-language film is a first-class axis rather than a regional footnote (ADR 0015). Curation-first with light UGC — Criterion/MUBI in spirit, not Douban/IMDb. 收录即推荐: inclusion *is* the recommendation.
 
 ## Domain language
 
@@ -34,6 +34,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 - `src/lib/storage.ts` — the storage seam (Vercel Blob in prod, `public/uploads` in dev). Keep all storage behind it (ADR 0008).
 - `src/db/locks.ts` — editorial mutations serialize on `SELECT … FOR UPDATE` row locks taken ONLY through this module, in the canonical order **people → tags → films → lists** (multi-row helpers sort by id). Acquiring locks in any other order can deadlock. Gates and writes run inside one transaction; `revalidate*`/IndexNow run only after commit.
 - `src/lib/rum-retention.ts` — opportunistic RUM maintenance. Successful beacons schedule a post-response cleanup; an atomic daily claim retains raw events for 90 days.
+- `src/db/seed-data/` + the content CLIs — the editorial corpus is checked-in TypeScript, written by `db:seed:content` (idempotent, `onConflictDoNothing`, never clobbers admin edits). It tags the films it creates itself, refuses to start if one references a tag the admin-owned vocabulary lacks, and **reports** (never touches) existing films whose seed tags the DB lacks. It bootstraps the starter vocabulary only when the database holds **no films** — never on an empty `tags` table, which an editor can produce deliberately. The decision rules are pure functions in `src/db/tag-plan.ts`, unit-tested because the scripts around them cannot be. Siblings for the cases it cannot handle: `apply-tags.ts` creates named vocabulary entries (`--create-tags=`) and nothing else, `resync-content.ts` overwrites content fields of named slugs, and with `--tags-only` add-only-syncs their tags instead — **the only path by which a tag change to an already-existing film reaches production**. One invocation writes prose *or* tags, never both, so a tag fix can never revert an editor's note. All of them act only on films you name, and release scope comes from the release notes, never from a DB query: nothing in the database distinguishes a tag this release adds from one an editor deliberately removed (ADR 0014 amendment). `backfill-en.ts` fills NULL/draft English fields, `link-cast.ts` links existing cast rows to people. All run **outside Next**, so none can call `revalidate.ts` — redeploy after writing. See DEPLOY.md's content runbook.
 
 ## QA
 

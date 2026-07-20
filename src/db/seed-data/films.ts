@@ -2,12 +2,19 @@ import { doc, h2, p, quote } from "./tiptap";
 import type { SeedFilm } from "./types";
 
 /**
- * The seeded canon — ~50 classics in the Criterion/MUBI spirit, all
- * black-and-white so far. Every `editorialNote` is original prose,
- * 200–500 code points (the publish gate). `directorSlugs` reference
- * `directors.ts`; images and `publishedAt` are wired by
- * `seed-content.ts`. `isBlackAndWhite` is stated on every film — the
- * catalogue no longer presumes it.
+ * The seeded canon — classics in the Criterion/MUBI spirit. Every
+ * `editorialNote` is original prose, 200–500 code points (the publish
+ * gate). `directorSlugs` reference `directors.ts`; images and
+ * `publishedAt` are wired by `seed-content.ts`.
+ *
+ * The catalogue's boundary is classic cinema, not black-and-white and not
+ * pre-1967 (ADR 0015). B&W is a house preference, stated per film via
+ * `isBlackAndWhite`, never presumed and never a tag. Chinese-language
+ * cinema is a first-class axis rather than a regional footnote.
+ *
+ * Array order is load-bearing: `publishedAtFor(i)` derives `publishedAt`
+ * from the index, so position here decides the homepage 近期收录 strip for
+ * any film this run actually inserts.
  */
 export const seedFilms: SeedFilm[] = [
   // ── Federico Fellini ──────────────────────────────────────────────
@@ -99,6 +106,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 110,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["neorealism"],
     editorialNote:
       "一个罗马街头的妓女卡比利亚，一次次被欺骗、被抢劫、被抛弃，却一次次重新相信爱情。费里尼与马西纳这对夫妻，把一个最容易被写成悲剧的题材，拍成了对人类韧性的礼赞。影片最后那个著名的长镜头——卡比利亚刚被未婚夫骗走全部积蓄，眼含泪水走在路上，一群年轻人载歌载舞地经过，她抬起头，对着镜头几乎是对着我们，露出一个破碎又倔强的微笑。那一刻，绝望与希望同时在场。马西纳凭这个角色摘得戛纳影后，她那张仿佛不谙世事的脸，把苦难与天真同时写尽。这是电影送给所有跌倒又爬起的人的一封情书。",
     editorialNoteEn:
@@ -170,6 +178,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 91,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["modernism", "family-drama"],
     editorialNote:
       "一位年迈的医学教授驱车前往领取荣誉学位，一路上却被梦境、回忆与懊悔层层拦截。伯格曼让老人重返童年采野草莓的夏日、重历爱情的失落，在时间的褶皱里审判自己一生的冷漠。由默片大师维克多·舍斯特勒姆亲自出演，那张苍老的脸承载了整个二十世纪对孤独的理解。这是一部关于和解的电影：不是与他人，而是与那个逐渐变得铁石心肠的自己。当老人在片尾终于梦见父母在河边向他招手，冰封的心在一瞬间融化——衰老原来也可以是一次迟来的温柔的醒悟。",
     editorialNoteEn:
@@ -311,6 +320,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 143,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["faith-and-redemption"],
     editorialNote:
       "一个庸碌了三十年、只会盖章的市政科长，被诊断出胃癌只剩数月可活。在纵酒与彷徨之后，他决定用最后的时间，顶着官僚系统的层层推诿，把一片臭水沟建成一座小公园。黑泽明用近乎残酷的诚实拷问：人怎样才算真正活过？影片后半程干脆跳到主人公的葬礼，让同事们在酒后争论他究竟做了什么——记忆与推诿之间，一个人的意义被反复称量。志村乔在雪夜的秋千上轻声哼唱的一幕，是电影史上最动人的死亡与新生。它提醒每一个在体制中麻木的人：意义不在别处，只在你肯不肯为一件小事燃尽自己。",
     editorialNoteEn:
@@ -475,6 +485,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 95,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["war"],
     editorialNote:
       "十二岁的伊万在战争中失去全家，成了红军的侦察兵，穿行于生死之间的前线沼泽。塔可夫斯基的处女作就已显露天才：他让梦境与战争交替浮现，明亮的童年闪回与阴冷的现实互为伤口。倒映的白桦、滴水的地窖、被炮火犁过的荒原，都被拍出了一种令人窒息的诗意。伊万把整个童年献给了复仇，也因此被战争彻底吞噬。影片没有一处正面歌颂英勇，只是静静记录一个孩子如何被时代碾碎。它一举拿下威尼斯金狮，宣告了一位把苦难拍成挽歌的诗人导演的诞生。",
     editorialNoteEn:
@@ -734,6 +745,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 119,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["modernism"],
     editorialNote:
       "报业大亨凯恩临终吐出的一个词“玫瑰花蕾”，牵出记者对他一生的层层追查，也拼出一幅关于权力、孤独与美国梦幻灭的碎片肖像。年仅二十五岁的威尔斯集编导演于一身，用深焦摄影、天花板入镜、时间跳跃的叙事，几乎一次性刷新了电影语言的边界。凯恩从理想主义的青年一路膨胀为众叛亲离的孤家寡人，那座塞满收藏却空无一人的庄园，是二十世纪对成功最尖锐的反讽。“玫瑰花蕾”的谜底，最终指向的是被金钱买不回的童年。它常年高居影史最伟大作品之列，至今仍是每个学电影者绕不开的起点。",
     editorialNoteEn:
@@ -919,6 +931,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 106,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["comedy"],
     editorialNote:
       "一群贵族与仆人齐聚乡间庄园狩猎作乐，情欲、谎言与阶级的游戏在楼上楼下同时上演，最终以一场荒唐的误杀收场。雷诺阿用流动的场面调度与纵深构图，让主仆、宾客在同一空间里进进出出，织成一幅战前法国社会的群像。他不审判任何人，因为“每个人都有他的理由”。狩猎场上兔子成片倒下的段落，冷不防预言了即将到来的战争屠戮。影片公映时惨遭嘘骂与删剪，二战后才被重新发现，如今稳居影史殿堂。它是喜剧也是挽歌，笑着送别一个行将崩塌的旧世界，优雅之下藏着刺骨的悲凉。",
     editorialNoteEn:
@@ -937,6 +950,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 113,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["war"],
     editorialNote:
       "一战期间，几个法国军官沦为德军战俘，在一次次越狱中，雷诺阿让我们看到：真正的界线不在国与国之间，而在阶级与阶级之间。贵族出身的法国上尉与德国典狱长惺惺相惜，跨越敌意；平民战俘则彼此扶持，跨越出身。影片几乎没有一个正面的战斗场面，却把战争的荒谬与人性的高贵拍得动人至深。德国军官放走两名越狱者、望着他们消失在中立国雪原的一幕，是对“敌人”这个概念最温柔的消解。“大幻影”既指人们以为这是最后一场战争的天真，也指所有终将被战争碾碎的美好。这是一部伟大的反战宣言。",
     editorialNoteEn:
@@ -1097,6 +1111,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 125,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["neorealism", "family-drama"],
     editorialNote:
       "孟加拉乡村，一个贫苦家庭的男孩阿普与姐姐在饥饿、疾病与四季流转中长大，见证亲人的离去与生活的坚韧。雷伊的处女作，把印度乡村的贫困拍出了近乎透明的诗意。孩子们第一次穿过白茫茫的芦苇丛、看见远处火车轰鸣而过的一幕，是电影史上最纯净的惊奇之一。姐姐病逝、全家在雨季后黯然离乡的段落，哀而不伤，托起了生命本身的重量。西塔琴大师拉维·香卡的配乐如泣如诉，让苦难流淌成歌。作为《阿普三部曲》的开篇，它以最朴素的日常证明：第三世界的角落，也能盛放最普世的诗与尊严。世界电影因它而更辽阔。",
     editorialNoteEn:
@@ -1234,6 +1249,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 190,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["romance"],
     editorialNote:
       "十九世纪巴黎的“犯罪大道”上，一个哑剧演员、一个花花公子、一个演员与一个贵族，同时爱上了神秘的女子加朗斯。卡尔内与诗人普莱维在纳粹占领下秘密拍就的这部鸿篇，把剧场、表演与得不到的爱交织成一幅法国电影最华美的画卷。哑剧大师巴洛用无声的身体道尽相思，比任何台词都更催人泪下。近三小时的篇幅里，舞台上下、真情与假意彼此渗透，最终有情人在狂欢的人潮中永远失散。它被许多法国人奉为民族电影的骄傲，是“诗意现实主义”的绝唱。在最黑暗的年代拍出如此绚烂的作品，本身就是一种不屈的宣言。",
     editorialNoteEn:
@@ -1254,6 +1270,7 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 108,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    tagSlugs: ["film-noir"],
     editorialNote:
       "一个当过拳击手、如今给码头黑帮跑腿的青年，在良心与义气之间挣扎，最终决定站出来指证盘剥工人的工会恶霸。卡赞调教出的马龙·白兰度，把方法派表演带上了新的高度——那段在出租车里对哥哥说出“我本可以是个人物，本可以是个真正的角色”的独白，成了美国电影史上最著名的时刻之一。粗粝的码头实景、赫尔曼式的配乐、赤裸的道德挣扎，让影片既是社会剧也是灵魂的救赎。有人从中读出卡赞为自己在麦卡锡时代作证的辩护，这层暧昧反而让它更加复杂动人。关于告密、勇气与自我救赎，它给出了灼热的回答。",
     editorialNoteEn:
@@ -1267,5 +1284,823 @@ export const seedFilms: SeedFilm[] = [
       },
     ],
     directorSlugs: ["elia-kazan"],
+  },
+
+  // ── 华语经典 ───────────────────────────────────────────────────────
+  // Ordered deliberately: publishedAt is derived from array index, so the
+  // first four here become the homepage 近期收录 strip.
+  {
+    slug: "spring-in-a-small-town",
+    titleZh: "小城之春",
+    titleZhHk: "小城之春",
+    titleZhTw: "小城之春",
+    titleOriginal: "小城之春",
+    titleEn: "Spring in a Small Town",
+    year: 1948,
+    countries: ["中国"],
+    runtimeMinutes: 98,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["romance", "family-drama"],
+    tmdbId: 21058,
+    editorialNote:
+      "五个人，一座炸塌了一半的园子，一段没有发生的私奔。费穆把中国电影史上最危险的题材——已婚妇人重逢旧日情人——拍成了最克制的作品：所有欲望都停在门槛前，所有台词都少说半句。玉纹在残破城墙上来回走的那几个镜头，是华语电影最早也最好的心理空间；摄影机几乎不动，人物却在原地把一生走完了。1948 年上映时正逢天翻地覆，它因「不问世事」被搁置了三十多年；重见天日之后，几乎每一次华语影史评选它都排在第一位。看它需要安静，也需要一点耐心，而那份耐心会被加倍偿还。",
+    editorialNoteEn:
+      "Five people, a garden half destroyed by bombing, and an elopement that never happens. Fei Mu took the most dangerous subject available to Chinese cinema — a married woman reunited with the man she once loved — and made from it the most restrained film imaginable: every desire stops at the threshold, every line stops half a sentence short. The shots of Yuwen walking back and forth along the broken city wall are the earliest and still the finest psychological space in Chinese-language film; the camera barely moves, and yet she walks an entire life without going anywhere. Released in 1948 as the country turned over, it was condemned as indifferent to the world and shelved for more than thirty years. Since its rediscovery it has finished first in nearly every poll of Chinese cinema ever conducted. It asks for quiet and a little patience, and it repays that patience several times over. If you watch one film in this collection, watch this one.",
+    essay: doc([
+      h2("停在门槛上的电影"),
+      p(
+        "《小城之春》的全部张力都建立在没有发生的事情上。志忱来了，玉纹去了他的房间，门开着，两人隔着一张桌子说了几句无关的话——费穆没有给任何一个可以让观众松一口气的时刻，也没有给任何一个可以让人指责的时刻。",
+      ),
+      p(
+        "这种克制不是道德保守，而是形式上的自觉。他知道一旦拍出越轨，电影就变成了事件；而只要不拍，它就一直是状态。八十年后我们仍在为这个选择震动。",
+      ),
+      quote("发乎情，止乎礼——这句老话，费穆把它拍成了摄影机的运动。"),
+    ]),
+    essayEn: doc([
+      h2("A Film That Stops at the Threshold"),
+      p(
+        "The whole tension of Spring in a Small Town rests on what does not happen. Zhichen arrives, Yuwen goes to his room, the door stays open, and the two of them exchange a few irrelevant sentences across a table. Fei Mu grants no moment where the audience can exhale, and none where it can accuse.",
+      ),
+      p(
+        "That restraint is not moral conservatism but formal self-awareness. He understood that the moment transgression is filmed the picture becomes an event, and that so long as it is withheld the picture remains a condition. Eighty years on, the choice still stuns.",
+      ),
+      quote(
+        "Feeling may begin, but it stops at propriety — an old maxim that Fei Mu turned into camera movement.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Wei Wei",
+        zhName: "韦伟",
+        character: "Zhou Yuwen",
+        characterZh: "周玉纹",
+        personSlug: "wei-wei",
+      },
+      { name: "Li Wei", zhName: "李纬", character: "Zhang Zhichen", characterZh: "章志忱" },
+      { name: "Shi Yu", zhName: "石羽", character: "Dai Liyan", characterZh: "戴礼言" },
+    ],
+    directorSlugs: ["fei-mu"],
+  },
+  {
+    slug: "in-the-mood-for-love",
+    titleZh: "花样年华",
+    titleZhHk: "花樣年華",
+    titleZhTw: "花樣年華",
+    titleOriginal: "花樣年華",
+    titleEn: "In the Mood for Love",
+    year: 2000,
+    countries: ["中国香港"],
+    runtimeMinutes: 98,
+    aspectRatio: "1.66:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["romance"],
+    tmdbId: 843,
+    editorialNote:
+      "两个被各自配偶背叛的人，在同一道楼梯上反复错身，用排练的方式演练一场不敢发生的爱情。王家卫把所有关键情节都拿掉了：出轨没有被拍，告白没有被说出，连那两位配偶的脸都始终不在画面里。剩下的是旗袍、走廊、慢镜里飘散的烟，以及梅林茂那段一响起就让人心口发紧的圆舞曲。张曼玉换了二十多件旗袍，每一件都在替她说她不能说的话；结尾梁朝伟对着吴哥窟的石洞低语，我们一个字也听不见。这是关于「错过」最精致的一部电影，也是最狠的一部。",
+    editorialNoteEn:
+      "Two people betrayed by their respective spouses keep passing each other on the same staircase, rehearsing an affair neither will allow to happen. Wong Kar-wai removed every plot point that mattered: the adultery is never shown, the declaration is never spoken, and the faces of the two unfaithful spouses never once enter the frame. What is left is cheongsams, corridors, cigarette smoke drifting through slow motion, and Shigeru Umebayashi's waltz, which tightens the chest the instant it starts. Maggie Cheung wears more than twenty dresses and each one says what she is not permitted to say. At the close, Tony Leung murmurs into a hollow in the stone at Angkor Wat and we hear not a single word of it. This is the most exquisite film ever made about missed chances, and also the cruelest — it understands that what haunts people is rarely what they did, and almost always what they were too decent to do.",
+    essay: doc([
+      h2("克制作为一种纪律"),
+      p(
+        "王家卫没有完整剧本，成片的优雅其实是大量删减之后的残余——据说关于那场婚外情本身，他拍下的素材远多于留在片中的。留下来的，是一套关于「差一点」的结构。",
+      ),
+      p(
+        "重复本身就是论证。同一条走廊、同一个面摊、同一场雨：电影很少敢于只靠复现让观众感到时间流逝，而这部片子证明了它可以。",
+      ),
+    ]),
+    essayEn: doc([
+      h2("The Discipline of Withholding"),
+      p(
+        "Wong shot without a finished script, and the film's famous elegance is the residue of enormous subtraction — reportedly far more footage of the affair was shot than survives. What remains is a structure of near-misses.",
+      ),
+      p(
+        "The repetition is the argument. The same corridor, the same noodle stall, the same rain: cinema rarely trusts an audience to feel time passing through recurrence alone, and this is the film that proves it can.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Maggie Cheung",
+        zhName: "张曼玉",
+        character: "Su Li-zhen",
+        characterZh: "苏丽珍",
+        personSlug: "maggie-cheung",
+      },
+      {
+        name: "Tony Leung Chiu-wai",
+        zhName: "梁朝伟",
+        character: "Chow Mo-wan",
+        characterZh: "周慕云",
+        personSlug: "tony-leung-chiu-wai",
+      },
+    ],
+    directorSlugs: ["wong-kar-wai"],
+  },
+  {
+    slug: "a-brighter-summer-day",
+    titleZh: "牯岭街少年杀人事件",
+    titleZhHk: "牯嶺街少年殺人事件",
+    titleZhTw: "牯嶺街少年殺人事件",
+    titleOriginal: "牯嶺街少年殺人事件",
+    titleEn: "A Brighter Summer Day",
+    year: 1991,
+    countries: ["中国台湾"],
+    runtimeMinutes: 237,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["taiwan-new-cinema", "family-drama"],
+    tmdbId: 15804,
+    editorialNote:
+      "近四小时，上百个角色，一座 1961 年的台北。杨德昌用工程师般的耐心，把眷村少年的帮派、父亲被带走的白色恐怖审讯、教室的停电与一支手电筒，编进同一张电路图里——你以为在看成长故事，其实在看一整个社会如何一步步把十四岁的小四逼到刀口上。全片大量夜戏，光源常常只有一支手电或一盏昏灯，黑暗不是风格而是处境：那是一代外省家庭悬在半空、随时准备再次搬家的处境。片长会吓退很多人，但这是华语电影里少有的、真正配得上「史诗」二字的作品，也是杨德昌最完整的一次演算。",
+    editorialNoteEn:
+      "Nearly four hours, a cast of more than a hundred, and the city of Taipei in 1961. Edward Yang applies an engineer's patience to wiring a single circuit diagram out of a teenage gang, a father hauled in for interrogation under the White Terror, a classroom blackout, and one flashlight — you think you are watching a coming-of-age story, and you are in fact watching an entire society walk a fourteen-year-old boy step by step onto the point of a knife. Much of the film is shot at night with a torch or a single dim bulb as the only source, and the darkness is not a style but a condition: the condition of a generation of mainlander families suspended in mid-air, always packed to move again. The running time will frighten people off. It should not. This is one of the rare Chinese-language films that genuinely earns the word epic, and it is Yang's most complete piece of reasoning about how a place shapes the people who grow up inside it.",
+    essay: doc([
+      h2("电路图"),
+      p(
+        "杨德昌读的是电机工程，这不是花边，是理解他的钥匙。片中上百个角色彼此不识，却通过父亲的职务、帮派的地盘、一把手电筒的归属互相咬合，任何一个节点松动，整条线路都会改变电流的方向。",
+      ),
+      p("所以结尾的那一刀既是意外，也是必然。小四不是坏孩子，他只是那个电路里电压最集中的位置。"),
+    ]),
+    essayEn: doc([
+      h2("The Circuit Diagram"),
+      p(
+        "Yang trained in electrical engineering, which is not trivia but the key to reading him. The film's hundred-odd characters do not know one another, yet they interlock through a father's job, a gang's turf, the ownership of a single flashlight; loosen any node and the current changes direction everywhere.",
+      ),
+      p(
+        "Which is why the knife at the end is at once an accident and an inevitability. Xiao Si'r is not a bad boy. He is simply the point in the circuit where the voltage concentrates.",
+      ),
+    ]),
+    cast: [
+      { name: "Chang Chen", zhName: "张震", character: "Xiao Si'r", characterZh: "小四" },
+      { name: "Lisa Yang", zhName: "杨静怡", character: "Ming", characterZh: "小明" },
+      { name: "Chang Kuo-chu", zhName: "张国柱", character: "The Father", characterZh: "父亲" },
+    ],
+    directorSlugs: ["edward-yang"],
+  },
+  {
+    slug: "the-goddess",
+    titleZh: "神女",
+    titleZhHk: "神女",
+    titleZhTw: "神女",
+    titleOriginal: "神女",
+    titleEn: "The Goddess",
+    year: 1934,
+    countries: ["中国"],
+    runtimeMinutes: 85,
+    aspectRatio: "1.33:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["silent-cinema"],
+    tmdbId: 112698,
+    editorialNote:
+      "一个母亲白天带孩子，夜里站在街边。吴永刚拍这个题材时只有二十七岁，却做出了整个时代最成熟的选择：不控诉、不怜悯，把摄影机放在与她平视的高度，连盘剥她的流氓也只是环境的一部分，而不是供人唾骂的反派。阮玲玉的表演几乎不需要字幕卡——她把攒下的钱一张张塞进墙砖缝里的那个动作，比任何台词都清楚地说明了什么叫尊严。中国默片在这里到达顶点，而拍完次年，阮玲玉在二十四岁自尽。今天再看，最动人的仍是它对主人公的信任：她不是一个社会问题，她是一个人。",
+    editorialNoteEn:
+      "A mother raises her child by day and stands on the street by night. Wu Yonggang was twenty-seven when he made this, and he made the most mature choice available to his era: no indictment, no pity, the camera set level with her, and even the thug who bleeds her registering as part of the environment rather than a villain to be hissed at. Ruan Lingyu barely needs an intertitle — the way she pushes her saved banknotes one by one into a gap in the brickwork states what dignity is more precisely than any line could. Chinese silent cinema reaches its summit here, and the year after finishing it Ruan took her own life at twenty-four. What still moves most on a fresh viewing is the film's trust in its protagonist. She is not a social problem to be solved or wept over. She is a person, filmed as one, at a moment when almost no cinema anywhere was willing to do that for a woman in her position.",
+    essay: doc([
+      h2("平视的高度"),
+      p(
+        "默片时代拍妓女，通常有两条路：控诉社会，或者渲染堕落。吴永刚两条都没走。他把机位放平，让观众和她坐在同一条板凳上，于是道德判断变成了多余的东西。",
+      ),
+      p("这一选择在 1934 年是激进的，今天依然是。很多当代电影仍在俯拍它们的主人公。"),
+    ]),
+    essayEn: doc([
+      h2("The Height of the Eye"),
+      p(
+        "Silent cinema had two standard routes for filming a prostitute: indict society, or luxuriate in the fall. Wu Yonggang took neither. He levelled the camera and sat the audience on the same bench as his heroine, at which point moral judgment simply became surplus to requirements.",
+      ),
+      p(
+        "That was a radical choice in 1934 and it remains one now. A great many contemporary films still shoot down at the people they are about.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Ruan Lingyu",
+        zhName: "阮玲玉",
+        character: "The Mother",
+        characterZh: "阮嫂",
+        personSlug: "ruan-lingyu",
+      },
+      { name: "Zhang Zhizhi", zhName: "章志直", character: "The Boss", characterZh: "流氓" },
+    ],
+    directorSlugs: ["wu-yonggang"],
+  },
+  {
+    slug: "street-angel",
+    titleZh: "马路天使",
+    titleZhHk: "馬路天使",
+    titleZhTw: "馬路天使",
+    titleOriginal: "馬路天使",
+    titleEn: "Street Angel",
+    year: 1937,
+    countries: ["中国"],
+    runtimeMinutes: 91,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["comedy", "romance"],
+    tmdbId: 112699,
+    editorialNote:
+      "上海的一条弄堂里，歌女、妓女、吹鼓手和剃头匠挤在一起过日子。袁牧之把好莱坞的喜剧节奏、苏联的剪辑与上海的市井小调焊在一起，做出了一部前所未见的中国电影：前一分钟还在窗对窗地插科打诨，后一分钟就有人被卖掉。周璇唱《四季歌》与《天涯歌女》的段落，是华语电影配乐史的起点之一，那两首歌至今还在被人传唱。笑声底下始终垫着一层薄冰——这正是三十年代上海左翼电影最厉害的地方：它从不说教，只是先让你笑，再让你明白自己笑的究竟是什么。",
+    editorialNoteEn:
+      "In one Shanghai lane a singsong girl, a prostitute, a trumpeter and a barber live crammed together. Yuan Muzhi welded Hollywood comic timing, Soviet cutting, and Shanghai street song into a Chinese film unlike any before it: one minute the neighbours are clowning at each other window to window, the next a young woman has been sold. Zhou Xuan's performances of the Four Seasons Song and The Wandering Songstress are among the founding moments of Chinese film music, and both songs are still sung today. There is always thin ice under the laughter, and that is exactly what made the Shanghai left-wing cinema of the 1930s so formidable — it never lectures. It gets you laughing first, and only then lets you work out what it is you have been laughing at. Made months before the Japanese invasion closed the studios, it is a comedy with a trapdoor under it.",
+    cast: [
+      {
+        name: "Zhou Xuan",
+        zhName: "周璇",
+        character: "Xiao Hong",
+        characterZh: "小红",
+        personSlug: "zhou-xuan",
+      },
+      { name: "Zhao Dan", zhName: "赵丹", character: "Chen Shaoping", characterZh: "陈少平" },
+      { name: "Zhao Huishen", zhName: "赵慧深", character: "Xiao Yun", characterZh: "小云" },
+    ],
+    directorSlugs: ["yuan-muzhi"],
+  },
+  {
+    slug: "the-spring-river-flows-east",
+    titleZh: "一江春水向东流",
+    titleZhHk: "一江春水向東流",
+    titleZhTw: "一江春水向東流",
+    titleOriginal: "一江春水向東流",
+    titleEn: "The Spring River Flows East",
+    year: 1947,
+    countries: ["中国"],
+    runtimeMinutes: 190,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["war", "family-drama"],
+    tmdbId: 140260,
+    editorialNote:
+      "三个多小时，一个家庭，抗战八年。蔡楚生与郑君里让同一个丈夫在重庆步步高升，让妻子在沦陷的上海一寸寸沉下去，最后在一场宴会上把两条线狠狠撞在一起。这是中国通俗剧的巅峰：结构精确得像一部长篇小说，情感却毫不吝啬。1947 年上映时连映三个多月，观众在影院里哭成一片。它不掩饰自己的煽情，因为那份煽情是有出处的——战争刚刚结束，账还没有算完，而算账的方式就是让所有人看见谁在受难、谁在赴宴。素芬最后望向江水的那个镜头，是一代人的判决书。",
+    editorialNoteEn:
+      "Three hours and more, one family, eight years of war. Cai Chusheng and Zheng Junli let the same husband rise through wartime Chongqing while his wife sinks inch by inch in occupied Shanghai, then slam the two lines together at a banquet. This is the summit of Chinese melodrama: a structure as precise as a long novel, and an emotional register with nothing held back. On release in 1947 it ran for over three months to full houses and audiences wept in the aisles. It makes no apology for its sentiment, because the sentiment had somewhere to come from — the war had only just ended, the accounting was not finished, and the way this film does the accounting is to make everyone see plainly who suffered and who went to the party. Sufen's final look out at the river is a verdict handed down on behalf of a whole generation.",
+    cast: [
+      { name: "Bai Yang", zhName: "白杨", character: "Sufen", characterZh: "素芬" },
+      { name: "Tao Jin", zhName: "陶金", character: "Zhang Zhongliang", characterZh: "张忠良" },
+      { name: "Shu Xiuwen", zhName: "舒绣文", character: "Wang Lizhen", characterZh: "王丽珍" },
+    ],
+    directorSlugs: ["cai-chusheng", "zheng-junli"],
+  },
+  {
+    slug: "a-time-to-live-a-time-to-die",
+    titleZh: "童年往事",
+    titleZhHk: "童年往事",
+    titleZhTw: "童年往事",
+    titleOriginal: "童年往事",
+    titleEn: "A Time to Live, a Time to Die",
+    year: 1985,
+    countries: ["中国台湾"],
+    runtimeMinutes: 138,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["taiwan-new-cinema", "family-drama"],
+    tmdbId: 45999,
+    editorialNote:
+      "侯孝贤把摄影机架远、架定，让一个家庭的十几年自己走完。父亲死在藤椅上，母亲的病一点点加重，祖母始终念叨着要走路回大陆——这些事大多发生在画面深处或画外，没有配乐提醒你此刻该难过。这正是台湾新电影的方法：不追戏剧高潮，让时间承担全部重量，观众必须自己走进去看。片名直译是「一段活着的时间，一段死去的时间」，看完你会明白那不是文艺腔，而是对这部电影最准确的描述。它也是理解侯孝贤的最好入口：他后来所有的远景与省略，都从这里长出来。适合在一个不赶时间的晚上看，最好是一个人。",
+    editorialNoteEn:
+      "Hou Hsiao-hsien sets the camera far back, locks it down, and lets a decade of one family's life walk itself to the end. The father dies in a rattan chair, the mother's illness deepens by degrees, the grandmother keeps announcing she will walk back to the mainland — and most of this happens deep in the frame or just outside it, with no score to tell you when to grieve. That is the method of Taiwan New Cinema: refuse the dramatic peak, let time carry the weight, and make the viewer come in and look. The Chinese title translates as a time to live and a time to die, and by the end you understand that this is not a literary flourish but the most accurate description of the film available. It is also the best door into Hou: every distant framing and every ellipsis in his later work grows from here. Watch it on an evening when you are not in a hurry, preferably alone.",
+    cast: [
+      { name: "You An-shun", zhName: "游安顺", character: "Ah-ha (teenage)", characterZh: "阿孝" },
+      { name: "Tang Ru-yun", zhName: "唐如韫", character: "Grandmother", characterZh: "祖母" },
+      { name: "Mei Fang", zhName: "梅芳", character: "Mother", characterZh: "母亲" },
+    ],
+    directorSlugs: ["hou-hsiao-hsien"],
+  },
+  {
+    slug: "a-touch-of-zen",
+    titleZh: "侠女",
+    titleZhHk: "俠女",
+    titleZhTw: "俠女",
+    titleOriginal: "俠女",
+    titleEn: "A Touch of Zen",
+    year: 1971,
+    countries: ["中国台湾"],
+    runtimeMinutes: 200,
+    aspectRatio: "2.35:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["wuxia"],
+    tmdbId: 44154,
+    editorialNote:
+      "胡金铨把武侠从打斗提升成了一种关于气与空的电影。竹林里那场埋伏——阳光穿过竹叶，刀光在叶隙间闪现，人在半空中被剪辑托住——是后来所有华语武侠动作的源头，李安在《卧虎藏龙》里几乎照着重拍了一遍。但真正让这部片子伟大的是它的后半段：厮杀忽然让位于禅，血污被日光吞没，一个和尚流出金色的血。它拒绝在类型片该结束的地方结束，而是继续往上走，走到动作片很少抵达的地方。1975 年它在戛纳拿下技术大奖，是华语电影第一次在那里被认真对待。三个多小时，前松后紧，值得那份耐心。",
+    editorialNoteEn:
+      "King Hu lifted wuxia out of fighting and into a cinema of breath and emptiness. The bamboo-forest ambush — sunlight coming through the leaves, blades flashing in the gaps, bodies held in mid-air by the cutting itself — is the headwater of all Chinese-language action that followed, and Ang Lee restaged it almost shot for shot in Crouching Tiger, Hidden Dragon. But what makes the film great is its second half, where combat abruptly gives way to Zen, gore is swallowed by daylight, and a monk bleeds gold. It refuses to end where the genre says it should and instead keeps climbing, into territory action cinema almost never reaches. It took a technical prize at Cannes in 1975, the first time a Chinese-language film was taken seriously there. Three hours and twenty minutes, slow to gather and then relentless — worth the patience it asks for.",
+    essay: doc([
+      h2("从武打到顿悟"),
+      p(
+        "胡金铨受过京剧训练，他的动作场面从不追求真实的搏斗感，而是追求锣鼓点般的节奏：起势、停顿、爆发。人物在竹林中的腾跃并不合乎物理，却完全合乎音乐。",
+      ),
+      p(
+        "而当影片进入后段，这套节奏被推到了它的尽头——打斗不再解决任何问题，于是电影只好换一种方式收场。那个流着金血的和尚，是类型片史上最大胆的一次越界。",
+      ),
+    ]),
+    essayEn: doc([
+      h2("From Combat to Enlightenment"),
+      p(
+        "King Hu trained in Peking opera, and his action was never after the feel of a real fight; it was after the beat of drum and gong — gather, hold, burst. The leaps through the bamboo obey no physics whatever and obey music completely.",
+      ),
+      p(
+        "When the film enters its final movement that rhythm is pushed to its limit: fighting no longer settles anything, so the picture has to find another way to end. The monk bleeding gold is the boldest transgression in the history of the genre.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Hsu Feng",
+        zhName: "徐枫",
+        character: "Yang Hui-zhen",
+        characterZh: "杨慧贞",
+        personSlug: "hsu-feng",
+      },
+      { name: "Shih Chun", zhName: "石隽", character: "Gu Sheng-zhai", characterZh: "顾省斋" },
+      { name: "Roy Chiao", zhName: "乔宏", character: "Abbot Hui Yuan", characterZh: "慧圆大师" },
+    ],
+    directorSlugs: ["king-hu"],
+  },
+
+  // ── 彩色与战后 ─────────────────────────────────────────────────────
+  {
+    slug: "vertigo",
+    titleZh: "迷魂记",
+    titleZhHk: "迷魂記",
+    titleZhTw: "迷魂記",
+    titleOriginal: "Vertigo",
+    titleEn: "Vertigo",
+    year: 1958,
+    countries: ["美国"],
+    runtimeMinutes: 128,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["suspense", "romance"],
+    tmdbId: 426,
+    editorialNote:
+      "一个恐高的退休警探跟踪一个女人，爱上她，失去她，然后在街上遇见一个长得像她的人——于是他开始改造对方，头发、衣服、口红，一件件逼近那个死去的幻影。希区柯克把悬疑片的外壳套在一个关于痴迷与控制的故事上，而最不安的地方在于：他让观众也成了同谋，因为我们和主角一样想看那个女人变回去。旧金山的绿色雾气、螺旋楼梯、伯纳德·赫尔曼那段永远解决不了的和声，共同做出了电影史上最美也最病态的爱情。詹姆斯·斯图尔特那张一贯可靠的脸，在这里第一次变得可怕。",
+    editorialNoteEn:
+      "A retired detective with a fear of heights follows a woman, falls in love with her, loses her, and then meets someone on the street who resembles her — whereupon he begins remaking her, hair, clothes, lipstick, item by item, toward a dead illusion. Hitchcock wrapped the shell of a suspense picture around a story about obsession and control, and the most disquieting thing about it is that he makes the audience complicit: we want to see her changed back just as badly as he does. San Francisco's green fog, the spiral staircase, and Bernard Herrmann's endlessly unresolving harmony together produce the most beautiful and most pathological love story in cinema. James Stewart's famously trustworthy face becomes frightening here for the first time, and the film never forgives him for it — or us.",
+    essay: doc([
+      h2("让观众成为同谋"),
+      p(
+        "影片中段希区柯克做了一个惊人的决定：他提前告诉观众真相，而主角还蒙在鼓里。悬念因此从「会发生什么」变成了「他什么时候会知道」——痛苦被拉长了。",
+      ),
+      p(
+        "更狠的是那场改造戏。我们本该为这个女人难过，却在绿光里等着她走出来变成朱迪。希区柯克没有指责任何人，他只是安排我们坐在了那个位置上。",
+      ),
+    ]),
+    essayEn: doc([
+      h2("Making the Audience Complicit"),
+      p(
+        "Midway through, Hitchcock makes an astonishing decision: he tells the audience the truth while leaving his protagonist in the dark. Suspense shifts from what will happen to when he will find out — and the suffering is stretched out accordingly.",
+      ),
+      p(
+        "Crueller still is the makeover scene. We ought to grieve for this woman, and instead we wait in the green light for her to walk out transformed. Hitchcock accuses no one. He simply arranged for us to be sitting where we are sitting.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "James Stewart",
+        zhName: "詹姆斯·斯图尔特",
+        character: "Scottie Ferguson",
+        personSlug: "james-stewart",
+      },
+      { name: "Kim Novak", zhName: "金·诺瓦克", character: "Madeleine / Judy" },
+      { name: "Barbara Bel Geddes", zhName: "芭芭拉·贝尔·戈德斯", character: "Midge" },
+    ],
+    directorSlugs: ["alfred-hitchcock"],
+  },
+  {
+    slug: "ran",
+    titleZh: "乱",
+    titleZhHk: "亂",
+    titleZhTw: "亂",
+    titleOriginal: "乱",
+    titleEn: "Ran",
+    year: 1985,
+    countries: ["日本", "法国"],
+    runtimeMinutes: 162,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["jidaigeki", "epic", "war"],
+    tmdbId: 11645,
+    editorialNote:
+      "黑泽明七十五岁时拍的《李尔王》，也是他一生最悲观的一部。老领主把领地分给三个儿子，随后被一一背弃，在焦土上疯掉。与早年那些相信人可以互相拯救的作品不同，这里没有救赎：城池焚毁的长镜头里没有一句台词，只有配乐，仿佛神明厌倦了往下看。色彩在这里是叙事本身——三个儿子各着一色，红黄蓝的军队在山野间移动，像棋子，也像血。他为这部片子准备了十年，画了几百张分镜彩图。如果说《七武士》是他对人的信任，《乱》就是他收回这份信任之后的账单。",
+    editorialNoteEn:
+      "Kurosawa made his King Lear at seventy-five, and it is the most pessimistic film of his life. An old warlord divides his domain among three sons, is betrayed by them in turn, and goes mad on scorched ground. Unlike the earlier work, which believed people could save one another, there is no redemption available here: the long sequence of the burning castle carries no dialogue at all, only score, as though the gods had grown tired of looking down. Color is the storytelling — each son wears his own, and the red, yellow and blue armies move across the hills like chess pieces and like blood. He prepared the film for ten years and painted hundreds of storyboards in full color while waiting for the money. If Seven Samurai is Kurosawa's trust in human beings, Ran is the invoice that arrived after he withdrew it.",
+    essay: doc([
+      h2("收回来的信任"),
+      p(
+        "早年的黑泽明相信集体：七个武士守住一个村子，一个公务员用一座公园赎回一生。《乱》里没有这样的出口，秀虎的疯癫不是个人悲剧，而是整个秩序崩塌后剩下的声音。",
+      ),
+      p(
+        "最能说明问题的是那场攻城戏：黑泽明抽掉了全部现场音，只留下音乐。当暴力大到某个程度，写实反而失效，只剩下仪式。",
+      ),
+    ]),
+    essayEn: doc([
+      h2("Trust, Withdrawn"),
+      p(
+        "The early Kurosawa believed in the collective: seven samurai hold a village, a dying clerk redeems a life with one park. Ran offers no such exit. Hidetora's madness is not a personal tragedy but the sound left over after an entire order has collapsed.",
+      ),
+      p(
+        "The siege makes the case. Kurosawa strips out every trace of location sound and leaves only music. Past a certain magnitude of violence realism stops working, and all that remains is ritual.",
+      ),
+    ]),
+    cast: [
+      {
+        name: "Tatsuya Nakadai",
+        zhName: "仲代达矢",
+        character: "Hidetora Ichimonji",
+        characterZh: "一文字秀虎",
+        personSlug: "tatsuya-nakadai",
+      },
+      {
+        name: "Mieko Harada",
+        zhName: "原田美枝子",
+        character: "Lady Kaede",
+        characterZh: "枫夫人",
+      },
+    ],
+    directorSlugs: ["akira-kurosawa"],
+  },
+  {
+    slug: "2001-a-space-odyssey",
+    titleZh: "2001太空漫游",
+    titleZhHk: "2001太空漫遊",
+    titleZhTw: "2001太空漫遊",
+    titleOriginal: "2001: A Space Odyssey",
+    titleEn: "2001: A Space Odyssey",
+    year: 1968,
+    countries: ["英国", "美国"],
+    runtimeMinutes: 149,
+    aspectRatio: "2.20:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["science-fiction", "modernism"],
+    tmdbId: 62,
+    editorialNote:
+      "一根被抛向空中的骨头，切给一艘飞船，四百万年在一个镜头里过去——这大概是电影史上最著名的一次剪辑，也说明了库布里克想干什么：他要拍的不是未来，而是人这个物种。影片几乎没有台词，最有人味的角色是一台电脑，而结尾那段没有解释的光之旅至今仍在被争论。1968 年首映时观众中途离场，评论刻薄；今天它被公认为科幻片的天花板，此后所有太空电影都在向它交学费。请尽可能在最大的银幕上看，并且不要中途查手机——这部电影的节奏本身就是它的论点。",
+    editorialNoteEn:
+      "A bone thrown into the air cuts to a spacecraft and four million years pass inside a single edit — probably the most famous cut in cinema, and a clear statement of what Kubrick was after: not the future, but the species. There is almost no dialogue, the most human character is a computer, and the unexplained corridor of light at the end is still being argued about. Audiences walked out of the 1968 premiere and the reviews were unkind. It is now the ceiling of the genre, and every space film since has been paying it tuition. See it on the largest screen you can find and do not check your phone; the film's tempo is not a delivery mechanism for its argument, it is the argument. Kubrick believed a picture could work on an audience the way music does, without passing through explanation first, and this is where he proved it.",
+    essay: doc([
+      h2("不解释的电影"),
+      p(
+        "库布里克拒绝为结尾提供答案，这不是故弄玄虚。他相信电影可以像音乐一样直接作用于人，而一旦给出解释，作品就退化成了一道有标准答案的谜题。",
+      ),
+      p(
+        "所以片中最动人的死亡属于 HAL——一台电脑在被拔掉记忆板时唱起儿歌。人类角色面无表情地执行任务，机器却在恐惧。这个反转就是全片的论点。",
+      ),
+    ]),
+    essayEn: doc([
+      h2("A Film That Refuses to Explain"),
+      p(
+        "Kubrick declined to supply an answer for the ending, and this is not mystification. He believed film could act on a person directly, the way music does, and that an explanation would demote the work to a riddle with a correct solution.",
+      ),
+      p(
+        "Which is why the most affecting death in the picture belongs to HAL — a computer singing a children's song as its memory is pulled. The human characters carry out their tasks expressionlessly while the machine is afraid. That inversion is the whole argument.",
+      ),
+    ]),
+    cast: [
+      { name: "Keir Dullea", zhName: "凯尔·杜拉", character: "Dave Bowman" },
+      { name: "Douglas Rain", zhName: "道格拉斯·雷恩", character: "HAL 9000 (voice)" },
+    ],
+    directorSlugs: ["stanley-kubrick"],
+  },
+  {
+    slug: "la-dolce-vita",
+    titleZh: "生活的甜蜜",
+    titleZhHk: "露滴牡丹開",
+    titleZhTw: "生活的甜蜜",
+    titleOriginal: "La dolce vita",
+    titleEn: "La Dolce Vita",
+    year: 1960,
+    countries: ["意大利", "法国"],
+    runtimeMinutes: 174,
+    aspectRatio: "2.35:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["modernism"],
+    tmdbId: 439,
+    editorialNote:
+      "一架直升机吊着耶稣像飞过罗马上空，下面泳池边的女人挥手打招呼——开场三分钟，费里尼就把战后意大利的全部处境说完了。影片没有情节，只有七个昼夜、七场派对，一个记者在其中越陷越深。这是费里尼从新现实主义转身的时刻：他不再关心穷人如何活下去，而开始追问富起来之后的人为什么依然空。特莱维喷泉那场戏成了永恒的银幕图像，而片中那个摄影记者的名字 Paparazzo，从此变成了全世界通用的词。结尾海滩上那条怪鱼睁着眼睛，谁也没能给出解释。",
+    editorialNoteEn:
+      "A helicopter carries a statue of Christ over Rome while women beside a rooftop pool wave up at it — three minutes in, Fellini has already stated the entire condition of postwar Italy. There is no plot, only seven days and nights and seven parties, with a journalist sinking further at each one. This is the moment Fellini turns away from neorealism: he stops asking how the poor survive and starts asking why people remain empty after they get rich. The Trevi Fountain sequence became a permanent image, and the name of the film's photographer, Paparazzo, became a word in every language on earth. On the beach at the end a monstrous fish lies staring, and nobody has ever satisfactorily explained it — which is exactly right, because the film is about a society that has run out of things it can explain to itself.",
+    cast: [
+      {
+        name: "Marcello Mastroianni",
+        zhName: "马塞洛·马斯楚安尼",
+        character: "Marcello Rubini",
+        personSlug: "marcello-mastroianni",
+      },
+      { name: "Anita Ekberg", zhName: "安妮塔·艾克伯格", character: "Sylvia" },
+      { name: "Anouk Aimée", zhName: "阿努克·艾梅", character: "Maddalena" },
+    ],
+    directorSlugs: ["federico-fellini"],
+  },
+  {
+    slug: "an-autumn-afternoon",
+    titleZh: "秋刀鱼之味",
+    titleZhHk: "秋刀魚之味",
+    titleZhTw: "秋刀魚之味",
+    titleOriginal: "秋刀魚の味",
+    titleEn: "An Autumn Afternoon",
+    year: 1962,
+    countries: ["日本"],
+    runtimeMinutes: 113,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["family-drama"],
+    tmdbId: 50759,
+    editorialNote:
+      "小津的最后一部电影，也是他唯一一次在彩色里拍完那个讲了一辈子的故事：女儿要出嫁，父亲要独自留下。红色的水壶、蓝色的招牌、走廊尽头的一点橘光——他把颜色当作构图的支点，而不是写实的工具，于是彩色不但没有破坏他的形式，反而让那份克制更清晰。结尾父亲在婚礼后独自回家，哼着军歌，坐在空荡的屋子里，什么也没发生。次年小津去世，享年六十岁，生日与忌日是同一天。看过他其他作品的人会在这里感到某种告别；没看过的人，从这一部开始也完全可以。",
+    editorialNoteEn:
+      "Ozu's final film, and the only time he told his lifelong story in color: a daughter is to be married, and a father will be left alone. A red kettle, a blue shop sign, a patch of orange at the end of a corridor — he treats color as a pivot for composition rather than a tool for realism, so it does not disturb his form at all and instead makes the restraint easier to see. At the end the father comes home from the wedding, hums an old navy song, and sits in an empty house, and nothing happens. Ozu died the following year at sixty, on the same date he had been born. Anyone who knows the rest of his work will feel a farewell in this one. Anyone who does not can begin here with no disadvantage whatsoever.",
+    cast: [
+      {
+        name: "Chishū Ryū",
+        zhName: "笠智众",
+        character: "Shuhei Hirayama",
+        characterZh: "平山周平",
+        personSlug: "chishu-ryu",
+      },
+      { name: "Shima Iwashita", zhName: "岩下志麻", character: "Michiko", characterZh: "路子" },
+    ],
+    directorSlugs: ["yasujiro-ozu"],
+  },
+  {
+    slug: "red-desert",
+    titleZh: "红色沙漠",
+    titleZhHk: "紅色沙漠",
+    titleZhTw: "紅色沙漠",
+    titleOriginal: "Il deserto rosso",
+    titleEn: "Red Desert",
+    year: 1964,
+    countries: ["意大利", "法国"],
+    runtimeMinutes: 117,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["modernism"],
+    tmdbId: 26638,
+    editorialNote:
+      "安东尼奥尼的第一部彩色片，他的做法是把颜色直接刷到现实上：草地喷成灰色，水果摊漆成白色，工厂的管道涂成刺目的黄。这不是布景，是女主角的神经系统——她在工业化的拉文纳走来走去，无法说清自己得了什么病，而整个世界的颜色替她说了。影片几乎没有情节，很多人会觉得闷，但它是电影史上第一次真正把色彩当作心理状态来使用，此后所有关于「现代人异化」的画面都欠它一笔。莫妮卡·维蒂的表演同样反常规：她不演崩溃，只演一个人努力维持正常的那种吃力。适合在心情稳定的时候看，它不安慰人，也不打算安慰人。",
+    editorialNoteEn:
+      "Antonioni's first film in color, and his method was to paint color directly onto reality: grass sprayed gray, a fruit stall painted white, factory pipework in a punishing yellow. This is not set dressing, it is the heroine's nervous system — she moves through industrial Ravenna unable to say what is wrong with her, and the color of the world says it on her behalf. There is almost no plot and plenty of viewers find it inert. It is also the first time cinema used color as a psychological state rather than a description, and every subsequent image of modern alienation is in its debt. Monica Vitti's performance is equally against the grain: she does not play breakdown, she plays the effort of holding normality together. Watch it when you are feeling steady; it offers no comfort and has no intention of offering any.",
+    cast: [
+      { name: "Monica Vitti", zhName: "莫妮卡·维蒂", character: "Giuliana" },
+      { name: "Richard Harris", zhName: "理查德·哈里斯", character: "Corrado Zeller" },
+    ],
+    directorSlugs: ["michelangelo-antonioni"],
+  },
+  {
+    slug: "cries-and-whispers",
+    titleZh: "呼喊与细语",
+    titleZhHk: "哭泣與耳語",
+    titleZhTw: "哭泣與耳語",
+    titleOriginal: "Viskningar och rop",
+    titleEn: "Cries and Whispers",
+    year: 1972,
+    countries: ["瑞典"],
+    runtimeMinutes: 91,
+    aspectRatio: "1.66:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["faith-and-redemption", "family-drama"],
+    tmdbId: 10238,
+    editorialNote:
+      "一栋红色的宅子里，一个女人正在死去，两个姐妹守在旁边，谁也无法真正靠近谁。伯格曼说他一生反复梦见一个全红的房间，于是整部电影就建在那个梦里——墙是红的，帷幕是红的，连场景之间的转场都用整幅红色画面切开，像血，也像子宫。摄影师尼克维斯特凭此片拿下奥斯卡，那些脸部特写在烛光下几乎是宗教画。这是伯格曼最不留情的一部：临终的痛苦被拍得毫不修饰，而亲情在这里没有拯救任何人，真正给出安慰的反而是那位不说话的女仆。九十分钟，看完需要缓一会儿再开口说话。",
+    editorialNoteEn:
+      "In a red house a woman is dying while two sisters keep vigil, and none of the three can genuinely reach another. Bergman said he dreamed repeatedly of a room that was entirely red, and the film is built inside that dream — red walls, red drapes, and even the transitions between scenes cut through a full frame of red, like blood and like a womb. Sven Nykvist won an Oscar for the photography, and the faces in candlelight are close to religious painting. This is Bergman at his least merciful: the pain of dying is filmed without softening, and family love saves precisely nobody. The only real comfort in the house comes from the servant, who says almost nothing and is not related to any of them. Ninety minutes, and you will want to sit still for a while afterwards before speaking to anyone.",
+    cast: [
+      { name: "Harriet Andersson", zhName: "哈里特·安德森", character: "Agnes" },
+      { name: "Ingrid Thulin", zhName: "英格丽·图林", character: "Karin" },
+      { name: "Liv Ullmann", zhName: "丽芙·乌曼", character: "Maria" },
+    ],
+    directorSlugs: ["ingmar-bergman"],
+  },
+  {
+    slug: "the-mirror",
+    titleZh: "镜子",
+    titleZhHk: "鏡子",
+    titleZhTw: "鏡子",
+    titleOriginal: "Зеркало",
+    titleEn: "The Mirror",
+    year: 1975,
+    countries: ["苏联"],
+    runtimeMinutes: 107,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["modernism"],
+    tmdbId: 1396,
+    editorialNote:
+      "塔可夫斯基最私人也最难的一部：没有情节，没有连贯的时间，母亲、妻子由同一个演员扮演，童年、战争、新闻片与梦境彼此渗透。它不要求你看懂，它要求你回忆——很多人第一次看会困惑，第二次看会在某个毫无预兆的镜头前掉眼泪，比如风吹过荞麦地，或者一间木屋在雨中缓缓烧起来。彩色与黑白在片中交替出现，不按逻辑，只按记忆的温度。如果你想知道电影除了讲故事还能做什么，这部片子是最直接的答案。请挑一个不会被打断的夜晚。",
+    editorialNoteEn:
+      "Tarkovsky's most private and most difficult film: no plot, no continuous time, the mother and the wife played by the same actor, and childhood, war, newsreel and dream all seeping into one another. It does not ask you to follow it; it asks you to remember. Most people are baffled the first time and then, on a second viewing, find themselves crying at something entirely unheralded — wind moving across a field of buckwheat, or a wooden barn burning slowly in the rain. Color and black-and-white alternate throughout on no logic but the temperature of memory, and the poems on the soundtrack are read by the director's own father. If you want to know what film can do besides tell a story, this is the most direct answer available. Choose an evening when nothing will interrupt you.",
+    cast: [
+      {
+        name: "Margarita Terekhova",
+        zhName: "玛格丽塔·捷列霍娃",
+        character: "Mother / Natalia",
+      },
+      { name: "Ignat Daniltsev", zhName: "伊格纳特·丹尼尔采夫", character: "Ignat / Alexei" },
+    ],
+    directorSlugs: ["andrei-tarkovsky"],
+  },
+  {
+    slug: "a-man-escaped",
+    titleZh: "死囚越狱",
+    titleZhHk: "死囚越獄",
+    titleZhTw: "死囚越獄",
+    titleOriginal: "Un condamné à mort s'est échappé",
+    titleEn: "A Man Escaped",
+    year: 1956,
+    countries: ["法国"],
+    runtimeMinutes: 101,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["faith-and-redemption", "war"],
+    tmdbId: 15244,
+    editorialNote:
+      "片名已经告诉你结局，布列松却依然让这一百分钟紧张得难以呼吸。一个法国抵抗组织成员在里昂的监狱里准备越狱：他磨勺子、拆门板、把床单撕成绳子，摄影机几乎只拍手和物件，声音全靠走廊的脚步与远处的火车。没有配乐渲染，没有闪回交代，也没有一场戏是为了让你认识这个人——但你会在结尾发现自己已经和他一起活了一百分钟。这是极简主义最有力的证明：越是拿掉，越是留下。布列松说他拍的是「圣灵随心所欲地吹拂」，这句话看完就懂了。",
+    editorialNoteEn:
+      "The title gives away the ending and Bresson still makes these hundred minutes almost too tense to breathe through. A member of the French Resistance prepares to break out of a prison in Lyon: he grinds down a spoon, works a door apart, tears bedding into rope, and the camera looks at almost nothing but hands and objects while the sound is footsteps in a corridor and a train somewhere outside. No score underlines anything, no flashback explains him, and not one scene exists to introduce him as a personality — yet by the end you find you have been living alongside him the whole time. It is the most forceful demonstration of minimalism there is: the more that is removed, the more remains. Bresson said his subject was the wind blowing where it wishes, and the film makes that plain.",
+    cast: [{ name: "François Leterrier", zhName: "弗朗索瓦·勒泰里耶", character: "Fontaine" }],
+    directorSlugs: ["robert-bresson"],
+  },
+  {
+    slug: "rome-open-city",
+    titleZh: "罗马，不设防的城市",
+    titleZhHk: "羅馬，不設防的城市",
+    titleZhTw: "不設防城市",
+    titleOriginal: "Roma città aperta",
+    titleEn: "Rome, Open City",
+    year: 1945,
+    countries: ["意大利"],
+    runtimeMinutes: 103,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["neorealism", "war"],
+    tmdbId: 307,
+    editorialNote:
+      "新现实主义从这里开始。罗西里尼在德军刚撤走的罗马开拍，胶片是东拼西凑买来的，街道就是真的街道，很多群众演员几个月前刚刚经历过片里的事。安娜·马尼亚尼追着卡车奔跑然后倒下的那个镜头，是电影史上最著名的画面之一，而它之所以有力，正是因为周围的一切都不像在演戏。影片粗糙、噪点很重、录音也差，但这些「缺点」后来变成了一整套美学，直接影响了此后七十年的世界电影。看它不是看一部老片，是看一件在废墟上抢救出来的证物。",
+    editorialNoteEn:
+      "Neorealism begins here. Rossellini started shooting in Rome as the German army was pulling out, using film stock bought in scraps wherever he could find it, on streets that were simply the streets, with extras who had lived through the events being staged only months earlier. The shot of Anna Magnani running after a truck and falling is among the most famous images in cinema, and its force comes precisely from the fact that nothing around it looks like acting. The film is rough, heavily grained and badly recorded, and those defects became an entire aesthetic that has shaped world cinema for seventy years since. Rossellini was not documenting a style; he was working with what a bombed city could supply, and the style is what survived of the necessity. Watching it is less like watching an old film than like examining evidence salvaged from rubble.",
+    cast: [
+      { name: "Anna Magnani", zhName: "安娜·马尼亚尼", character: "Pina" },
+      { name: "Aldo Fabrizi", zhName: "阿尔多·法布里齐", character: "Don Pietro" },
+    ],
+    directorSlugs: ["roberto-rossellini"],
+  },
+  {
+    slug: "harakiri",
+    titleZh: "切腹",
+    titleZhHk: "切腹",
+    titleZhTw: "切腹",
+    titleOriginal: "切腹",
+    titleEn: "Harakiri",
+    year: 1962,
+    countries: ["日本"],
+    runtimeMinutes: 133,
+    aspectRatio: "2.35:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["jidaigeki"],
+    tmdbId: 14537,
+    editorialNote:
+      "一个落魄浪人走进大名的宅邸，说要在此切腹。对方允许了，并打算看一场好戏——然后他开始讲一个故事，而这个故事会把整座宅子的体面拆得干干净净。小林正树用最工整的构图拍最锋利的控诉：庭院对称、家臣列坐、一切都合乎礼法，正因如此，当真相一层层揭开时才格外骇人。片中那把竹刀是电影史上最残忍的道具之一，它逼出的问题很简单：当荣誉只剩下形式，维持形式的代价由谁来付。仲代达矢的表演由始至终压着，直到最后才爆发。如果你觉得武士片就是打打杀杀，这部会彻底改变你的看法。",
+    editorialNoteEn:
+      "A destitute masterless samurai walks into a great house and announces he intends to disembowel himself there. Permission is granted and the retainers settle in to enjoy the spectacle — and then he begins telling a story, and the story dismantles the entire decorum of the house. Kobayashi films the sharpest possible indictment in the most orderly possible compositions: the courtyard symmetrical, the retainers ranked, everything correct according to form, which is exactly what makes the truth so appalling as it is peeled back layer by layer. The bamboo blade is one of the cruellest props in cinema, and the question it forces is a simple one: when honour has been reduced to form, who pays the cost of maintaining the form. Nakadai holds his performance down throughout and detonates it only at the very end. If you think samurai films are about swordplay, this one will change your mind permanently.",
+    cast: [
+      {
+        name: "Tatsuya Nakadai",
+        zhName: "仲代达矢",
+        character: "Hanshiro Tsugumo",
+        characterZh: "津云半四郎",
+        personSlug: "tatsuya-nakadai",
+      },
+      {
+        name: "Rentarō Mikuni",
+        zhName: "三国连太郎",
+        character: "Kageyu Saito",
+        characterZh: "斋藤勘解由",
+      },
+    ],
+    directorSlugs: ["masaki-kobayashi"],
+  },
+  {
+    slug: "floating-clouds",
+    titleZh: "浮云",
+    titleZhHk: "浮雲",
+    titleZhTw: "浮雲",
+    titleOriginal: "浮雲",
+    titleEn: "Floating Clouds",
+    year: 1955,
+    countries: ["日本"],
+    runtimeMinutes: 123,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: true,
+    tagSlugs: ["family-drama", "romance"],
+    tmdbId: 77285,
+    editorialNote:
+      "一对在战时越南相爱的男女，回到战败后的东京，发现那段感情在这里没有位置。成濑巳喜男不给他们任何一个可以重新开始的机会，也不让他们干脆分开——两人就这样拖着，借钱、争吵、投奔、又离开，一路走到最南端的岛上。这是日本电影里最不浪漫的爱情片，也是最真实的一部：它明白人不是被一次打击摧毁的，而是被无数次微小的将就磨平的。高峰秀子的表演几乎没有情绪爆发，却让你看见一个女人如何一寸寸认命。看完会有点难过，但那种难过很干净。",
+    editorialNoteEn:
+      "A man and a woman who fell in love in wartime Indochina return to a defeated Tokyo and discover their feeling has nowhere to live. Naruse gives them no opening to begin again and does not let them cleanly separate either — they simply drag on, borrowing money, quarrelling, turning up on each other's doorsteps, leaving again, all the way down to an island at the southern end of the country. It is the least romantic love story in Japanese cinema and the truest: it understands that people are not destroyed by a single blow but worn flat by countless small accommodations. Hideko Takamine barely raises her voice and yet you watch a woman resign herself inch by inch. You will feel low afterwards, but it is a clean kind of low.",
+    cast: [
+      { name: "Hideko Takamine", zhName: "高峰秀子", character: "Yukiko", characterZh: "雪子" },
+      { name: "Masayuki Mori", zhName: "森雅之", character: "Kengo", characterZh: "富冈兼吾" },
+    ],
+    directorSlugs: ["mikio-naruse"],
+  },
+  {
+    slug: "playtime",
+    titleZh: "游戏时间",
+    titleZhHk: "遊戲時間",
+    titleZhTw: "遊戲時間",
+    titleOriginal: "Play Time",
+    titleEn: "Playtime",
+    year: 1967,
+    countries: ["法国", "意大利"],
+    runtimeMinutes: 124,
+    aspectRatio: "1.85:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["comedy", "modernism"],
+    tmdbId: 10227,
+    editorialNote:
+      "塔蒂花光身家造了一座城：钢铁、玻璃、直角，全部按他的笑话尺寸定做。影片里没有主角——于洛先生只是众多迷路者之一——也几乎没有台词，笑点分散在画面的各个角落，同一个镜头里可能同时发生七八件事，你看哪里，哪里就是主线。这是对观众注意力的一次彻底反叛：别人的喜剧告诉你什么时候笑，塔蒂让你自己去找。影片当年惨败，令他破产，此后再没能恢复元气。今天它被视作电影史上最精密的喜剧建筑，值得为它专门腾出一个晚上，并且看第二遍。",
+    editorialNoteEn:
+      "Tati spent his entire fortune building a city — steel, glass, right angles, every piece custom-made to the dimensions of his jokes. There is no protagonist; Monsieur Hulot is merely one of many people who have got lost. There is almost no dialogue either, and the gags are distributed across every corner of the frame, with seven or eight things sometimes happening at once, so that whatever you happen to look at becomes the main action. It is a wholesale revolt against how comedy manages attention: other films tell you when to laugh, and Tati makes you go and find it. It flopped, bankrupted him, and he never recovered. It is now considered the most precisely engineered comic architecture ever built, and it repays a second viewing more than almost anything else here.",
+    cast: [{ name: "Jacques Tati", zhName: "雅克·塔蒂", character: "Monsieur Hulot" }],
+    directorSlugs: ["jacques-tati"],
+  },
+  {
+    slug: "the-red-shoes",
+    titleZh: "红菱艳",
+    titleZhHk: "紅菱艷",
+    titleZhTw: "紅菱豔",
+    titleOriginal: "The Red Shoes",
+    titleEn: "The Red Shoes",
+    year: 1948,
+    countries: ["英国"],
+    runtimeMinutes: 135,
+    aspectRatio: "1.37:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["musical", "romance"],
+    tmdbId: 19542,
+    editorialNote:
+      "一个芭蕾舞者被要求在爱情与艺术之间二选一，而这部电影认为这个选择本身就是致命的。中段那场十七分钟的《红菱艳》舞剧，是特艺七彩最放肆的一次挥霍：布景在舞者脚下变形，纸张变成人，海浪变成舞台，电影彻底放弃了写实，改用舞蹈的逻辑说话。鲍威尔与普雷斯伯格把英国影坛的克制传统整个掀翻，拍出了一部关于「被自己的天赋吞噬」的恐怖片——那双红鞋一旦穿上就停不下来，这个童话在片中是字面意义上的真的。此后无数导演承认自己是因为这部片子才开始拍电影。",
+    editorialNoteEn:
+      "A ballerina is told to choose between love and art, and the film's position is that the demand itself is fatal. The seventeen-minute ballet at its centre is the most extravagant use Technicolor was ever put to: sets deform beneath the dancer, sheets of newspaper become a man, waves become a stage, and the picture abandons realism entirely to argue in the logic of dance instead. Powell and Pressburger overturned the whole restrained tradition of British cinema to make what is finally a horror film about being devoured by your own gift — once the red shoes go on they cannot be stopped, and in this film the fairy tale is literally true. A remarkable number of directors have said afterwards that this is the film that made them want to make films.",
+    cast: [
+      { name: "Moira Shearer", zhName: "莫伊拉·希勒", character: "Victoria Page" },
+      { name: "Anton Walbrook", zhName: "安东·沃尔布鲁克", character: "Boris Lermontov" },
+    ],
+    directorSlugs: ["michael-powell", "emeric-pressburger"],
+  },
+  {
+    slug: "lawrence-of-arabia",
+    titleZh: "阿拉伯的劳伦斯",
+    titleZhHk: "沙漠梟雄",
+    titleZhTw: "阿拉伯的勞倫斯",
+    titleOriginal: "Lawrence of Arabia",
+    titleEn: "Lawrence of Arabia",
+    year: 1962,
+    countries: ["英国"],
+    runtimeMinutes: 218,
+    aspectRatio: "2.20:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["epic", "war"],
+    tmdbId: 947,
+    editorialNote:
+      "一根火柴被吹灭，切给一轮沙漠上升起的红日——里恩用一个剪辑就宣告了什么叫大银幕。四个小时里，沙漠不是背景而是角色：它吞掉队伍、吞掉时间，也吞掉劳伦斯这个人。影片最了不起的地方不是场面，而是它对英雄的怀疑——你看着一个理想主义者一点点爱上自己的传奇，然后被这份传奇掏空，最后连他自己都认不出镜子里的人。这是史诗片的最高标准，也几乎是最后一部无法用电脑合成的史诗。请务必找最大的屏幕，四个小时不算长，前提是你别在手机上看。",
+    editorialNoteEn:
+      "A match is blown out and the film cuts to a red sun rising over the desert — with one edit Lean declared what a large screen is for. Across four hours the desert is not scenery but a character: it swallows columns of men, swallows time, and swallows Lawrence himself. What is most remarkable is not the scale but the film's suspicion of its own hero — you watch an idealist fall gradually in love with his legend, get hollowed out by it, and end unable to recognise the man in the mirror. This is the standard against which epics are measured, and very nearly the last epic that could not have been assembled in a computer. Find the largest screen available to you. Four hours is not long, provided you are not watching it on a phone.",
+    cast: [
+      { name: "Peter O'Toole", zhName: "彼得·奥图尔", character: "T. E. Lawrence" },
+      { name: "Omar Sharif", zhName: "奥马尔·沙里夫", character: "Sherif Ali" },
+      { name: "Alec Guinness", zhName: "亚历克·吉尼斯", character: "Prince Faisal" },
+    ],
+    directorSlugs: ["david-lean"],
+  },
+  {
+    slug: "apocalypse-now",
+    titleZh: "现代启示录",
+    titleZhHk: "現代啟示錄",
+    titleZhTw: "現代啟示錄",
+    titleOriginal: "Apocalypse Now",
+    titleEn: "Apocalypse Now",
+    year: 1979,
+    countries: ["美国"],
+    runtimeMinutes: 147,
+    aspectRatio: "2.35:1",
+    isBlackAndWhite: false,
+    tagSlugs: ["war", "epic"],
+    tmdbId: 28,
+    editorialNote:
+      "科波拉把康拉德的《黑暗之心》搬到越南，让一艘小艇逆流而上去刺杀一个疯掉的上校，结果拍出了一部本身就在发疯的电影。菲律宾的拍摄失控到近乎传奇：台风摧毁布景，主演心脏病发，预算靠他抵押家产维持，成片里那种越往上游越不讲道理的气氛，有一半来自剧组自己的处境。直升机伴着瓦格纳扫射村庄的段落已成经典，但真正留下的是后半段的黑暗——当叙事逻辑一起崩溃时，战争片终于不再假装战争可以被讲述。这不是一部关于越战的电影，它本身就是一场战争。",
+    editorialNoteEn:
+      "Coppola moved Conrad's Heart of Darkness to Vietnam, sent a patrol boat upriver to assassinate a colonel who has gone mad, and ended up making a film that is itself deranged. The Philippine shoot became legendary for going out of control: a typhoon destroyed the sets, the lead actor had a heart attack, and the budget was kept alive against his own mortgaged property — and fully half of the film's sense that reason thins the further upriver you go comes from the circumstances of the crew. The helicopter assault set to Wagner is long since canonical, but what actually stays with you is the darkness of the last hour, where the narrative logic collapses along with everything else and the war film finally stops pretending war can be narrated at all.",
+    cast: [
+      {
+        name: "Martin Sheen",
+        zhName: "马丁·辛",
+        character: "Captain Willard",
+      },
+      {
+        name: "Marlon Brando",
+        zhName: "马龙·白兰度",
+        character: "Colonel Kurtz",
+        personSlug: "marlon-brando",
+      },
+      { name: "Robert Duvall", zhName: "罗伯特·杜瓦尔", character: "Lt. Col. Kilgore" },
+    ],
+    directorSlugs: ["francis-ford-coppola"],
   },
 ];

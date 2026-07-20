@@ -6,6 +6,13 @@ import type { SeedDirector } from "./types";
  * bio (enough on its own to publish) and, for the major figures, a
  * 创作历程 essay. Prose is original; no exhaustive filmographies — this is
  * a curatorial site, not a database.
+ *
+ * `tmdbPersonId` is pinned on every entry added from the 华语电影 block
+ * onward. The portrait fallback searches by Latin name and takes the first
+ * result with a photo, which happens to be right today but is a silent
+ * failure when it is not — TMDB re-ranks, and a wrong portrait looks
+ * exactly like a right one. The earlier entries predate that policy and
+ * already carry seeded portraits, so backfilling them would be inert.
  */
 export const seedDirectors: SeedDirector[] = [
   {
@@ -583,6 +590,444 @@ export const seedDirectors: SeedDirector[] = [
       ),
       p(
         "Brando's \"I coulda been a contender\" in On the Waterfront is the summit of that acting, and it quietly mirrors Kazan's own controversy over the names he gave in his McCarthy-era testimony. His films are forever smoldering in the gap between social conscience and personal weakness.",
+      ),
+    ]),
+  },
+
+  // ── 华语电影 ────────────────────────────────────────────────────────
+  {
+    slug: "fei-mu",
+    name: "Fei Mu",
+    nameZh: "费穆",
+    tmdbPersonId: 233200,
+    bio: "中国导演，1906–1951。把中国古典诗的留白带进电影：镜头缓慢游移，人物欲言又止，一段战后废墟上的私情因此有了千年的重量。",
+    careerEssay: doc([
+      p(
+        "费穆是三十年代上海影坛最不像同代人的那一个。同行忙着把电影当武器，他却在《城市之夜》《香雪海》里琢磨光线与静默；沦陷期间拍《孔夫子》，用一个不合时宜的圣人说不能明说的话。1948 年他与梅兰芳合作《生死恨》，拍出了中国第一部彩色影片。",
+      ),
+      p(
+        "《小城之春》是他唯一一次把全部本领用在一件小事上：五个人，一座破园子，一段没有发生的私奔。上映时正值天翻地覆，批评者嫌它耽于个人情绪，影片随即被封存数十年。八十年代重新出土后，它几乎在每一次华语影史评选中位居榜首。费穆 1951 年病逝于香港，四十五岁，只留下这一部完成度极高的杰作。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1906–1951. He carried the negative space of classical Chinese poetry into cinema: the camera drifts, the characters stop short of saying what they mean, and a private affair among postwar ruins takes on the weight of a thousand years.",
+    careerEssayEn: doc([
+      p(
+        "Fei Mu was the least typical figure in 1930s Shanghai cinema. While his contemporaries were busy treating film as a weapon, he was studying light and silence in Night in the City and Sea of Fragrant Snow; under the occupation he made Confucius, using an unfashionable sage to say what could not be said outright. In 1948, working with the opera master Mei Lanfang, he shot Remorse at Death — the first Chinese film in color.",
+      ),
+      p(
+        "Spring in a Small Town is the one time he spent everything he knew on something small: five people, a ruined garden, an elopement that never happens. It opened as the country was turning upside down, critics found it self-absorbed, and it was shelved for decades. Unearthed in the 1980s, it has since topped nearly every poll of Chinese-language cinema ever conducted. Fei Mu died in Hong Kong in 1951 at forty-five, leaving this one fully realized masterpiece behind.",
+      ),
+    ]),
+  },
+  {
+    slug: "wu-yonggang",
+    name: "Wu Yonggang",
+    nameZh: "吴永刚",
+    tmdbPersonId: 1073182,
+    bio: "中国导演，1907–1982。二十七岁以处女作《神女》立身：不控诉、不说教，只是把摄影机架在与妓女平视的高度上。",
+    careerEssay: doc([
+      p(
+        "吴永刚做过美工，对画面的洁癖贯穿一生。《神女》是他的第一部片子，也是默片时代中国电影的最高点之一——他拒绝把主人公拍成道德案例，镜头始终与她平视，连那个流氓也只是环境的一部分，而不是可供唾骂的反派。",
+      ),
+      p(
+        "此后的《浪淘沙》走得更远，两个人困在荒岛上互相铐着，几乎是中国电影里少见的存在主义寓言。战后与新中国的数十年里他历经批判与沉默，直到 1980 年与吴贻弓合导《巴山夜雨》，才重新被看见。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1907–1982. He established himself at twenty-seven with his first film, The Goddess: no indictment, no sermon, simply a camera placed at eye level with a prostitute.",
+    careerEssayEn: doc([
+      p(
+        "Wu Yonggang trained as a set designer, and a fastidiousness about the image never left him. The Goddess was his debut and remains one of the summits of Chinese silent cinema — he refused to turn his heroine into a moral case study, kept the camera level with her throughout, and let even the thug who exploits her register as part of the environment rather than a villain to be hissed at.",
+      ),
+      p(
+        "Waves Wash the Sand, two years later, went further still: two men shackled to each other on a desert island, an existential parable of a kind Chinese cinema rarely attempted. The decades that followed brought criticism and long silences, and it was not until 1980, co-directing Evening Rain with Wu Yigong, that he was properly seen again.",
+      ),
+    ]),
+  },
+  {
+    slug: "yuan-muzhi",
+    name: "Yuan Muzhi",
+    nameZh: "袁牧之",
+    tmdbPersonId: 1173642,
+    bio: "中国导演、演员，1909–1978。从话剧舞台走来的“千面人”，把好莱坞的节奏、苏联的剪辑与上海的市井小调焊成了一种全新的中国电影。",
+    careerEssay: doc([
+      p(
+        "袁牧之先以演技闻名，人称“千面人”。转到导演位置后，他做的第一件事是拿电影玩形式：《都市风光》用歌唱和西洋镜串起都市讽刺，被视作中国第一部音乐喜剧。",
+      ),
+      p(
+        "《马路天使》则把这份聪明收进了人情里。妓女、歌女、吹鼓手、报贩挤在同一条弄堂，周璇唱《四季歌》，赵丹插科打诨，笑声底下是随时可能塌掉的生活。抗战爆发后他北上延安，后来成为新中国电影事业的第一任主事者，从此几乎不再导戏。",
+      ),
+    ]),
+    bioEn:
+      'Chinese director and actor, 1909–1978. A stage-trained "man of a thousand faces" who welded Hollywood tempo, Soviet cutting, and Shanghai street song into a new kind of Chinese film.',
+    careerEssayEn: doc([
+      p(
+        "Yuan Muzhi made his name as an actor first, nicknamed the man of a thousand faces. His first move as a director was to play with form: Scenes of City Life strings urban satire through songs and a peep-show frame, and is generally counted China's first musical comedy.",
+      ),
+      p(
+        "Street Angel folds that cleverness back into feeling. A prostitute, a singsong girl, a trumpeter and a newspaper hawker are crowded into one lane; Zhou Xuan sings the Four Seasons Song, Zhao Dan clowns, and under the laughter is a life that could collapse at any moment. After the war with Japan broke out he went north to Yan'an, later becoming the first head of the new republic's film administration — and directed almost nothing again.",
+      ),
+    ]),
+  },
+  {
+    slug: "cai-chusheng",
+    name: "Cai Chusheng",
+    nameZh: "蔡楚生",
+    tmdbPersonId: 1112330,
+    bio: "中国导演，1906–1968。左翼电影最会讲故事的人：把家国离散写成通俗剧，让观众为时代哭，也为自己哭。",
+    careerEssay: doc([
+      p(
+        "蔡楚生出身贫寒，学徒出身，这让他始终相信电影必须先让普通人看懂。《渔光曲》讲渔家姐弟的破产与流离，1935 年在莫斯科拿下荣誉奖，是中国电影第一次在国际上获奖。",
+      ),
+      p(
+        "《一江春水向东流》是这条路的终点，也是顶点。他与郑君里用三个多小时、一个家庭的八年，把抗战的全部代价具体到一个女人的脸上。影片连映三个多月，万人空巷。文革中他遭到批斗，1968 年含冤去世。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1906–1968. The finest storyteller of the left-wing cinema, he wrote national catastrophe as melodrama so audiences would weep for the age and for themselves at once.",
+    careerEssayEn: doc([
+      p(
+        "Cai Chusheng was born poor and apprenticed young, and he never stopped believing a film had to be legible to ordinary people first. Song of the Fishermen follows a fishing family's ruin and dispersal; it took an honorable mention at Moscow in 1935, the first international prize any Chinese film had won.",
+      ),
+      p(
+        "The Spring River Flows East is both the end of that road and its summit. With Zheng Junli he spent more than three hours and eight years of one family's life bringing the entire cost of the war to rest on a single woman's face. It ran for over three months to packed houses. During the Cultural Revolution he was denounced, and he died under persecution in 1968.",
+      ),
+    ]),
+  },
+  {
+    slug: "zheng-junli",
+    name: "Zheng Junli",
+    nameZh: "郑君里",
+    tmdbPersonId: 1112331,
+    bio: "中国导演，1911–1969。演员出身，因此最懂得把镜头交给脸；他镜头下的市井群像，是四十年代中国最锋利的一面镜子。",
+    careerEssay: doc([
+      p(
+        "郑君里三十年代是活跃的演员，也翻译表演理论。转做导演后，他把舞台上练出的对人的观察带进了片场——与蔡楚生合导《一江春水向东流》时，那些细碎的家庭场面几乎全是他的笔触。",
+      ),
+      p(
+        "真正属于他自己的是《乌鸦与麻雀》：一栋上海石库门楼房里，房东、房客、投机者各怀鬼胎，政权更迭就在楼梯间发生。这部片子在 1949 年前后偷偷拍完，是中国电影里少有的群戏杰作。他在文革中入狱，1969 年死于狱中。",
+      ),
+    ]),
+    bioEn:
+      "Chinese director, 1911–1969. An actor first, which is why he knew to give the camera to faces; his crowded tenements are the sharpest mirror 1940s China held up to itself.",
+    careerEssayEn: doc([
+      p(
+        "Zheng Junli was a working actor through the 1930s and a translator of acting theory besides. Turning director, he brought a stage-trained attention to people onto the set — co-directing The Spring River Flows East with Cai Chusheng, the small domestic scenes are almost entirely his hand.",
+      ),
+      p(
+        "What is wholly his is Crows and Sparrows: in one Shanghai tenement a landlord, his tenants and a speculator all scheme past each other while a change of regime happens on the stairwell. Shot half in secret across 1949, it is one of the rare great ensemble films in Chinese cinema. He was imprisoned during the Cultural Revolution and died in custody in 1969.",
+      ),
+    ]),
+  },
+  {
+    slug: "hou-hsiao-hsien",
+    name: "Hou Hsiao-hsien",
+    nameZh: "侯孝贤",
+    tmdbPersonId: 64992,
+    bio: "台湾导演，1947 年生。把摄影机放远、放定、放久，让时间自己走完一场戏——台湾新电影最沉着的那双眼睛。",
+    careerEssay: doc([
+      p(
+        "侯孝贤从商业片起步，直到《风柜来的人》才找到自己的语法：远景、长镜头、不追戏剧高潮。《童年往事》把这套方法对准他自己的成长，祖母一次次说要走路回大陆，成为整部片的节拍器。",
+      ),
+      p(
+        "《悲情城市》让他第一次直视台湾的历史伤口，也让华语电影第一次拿到威尼斯金狮。此后他越走越远：《戏梦人生》几乎不解释，《海上花》全片在室内的油灯下完成，《刺客聂隐娘》把武侠拍成了风与树叶的电影。",
+      ),
+    ]),
+    bioEn:
+      "Taiwanese director, born 1947. He set the camera far back, held it still, and let it run until time had finished the scene by itself — the most composed pair of eyes in Taiwan New Cinema.",
+    careerEssayEn: doc([
+      p(
+        "Hou began in commercial pictures and did not find his grammar until The Boys from Fengkuei: wide, long, uninterested in dramatic peaks. A Time to Live, a Time to Die turns that method on his own childhood, where a grandmother repeatedly announcing she will walk back to the mainland becomes the film's metronome.",
+      ),
+      p(
+        "A City of Sadness was his first direct look at Taiwan's historical wound, and the first Golden Lion for a Chinese-language film. He kept going further out: The Puppetmaster barely explains itself, Flowers of Shanghai unfolds entirely by interior oil lamp, and The Assassin turns wuxia into a film about wind and leaves.",
+      ),
+    ]),
+  },
+  {
+    slug: "edward-yang",
+    name: "Edward Yang",
+    nameZh: "杨德昌",
+    tmdbPersonId: 143035,
+    bio: "台湾导演，1947–2007。工程师出身，用建筑般的精确解剖台北：玻璃幕墙、公寓格局与人际关系是同一张图纸。",
+    careerEssay: doc([
+      p(
+        "杨德昌在美国读电机、做过电脑工程师，三十出头才回台湾拍片。这段经历留在他的结构里：《恐怖分子》像一道多线并置的方程式，人物彼此不识，命运却互相咬合。",
+      ),
+      p(
+        "《牯岭街少年杀人事件》是他最庞大的一次演算——近四小时，上百个角色，六十年代台北的眷村、帮派、教室与停电，全部收束到一把刀上。晚年的《一一》则温和下来，用一个小男孩拍别人后脑勺的举动，说尽了人看不见自己的困境。2007 年病逝于洛杉矶。",
+      ),
+    ]),
+    bioEn:
+      "Taiwanese director, 1947–2007. Trained as an engineer, he dissected Taipei with an architect's precision: curtain walls, apartment layouts, and human relations are all the same blueprint.",
+    careerEssayEn: doc([
+      p(
+        "Yang studied electrical engineering in the United States and worked as a computer engineer; he was past thirty before he came back to Taiwan to make films. The training stayed in his structures: Terrorizers runs like a simultaneous equation, its characters strangers to each other whose fates nonetheless interlock.",
+      ),
+      p(
+        "A Brighter Summer Day is his largest computation — nearly four hours, a cast of over a hundred, the military dependents' villages and gangs and classrooms and blackouts of 1960s Taipei all converging on a single knife. The late Yi Yi softens: a small boy photographing the backs of people's heads says everything about our inability to see ourselves. He died in Los Angeles in 2007.",
+      ),
+    ]),
+  },
+  {
+    slug: "wong-kar-wai",
+    name: "Wong Kar-wai",
+    nameZh: "王家卫",
+    tmdbPersonId: 12453,
+    bio: "香港导演，1958 年生。没有剧本，只有钟表：他的电影反复丈量错过的几分钟，把都市里的擦肩而过拍成了唯一的史诗。",
+    careerEssay: doc([
+      p(
+        "王家卫从编剧起家，成名后却几乎不写完整剧本，靠现场与演员一起长出电影。《阿飞正传》里“一分钟的朋友”和无脚鸟，已经定下他一生的主题：时间、错过、无法着陆。",
+      ),
+      p(
+        "与摄影师杜可风、美术张叔平的合作，把这份情绪变成了可见的东西——《重庆森林》的抽帧与霓虹，《春光乍泄》的布宜诺斯艾利斯，《花样年华》里张曼玉每一件不重样的旗袍。到《2046》，他索性把记忆本身写成了一列开不回去的火车。",
+      ),
+    ]),
+    bioEn:
+      "Hong Kong director, born 1958. No screenplay, only clocks: his films keep measuring the few minutes by which people miss each other, turning a brush past a stranger into the only epic worth having.",
+    careerEssayEn: doc([
+      p(
+        "Wong started as a screenwriter and then, once established, largely stopped writing finished scripts, growing his films on set with his actors instead. Days of Being Wild — the one-minute friend, the bird with no feet — already fixes the themes of his whole career: time, missed chances, the inability to land.",
+      ),
+      p(
+        "His work with cinematographer Christopher Doyle and designer William Chang made that mood visible: the step-printing and neon of Chungking Express, the Buenos Aires of Happy Together, the procession of never-repeated cheongsams Maggie Cheung wears in In the Mood for Love. By 2046 he had simply written memory itself as a train that cannot go back.",
+      ),
+    ]),
+  },
+  {
+    slug: "king-hu",
+    name: "King Hu",
+    nameZh: "胡金铨",
+    tmdbPersonId: 83698,
+    bio: "华语导演，1932–1997。把京剧的锣鼓点变成剪辑的节奏，让武侠从打斗升格为一种关于气韵与空的电影。",
+    careerEssay: doc([
+      p(
+        "胡金铨生于北平，做过演员与美术，对明代掌故、京剧与佛理都下过功夫。《大醉侠》《龙门客栈》先后确立了他的招牌：客栈里的对峙、一触即发的静默，以及从戏曲借来的锣鼓节奏。",
+      ),
+      p(
+        "《侠女》则把他推到了另一个层面。竹林一战至今是所有武侠动作的源头之一，而影片后半段忽然转入禅意，血战让位给了顿悟。1975 年它在戛纳拿下技术大奖，是华语电影首次在那里获得肯定。",
+      ),
+    ]),
+    bioEn:
+      "Chinese-language director, 1932–1997. He turned the drum-and-gong beat of Peking opera into a rhythm of cutting, lifting wuxia out of fighting and into a cinema of breath and emptiness.",
+    careerEssayEn: doc([
+      p(
+        "Born in Beijing, King Hu worked as an actor and a designer and read seriously in Ming history, Peking opera, and Buddhism. Come Drink with Me and Dragon Inn established his signatures in turn: the standoff inside an inn, the silence a hair before violence, and a cutting rhythm borrowed from the opera percussion.",
+      ),
+      p(
+        "A Touch of Zen pushed him somewhere else entirely. Its bamboo-forest duel remains one of the headwaters of all wuxia action, and then the film's second half turns abruptly contemplative, with bloodshed giving way to enlightenment. It won a technical prize at Cannes in 1975 — the first recognition a Chinese-language film received there.",
+      ),
+    ]),
+  },
+
+  // ── 战后与彩色 ──────────────────────────────────────────────────────
+  {
+    slug: "roberto-rossellini",
+    name: "Roberto Rossellini",
+    nameZh: "罗伯托·罗西里尼",
+    tmdbPersonId: 4410,
+    bio: "意大利导演，1906–1977。新现实主义的开山者：战争还没结束就扛着摄影机上街，用剩胶片拍下了一座城市的真实体温。",
+    careerEssay: doc([
+      p(
+        "《罗马，不设防的城市》几乎是在废墟里抢拍出来的——胶片是零星凑来的，街道是真的街道，群众演员刚刚经历过片中的事。它一举确立了新现实主义：不要摄影棚，不要明星，不要圆满。",
+      ),
+      p(
+        "但罗西里尼很快离开了自己开创的运动。与英格丽·褒曼合作的《意大利之旅》几乎没有情节，只有一对夫妻在异乡的沉默里逐渐看清彼此——这部片子后来被新浪潮奉为现代电影的起点。",
+      ),
+    ]),
+    bioEn:
+      "Italian director, 1906–1977. The founder of neorealism, who took a camera into the street before the war had even finished and shot a city's real body temperature on scavenged stock.",
+    careerEssayEn: doc([
+      p(
+        "Rome, Open City was very nearly stolen out of the rubble — the film stock was scraped together in short ends, the streets were real streets, and the extras had lived through what the picture depicts. It established neorealism at a stroke: no studio, no stars, no resolution.",
+      ),
+      p(
+        "But Rossellini left the movement he had started almost immediately. Journey to Italy, made with Ingrid Bergman, has almost no plot at all — only a married couple coming to see each other clearly through the silence of a foreign country. The New Wave later canonized it as the beginning of modern cinema.",
+      ),
+    ]),
+  },
+  {
+    slug: "masaki-kobayashi",
+    name: "Masaki Kobayashi",
+    nameZh: "小林正树",
+    tmdbPersonId: 76978,
+    bio: "日本导演，1916–1996。战时拒绝晋升、被派往满洲的士兵，一生的电影都在做同一件事：让个人站出来，指着制度说不。",
+    careerEssay: doc([
+      p(
+        "小林正树本人当过兵，且刻意拒绝升迁以示抗议，这份经历烧进了他所有作品。长达九小时的《人间的条件》几乎是他的自传，一个善良的人如何被战争一层层剥掉，直到只剩下不肯低头这一件事。",
+      ),
+      p(
+        "《切腹》把同样的怒火装进了时代剧的外壳：一个浪人走进大名的庭院，用一个故事把整套武士道的体面拆得粉碎。到了《怪谈》他转向色彩与鬼故事，画面华丽如屏风，底下依旧是那份对权力的不信任。",
+      ),
+    ]),
+    bioEn:
+      "Japanese director, 1916–1996. A conscript who refused promotion in protest and was sent to Manchuria, he spent his career doing one thing: putting an individual on his feet to say no to a system.",
+    careerEssayEn: doc([
+      p(
+        "Kobayashi served, and deliberately refused promotion as a protest, and that experience is burned into everything he made. The nine-hour Human Condition is close to autobiography: a decent man stripped layer by layer by war until nothing is left but his refusal to bow.",
+      ),
+      p(
+        "Harakiri packs the same anger into the shell of a period picture — a masterless samurai walks into a lord's courtyard and, by telling a story, dismantles the entire decorum of bushido. By Kwaidan he had turned to color and ghost stories, images as lavish as painted screens, with the same distrust of power underneath.",
+      ),
+    ]),
+  },
+  {
+    slug: "mikio-naruse",
+    name: "Mikio Naruse",
+    nameZh: "成濑巳喜男",
+    tmdbPersonId: 125690,
+    bio: "日本导演，1905–1969。小津与沟口之外的第三条路：拍女人如何在没有出口的日常里继续走下去，不给救赎，也不给控诉。",
+    careerEssay: doc([
+      p(
+        "成濑一生拍了八十多部片子，主角几乎都是女人——酒吧女招待、寡妇、被丈夫拖累的妻子。他不像沟口那样把她们写成受难者，也不像小津那样让她们体面地退场，而是让她们在账本、房租和一次次算计里熬下去。",
+      ),
+      p(
+        "《浮云》是这条路的终点。一对在战时殖民地相爱的男女回到破败的东京，感情早已耗尽，却谁也走不开。有人说成濑的电影像水，看起来平静，底下的流速会把人卷走。",
+      ),
+    ]),
+    bioEn:
+      "Japanese director, 1905–1969. The third path beside Ozu and Mizoguchi: films about how women keep walking through a daily life with no exit, offered neither redemption nor indictment.",
+    careerEssayEn: doc([
+      p(
+        "Naruse made more than eighty films and the protagonist is almost always a woman — a bar hostess, a widow, a wife dragged down by her husband. He does not write them as martyrs the way Mizoguchi does, nor let them exit with dignity the way Ozu does; he makes them endure, through account books and rent and one calculation after another.",
+      ),
+      p(
+        "Floating Clouds is the end of that road. A man and a woman who fell in love in a wartime colony return to a ruined Tokyo with the feeling long since spent, and neither can leave. Naruse's films have been likened to water: placid on the surface, with a current underneath fast enough to carry you off.",
+      ),
+    ]),
+  },
+  {
+    slug: "jacques-tati",
+    name: "Jacques Tati",
+    nameZh: "雅克·塔蒂",
+    tmdbPersonId: 5763,
+    bio: "法国导演、演员，1907–1982。用身体、声音与建筑做喜剧，几乎不用台词；他镜头里的现代世界光洁、便利，而且完全不适合人类居住。",
+    careerEssay: doc([
+      p(
+        "塔蒂出身默剧，于洛先生这个角色——高个子、雨衣、烟斗、永远迈错一步——是他对现代生活的固定测量仪。《于洛先生的假期》里，他让海滨旅馆的每一个声音都成为笑点，而不是靠一句台词。",
+      ),
+      p(
+        "《游戏时间》则近乎疯狂：他花光身家搭出一座钢铁玻璃的“塔蒂城”，用 70mm 宽银幕拍摄，画面里同时发生七八件事，观众得自己去找笑点。影片票房惨败，令他破产，却在今天被视作电影史上最精密的喜剧建筑。",
+      ),
+    ]),
+    bioEn:
+      "French director and actor, 1907–1982. He built comedy out of bodies, sound, and architecture with almost no dialogue; the modern world in his films is sleek, convenient, and entirely unfit for humans to live in.",
+    careerEssayEn: doc([
+      p(
+        "Tati came out of mime, and Monsieur Hulot — tall, raincoated, pipe in mouth, forever half a step wrong — is his fixed instrument for measuring modern life. In Monsieur Hulot's Holiday he turns every sound in a seaside hotel into a joke, without recourse to a single line.",
+      ),
+      p(
+        "Playtime is close to madness: he spent his entire fortune building a city of steel and glass, shot it in 70mm, and staged seven or eight things at once in every frame so that the audience has to find the jokes for itself. It failed catastrophically and bankrupted him. It is now regarded as the most precisely engineered comic architecture in cinema.",
+      ),
+    ]),
+  },
+  {
+    slug: "stanley-kubrick",
+    name: "Stanley Kubrick",
+    nameZh: "斯坦利·库布里克",
+    tmdbPersonId: 240,
+    bio: "美国导演，1928–1999。摄影记者出身，把每一种类型都拍了一遍，又把每一种都拍成了别的东西：冷、对称、精确到偏执，却始终在问人究竟是不是野兽。",
+    careerEssay: doc([
+      p(
+        "库布里克的每部片子几乎都换一个类型——战争、黑色喜剧、科幻、恐怖、古装——但方法从不变：对称构图、缓慢推进的镜头、把人放在巨大结构的正中央，然后看着他缩小。",
+      ),
+      p(
+        "《2001 太空漫游》是他最极端的一次实验，用近乎无声的十分钟开场与一段没有解释的结尾，逼观众自己完成意义。此后的《发条橙》《闪灵》都在同一个问题上打转：文明这层壳到底有多薄。",
+      ),
+    ]),
+    bioEn:
+      "American director, 1928–1999. A former photojournalist who worked through every genre and turned each one into something else: cold, symmetrical, precise to the point of obsession, and always asking whether the human animal is an animal.",
+    careerEssayEn: doc([
+      p(
+        "Kubrick changed genre with nearly every film — war, black comedy, science fiction, horror, costume drama — but never changed method: symmetrical framing, the slow advancing camera, a man placed dead centre of an enormous structure and then watched as he shrinks.",
+      ),
+      p(
+        "2001: A Space Odyssey is his most extreme experiment, opening with ten near-silent minutes and closing on an ending he refuses to explain, forcing the audience to complete the meaning itself. A Clockwork Orange and The Shining circle the same question afterwards: exactly how thin the shell of civilization is.",
+      ),
+    ]),
+  },
+  {
+    slug: "michael-powell",
+    name: "Michael Powell",
+    nameZh: "迈克尔·鲍威尔",
+    tmdbPersonId: 68424,
+    bio: "英国导演，1905–1990。与普雷斯伯格合组“射箭者”，在一个崇尚写实的国度里坚持拍浓烈的色彩、歌剧式的激情与近乎危险的美。",
+    careerEssay: doc([
+      p(
+        "鲍威尔与普雷斯伯格以“射箭者”的名义联合署名，编剧与导演共享一个头衔，这在电影史上几乎绝无仅有。在崇尚纪录式冷静的英国影坛，他们偏要拍浓得化不开的特艺七彩情节剧——《黑水仙》《平步青云》《红菱艳》。",
+      ),
+      p(
+        "鲍威尔的事业毁于《偷窥狂》：一个用摄影机杀人的故事，1960 年被批为下流，今天却成了关于「观看即暴力」的奠基文本。多年后是斯科塞斯等人把他从遗忘里请了回来。",
+      ),
+    ]),
+    bioEn:
+      "British director, 1905–1990. With Pressburger he formed The Archers and, in a country that prized realism, insisted on saturated color, operatic passion, and a beauty verging on dangerous.",
+    careerEssayEn: doc([
+      p(
+        "Powell and Emeric Pressburger signed their films jointly as The Archers, an almost unheard-of arrangement in which writer and director shared a single credit. Against a British film culture that prized documentary sobriety, they made Technicolor melodramas of overwhelming intensity — Black Narcissus, A Matter of Life and Death, The Red Shoes.",
+      ),
+      p(
+        "Powell's career was effectively ended by Peeping Tom, a film about a killer who films his victims that critics found obscene in 1960 and that is now taught as a founding text on the violence of looking. Scorsese was among those who later brought him back from obscurity.",
+      ),
+    ]),
+  },
+  {
+    slug: "emeric-pressburger",
+    name: "Emeric Pressburger",
+    nameZh: "埃默里克·普雷斯伯格",
+    tmdbPersonId: 37846,
+    bio: "匈牙利裔英国编剧、导演，1902–1988。从纳粹德国逃出的流亡者，为英国电影写出了最不英国的故事：狂热、异色、执着于牺牲。",
+    bioEn:
+      "Hungarian-born British writer and director, 1902–1988. An exile who fled Nazi Germany and then wrote the least English stories in English cinema: feverish, exotic, and fixated on sacrifice.",
+  },
+  {
+    slug: "david-lean",
+    name: "David Lean",
+    nameZh: "大卫·里恩",
+    tmdbPersonId: 12238,
+    bio: "英国导演，1908–1991。剪辑师出身，先拍出英国最细腻的室内片，再转身把沙漠、铁路与雪原拍成了后世衡量史诗的尺子。",
+    careerEssay: doc([
+      p(
+        "很多人只记得后期的里恩，但他真正的功底在早年：《相见恨晚》全片发生在一个车站茶室，两个中年人克制的告别，是英国电影最精确的一次情感手术。",
+      ),
+      p(
+        "《桂河大桥》之后他转向大银幕。《阿拉伯的劳伦斯》几乎重新定义了「史诗」——沙漠不是背景而是角色，而那位英雄越走越大，人却越来越碎。剪辑师的出身让他知道：真正的宏大来自节奏，而不是尺寸。",
+      ),
+    ]),
+    bioEn:
+      "British director, 1908–1991. An editor by training who first made the most delicate interiors in British cinema, then turned around and made deserts, railways, and snowfields into the standard by which epics are measured.",
+    careerEssayEn: doc([
+      p(
+        "Lean is remembered for the late films, but the craft was laid down early: Brief Encounter takes place almost entirely in a station tea room, and the restrained parting of two middle-aged people is the most precise piece of emotional surgery in British cinema.",
+      ),
+      p(
+        "After The Bridge on the River Kwai he moved onto the wide screen. Lawrence of Arabia effectively redefined the epic — the desert is a character rather than a backdrop, and the hero grows larger as the man inside him comes apart. The editor in him knew that real scale comes from rhythm, not from size.",
+      ),
+    ]),
+  },
+  {
+    slug: "francis-ford-coppola",
+    name: "Francis Ford Coppola",
+    nameZh: "弗朗西斯·福特·科波拉",
+    tmdbPersonId: 1776,
+    bio: "美国导演，1939 年生。新好莱坞最敢赌的人：把黑帮片拍成家族悲剧，又把战争片拍成一场几乎毁掉自己的溯河之旅。",
+    careerEssay: doc([
+      p(
+        "七十年代属于科波拉。《教父》两部把类型片提升为美国资本与家族的史诗，《对话》则安静得像一部欧洲电影——同一个人在同一个十年里做到了这两件事。",
+      ),
+      p(
+        "《现代启示录》几乎摧毁了他：菲律宾拍摄失控，台风毁掉布景，主演心脏病发，预算靠他抵押家产撑着。成片却因此带上了一种别的电影没有的疯狂——它不是关于越战的电影，它本身就是一次战争。",
+      ),
+    ]),
+    bioEn:
+      "American director, born 1939. The biggest gambler of the New Hollywood: he made a gangster picture into a family tragedy, then made a war picture into a journey upriver that nearly destroyed him.",
+    careerEssayEn: doc([
+      p(
+        "The seventies belonged to Coppola. The two Godfather films lifted genre into an epic of American capital and family, while The Conversation is as quiet as a European art film — the same man did both inside the same decade.",
+      ),
+      p(
+        "Apocalypse Now almost finished him: the Philippine shoot ran out of control, a typhoon destroyed the sets, his lead actor had a heart attack, and he mortgaged his own property to keep the budget alive. The finished film carries a derangement no other film has, precisely because of it. It is not a picture about the war in Vietnam so much as a war in its own right.",
       ),
     ]),
   },
