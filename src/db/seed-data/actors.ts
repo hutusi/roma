@@ -141,4 +141,88 @@ export const seedActors: SeedDirector[] = [
     bioEn:
       "American actor, 1899–1983. A queen of the silent era who, in Sunset Boulevard, played a queen the talkies left behind: Norma Desmond is a performance, and a self-annotation with a blade in it.",
   },
+
+  // ── 华语电影 ────────────────────────────────────────────────────────
+  {
+    slug: "ruan-lingyu",
+    name: "Ruan Lingyu",
+    nameZh: "阮玲玉",
+    primaryRole: "actor",
+    tmdbPersonId: 1021587,
+    bio: "中国演员，1910–1935。默片时代最好的一张脸：不靠字幕卡，只用眼睑与嘴角完成整段独白。1935 年自尽，年仅二十四岁，遗书上写着“人言可畏”。",
+    bioEn:
+      "Chinese actor, 1910–1935. The finest face of the silent era, capable of delivering an entire monologue with an eyelid and the corner of a mouth, no intertitle required. She took her own life in 1935 at twenty-four, leaving a note that read: gossip is a fearful thing.",
+  },
+  {
+    slug: "zhou-xuan",
+    name: "Zhou Xuan",
+    nameZh: "周璇",
+    primaryRole: "actor",
+    tmdbPersonId: 1366187,
+    bio: "中国演员、歌手，1920–1957。“金嗓子”，《马路天使》里唱《四季歌》与《天涯歌女》的歌女；歌声甜，命运苦，三十七岁病逝于上海。",
+    bioEn:
+      "Chinese actor and singer, 1920–1957. The “golden voice” of her generation and the singsong girl of Street Angel, where she performs the Four Seasons Song and The Wandering Songstress. The voice is sweet and the life was not; she died in Shanghai at thirty-seven.",
+  },
+  {
+    slug: "wei-wei",
+    name: "Wei Wei",
+    nameZh: "韦伟",
+    primaryRole: "actor",
+    tmdbPersonId: 236193,
+    // Birth year per TMDB; no death date recorded there. Left open rather
+    // than asserting one we cannot verify — confirm before adding.
+    bio: "中国演员，1922 年生。《小城之春》里的周玉纹：一部几乎没有事件的电影，全靠她走在城墙上的步子与几次不敢落下的目光撑住。",
+    bioEn:
+      "Chinese actor, born 1922. As Zhou Yuwen in Spring in a Small Town she carries a film in which almost nothing happens — held up entirely by the way she walks the ruined city wall and by the glances she cannot quite let land.",
+  },
+  {
+    slug: "maggie-cheung",
+    name: "Maggie Cheung",
+    nameZh: "张曼玉",
+    primaryRole: "actor",
+    tmdbPersonId: 1338,
+    bio: "香港演员，1964 年生。从选美与打闹喜剧起步，最终成为华语电影最精准的表演者之一：《花样年华》里她二十多件旗袍下的隐忍，比任何台词都清楚。",
+    bioEn:
+      "Hong Kong actor, born 1964. She began in beauty pageants and knockabout comedies and became one of the most precise performers in Chinese-language cinema; the restraint she holds beneath two dozen cheongsams in In the Mood for Love says more than any line of dialogue.",
+  },
+  {
+    slug: "tony-leung-chiu-wai",
+    name: "Tony Leung Chiu-wai",
+    nameZh: "梁朝伟",
+    primaryRole: "actor",
+    tmdbPersonId: 1337,
+    bio: "香港演员，1962 年生。王家卫的常用面孔，擅长演“不说”：《花样年华》结尾他对着吴哥窟的石洞说话，观众一个字也听不见，却全都懂了。",
+    bioEn:
+      "Hong Kong actor, born 1962. Wong Kar-wai's recurring face, and a specialist in the unsaid: at the close of In the Mood for Love he speaks into a hollow in the stone at Angkor and the audience hears not one word of it, yet understands all of it.",
+  },
+  {
+    slug: "hsu-feng",
+    name: "Hsu Feng",
+    nameZh: "徐枫",
+    primaryRole: "actor",
+    tmdbPersonId: 130394,
+    bio: "台湾演员、制片人，1950 年生。胡金铨镜头下的侠女杨慧贞，冷峻、不笑、几乎没有台词；后来转任制片，促成了《霸王别姬》。",
+    bioEn:
+      "Taiwanese actor and producer, born 1950. As Yang Hui-zhen in A Touch of Zen she is severe, unsmiling, and nearly wordless. She later turned producer and brought Farewell My Concubine into being.",
+  },
+  {
+    slug: "tatsuya-nakadai",
+    name: "Tatsuya Nakadai",
+    nameZh: "仲代达矢",
+    primaryRole: "actor",
+    tmdbPersonId: 70131,
+    bio: "日本演员，1932–2025。三船之外黑泽明的另一极：《乱》里的秀虎从暴君走到疯癫，白面妆下几乎只剩眼睛在演；《切腹》里则用一柄竹刀讨回全部尊严。",
+    bioEn:
+      "Japanese actor, 1932–2025. Kurosawa's other pole beside Mifune: his Hidetora in Ran walks from tyrant to madman with almost nothing left acting but the eyes beneath the white makeup, and in Harakiri he reclaims an entire family's dignity with a bamboo blade.",
+  },
+  {
+    slug: "james-stewart",
+    name: "James Stewart",
+    nameZh: "詹姆斯·斯图尔特",
+    primaryRole: "actor",
+    tmdbPersonId: 854,
+    bio: "美国演员，1908–1997。好莱坞最可信的好人，也正因如此，希区柯克用他来演坏掉的人：《迷魂记》里的痴迷与控制，恰恰因为那张脸本该无害才令人不安。",
+    bioEn:
+      "American actor, 1908–1997. Hollywood's most trustworthy decent man, which is precisely why Hitchcock cast him as men coming apart: the obsession and control of Vertigo unsettle exactly because that face was supposed to be harmless.",
+  },
 ];
