@@ -7,19 +7,16 @@ import type { SeedTag } from "./types";
  * Black-and-white is deliberately absent — it is a film attribute
  * (`isBlackAndWhite`), never a tag (ADR 0014).
  *
- * Keep this current even though `seed-content.ts` seeds tags on the FIRST
- * RUN ONLY: `assertPublishable` hard-exits on a film `tagSlugs` entry with
- * no row here, so a tag that exists only in /admin breaks db:seed:content
- * on every fresh checkout. `tags.test.ts` guards that in CI.
+ * This file is the source of truth for the vocabulary a release ships.
+ * Adding a row here is all it takes: `seed-content.ts` creates tags it has
+ * never seeded before, on any database, because `seed_tag_baseline` tells
+ * it which slugs are genuinely new and which are ones an editor retired —
+ * states that are otherwise identical (ADR 0014). A retired tag is never
+ * recreated, no matter how long it stays in this list.
  *
- * On a database whose vocabulary already exists, adding rows here changes
- * nothing by itself — the gate skips the whole block. The seeder will
- * refuse to insert a film referencing a slug the vocabulary does not hold,
- * naming it; create it in /admin/tags or with
- * `bun run apply:tags -- --create-tags=<slug> --apply`. Creation is always
- * explicit: an absent slug may be a new tag, or one an editor retired on
- * purpose, and nothing in the database distinguishes them (ADR 0014
- * amendment).
+ * Keep it current: `assertPublishable` hard-exits on a film `tagSlugs`
+ * entry with no row here, so a tag existing only in /admin breaks
+ * db:seed:content on every fresh checkout. `tags.test.ts` guards that in CI.
  */
 export const seedTags: SeedTag[] = [
   { slug: "silent-cinema", nameZh: "默片", nameEn: "Silent Cinema" },

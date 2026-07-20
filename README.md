@@ -30,7 +30,7 @@ bun dev
 | `bun run db:migrate` | Apply migrations |
 | `bun run db:seed` | Seed the first admin user |
 | `bun run db:seed:content` | Seed/refresh the editorial corpus (idempotent; never clobbers admin edits) |
-| `bun run apply:tags` | Create named vocabulary entries on an admin-owned `tags` table (`-- --create-tags=a,b`; dry-run, `--apply` to write) |
+| `bun run db:migrate` + `db:seed:content` | The whole content deploy — see DEPLOY.md |
 
 ## QA & docs
 

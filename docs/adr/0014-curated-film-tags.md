@@ -23,55 +23,37 @@ Repositioning the product around classic cinema in general (rather than "black-a
 - Deleting a tag attached only to drafts just works (junction cascades); detaching it from published films is a deliberate per-film editorial act first.
 - The seeded vocabulary (~12 movements/genres/themes) is a starting point, not a taxonomy commitment — the admin can rename or retire any of it. The seeder only bootstraps an empty vocabulary (first-run semantics); once any tag exists, re-runs never resurrect renamed or deleted tags.
 
-## Amendment (2026-07-20) — tagging films the seeder creates
+## Amendment (2026-07-20) — the seeder records what it applied
 
-The first-run gate has a consequence that was not obvious when it was written: because it skips the *entire* tags block, new seed films arriving on a populated database got no `film_tags` rows at all, and nothing reported it. The films published and simply carried no tags. [ADR 0015](0015-corpus-scope-beyond-black-and-white.md)'s batch of twenty-four films would have landed that way.
+The original gate seeded tags on the first run only, detected by an empty `tags` table. That left new seed films arriving on a populated database with no junctions at all, silently — and four review rounds each found a different bug in the attempts to fix it. They are worth listing, because they were all one mistake:
 
-**The gate stays. What changed is where a new film's junctions come from.** `seed-content.ts` now writes them for films in `newFilmSlugs` on every run — the same scoping that already governs `film_cast` and `film_watch_links`, for the same reason. A film the run just created has no editorial history to undo; an existing film does. Tag ids resolve from the database, never from `tags.ts`, and a pre-flight aborts the run **before any write** if an incoming film references a slug the vocabulary does not hold, naming the slugs and the command that creates them. Aborting before the first insert matters: failing afterwards would leave the films present, so a retry would no longer see them as new and they would stay untagged permanently.
+1. A reconciler recreated every seed tag missing from the database, undoing an editor's `deleteTag`, and refilled every film with zero junctions — a state `saveFilm` produces whenever an editor clears a film's tags.
+2. Tag changes to films that already existed reached production through no path at all, and the runbook's wording steered the operator past the gap.
+3. The tool that fixed those tags also overwrote editorial prose, so the command recommended for a tag silently reverted notes rewritten in `/admin` — while its output mentioned only the tag.
+4. The first-run signal itself was flippable: `deleteTag` can empty the `tags` table, which read as "fresh database" and restored all nineteen seeded tags plus junctions across the whole catalogue.
 
-### Correcting this amendment as first written
+### The cause was a missing input, not four missing guards
 
-The original version claimed `apply-tags.ts` could safely reconcile a whole database because it "fills only films carrying zero junctions — a film with no tags has demonstrably never been curated." **That was wrong, and so was the tool built on it.** Two inferences were unsound:
+Every one of those compares two things — what seed-data says now, and what the database holds. **Two inputs cannot express intent.** A tag in seed-data but absent from the database is *either* something the release adds *or* something an editor removed, and no query distinguishes them. Each fix compensated by demanding the information from a human: an explicit `--create-tags` list, an explicit `--films` list, a `--tags-only` flag, a drift warning to be read against release notes.
 
-- **A tag slug missing from the database is not necessarily new.** `deleteTag` lets an editor retire a tag once no published film carries it, so an absent slug is just as likely to be one deliberately removed. Recreating it from `tags.ts` silently reverted that decision.
-- **Zero junctions does not mean never curated.** `saveFilm` deletes every junction and re-inserts only a non-empty selection (`src/actions/films.ts`), and the validator sets no minimum — so an editor clearing a film's tags leaves zero rows, indistinguishable from a film nobody has touched.
+**`seed_tag_baseline` and `seed_film_tag_baseline` record the third input** — what seed-data asserted at the last successful run — and the decision becomes a three-way merge, the shape git uses on a file:
 
-These compound rather than sitting apart. `deleteTag` refuses while a published film still carries the tag and instructs the editor to detach it film by film first — producing exactly the zero-junction films *and* the deletable tag that both heuristics would then undo. The documented way to retire a tag was the one operation guaranteed to be reverted, which is precisely the failure this ADR's gate exists to prevent.
+| seed-data | baseline | database | meaning | action |
+|---|---|---|---|---|
+| yes | no | — | this release adds it | **write** |
+| yes | yes | no | an editor removed it | leave, report |
+| yes | yes | yes | already applied | nothing |
+| no | yes | yes | release dropped it | leave, report |
 
-### Junction ownership, by lifecycle
+Row two is what all four bugs got wrong. Row four keeps removal an `/admin` act: seed-data dropping a tag is never grounds to delete an editor's row.
 
-The muddle underneath all of this was never answering *who owns a film's tags*. Settled:
+### Consequences
 
-| Stage | Owner | Mechanism |
-|---|---|---|
-| At creation | seed-data | `seed-content.ts`, scoped to `newFilmSlugs` |
-| Thereafter | `/admin` | the film form; the seeder never revisits |
-| An explicit seed-driven correction | operator | `resync-content.ts --films=… --tags-only`, add-only |
-| The vocabulary itself | `/admin` | `apply-tags.ts -- --create-tags=…` for named slugs |
+- **A content deploy is `db:migrate && db:seed:content` again.** One path covers a fresh database, a film created moments ago, a film retagged by this release, and a tag an editor retired. New and existing films stop being separate cases: a film that did not exist a moment ago has no baseline and no junctions, which is the definition of an addition.
+- **Four mechanisms and two tools are gone** — the first-run gate, the `newFilmSlugs`-scoped junction path, the pre-flight abort, the actionable drift report, `apply-tags.ts`, and `resync-content --tags-only`. The prose/tag coupling of bug 3 cannot recur because resync has no tag mode.
+- **Writes and the baseline update share one transaction.** Apart, a crash could leave a baseline claiming more than was applied, and the next run would read those additions as editor removals — a fresh route to bug 1.
+- **Keyed by slug, no foreign keys.** The baseline must outlive the row it describes; a cascade would erase exactly the record proving an editor removed something.
+- **The baseline records what seed-data asked for, including entries left alone**, so a retired tag stays retired on every future run instead of flipping back to "new".
+- **One-time blind spot.** The bootstrap migration seeds the baseline from whatever the database already holds, so a tag removed *before* it cannot be seen and will be re-applied once. Confirm the target's tags match seed-data before migrating where that is possible.
+- The decision rules are pure functions in `src/db/tag-plan.ts` with unit tests carrying each bug as a named case. All four lived in scripts that touch a database and therefore had no automated coverage at all.
 
-`resync-content.ts` already existed for exactly the middle case — "overwrite the editorial content fields of specific rows from seed-data, by slug" — and tags were simply missing from its remit. Since `seed-content.ts` writes junctions only for films it creates, a `tagSlugs` change to a film that already exists reaches production through `resync-content --films=… --tags-only` and nowhere else. Its tag handling is **add-only**: a tag in the database but not in seed-data is reported and left alone, because removing one is an `/admin` act.
-
-### Two rules that took three review rounds to arrive at
-
-**One invocation writes one kind of thing.** `resync-content` writes prose *or* tags, never both. The first attempt synced them together, so the command recommended for a missing tag also reverted any note an editor had rewritten in `/admin` — silently, while the output mentioned only the tag. The direction that was guarded (a prose fix must not disturb tags) and the direction that was not (a tag fix must not disturb prose) are the same coupling read two ways; only splitting the modes removes both.
-
-**Release scope comes from the release, never from the database.** No query can distinguish a tag the current release adds from one an editor deliberately removed: both appear simply as "seed has it, the DB does not." That difference exists only in the seed-data diff. So `seed-content.ts` **warns** that N existing films have drifted and stops — it deliberately emits no runnable `--films=` list, because handing over a paste-ready set computed from database state is how a deploy silently reattaches tags an editor removed on purpose. The warning says a resync is *needed*; the release notes say *what*.
-
-The failure mode this last rule guards against is subtle enough to be worth naming: the earlier version did not write anything itself, it merely printed a command for a human to run. Moving an unsound inference from the writer to the reporter does not fix it — the human in the middle has no information the query lacked.
-
-### The first-run signal is film presence, not an empty tag table
-
-The gate above answers "is this a fresh database?" It originally answered it with `tags` being empty — which is a state an editor can *reach on purpose*. `deleteTag` refuses only while a **published** film carries the tag, so detaching a tag film by film and then deleting it is a supported workflow; do that for the whole vocabulary and the table is empty. The next deploy then read "fresh database", recreated all of the seeded tags, and relinked junctions across the entire catalogue. Retiring the vocabulary was self-undoing.
-
-The signal is now **whether any film exists**. The seeder creates films and tags together, so films present is a durable record of "seeded before", whatever the vocabulary looks like now. Emptying it would require deleting every film — and if that happened, re-seeding is the correct response, which is exactly what makes this signal sound where the old one was not.
-
-Two consequences worth recording:
-
-- The first-run junction backfill is gone. On a films-empty first run every film is in `newFilmSlugs`, so the per-new-film path already covers them; keeping a branch that writes junctions for *all* seed films only preserved the blast radius that made this bug severe.
-- A first run that inserts films and then fails before tags leaves those films unseeded-for-tags, since a retry no longer sees them as new. That is visible (the drift report names them) and recoverable (`resync-content --films=… --tags-only`) — the same path as any existing-film tag change.
-
-The decision rules — first-run detection, the add-only diff, vocabulary resolution — now live as pure functions in `src/db/tag-plan.ts` with unit tests. Four review rounds found four bugs of one class in this logic, all of it in scripts that touch a database and therefore had no automated coverage at all. `isFirstRun` takes a film count and nothing else: the signature itself makes the original bug unexpressible.
-
-`apply-tags.ts` is therefore reduced to one job — creating **named** vocabulary entries. With no flags it does nothing and says so. It never infers intent from database state.
-
-`tags.ts` remains the source of truth for the starter vocabulary on an *empty* database (local dev, e2e, any future environment). It is not optional to keep it current: `assertPublishable` hard-exits on a `tagSlugs` entry with no matching `seedTags` row, so a tag created only through `/admin` would break `db:seed:content` on every fresh checkout. `src/db/seed-data/tags.test.ts` lifts that check into CI.

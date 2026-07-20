@@ -62,8 +62,41 @@ bun run db:migrate    # against Neon (direct URL), before deploying the code tha
 
 ## Ongoing content changes
 
-For a batch of new films/people/lists added to `src/db/seed-data/`. Pure data — no
-migration; confirm `drizzle/` is untouched in the diff.
+For a batch of new films/people/lists added to `src/db/seed-data/`.
+
+```bash
+# 0. Get production credentials locally; delete the file when you are done.
+vercel env pull --environment=production .env.production.local
+
+# 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
+
+# 2. Apply any schema change, and the seed baseline it depends on.
+bun --env-file=.env.production.local run db:migrate
+
+# 3. Seed. This is the whole content deploy: new films, people and lists, their tag
+#    junctions, and any tag the release introduces.
+bun --env-file=.env.production.local --conditions=react-server run src/db/seed-content.ts
+#    Read the last lines: "Tags: created N tag(s), linked N junction(s)" and
+#    "Newly inserted — people:N films:N …" plus "Images stored:N skipped:N".
+#    films:0 means a slug collision. Any "✗" line names a film or person whose TMDB
+#    lookup failed and needs its id pinned by hand. A "left alone" line is not a
+#    problem — it reports tags an editor removed, which the seeder will not restore.
+
+# 4. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
+#    Source the prod env first — an unset/empty connection string does NOT make psql fail,
+#    it falls back to libpq defaults and quietly queries your LOCAL database, so this check
+#    would "pass" against the wrong data.
+set -a; source .env.production.local; set +a
+psql "$DATABASE_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
+
+# 5. Changes to an existing row that are NOT tags — a corrected note, a list's sortOrder —
+#    still need their own step, because everything else is onConflictDoNothing:
+#      prose  → bun run src/db/resync-content.ts --films=… --apply
+#      lists  → /admin (moving the featured list, sortOrder 0)
+
+# 6. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
+#    pages rebuild against the populated database.
+```
 
 **Three things about production are not obvious and will bite:**
 
@@ -73,91 +106,21 @@ migration; confirm `drizzle/` is untouched in the diff.
    `dynamicParams: true` so a new film's own page renders on demand, but every **listing**
    surface (`/zh`, `/zh/films`, `/zh/lists`, `/sitemap.xml`, person pages) is prerendered
    and stale. **The redeploy is the invalidation mechanism.**
-3. Everything is `onConflictDoNothing`. Re-running never fixes an existing row — that is
-   `resync-content.ts --films=…`. It also means edits to *existing* rows in seed data
-   (a list's `sortOrder`, a corrected note) apply only to a fresh database.
+3. Everything except tags is `onConflictDoNothing`. Re-running never fixes an existing
+   row, so edits to *existing* seed rows — a corrected note, a list's `sortOrder` — apply
+   only to a fresh database unless you take step 5.
 
-New films get their tag junctions from the seeder itself. It will **refuse to start** if an
-incoming film references a tag the admin-owned vocabulary does not hold, naming the slugs —
-create those first. Nothing is written on that refusal, so the run stays replayable.
+**Why tags are the exception.** They are the one thing the seeder can decide safely on its
+own, because `seed_tag_baseline` / `seed_film_tag_baseline` record what seed-data asserted
+at the last run. That third input is what separates "this release adds a tag" from "an
+editor removed one" — states that are otherwise identical (ADR 0014). So the seeder creates
+tags a release introduces, links them on new and existing films alike, and leaves anything
+an editor removed exactly where they left it, saying so.
 
-The seeder bootstraps the starter vocabulary **only on a database holding no films at all**.
-An empty `tags` table is not the signal, because `deleteTag` lets an editor reach that state
-deliberately — so on any populated database the vocabulary is left alone, even if it is
-currently empty.
-
-Films that **already exist** are a separate case: the seeder never touches their tags, so a
-`tagSlugs` change to one reaches production only through step 5. The seeder reports which
-films those are — read its output, do not assume there are none.
-
-```bash
-# 0. Get production credentials locally. Every command below reads them from this file;
-#    delete it when you are done.
-vercel env pull --environment=production .env.production.local
-
-# 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
-
-# 2. Create any new tags the batch introduces. Always explicit: an absent slug might be new,
-#    or one an editor deliberately retired, and the database cannot tell them apart.
-#    Do this in /admin/tags, or:
-bun --env-file=.env.production.local run src/db/apply-tags.ts \
-  -- --create-tags=slug-a,slug-b            # dry run first
-bun --env-file=.env.production.local run src/db/apply-tags.ts \
-  -- --create-tags=slug-a,slug-b --apply
-
-# 3. Seed production from a local checkout of main. New films arrive WITH their junctions.
-bun --env-file=.env.production.local --conditions=react-server run src/db/seed-content.ts
-#    Read the last lines: "Tags: linked N junction(s) …" and
-#    "Newly inserted — people:N films:N …" plus "Images stored:N skipped:N".
-#    films:0 means a slug collision. Exit 1 means a gate caught something — the message says
-#    what; fix and re-run, onConflictDoNothing makes that safe. Any "✗" line names a film or
-#    person whose TMDB lookup failed and needs its id pinned by hand.
-
-# 4. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
-#    Source the prod env first — an unset/empty connection string does NOT make psql fail,
-#    it falls back to libpq defaults and quietly queries your LOCAL database, so this check
-#    would "pass" against the wrong data.
-set -a; source .env.production.local; set +a
-psql "$DATABASE_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
-
-# 5. REQUIRED if the release changed tags on films that already exist.
-#    Step 3 prints a "⚠ N existing film(s) have tags …" warning — that is your prompt that this
-#    step applies, NOT the list to run. That list is database drift: it cannot tell a tag this
-#    release adds from one an editor removed on purpose. Take the films from the RELEASE NOTES.
-#    --tags-only is not optional: without it, resync also overwrites editorial prose and would
-#    revert any note or essay edited through /admin.
-bun --env-file=.env.production.local run src/db/resync-content.ts \
-  --films=<from release notes> --tags-only
-bun --env-file=.env.production.local run src/db/resync-content.ts \
-  --films=<from release notes> --tags-only --apply
-
-# 6. Any OTHER change to an existing row must be made in /admin — e.g. moving the featured list
-#    (sortOrder 0), which the seeder will not do. Admin actions call revalidate.ts, which
-#    sweeps the tree.
-
-# 7. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
-#    pages rebuild against the populated database.
-```
-
-**Who owns a film's tags, by lifecycle** — the rule that decides which command you need:
-
-| Situation | What handles it |
-|---|---|
-| Film created by this seed run | `seed-content.ts`, automatically (step 3) |
-| Film already in the DB, seed `tagSlugs` changed | `resync-content.ts --films=… --tags-only` (step 5) — **the seeder will not do this** |
-| A tag that does not exist yet | `apply-tags.ts -- --create-tags=…` (step 2), or `/admin/tags` |
-| Removing a tag from a film | `/admin` only — resync is add-only and never deletes |
-| Correcting a film's prose from seed-data | `resync-content.ts --films=…` (no `--tags-only`) |
-
-Two rules make these safe, and both were learned the hard way:
-
-1. **One invocation writes one kind of thing.** `resync-content` writes prose *or* tags, never
-   both — otherwise a command run to add a tag silently reverts an editor's note, and the output
-   would not even mention it. Need both? Run it twice.
-2. **Release scope comes from the release, never from the database.** Every one of these acts
-   only on films you name, because no query can distinguish a tag this release adds from one an
-   editor deliberately removed — that difference exists only in the seed-data diff. The seeder's
-   step-3 warning tells you a resync is *needed*; the release notes tell you *what*.
+The baseline is bootstrapped by its migration from whatever the database already holds. On a
+database where an editor removed a tag *before* that migration, the removal is invisible and
+will be re-applied once — confirm the target's tags match seed-data before migrating if that
+is possible.
 
 Then run the §7 post-deploy checks, plus: new slugs present in `/sitemap.xml` in both
 locales; `/en/film/<new-slug>` is a real page and not a translation-pending stub;
