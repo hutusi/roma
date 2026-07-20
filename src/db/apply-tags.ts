@@ -1,58 +1,42 @@
 /**
- * Explicit tag repair for a database whose vocabulary is admin-owned.
+ * Creates named vocabulary entries from `seed-data/tags.ts` on a database
+ * whose `tags` table is already admin-owned.
  *
- * Scope: this is a REPAIR tool, not a reconciler. Films created by
- * `seed-content.ts` already receive their tag junctions there (scoped to
- * that run's new films, where there is no editorial history to undo).
- * Reach for this script only to backfill films that predate their tags,
- * or to add a vocabulary entry ahead of a seed run.
+ * Why a separate script: `seed-content.ts` seeds the vocabulary on the FIRST
+ * RUN ONLY (ADR 0014) — once any tag exists, the vocabulary belongs to
+ * `/admin/tags` and the seeder never touches it again. But the seeder also
+ * refuses to insert a film referencing a tag that does not exist, so a batch
+ * introducing new tags needs them created first. This does that, and nothing
+ * else.
  *
- * It acts ONLY on what you name. That is deliberate, and it is a
- * correction: an earlier version inferred intent from database state, and
- * both inferences were wrong.
+ * It creates ONLY the slugs you name. That is deliberate, and it is a
+ * correction: an earlier version created every seed tag missing from the
+ * database, on the theory that a missing slug must be new. It is not —
+ * `deleteTag` lets an editor retire a tag once no published film carries it,
+ * so an absent slug is just as likely to be one deliberately removed, and
+ * nothing in the database distinguishes the two. Recreating it silently
+ * reverted an editorial decision. Naming a slug IS the assertion that it
+ * should exist; the script supplies no judgement of its own.
  *
- *   - "a tag slug missing from the DB must be new" — false. `deleteTag`
- *     lets an editor retire a tag once no published film carries it, so a
- *     missing slug is just as likely to be one that was deliberately
- *     removed. Recreating it silently reverted that decision.
- *   - "a film with zero junctions was never curated" — false. `saveFilm`
- *     deletes every junction and re-inserts only a non-empty selection, so
- *     clearing a film's tags in the admin leaves zero rows, which is
- *     indistinguishable from a film nobody ever touched.
+ * What this script does NOT do:
+ *   - It does not attach tags to films. Films the seeder creates are tagged
+ *     there; a tagSlugs change to a film that already exists is a content
+ *     update to an existing row, which is `resync-content.ts --films=…`.
+ *   - It never renames. A tag whose DB names differ from tags.ts is reported
+ *     and left alone.
+ *   - It never deletes.
  *
- * Those two compound: `deleteTag` refuses while a published film still
- * carries the tag and tells the editor to detach it film by film first —
- * which produces exactly the zero-junction films and the deleted tag that
- * the old heuristics would both undo. The documented way to retire a tag
- * was the one thing guaranteed to be reverted.
+ * Freshness: like backfill-en/link-cast/resync-content this runs outside the
+ * Next server and cannot revalidate — redeploy after `--apply`.
  *
- * So: no film is touched unless named in `--films`, and no tag is ever
- * created unless named in `--create-tags`. Naming something IS the
- * assertion of intent; the script supplies none of its own.
- *
- * Still true, and still enforced:
- *   - INSERT only. Never UPDATE, never DELETE.
- *   - A tag whose DB names differ from tags.ts is reported and left alone;
- *     renaming is the admin's prerogative.
- *   - Idempotent — existing pairs are skipped, so a second run writes 0.
- *   - Dry run by default; prints the target DB host before anything.
- *
- * Locking: takes no advisory locks (src/db/locks.ts is server-only and
- * would drag in the react-server condition). Run it when no editor is
- * mid-edit.
- *
- * Freshness: like backfill-en/link-cast/resync-content this runs outside
- * the Next server and cannot revalidate — redeploy after `--apply`.
- *
- * Run (local):  bun run apply:tags
- *               bun run apply:tags -- --films=a,b --apply
+ * Run (local):  bun run apply:tags -- --create-tags=wuxia,epic
  *               bun run apply:tags -- --create-tags=wuxia,epic --apply
- * Run (prod):   bun --env-file=.env.production.local run src/db/apply-tags.ts [flags]
+ * Run (prod):   bun --env-file=.env.production.local run src/db/apply-tags.ts \
+ *                 -- --create-tags=… [--apply]
  */
 import { inArray } from "drizzle-orm";
 import { db } from "./index";
-import { films, filmTags, tags } from "./schema";
-import { seedFilms } from "./seed-data/films";
+import { tags } from "./schema";
 import { seedTags } from "./seed-data/tags";
 
 const APPLY = process.argv.includes("--apply");
@@ -67,7 +51,6 @@ function listFlag(name: string): string[] {
     .filter(Boolean);
 }
 
-const FILMS = listFlag("films");
 const CREATE_TAGS = listFlag("create-tags");
 
 async function main() {
@@ -77,163 +60,55 @@ async function main() {
     process.exit(1);
   }
   console.log(`Target DB host: ${new URL(url).hostname}`);
-  console.log(`MODE: ${APPLY ? "APPLY (writing)" : "dry run (no writes; pass --apply)"}`);
-  console.log(`Films named:  ${FILMS.length ? FILMS.join(", ") : "(none)"}`);
-  console.log(`Tags to create: ${CREATE_TAGS.length ? CREATE_TAGS.join(", ") : "(none)"}\n`);
+  console.log(`MODE: ${APPLY ? "APPLY (writing)" : "dry run (no writes; pass --apply)"}\n`);
 
-  if (!FILMS.length && !CREATE_TAGS.length) {
+  if (!CREATE_TAGS.length) {
     console.log(
-      "Nothing named, so nothing to do. This tool only acts on what you name:\n" +
-        "  --films=slug,slug        add the seed tagSlugs for these films\n" +
-        "  --create-tags=slug,slug  create these vocabulary entries from tags.ts\n\n" +
-        "Newly seeded films are tagged by seed-content.ts itself and need neither.",
+      "Nothing named, so nothing to do. This tool creates vocabulary entries:\n" +
+        "  --create-tags=slug,slug   create these tags from seed-data/tags.ts\n\n" +
+        "To tag films:\n" +
+        "  films the seeder creates are tagged by seed-content.ts itself;\n" +
+        "  a tag change to a film that already exists is a content update —\n" +
+        "  bun run src/db/resync-content.ts --films=slug,slug --apply",
     );
     process.exit(0);
   }
 
-  const seedFilmBySlug = new Map(seedFilms.map((f) => [f.slug, f]));
   const seedTagBySlug = new Map(seedTags.map((t) => [t.slug, t]));
-
-  // Abort before any write on anything we cannot resolve.
-  const unknownFilms = FILMS.filter((s) => !seedFilmBySlug.has(s));
-  if (unknownFilms.length) {
-    console.error(`✗ not in seed-data/films.ts: ${unknownFilms.join(", ")}`);
-    process.exit(1);
-  }
-  const unknownTags = CREATE_TAGS.filter((s) => !seedTagBySlug.has(s));
-  if (unknownTags.length) {
+  const unknown = CREATE_TAGS.filter((s) => !seedTagBySlug.has(s));
+  if (unknown.length) {
     console.error(
-      `✗ not in seed-data/tags.ts: ${unknownTags.join(", ")}\n` +
-        "  Add them there first so a fresh database seeds the same vocabulary.",
+      `✗ not in seed-data/tags.ts: ${unknown.join(", ")}\n` +
+        "  Add them there first, so a fresh database seeds the same vocabulary.",
     );
     process.exit(1);
   }
 
-  let createdTags = 0;
-  let addedPairs = 0;
-  let drifted = 0;
-  let skippedMissingTag = 0;
+  let created = 0;
 
   await db.transaction(async (tx) => {
-    // ── Vocabulary: only the slugs explicitly named ──────────────────
-    if (CREATE_TAGS.length) {
-      const present = new Set(
-        (
-          await tx.select({ slug: tags.slug }).from(tags).where(inArray(tags.slug, CREATE_TAGS))
-        ).map((r) => r.slug),
-      );
-      const toCreate = CREATE_TAGS.filter((s) => !present.has(s)).map(
-        (s) => seedTagBySlug.get(s) as (typeof seedTags)[number],
-      );
-      for (const s of CREATE_TAGS.filter((s) => present.has(s))) {
-        console.log(`  = tag ${s} already exists — left as-is`);
-      }
-      for (const t of toCreate) {
-        createdTags++;
-        console.log(`  + tag ${t.slug} (${t.nameZh} / ${t.nameEn})`);
-      }
-      if (APPLY && toCreate.length) {
-        await tx.insert(tags).values(toCreate).onConflictDoNothing({ target: tags.slug });
-      }
-    }
-
-    if (!FILMS.length) return;
-
-    // ── Junctions: only the films explicitly named ───────────────────
-    const wanted = FILMS.flatMap((slug) =>
-      (seedFilmBySlug.get(slug)?.tagSlugs ?? []).map((tagSlug) => ({ filmSlug: slug, tagSlug })),
+    const present = new Set(
+      (await tx.select({ slug: tags.slug }).from(tags).where(inArray(tags.slug, CREATE_TAGS))).map(
+        (r) => r.slug,
+      ),
     );
-    if (!wanted.length) {
-      console.log("  (the named films carry no tagSlugs in seed data)");
-      return;
+    for (const s of CREATE_TAGS.filter((s) => present.has(s))) {
+      console.log(`  = tag ${s} already exists — left as-is`);
     }
-
-    const referenced = [...new Set(wanted.map((w) => w.tagSlug))];
-    const dbTags = await tx
-      .select({ id: tags.id, slug: tags.slug, nameZh: tags.nameZh, nameEn: tags.nameEn })
-      .from(tags)
-      .where(inArray(tags.slug, referenced));
-    const dbTagBySlug = new Map(dbTags.map((t) => [t.slug, t]));
-
-    // Report drift; never correct it.
-    for (const t of dbTags) {
-      const seeded = seedTagBySlug.get(t.slug);
-      if (seeded && (seeded.nameZh !== t.nameZh || seeded.nameEn !== t.nameEn)) {
-        drifted++;
-        console.log(
-          `  ~ tag ${t.slug}: DB has "${t.nameZh}"/"${t.nameEn}", ` +
-            `seed says "${seeded.nameZh}"/"${seeded.nameEn}" — left as-is`,
-        );
-      }
+    const toCreate = CREATE_TAGS.filter((s) => !present.has(s)).map(
+      (s) => seedTagBySlug.get(s) as (typeof seedTags)[number],
+    );
+    for (const t of toCreate) {
+      created++;
+      console.log(`  + tag ${t.slug} (${t.nameZh} / ${t.nameEn})`);
     }
-
-    const filmRows = await tx
-      .select({ id: films.id, slug: films.slug })
-      .from(films)
-      .where(inArray(films.slug, FILMS));
-    const filmIdBySlug = new Map(filmRows.map((r) => [r.slug, r.id]));
-    const absent = FILMS.filter((s) => !filmIdBySlug.has(s));
-    if (absent.length) {
-      console.log(`  ! not in this database (run db:seed:content first): ${absent.join(", ")}`);
-    }
-
-    // Existing pairs, keyed structurally so no separator character is
-    // needed — an earlier version joined ids with a literal NUL, which
-    // made git classify this whole file as binary and hid its diff.
-    const existing = filmRows.length
-      ? await tx
-          .select({ filmId: filmTags.filmId, tagId: filmTags.tagId })
-          .from(filmTags)
-          .where(
-            inArray(
-              filmTags.filmId,
-              filmRows.map((r) => r.id),
-            ),
-          )
-      : [];
-    const tagIdsByFilm = new Map<string, Set<string>>();
-    for (const row of existing) {
-      const set = tagIdsByFilm.get(row.filmId) ?? new Set<string>();
-      set.add(row.tagId);
-      tagIdsByFilm.set(row.filmId, set);
-    }
-
-    const planned: { filmId: string; tagId: string }[] = [];
-    for (const w of wanted) {
-      const filmId = filmIdBySlug.get(w.filmSlug);
-      if (!filmId) continue;
-      const tag = dbTagBySlug.get(w.tagSlug);
-      if (!tag) {
-        // Absent from an admin-owned vocabulary: it may never have been
-        // created, or may have been retired on purpose. Either way this
-        // script will not decide — name it in --create-tags if it should
-        // exist.
-        skippedMissingTag++;
-        console.log(`  ? ${w.filmSlug} → ${w.tagSlug}: tag not in vocabulary — skipped`);
-        continue;
-      }
-      if (tagIdsByFilm.get(filmId)?.has(tag.id)) continue;
-      addedPairs++;
-      console.log(`  + ${w.filmSlug} → ${w.tagSlug}`);
-      planned.push({ filmId, tagId: tag.id });
-    }
-
-    if (APPLY && planned.length) {
-      await tx.insert(filmTags).values(planned).onConflictDoNothing();
+    if (APPLY && toCreate.length) {
+      await tx.insert(tags).values(toCreate).onConflictDoNothing({ target: tags.slug });
     }
   });
 
-  console.log(
-    `\n${APPLY ? "Applied" : "Would write"} — tags:${createdTags} junctions:${addedPairs}` +
-      `${drifted ? `, ${drifted} renamed tag(s) left alone` : ""}` +
-      `${skippedMissingTag ? `, ${skippedMissingTag} pair(s) skipped for missing tags` : ""}.`,
-  );
-  if (skippedMissingTag) {
-    console.log("Pass --create-tags=… for any of those that should exist.");
-  }
-  if (!APPLY && (createdTags || addedPairs)) {
-    console.log("Re-run with --apply to write, then redeploy.");
-  }
+  console.log(`\n${APPLY ? "Applied" : "Would write"} — tags:${created}.`);
+  if (!APPLY && created) console.log("Re-run with --apply to write, then redeploy.");
   process.exit(0);
 }
 

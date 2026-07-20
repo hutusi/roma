@@ -304,6 +304,50 @@ async function main() {
     }
   }
 
+  // ── Report (never write): existing films whose seed tags are missing ──
+  // A tagSlugs change to a film that already exists is invisible to this
+  // seeder by design, and the operator cannot be expected to know which
+  // films a given content branch touched. Naming them here — in the output
+  // they are already reading — is what turns a silent no-op into a decision.
+  {
+    const preexisting = seedFilms.filter(
+      (f) => f.tagSlugs?.length && filmIdBySlug.has(f.slug) && !newFilmSlugs.has(f.slug),
+    );
+    if (preexisting.length) {
+      const ids = preexisting.flatMap((f) => {
+        const id = filmIdBySlug.get(f.slug);
+        return id ? [id] : [];
+      });
+      const held = ids.length
+        ? await db
+            .select({ filmId: filmTags.filmId, slug: tags.slug })
+            .from(filmTags)
+            .innerJoin(tags, eq(tags.id, filmTags.tagId))
+            .where(inArray(filmTags.filmId, ids))
+        : [];
+      const heldByFilm = new Map<string, Set<string>>();
+      for (const row of held) {
+        const set = heldByFilm.get(row.filmId) ?? new Set<string>();
+        set.add(row.slug);
+        heldByFilm.set(row.filmId, set);
+      }
+      const behind = preexisting.filter((f) => {
+        const have = heldByFilm.get(filmIdBySlug.get(f.slug) as string) ?? new Set<string>();
+        return (f.tagSlugs ?? []).some((s) => !have.has(s));
+      });
+      if (behind.length) {
+        console.log(
+          `\nℹ ${behind.length} existing film(s) carry tags in seed-data that this database ` +
+            `lacks.\n  They pre-date this run, so the seeder does not touch them (only films it ` +
+            `creates).\n  If that is a content change you are shipping — dry run first, ` +
+            `then add --apply:\n` +
+            `    bun run src/db/resync-content.ts --films=${behind.map((f) => f.slug).join(",")}\n` +
+            `  If an editor removed those tags on purpose, ignore this.\n`,
+        );
+      }
+    }
+  }
+
   // ── 演员表 — only for newly-created films (no natural unique key) ────
   const castValues = seedFilms
     .filter((f) => newFilmSlugs.has(f.slug) && f.cast?.length)

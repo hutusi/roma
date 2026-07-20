@@ -81,6 +81,10 @@ New films get their tag junctions from the seeder itself. It will **refuse to st
 incoming film references a tag the admin-owned vocabulary does not hold, naming the slugs —
 create those first. Nothing is written on that refusal, so the run stays replayable.
 
+Films that **already exist** are a separate case: the seeder never touches their tags, so a
+`tagSlugs` change to one reaches production only through step 5. The seeder reports which
+films those are — read its output, do not assume there are none.
+
 ```bash
 # 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
 
@@ -103,21 +107,32 @@ bun --env-file=.env.production.local --conditions=react-server run src/db/seed-c
 # 4. Confirm the homepage 近期收录 strip is what you intended (it is the 4 newest).
 psql "$PROD_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
 
-# 5. Only if you are backfilling films that PREDATE their tags — name them explicitly.
-#    Not needed for films step 3 just created.
-bun --env-file=.env.production.local run src/db/apply-tags.ts -- --films=slug-a,slug-b --apply
+# 5. REQUIRED if the batch changed tags on films that already exist. Step 3 prints the exact
+#    command — it ends with an "ℹ N existing film(s) carry tags …" block naming them. Copy it.
+#    Nothing prints when nothing pre-existing changed, and then this step is genuinely skippable.
+bun --env-file=.env.production.local run src/db/resync-content.ts --films=<from step 3>
+bun --env-file=.env.production.local run src/db/resync-content.ts --films=<from step 3> --apply
 
-# 6. Any change to an EXISTING row must be made in /admin, not by re-seeding — e.g. moving the
-#    featured list (sortOrder 0). Admin actions do call revalidate.ts, which sweeps the tree.
+# 6. Any OTHER change to an existing row must be made in /admin — e.g. moving the featured list
+#    (sortOrder 0), which the seeder will not do. Admin actions call revalidate.ts, which
+#    sweeps the tree.
 
 # 7. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
 #    pages rebuild against the populated database.
 ```
 
-`apply-tags.ts` acts **only on what you name**. With no flags it does nothing. It will not
-create a tag you did not list, and will not touch a film you did not list — because neither
-"this tag is missing" nor "this film has no tags" distinguishes a gap from an editorial
-decision (ADR 0014 amendment).
+**Who owns a film's tags, by lifecycle** — the rule that decides which command you need:
+
+| Situation | What handles it |
+|---|---|
+| Film created by this seed run | `seed-content.ts`, automatically (step 3) |
+| Film already in the DB, seed `tagSlugs` changed | `resync-content.ts --films=…` (step 5) — **the seeder will not do this** |
+| A tag that does not exist yet | `apply-tags.ts -- --create-tags=…` (step 2), or `/admin/tags` |
+| Removing a tag from a film | `/admin` only — resync is add-only and never deletes |
+
+Each of these acts **only on what you name**, because neither "this tag is missing" nor "this
+film has no tags" distinguishes a gap from an editorial decision (ADR 0014 amendment). The
+seeder's step-3 report is what tells you a resync is needed; it never acts on its own.
 
 Then run the §7 post-deploy checks, plus: new slugs present in `/sitemap.xml` in both
 locales; `/en/film/<new-slug>` is a real page and not a translation-pending stub;

@@ -38,6 +38,21 @@ The original version claimed `apply-tags.ts` could safely reconcile a whole data
 
 These compound rather than sitting apart. `deleteTag` refuses while a published film still carries the tag and instructs the editor to detach it film by film first — producing exactly the zero-junction films *and* the deletable tag that both heuristics would then undo. The documented way to retire a tag was the one operation guaranteed to be reverted, which is precisely the failure this ADR's gate exists to prevent.
 
-`apply-tags.ts` is therefore now a **repair tool that acts only on what it is named**: `--films=` adds a listed film's seed tags, `--create-tags=` adds named vocabulary entries. With no flags it does nothing and says so. It never infers intent from database state.
+### Junction ownership, by lifecycle
+
+The muddle underneath all of this was never answering *who owns a film's tags*. Settled:
+
+| Stage | Owner | Mechanism |
+|---|---|---|
+| At creation | seed-data | `seed-content.ts`, scoped to `newFilmSlugs` |
+| Thereafter | `/admin` | the film form; the seeder never revisits |
+| An explicit seed-driven correction | operator | `resync-content.ts --films=…`, add-only |
+| The vocabulary itself | `/admin` | `apply-tags.ts -- --create-tags=…` for named slugs |
+
+`resync-content.ts` already existed for exactly the middle case — "overwrite the editorial content fields of specific rows from seed-data, by slug" — and tags were simply missing from its remit. Since `seed-content.ts` writes junctions only for films it creates, a `tagSlugs` change to a film that already exists reaches production through resync and nowhere else. Its tag handling is **add-only**: a tag in the database but not in seed-data is reported and left alone. That asymmetry with the prose fields it overwrites is deliberate — prose is single-valued so overwriting is the only coherent option, whereas tags are a set under admin ownership, and fixing a typo in an `editorialNote` must not silently discard curation as a side effect. Removing a tag stays an `/admin` act.
+
+Because a silent no-op is what caused this in the first place, `seed-content.ts` also **reports** existing films whose seed tags the database lacks, printing the resync command. It never acts on that itself: a film appears in that list just as easily because an editor removed the tag on purpose.
+
+`apply-tags.ts` is therefore reduced to one job — creating **named** vocabulary entries. With no flags it does nothing and says so. It never infers intent from database state.
 
 `tags.ts` remains the source of truth for the starter vocabulary on an *empty* database (local dev, e2e, any future environment). It is not optional to keep it current: `assertPublishable` hard-exits on a `tagSlugs` entry with no matching `seedTags` row, so a tag created only through `/admin` would break `db:seed:content` on every fresh checkout. `src/db/seed-data/tags.test.ts` lifts that check into CI.
