@@ -68,10 +68,14 @@ For a batch of new films/people/lists added to `src/db/seed-data/`.
 # 0. Get production credentials locally; delete the file when you are done.
 vercel env pull --environment=production .env.production.local
 
-# 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
-
-# 2. Apply any schema change, and the seed baseline it depends on.
+# 1. Apply any schema change FIRST, and the seed baseline it depends on. Order matters:
+#    the Vercel build prerenders against this database, so deploying code that queries a
+#    column before the column exists fails the build (this applies to PR preview builds
+#    too). Our migrations are additive, which is why running them under the live site is
+#    the safe direction.
 bun --env-file=.env.production.local run db:migrate
+
+# 2. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
 
 # 3. Seed. This is the whole content deploy: new films, people and lists, their tag
 #    junctions, and any tag the release introduces.

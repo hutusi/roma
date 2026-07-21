@@ -45,7 +45,7 @@ export const films = pgTable(
     /** Douban subject id, numeric string — e.g. "1291560" */
     doubanId: text().unique(),
     /** e.g. "Q550027" */
-    wikidataId: text(),
+    wikidataId: text().unique(),
     /** 修复版本 — e.g. "2019 年 4K 修复，博洛尼亚电影资料馆". */
     restorationNote: text(),
     restorationNoteEn: text(),

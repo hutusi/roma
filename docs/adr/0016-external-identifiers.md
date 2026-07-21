@@ -10,7 +10,7 @@ Alongside the ids, two physical-metadata gaps surfaced: the corpus now contains 
 
 ## Decision
 
-- **Four external ids as nullable columns on `films`, stored bare, never as URLs**: `tmdbId` (int, unique), `imdbId` (`tt…`, unique), `doubanId` (numeric string, unique), `wikidataId` (`Q…`). URLs are built in exactly one place, `src/lib/external-ids.ts` — the same one-predicate-shared shape as the tiptap link policy (ADR 0004).
+- **Four external ids as nullable columns on `films`, stored bare, never as URLs**: `tmdbId` (int), `imdbId` (`tt…`), `doubanId` (numeric string), `wikidataId` (`Q…`) — each unique, since every one is an identity claim and two films sharing one would assert `sameAs` the same entity. URLs are built in exactly one place, `src/lib/external-ids.ts` — the same one-predicate-shared shape as the tiptap link policy (ADR 0004).
 - **Display is a courtesy pointer, not a feature.** One discreet 外部链接 line near 哪里能看, showing only the reader-facing pair, ordered for the audience: /zh leads 豆瓣 then IMDb (IMDb is blocked in the mainland), /en leads IMDb then Douban (labelled "Douban", romanized — no zh prose on /en, ADR 0012). No ratings, no counts, no widgets. TMDB and Wikidata ids are never rendered.
 - **All present ids feed `sameAs`** on the Movie JSON-LD node — the entity-reconciliation payoff costs nothing once the ids exist.
 - **`isSilent` boolean, defaulting false**, mirroring `isBlackAndWhite`: a physical attribute every film states, never a tag (ADR 0014). The facts line shows 默片/Silent only when true — talkies are the default and get no word.
@@ -21,7 +21,7 @@ Alongside the ids, two physical-metadata gaps surfaced: the corpus now contains 
 
 - The seeder now persists `tmdbId` instead of treating it as an image-lookup hint, and the admin TMDB import (new films only) keeps the entered id and prefills `imdbId` from `external_ids`. The stored id pins identity — the unique constraint blocks duplicate inclusion — and keeps the seed/enrich pipeline deterministic; it is also the handle an edit-page re-import flow would use, but no such flow exists yet.
 - Existing prod rows never receive new seed fields (`onConflictDoNothing`), so the corpus backfill is its own script, `src/db/backfill-metadata.ts` — metadata columns only, dry-run default, same host-banner conventions as `resync-content.ts`, which stays prose-only. After editors start correcting ids in /admin, run it only with an explicit `--films` list.
-- `films` gains three unique constraints; `saveFilm`'s duplicate-key error now names the colliding field instead of blaming the slug.
+- `films` gains four unique constraints; `saveFilm`'s duplicate-key error now names the colliding field instead of blaming the slug.
 - 73/74 films carry a Douban id (Wikidata has none for 一条安达鲁狗); Wikidata QIDs and IMDb ids are complete. Gaps stay null and render as nothing.
 
 ## Not changed

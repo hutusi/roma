@@ -52,6 +52,7 @@ function uniqueViolationMessage(error: unknown, slug: string): string {
   if (constraint.includes("tmdbId")) return "该 TMDB ID 已被其他影片使用";
   if (constraint.includes("imdbId")) return "该 IMDb ID 已被其他影片使用";
   if (constraint.includes("doubanId")) return "该豆瓣 ID 已被其他影片使用";
+  if (constraint.includes("wikidataId")) return "该 Wikidata ID 已被其他影片使用";
   return `slug「${slug}」已被使用`;
 }
 
