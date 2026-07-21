@@ -69,6 +69,17 @@ export type SeedFilm = {
   aspectRatio?: string;
   /** Explicit on every film — the catalogue no longer presumes B&W. */
   isBlackAndWhite: boolean;
+  /** Silent-era films only; omitted means a talkie. */
+  isSilent?: boolean;
+  /** External ids, stored bare (URLs are built in lib/external-ids.ts). */
+  imdbId?: string;
+  /** Douban subject id, numeric string. */
+  doubanId?: string;
+  /** e.g. "Q550027" */
+  wikidataId?: string;
+  /** 修复版本 — e.g. "2019 年 4K 修复，博洛尼亚电影资料馆". */
+  restorationNote?: string;
+  restorationNoteEn?: string;
   /** 编辑札记 — plain text, must be 200–500 code points to publish. */
   editorialNote: string;
   essay?: TiptapDoc;
@@ -84,7 +95,10 @@ export type SeedFilm = {
   /** Tag slugs from seed-data/tags.ts (unordered set). */
   tagSlugs?: string[];
   watchLinks?: SeedWatchLink[];
-  /** Optional explicit TMDB movie id; otherwise resolved by title + year. */
+  /**
+   * TMDB movie id — persisted to the row (stable re-import handle) and
+   * used for image lookup; otherwise images resolve by title + year.
+   */
   tmdbId?: number;
 };
 

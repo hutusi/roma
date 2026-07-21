@@ -31,6 +31,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.85:1",
     isBlackAndWhite: true,
     tagSlugs: ["modernism"],
+    tmdbId: 422,
+    imdbId: "tt0056801",
+    doubanId: "1361276",
+    wikidataId: "Q12018",
     editorialNote:
       "费里尼把创作的困境本身拍成了电影：一个拍不出电影的导演，被记忆、欲望与负疚缠绕，最终在马戏团式的圆圈舞里与自己的人生和解。它是关于艺术家中年危机最诚实的自白，也是电影语言的一次彻底解放——梦境、回忆与现实在同一个镜头里自由换场，不需要任何过渡的借口。黑白摄影在这里不是怀旧，而是让光成为叙事者：吉迪的白衬衫、修女的黑袍、浴场的蒸汽，都是心理的直接显影。半个多世纪过去，几乎所有关于创作者自我怀疑的电影都活在它的阴影里。如果你只看一部费里尼，看这一部。",
     editorialNoteEn:
@@ -80,6 +84,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["neorealism"],
+    tmdbId: 405,
+    imdbId: "tt0047528",
+    doubanId: "1292719",
+    wikidataId: "Q18402",
     editorialNote:
       "费里尼尚未离开新现实主义，却已长出翅膀。《大路》讲一个被卖给流浪艺人的傻姑娘杰索米娜，跟着粗暴的赞巴诺卖艺为生，直到死亡才让这个铁石心肠的男人明白自己失去了什么。朱丽叶塔·马西纳用小丑般的脸演出了近乎圣愚的天真，让最卑微的生命也闪着神性的光。这不是一部愤怒控诉社会的电影，而是一则关于爱与孤独的寓言：我们常常在失去之后，才认得出曾拥有的东西。结尾赞巴诺在海边的恸哭，是电影史上最沉重的一次迟到的觉悟。",
     editorialNoteEn:
@@ -107,6 +115,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["neorealism"],
+    tmdbId: 19426,
+    imdbId: "tt0050783",
+    doubanId: "1294781",
+    wikidataId: "Q18405",
     editorialNote:
       "一个罗马街头的妓女卡比利亚，一次次被欺骗、被抢劫、被抛弃，却一次次重新相信爱情。费里尼与马西纳这对夫妻，把一个最容易被写成悲剧的题材，拍成了对人类韧性的礼赞。影片最后那个著名的长镜头——卡比利亚刚被未婚夫骗走全部积蓄，眼含泪水走在路上，一群年轻人载歌载舞地经过，她抬起头，对着镜头几乎是对着我们，露出一个破碎又倔强的微笑。那一刻，绝望与希望同时在场。马西纳凭这个角色摘得戛纳影后，她那张仿佛不谙世事的脸，把苦难与天真同时写尽。这是电影送给所有跌倒又爬起的人的一封情书。",
     editorialNoteEn:
@@ -136,6 +148,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption"],
+    tmdbId: 490,
+    imdbId: "tt0050976",
+    doubanId: "1293234",
+    wikidataId: "Q217189",
     editorialNote:
       "一个从十字军东征归来的骑士，在黑死病肆虐的中世纪与死神下起一盘棋，只为在死前弄清上帝是否存在。伯格曼把最古老的恐惧——死亡与神的沉默——拍成了一则既凝重又意外幽默的寓言。海边棋局、教堂告解、火刑柱上的女巫，一幕幕逼问着信仰的意义；而那对天真的杂耍夫妻，则是黑暗中留下的微光。影片以死神领着众人在山脊上跳起“死亡之舞”收尾，成为电影史上最著名的画面之一。它诞生于二战的余悸与核阴影之下，至今仍是每个在信与不信之间挣扎者的镜子。",
     editorialNoteEn:
@@ -179,6 +195,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["modernism", "family-drama"],
+    tmdbId: 614,
+    imdbId: "tt0050986",
+    doubanId: "1293071",
+    wikidataId: "Q239756",
     editorialNote:
       "一位年迈的医学教授驱车前往领取荣誉学位，一路上却被梦境、回忆与懊悔层层拦截。伯格曼让老人重返童年采野草莓的夏日、重历爱情的失落，在时间的褶皱里审判自己一生的冷漠。由默片大师维克多·舍斯特勒姆亲自出演，那张苍老的脸承载了整个二十世纪对孤独的理解。这是一部关于和解的电影：不是与他人，而是与那个逐渐变得铁石心肠的自己。当老人在片尾终于梦见父母在河边向他招手，冰封的心在一瞬间融化——衰老原来也可以是一次迟来的温柔的醒悟。",
     editorialNoteEn:
@@ -202,6 +222,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["modernism"],
+    tmdbId: 797,
+    imdbId: "tt0060827",
+    doubanId: "1294438",
+    wikidataId: "Q695255",
     editorialNote:
       "一个突然拒绝说话的女演员，与照顾她的护士在海边独处，两个女人的身份逐渐渗透、交换、直至难分彼此。伯格曼在这里抛弃了一切故事的安全感，让胶片自燃、让银幕断裂，把电影本身的虚构性推到台前。这是他最难解也最大胆的作品：关于身份、沉默与我们戴给世界的那副面具。丽芙·乌曼与毕比·安德松两张脸在著名的叠印镜头里合为一张，成为二十世纪现代主义电影最令人不安的图像。它拒绝被讲清楚，却在每一次重看时都逼你面对：所谓“自我”，是否只是一场无人拆穿的表演。",
     editorialNoteEn:
@@ -220,6 +244,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption"],
+    tmdbId: 11656,
+    imdbId: "tt0053976",
+    doubanId: "1293156",
+    wikidataId: "Q753141",
     editorialNote:
       "中世纪的瑞典，一个虔诚人家的少女在去教堂途中被牧羊人奸杀，凶手却阴差阳错借宿到死者父亲的家中。当真相败露，父亲手刃仇人，随即在女儿倒下之处涌出一眼清泉。伯格曼借一则古老民谣，逼问最尖锐的神义论问题：全能的上帝为何容许无辜者受难。父亲在泉边跪地立誓建起教堂的一幕，既是忏悔也是与沉默之神的艰难和解。冷峻的黑白影像与几乎残酷的克制，让暴力与神迹并置，毫不煽情却直抵灵魂。这部为伯格曼赢得奥斯卡的作品，是他信仰追问的一次凛冽结晶。",
     editorialNoteEn:
@@ -241,6 +269,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["jidaigeki"],
+    tmdbId: 346,
+    imdbId: "tt0047478",
+    doubanId: "1295399",
+    wikidataId: "Q189540",
     editorialNote:
       "战国乱世，一座饱受山贼劫掠的村庄，请来七个走投无路的浪人守护稻谷与性命。黑泽明用三个多小时建起一整座关于勇气、阶级与徒劳的史诗：招募、备战、决战，节奏如鼓点般层层推进，泥泞中的雨战至今仍是动作场面的标尺。但它真正动人的，是武士与农民之间那道无法弥合的裂缝——胜利属于活下来的农民，而武士只留下几座土坟。“这一仗我们又输了。”志村乔的这句叹息，把英雄主义拉回了历史的尘土。此后无数关于“乌合之众集结成队”的电影，都欠它一份师承。",
     editorialNoteEn:
@@ -293,6 +325,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["jidaigeki"],
+    tmdbId: 548,
+    imdbId: "tt0042876",
+    doubanId: "1291879",
+    wikidataId: "Q135465",
     editorialNote:
       "一桩树林里的凶案，四个当事人给出四套彼此矛盾的证词，包括借巫女之口开口的死者。黑泽明由此把一个简单的谋杀，拍成了关于真相是否存在的哲学迷宫。摄影机第一次大胆地对着太阳穿行于密林，光影斑驳，如同人心的暧昧。每个人的叙述都在维护自己的体面，真相反而在自利的雾中永远退场。“罗生门”从此成为一个世界通用的词，指代那种各执一词、无从裁断的困境。而结尾樵夫收养弃婴的微光，又为这份对人性的怀疑留了一线不肯熄灭的信任。它让世界第一次看见了日本电影。",
     editorialNoteEn:
@@ -321,6 +357,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption"],
+    tmdbId: 3782,
+    imdbId: "tt0044741",
+    doubanId: "1293847",
+    wikidataId: "Q152105",
     editorialNote:
       "一个庸碌了三十年、只会盖章的市政科长，被诊断出胃癌只剩数月可活。在纵酒与彷徨之后，他决定用最后的时间，顶着官僚系统的层层推诿，把一片臭水沟建成一座小公园。黑泽明用近乎残酷的诚实拷问：人怎样才算真正活过？影片后半程干脆跳到主人公的葬礼，让同事们在酒后争论他究竟做了什么——记忆与推诿之间，一个人的意义被反复称量。志村乔在雪夜的秋千上轻声哼唱的一幕，是电影史上最动人的死亡与新生。它提醒每一个在体制中麻木的人：意义不在别处，只在你肯不肯为一件小事燃尽自己。",
     editorialNoteEn:
@@ -348,6 +388,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "2.35:1",
     isBlackAndWhite: true,
     tagSlugs: ["jidaigeki"],
+    tmdbId: 11878,
+    imdbId: "tt0055630",
+    doubanId: "1292515",
+    wikidataId: "Q20475",
     editorialNote:
       "一个无名浪人踱进一座被两帮恶势力撕扯的小镇，索性把自己卖给双方，坐看他们自相残杀。黑泽明把西部片的骨架移植到幕末的日本，又用三船敏郎耸肩、抓痒、痞气十足的表演，造出了一个全新的反英雄。风卷尘沙的空镜、干脆利落的杀阵，把冷峻与黑色幽默调成一味。这部电影反过来又催生了莱昂内的《荒野大镖客》，一个形象就此在东西方之间来回投胎，成就了“独行客涤荡罪恶小镇”的永恒母题。冷峻的幽默之下，是黑泽明对暴力与贪婪毫不留情的嘲讽。它证明娱乐性与作者性从来不必二选一。",
     editorialNoteEn:
@@ -377,6 +421,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["family-drama"],
+    tmdbId: 18148,
+    imdbId: "tt0046438",
+    doubanId: "1291568",
+    wikidataId: "Q26060",
     editorialNote:
       "一对老夫妻从乡下到东京探望儿女，却发现忙于生计的孩子们把他们当成负担，唯有战死儿子的遗孀待他们最好。小津用他标志性的低机位与几乎静止的镜头，拍下家庭最平常也最残忍的真相：亲情会随距离与时间悄然稀释，而我们总要到来不及时才懂得。没有争吵，没有戏剧化的转折，只有茶杯、火车与欲言又止的沉默。母亲归乡后骤然离世，留下父亲独对空荡的房子——那份克制到极点的哀伤，比任何嚎哭都更叫人心碎。这是电影献给“子欲养而亲不待”的一首挽歌，也是很多人到了一定年纪才敢重看的作品。",
     editorialNoteEn:
@@ -412,6 +460,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["family-drama"],
+    tmdbId: 20530,
+    imdbId: "tt0041154",
+    doubanId: "1307265",
+    wikidataId: "Q743203",
     editorialNote:
       "一个与父亲相依为命的女儿，因不愿离开而迟迟不肯出嫁，父亲便谎称自己要再娶，好逼她走进属于自己的人生。小津把一桩再寻常不过的婚事，拍成了关于付出与放手的深潭。原节子的笑容明亮得近乎透明，笑意底下却涌动着不舍与体谅。片尾父亲独自削着苹果，果皮断落，房间空了——那一刻，成全孩子的孤独具象成了一个简单的动作。没有一句台词点破，却道尽了为人父母的甘苦。这是小津“嫁女”母题的起点，也是他最温柔的一次心碎。原节子与笠智众的这次合作，就此开启了小津战后最动人的一系列家庭电影。",
     editorialNoteEn:
@@ -440,6 +492,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["family-drama"],
+    tmdbId: 50247,
+    imdbId: "tt0043313",
+    doubanId: "1401842",
+    wikidataId: "Q1761192",
     editorialNote:
       "一个到了适婚年龄的女儿，在家人为她张罗体面婚事时，却出人意料地选择嫁给邻家带着孩子的丧偶医生。小津把镜头对准三代同堂的大家庭，看它如何在一桩婚事中不动声色地走向解体。他不评判任何人的选择，只是让生活像麦子成熟那样自然发生。餐桌、走廊、海边沙丘上的空镜，把聚散离合酿成了淡淡的、带着咸味的诗。结尾老夫妇望着熟透的麦田感叹“我们已经很幸福了”，是小津对无常人生最豁达的注解：家终会散，而正因为会散，此刻的团圆才值得珍重。",
     editorialNoteEn:
@@ -468,6 +524,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "2.35:1",
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption"],
+    tmdbId: 895,
+    imdbId: "tt0060107",
+    doubanId: "1298248",
+    wikidataId: "Q503046",
     editorialNote:
       "以十五世纪圣像画家卢布廖夫为轴，塔可夫斯基拍下了一个艺术家如何在鞑靼铁蹄、饥荒与暴力中丧失又重拾信仰的漫长历程。影片由八个篇章缀成，气象恢弘却又粗粝真实，把中世纪罗斯的泥泞、苦难与偶尔迸发的神性一并托起。最著名的“铸钟”一段，一个少年在毫无把握中赌上性命铸出巨钟，钟声轰然响起的那一刻，几乎是对一切创造行为的献词。黑白的苦难在结尾骤然转为卢布廖夫真迹的彩色特写——艺术终于从血与土里升起。这是关于信仰、暴力与创作代价的沉思，也是塔可夫斯基“雕刻时光”的第一座丰碑。",
     editorialNoteEn:
@@ -486,6 +546,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["war"],
+    tmdbId: 31442,
+    imdbId: "tt0056111",
+    doubanId: "1294421",
+    wikidataId: "Q147878",
     editorialNote:
       "十二岁的伊万在战争中失去全家，成了红军的侦察兵，穿行于生死之间的前线沼泽。塔可夫斯基的处女作就已显露天才：他让梦境与战争交替浮现，明亮的童年闪回与阴冷的现实互为伤口。倒映的白桦、滴水的地窖、被炮火犁过的荒原，都被拍出了一种令人窒息的诗意。伊万把整个童年献给了复仇，也因此被战争彻底吞噬。影片没有一处正面歌颂英勇，只是静静记录一个孩子如何被时代碾碎。它一举拿下威尼斯金狮，宣告了一位把苦难拍成挽歌的诗人导演的诞生。",
     editorialNoteEn:
@@ -506,6 +570,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption"],
+    tmdbId: 690,
+    imdbId: "tt0053168",
+    doubanId: "1303559",
+    wikidataId: "Q664726",
     editorialNote:
       "一个自视甚高的青年沉迷于扒窃，把偷盗当作对平庸世界的智力反叛，直到爱与被捕才让他真正低头。布列松剥去一切表演的痕迹，让手指、目光与物件的运动承担全部叙事。地铁站、火车里那几段扒窃的“手部芭蕾”，被剪辑得如同一场精密的仪式，紧张却毫不煽情。这是他“恩典”主题最凝练的一次表达：救赎不来自主人公的悔悟，而来自监狱铁窗前那一句“我走了多么远的路才到你身边”。全片仅七十余分钟，却把犯罪、骄傲与爱写得像一则冷峻的祈祷。理解布列松，不妨从这里开始。",
     editorialNoteEn:
@@ -525,6 +593,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption"],
+    tmdbId: 20108,
+    imdbId: "tt0060138",
+    doubanId: "1401619",
+    wikidataId: "Q228937",
     editorialNote:
       "一头名叫巴特萨的驴子，从一个主人辗转到另一个主人，默默承受人间的爱抚、鞭打、利用与遗弃，最终死在羊群之中。布列松借这头驴的一生，写下了一部关于圣徒、苦难与人类残忍的寓言。驴子从不表演情绪，正因如此，它那双温顺的眼睛成了一面镜子，照出周遭每一个人的贪婪与软弱。结尾它中弹后缓缓卧倒在阳光下的草坡上，羊群围拢过来——那是电影史上最接近“殉道”的死亡。没有一句说教，却让戈达尔感叹“这就是整个世界”。它要求的不是理解，而是凝视与谦卑。",
     editorialNoteEn:
@@ -546,6 +618,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.85:1",
     isBlackAndWhite: true,
     tagSlugs: ["modernism"],
+    tmdbId: 5165,
+    imdbId: "tt0053619",
+    doubanId: "1389923",
+    wikidataId: "Q514531",
     editorialNote:
       "一群富人乘游艇出海，一个女人在荒岛上离奇失踪，然而电影很快放弃了寻找，转而凝视她的情人与好友如何在寻人途中彼此吸引。安东尼奥尼故意抽掉悬疑的答案，把注意力交给现代人之间无法填补的空洞。人物常被压到画面一角，让岩石、建筑与空旷的街道占据中心，仿佛环境本身就在制造疏离。这份“反情节”曾在戛纳招致嘘声，却很快被奉为现代主义电影的里程碑。它不提供故事的满足，只留下一种挥之不去的怅惘：我们如此靠近，却谁也无法真正抵达谁。看它，需要放下对答案的执念。",
     editorialNoteEn:
@@ -564,6 +640,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.85:1",
     isBlackAndWhite: true,
     tagSlugs: ["modernism"],
+    tmdbId: 41050,
+    imdbId: "tt0054130",
+    doubanId: "1361252",
+    wikidataId: "Q1215047",
     editorialNote:
       "一对婚姻走到尽头的夫妻，用一整夜的时间——探望病危的友人、参加喧闹的派对、在清晨的高尔夫球场上摊牌——确认爱情已经死去。安东尼奥尼让米兰的现代建筑成为冷漠的共谋，玻璃幕墙映出的是无处安放的空虚。让娜·莫罗独自穿行城市的长段落，几乎没有对白，却把一个女人的幻灭写得淋漓尽致。片尾妻子读起丈夫多年前写给她的情书，丈夫却记不得那是自己所写——最痛的不是背叛，而是激情如何在日常里悄无声息地蒸发。这是“疏离三部曲”中最冷静的一部，献给所有在长久关系里感到彼此陌生的人。",
     editorialNoteEn:
@@ -596,6 +676,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["modernism"],
+    tmdbId: 21135,
+    imdbId: "tt0056736",
+    doubanId: "1293105",
+    wikidataId: "Q1468980",
     editorialNote:
       "一个刚结束一段感情的女子，与在证券交易所里追逐金钱的年轻经纪人短暂相恋，却始终无法真正投入。安东尼奥尼“疏离三部曲”的终章，把现代情感的虚无推向极致。喧嚣的股市与空荡的街角形成刺目的对照，爱情像日食一样，明明发生过，却迅速被阴影吞没。影片最惊人的是结尾：两人约好再见，镜头却在约定的街角空等了七分钟，只有路灯、水桶、陌生人的脸，恋人始终没有出现。这段“无人的蒙太奇”宣告了现代人情感的彻底缺席，也把电影语言推到了抽象的边缘。它冷峻得近乎残酷，却精准得令人心悸。",
     editorialNoteEn:
@@ -617,6 +701,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["french-new-wave"],
+    tmdbId: 269,
+    imdbId: "tt0053472",
+    doubanId: "1353745",
+    wikidataId: "Q86427",
     editorialNote:
       "一个崇拜好莱坞硬汉的小混混偷车杀警，拉着美国女友在巴黎街头亡命，最终被她出卖。戈达尔的处女作用满不在乎的跳接，砸碎了古典剪辑的连贯，宣告一种全新的电影语法就此诞生。手持摄影、实景街拍、直视镜头的挑衅，把即兴与随性变成了美学。贝尔蒙多叼着烟摸嘴唇的痞气、塞贝格在香榭丽舍卖报的侧脸，成了新浪潮永恒的图腾。它不在乎故事是否严密，只在乎电影能否像生活一样任性、鲜活、随时脱轨。六十年后再看，那股横冲直撞的青春气息依旧扑面而来。这是现代电影的一声发令枪。",
     editorialNoteEn:
@@ -652,6 +740,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["french-new-wave"],
+    tmdbId: 1626,
+    imdbId: "tt0056663",
+    doubanId: "1296757",
+    wikidataId: "Q1148491",
     editorialNote:
       "一个想当演员的年轻女子娜娜，一步步沦为妓女，最终死于一场荒谬的交易。戈达尔用十二个带标题的段落，像论文又像素描地拆解一个女人的堕落与尊严。安娜·卡里娜的脸在片中被反复凝视——她在影院里对着德莱叶的《圣女贞德》落泪的一幕，把两个受难的女性隔着三十年重叠在一起。影片穿插哲学对话、街头实录与直视镜头的独白，冷静得近乎残酷，却又饱含爱意。它既是新浪潮对类型的又一次解构，也是戈达尔写给卡里娜的一封情书。自由与被出卖，在这里只有一线之隔。",
     editorialNoteEn:
@@ -676,6 +768,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "2.35:1",
     isBlackAndWhite: true,
     tagSlugs: ["french-new-wave"],
+    tmdbId: 147,
+    imdbId: "tt0053198",
+    doubanId: "1300056",
+    wikidataId: "Q162331",
     editorialNote:
       "十三岁的安托万被冷漠的父母、刻板的学校与不被理解的世界一步步推向街头与教养院。特吕弗把自己的童年拍成了新浪潮的开山之作，镜头始终与少年平视，从不居高临下地评判。逃学、偷打字机、被审讯——每一次“胡闹”背后，都是一个渴望被爱却屡屡碰壁的灵魂。影片以一个长镜头收尾：安托万从教养院逃出，一路奔向从未见过的大海，在浪花前停下，回头望向镜头，画面定格。那个既自由又茫然的眼神，成了电影史上最动人的结尾之一。它温柔地告诉每个曾是“问题少年”的人：你并不孤单。",
     editorialNoteEn:
@@ -698,6 +794,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.85:1",
     isBlackAndWhite: true,
     tagSlugs: ["suspense"],
+    tmdbId: 539,
+    imdbId: "tt0054215",
+    doubanId: "1293181",
+    wikidataId: "Q163038",
     editorialNote:
       "一个卷款潜逃的女秘书，在荒僻的汽车旅馆遇上腼腆的老板诺曼·贝茨，随即在浴室里被刺身亡——而这仅仅是电影的前半段。希区柯克用这场石破天惊的“中途弑主角”，彻底颠覆了观众对安全感的一切预期。淋浴谋杀那七十余个镜头的凌厉剪辑与伯纳德·赫尔曼尖啸的弦乐，成为影史最著名的段落。他把恐怖从哥特城堡搬进了寻常的汽车旅馆，暗示真正的怪物就藏在最普通的人心里。这部低成本黑白片重新定义了惊悚片的尺度与伦理，也让一代观众从此不敢安心洗澡。悬念大师最锋利的一击。",
     editorialNoteEn:
@@ -725,6 +825,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["suspense"],
+    tmdbId: 21734,
+    imdbId: "tt0036342",
+    doubanId: "1293817",
+    wikidataId: "Q465979",
     editorialNote:
       "小镇少女查理满心欢喜地迎来同名的舅舅来访，却渐渐察觉这位迷人的长辈很可能是连环杀害寡妇的凶手。希区柯克本人最钟爱的作品之一，把恐怖悄悄植入最安稳的美国小镇与最亲密的家庭内部。他让甥舅二人如镜像般彼此映照，善与恶的界线因血缘而愈发暧昧不安。餐桌上舅舅那段厌世的独白，冷不防撕开了体面生活的假面。没有异国城堡，只有白栅栏后的日常，危险却因此更贴近骨髓。这是希区柯克对“恶就住在隔壁”这一命题最优雅也最阴冷的演绎。",
     editorialNoteEn:
@@ -746,6 +850,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["modernism"],
+    tmdbId: 15,
+    imdbId: "tt0033467",
+    doubanId: "1292288",
+    wikidataId: "Q24815",
     editorialNote:
       "报业大亨凯恩临终吐出的一个词“玫瑰花蕾”，牵出记者对他一生的层层追查，也拼出一幅关于权力、孤独与美国梦幻灭的碎片肖像。年仅二十五岁的威尔斯集编导演于一身，用深焦摄影、天花板入镜、时间跳跃的叙事，几乎一次性刷新了电影语言的边界。凯恩从理想主义的青年一路膨胀为众叛亲离的孤家寡人，那座塞满收藏却空无一人的庄园，是二十世纪对成功最尖锐的反讽。“玫瑰花蕾”的谜底，最终指向的是被金钱买不回的童年。它常年高居影史最伟大作品之列，至今仍是每个学电影者绕不开的起点。",
     editorialNoteEn:
@@ -785,6 +893,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.85:1",
     isBlackAndWhite: true,
     tagSlugs: ["film-noir"],
+    tmdbId: 1480,
+    imdbId: "tt0052311",
+    doubanId: "1294756",
+    wikidataId: "Q778161",
     editorialNote:
       "美墨边境小镇发生汽车爆炸案，一个墨西哥缉毒官与一个腐败臃肿的美国警长就此展开较量。威尔斯自导自演那个道德溃烂的警长，把黑色电影的堕落美学推向巅峰。影片开场那个长达三分多钟、跨越街区与国界的著名长镜头，从装置炸弹一直跟到它爆炸，堪称调度史上的奇迹。倾斜的构图、逼仄的阴影与霓虹，把边境拍成了善恶难辨的泥沼。“他是个烂人，可他有直觉。”这句盖棺定论，道尽了威尔斯对人性含混的迷恋。作为经典黑色电影的一记华丽终章，它的邪魅至今无人能及。",
     editorialNoteEn:
@@ -814,7 +926,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 82,
     aspectRatio: "1.33:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema", "faith-and-redemption"],
+    tmdbId: 780,
+    imdbId: "tt0019254",
+    doubanId: "1293783",
+    wikidataId: "Q51520",
     editorialNote:
       "德莱叶依据真实审判记录，重现贞德受审、受辱直至火刑的最后时日。他几乎全程使用特写，让镜头贴近一张张脸——审判者的傲慢、贞德的泪水与信仰，在毫无修饰的皮肤纹理间纤毫毕现。法尔康内蒂奉献了电影史上最震撼的表演之一，据说她的泪水是真实痛苦的结晶。没有华丽布景，没有配乐（默片），只有面孔与信念的正面交锋，把一场宗教审判拍成了灵魂的酷刑。当火焰终于升起，殉道与救赎合为一体。这部近百年前的默片，至今仍是“电影能否承载超验之物”这一问题最有力的回答。",
     editorialNoteEn:
@@ -833,6 +950,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption"],
+    tmdbId: 48035,
+    imdbId: "tt0048452",
+    doubanId: "1303566",
+    wikidataId: "Q2352630",
     editorialNote:
       "丹麦乡间一个笃信上帝的农家，因信仰的分歧、疯癫的次子与一场难产的死亡而陷入危机，直到影片结尾迎来一场令人屏息的复活。德莱叶用极其克制、缓慢横移的长镜头，把日常的厨房与病榻拍出了祭坛般的庄严。他不解释、不煽情，只是耐心地让怀疑与信念在白墙之间交锋。当自称是基督的次子握住死者的手，奇迹真的发生——那一刻，最理性的观众也被逼到神迹的门前。这是电影史上少有的、敢于正面呈现“复活”而毫不滑向廉价的作品。它要求的不是相信，而是屏住呼吸的敬畏。",
     editorialNoteEn:
@@ -854,6 +975,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["jidaigeki"],
+    tmdbId: 14696,
+    imdbId: "tt0046478",
+    doubanId: "1303577",
+    wikidataId: "Q1076605",
     editorialNote:
       "战乱年代，两个贪图富贵与虚名的农夫抛下妻子外出闯荡，一个迷失在女鬼的温柔乡里，一个荒唐地做起了武士，最终都在幻梦破灭后尝到苦果。沟口健二用如水墨般流动的长镜头，把民间怪谈拍成了关于欲望与代价的凄美卷轴。雾中泛舟、幽宅夜宴的段落，虚实交融，美得令人心惊。当陶匠归家，亡妻的鬼魂已在灶前默默为他备好晚饭——那份跨越生死的温柔，比任何控诉都更叫人痛惜。影片对战争中被牺牲的女性寄予了最深的悲悯。它是日本电影黄金时代最精致的鬼故事，也是一则关于男人虚荣的永恒寓言。",
     editorialNoteEn:
@@ -873,6 +998,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["jidaigeki"],
+    tmdbId: 20532,
+    imdbId: "tt0047445",
+    doubanId: "1303573",
+    wikidataId: "Q2633405",
     editorialNote:
       "平安时代，一对姐弟因父亲仗义执言而家破人亡，被拐卖为奴，在残暴的庄头山椒大夫手下受尽折磨。沟口健二把这则古老传说，拍成了关于仁慈能否在残酷世间存续的沉思。姐姐安寿为掩护弟弟逃走而从容投水的一幕，湖面只余一圈涟漪，克制得令人肝肠寸断。多年后弟弟秉承父训释放奴隶、寻回失明的老母，却已物是人非。沟口的镜头始终保持着悲悯的距离，让苦难在优雅的构图中显得愈发沉重。“人若没有慈悲，便不算人。”父亲的教诲贯穿全片。这是对权力之恶与人性之善最庄重的一次称量。",
     editorialNoteEn:
@@ -893,6 +1022,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["surrealism"],
+    tmdbId: 800,
+    imdbId: "tt0042804",
+    doubanId: "1303579",
+    wikidataId: "Q572522",
     editorialNote:
       "墨西哥城的贫民窟里，一群无人照管的少年在暴力与饥饿中彼此伤害，走向注定的毁灭。布努埃尔把超现实主义的锋利，狠狠扎进了最残酷的社会现实。他拒绝廉价的同情，既不美化穷人也不宽恕他们，只是冷静地展示贫困如何制造出恶。片中那段少年梦见母亲递来血淋淋生肉的超现实梦境，把弗洛伊德式的欲望与匮乏一并揭开。结尾少年的尸体被驮上毛驴、抛入垃圾遍地的山沟，是对“被遗忘者”命运最刺骨的注脚。它一举让布努埃尔在墨西哥东山再起，也证明超现实主义可以是最尖锐的现实批判。",
     editorialNoteEn:
@@ -910,7 +1043,11 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 21,
     aspectRatio: "1.33:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema", "surrealism"],
+    tmdbId: 626,
+    imdbId: "tt0020530",
+    wikidataId: "Q190575",
     editorialNote:
       "布努埃尔与画家达利联手炮制的这部十余分钟的默片，以一记割裂眼球的镜头开场，宣告了超现实主义电影的诞生。手掌里爬出蚂蚁、钢琴上拖着腐驴与神父、时间字幕胡乱跳跃——它拒绝一切逻辑与解释，只忠实于梦与潜意识的自由联想。两位作者立下规矩：任何能被理性说通的画面一律删去。正因如此，它至今仍保有令人不安的原始冲击力，像一场无法被驯服的噩梦。作为电影先锋派最著名的一次爆破，它不是用来“看懂”的，而是用来经受的。近百年过去，那把划过眼球的剃刀依旧让人本能地闭眼。",
     editorialNoteEn:
@@ -932,6 +1069,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["comedy"],
+    tmdbId: 776,
+    imdbId: "tt0031885",
+    doubanId: "1401261",
+    wikidataId: "Q748599",
     editorialNote:
       "一群贵族与仆人齐聚乡间庄园狩猎作乐，情欲、谎言与阶级的游戏在楼上楼下同时上演，最终以一场荒唐的误杀收场。雷诺阿用流动的场面调度与纵深构图，让主仆、宾客在同一空间里进进出出，织成一幅战前法国社会的群像。他不审判任何人，因为“每个人都有他的理由”。狩猎场上兔子成片倒下的段落，冷不防预言了即将到来的战争屠戮。影片公映时惨遭嘘骂与删剪，二战后才被重新发现，如今稳居影史殿堂。它是喜剧也是挽歌，笑着送别一个行将崩塌的旧世界，优雅之下藏着刺骨的悲凉。",
     editorialNoteEn:
@@ -951,6 +1092,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["war"],
+    tmdbId: 777,
+    imdbId: "tt0028950",
+    doubanId: "1294808",
+    wikidataId: "Q470336",
     editorialNote:
       "一战期间，几个法国军官沦为德军战俘，在一次次越狱中，雷诺阿让我们看到：真正的界线不在国与国之间，而在阶级与阶级之间。贵族出身的法国上尉与德国典狱长惺惺相惜，跨越敌意；平民战俘则彼此扶持，跨越出身。影片几乎没有一个正面的战斗场面，却把战争的荒谬与人性的高贵拍得动人至深。德国军官放走两名越狱者、望着他们消失在中立国雪原的一幕，是对“敌人”这个概念最温柔的消解。“大幻影”既指人们以为这是最后一场战争的天真，也指所有终将被战争碾碎的美好。这是一部伟大的反战宣言。",
     editorialNoteEn:
@@ -972,6 +1117,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["neorealism"],
+    tmdbId: 5156,
+    imdbId: "tt0040522",
+    doubanId: "1295873",
+    wikidataId: "Q172837",
     editorialNote:
       "战后罗马，一个失业已久的男人好不容易找到贴海报的工作，赖以谋生的自行车却在第一天被偷。他带着年幼的儿子走遍全城寻找，最终在绝望中自己也伸手去偷，当场被擒，尊严碎在儿子眼前。德西卡用非职业演员、真实街道与几近纪录的镜头，把新现实主义推向顶峰。没有反派，没有奇迹，只有贫穷如何一点点逼一个老实人走投无路。结尾父子俩手牵手消失在人群中，父亲流泪，儿子紧握他的手——那份沉默的原谅，比任何台词都更沉重。它是电影同情心的标尺，也是对普通人尊严最深的凝视。",
     editorialNoteEn:
@@ -994,6 +1143,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["film-noir"],
+    tmdbId: 599,
+    imdbId: "tt0043014",
+    doubanId: "1298733",
+    wikidataId: "Q193570",
     editorialNote:
       "一个潦倒的编剧误入过气默片女星的豪宅，成了她重返银幕幻梦里的囚徒与情人，故事由他漂在泳池里的尸体倒叙讲起。怀尔德让好莱坞亲手解剖自己，写下了一封写给电影工业的黑色情书。葛洛丽亚·斯旺森饰演的诺玛，活在昔日光环里不肯醒来，那句“是电影变小了”的台词，道尽了被时代抛弃者的偏执与悲凉。片尾她踩着幻觉走下楼梯、对着新闻镜头念出“我准备好拍特写了”的一幕，疯狂与凄美交织，成为影史绝唱。它犬儒、尖刻，却对所有被名利吞噬的失败者怀着深深的怜悯。黑色电影里最华丽的一曲挽歌。",
     editorialNoteEn:
@@ -1022,6 +1175,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.66:1",
     isBlackAndWhite: true,
     tagSlugs: ["comedy"],
+    tmdbId: 239,
+    imdbId: "tt0053291",
+    doubanId: "1292574",
+    wikidataId: "Q190086",
     editorialNote:
       "两个撞见黑帮火并的落魄乐手，为躲追杀乔装成女人混进全女子乐队，一路笑料百出，还各自卷进啼笑皆非的恋情。怀尔德把变装、错认与追逐的喜剧机器开到最欢，节奏行云流水，笑点却始终锋利精准。玛丽莲·梦露演活了天真又落寞的歌女，为影片添了几分甜与愁。最妙的是那个被公认影史最佳的收尾台词——当男人坦白自己是男人，痴情的富翁只耸耸肩：“人无完人。”一句话把所有身份的执念轻轻化解，宽容得叫人拍案。它证明最上乘的喜剧，底子里往往藏着最豁达的人生态度。历久弥新的欢乐经典。",
     editorialNoteEn:
@@ -1050,6 +1207,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["film-noir"],
+    tmdbId: 996,
+    imdbId: "tt0036775",
+    doubanId: "1293226",
+    wikidataId: "Q478209",
     editorialNote:
       "一个精明的保险推销员被蛇蝎美人勾引，合谋杀死她的丈夫骗取双倍理赔，却在完美犯罪的裂缝里一步步走向自毁。怀尔德与钱德勒联手写就的剧本，字字锋利如刀，把宿命的黑色气质浇筑得密不透风。百叶窗切割出的条状阴影、烟雾缭绕的独白、一步步收紧的调查，几乎定义了什么叫“黑色电影”。斯坦威克脚踝上的脚链、麦克默里绝望的忏悔录音，成了这一类型的图腾。最动人的反而是主人公与理赔调查员之间那份别扭的情谊——罪案之外，仍有人惦记着你。作为黑色电影的奠基之作，它的冷峻与精巧至今难以超越。",
     editorialNoteEn:
@@ -1070,7 +1231,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 153,
     aspectRatio: "1.33:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema", "german-expressionism"],
+    tmdbId: 19,
+    imdbId: "tt0017136",
+    doubanId: "1298107",
+    wikidataId: "Q151599",
     editorialNote:
       "在一座未来都市里，享乐的精英高居云端，成千上万的工人却在地底像齿轮般被驱使，直到一位圣女般的少女与一个机器人点燃了阶级的火药桶。弗里茨·朗以惊人的想象力，建起了电影史上第一座反乌托邦的钢铁之城——摩天楼、地下工厂、发疯的机械人玛丽亚，几乎奠定了此后所有科幻片的视觉母题。表现主义的光影与浩大的群众场面，至今仍震撼人心。“头脑与双手之间，必须有心作中介。”影片这句略显天真的调解，包裹着对工业文明最早的忧惧。作为默片时代最宏伟的奇观之一，它的每一帧都在为未来造梦。",
     editorialNoteEn:
@@ -1090,6 +1256,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.19:1",
     isBlackAndWhite: true,
     tagSlugs: ["german-expressionism", "suspense"],
+    tmdbId: 832,
+    imdbId: "tt0022100",
+    doubanId: "1293381",
+    wikidataId: "Q127021",
     editorialNote:
       "一座城市被连环杀害儿童的凶手笼罩在恐惧中，警察与黑帮竟同时展开搜捕，最终由地下世界把凶手押上私刑的审判台。弗里茨·朗的第一部有声片，创造性地用声音编织罗网——凶手吹的那段《培尔·金特》口哨，成了暴露他的致命标记。彼得·洛饰演的杀人犯在片尾那段声嘶力竭的辩白，把一个恶魔还原成了被冲动奴役的病人，逼观众直面“该不该由暴民来定罪”的伦理深渊。倾斜的阴影、空荡的街道，把整座城市拍成了追捕的天罗地网。它既是黑色电影的源头，也是对私刑与集体狂热最早的警醒。声画合谋的开山杰作。",
     editorialNoteEn:
@@ -1112,6 +1282,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["neorealism", "family-drama"],
+    tmdbId: 5801,
+    imdbId: "tt0048473",
+    doubanId: "1306019",
+    wikidataId: "Q622380",
     editorialNote:
       "孟加拉乡村，一个贫苦家庭的男孩阿普与姐姐在饥饿、疾病与四季流转中长大，见证亲人的离去与生活的坚韧。雷伊的处女作，把印度乡村的贫困拍出了近乎透明的诗意。孩子们第一次穿过白茫茫的芦苇丛、看见远处火车轰鸣而过的一幕，是电影史上最纯净的惊奇之一。姐姐病逝、全家在雨季后黯然离乡的段落，哀而不伤，托起了生命本身的重量。西塔琴大师拉维·香卡的配乐如泣如诉，让苦难流淌成歌。作为《阿普三部曲》的开篇，它以最朴素的日常证明：第三世界的角落，也能盛放最普世的诗与尊严。世界电影因它而更辽阔。",
     editorialNoteEn:
@@ -1132,7 +1306,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 94,
     aspectRatio: "1.20:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema"],
+    tmdbId: 631,
+    imdbId: "tt0018455",
+    doubanId: "1295753",
+    wikidataId: "Q431093",
     editorialNote:
       "一个被城里女人蛊惑的农夫，起意淹死自己的妻子，却在下手的一刻幡然悔悟，两人由此在城市里重新坠入爱河，找回了几乎失去的婚姻。茂瑙赴美后的第一部作品，把德国表现主义的流动摄影与好莱坞的抒情熔于一炉，几乎不靠字幕就讲完了一个关于沉沦与救赎的寓言。沼泽夜行、城市游乐场、暴风雨中的失散与重逢，每一个段落都是纯粹的视觉诗。它拿下了第一届奥斯卡的“最佳独特艺术作品”奖——一个再未颁发的奖项，仿佛专为它而设。作为默片艺术的巅峰之一，它证明了电影可以完全用光影来歌唱。",
     editorialNoteEn:
@@ -1151,7 +1330,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 94,
     aspectRatio: "1.33:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema", "german-expressionism"],
+    tmdbId: 653,
+    imdbId: "tt0013442",
+    doubanId: "1296791",
+    wikidataId: "Q151895",
     editorialNote:
       "茂瑙未经授权改编《德古拉》，塑造出电影史上第一个真正令人毛骨悚然的吸血鬼——秃头、尖耳、指爪修长的奥洛克伯爵。他不是风度翩翩的贵族，而是携瘟疫而来的死亡本身。影片大量实景拍摄，把喀尔巴阡山的荒凉与港口小城的阴郁拍出了梦魇般的质感。伯爵的影子缓缓爬上楼梯、扼住少女心脏的一幕，把恐惧凝成了纯粹的光学事件，至今仍被无数电影引用致敬。为躲避版权诉讼，本片一度被判销毁，幸有零星拷贝存世。作为德国表现主义与恐怖类型的开山之作，它那具佝偻的身影，早已成为死亡最古老的面孔。",
     editorialNoteEn:
@@ -1172,7 +1356,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 87,
     aspectRatio: "1.33:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema", "comedy"],
+    tmdbId: 901,
+    imdbId: "tt0021749",
+    doubanId: "1293908",
+    wikidataId: "Q238211",
     editorialNote:
       "有声时代已经到来，卓别林却固执地为流浪汉夏尔洛拍了一部近乎默片的杰作。他爱上一个卖花的盲女，为筹钱替她治眼，又是拳击又是讨好醉汉富翁，闹出无数笑料，最终自己进了监狱。喜剧的引擎一路轰鸣，却全为那个催泪的结尾蓄力：重见光明的姑娘认不出眼前这个落魄的恩人，直到握住他的手才恍然大悟。“是你吗？”——夏尔洛半是羞涩半是期盼的最后一个笑容，被公认为影史最动人的收场。笑与泪在这里合为一体，把小人物的深情托到了极致。卓别林用它证明：默片的表达力，从未过时。",
     editorialNoteEn:
@@ -1199,7 +1388,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 87,
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema", "comedy"],
+    tmdbId: 3082,
+    imdbId: "tt0027977",
+    doubanId: "1294371",
+    wikidataId: "Q45602",
     editorialNote:
       "在流水线上拧螺丝拧到精神崩溃的夏尔洛，被卷进机器的齿轮、被当成测试喂食机的小白鼠，又阴差阳错卷入罢工与牢狱，只为在大萧条里挣一口饭吃。卓别林用最欢乐的肢体喜剧，包裹起对工业文明最尖锐的批判：人如何在机械与效率的碾压下沦为零件。喂食机失控、齿轮间穿行的段落，是对异化最生动的漫画。影片结尾，夏尔洛与流浪女孩相互搀扶，走向朝阳下未知的前路——纵然一无所有，也要笑着走下去。作为默片时代的谢幕之作，它把喜剧、抗议与温情熔于一炉，至今仍是小人物对抗时代的一面旗帜。",
     editorialNoteEn:
@@ -1228,7 +1422,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 75,
     aspectRatio: "1.33:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema"],
+    tmdbId: 643,
+    imdbId: "tt0015648",
+    doubanId: "1293492",
+    wikidataId: "Q152350",
     editorialNote:
       "1905年，波将金号战舰上的水兵因不堪腐烂的伙食与欺压而起义，敖德萨市民群起响应，却遭沙皇军队血腥镇压。爱森斯坦以此为素材，把蒙太奇理论付诸最震撼的实践：镜头与镜头的碰撞，迸发出单个画面无法承载的情感与思想。著名的“敖德萨阶梯”段落，婴儿车沿石阶失控滚落、军靴齐步逼近，短短几分钟成为剪辑史上被引用最多的一课。它宣扬革命，却也超越了宣传，把集体的悲怆凝成了永恒的节奏。作为默片时代的巅峰之一，它重新定义了电影“如何思考”。近百年来，凡谈剪辑者，几乎无人能绕过这座阶梯。",
     editorialNoteEn:
@@ -1250,6 +1449,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["romance"],
+    tmdbId: 2457,
+    imdbId: "tt0037674",
+    doubanId: "1300375",
+    wikidataId: "Q865580",
     editorialNote:
       "十九世纪巴黎的“犯罪大道”上，一个哑剧演员、一个花花公子、一个演员与一个贵族，同时爱上了神秘的女子加朗斯。卡尔内与诗人普莱维在纳粹占领下秘密拍就的这部鸿篇，把剧场、表演与得不到的爱交织成一幅法国电影最华美的画卷。哑剧大师巴洛用无声的身体道尽相思，比任何台词都更催人泪下。近三小时的篇幅里，舞台上下、真情与假意彼此渗透，最终有情人在狂欢的人潮中永远失散。它被许多法国人奉为民族电影的骄傲，是“诗意现实主义”的绝唱。在最黑暗的年代拍出如此绚烂的作品，本身就是一种不屈的宣言。",
     editorialNoteEn:
@@ -1271,6 +1474,10 @@ export const seedFilms: SeedFilm[] = [
     aspectRatio: "1.37:1",
     isBlackAndWhite: true,
     tagSlugs: ["film-noir"],
+    tmdbId: 654,
+    imdbId: "tt0047296",
+    doubanId: "1292521",
+    wikidataId: "Q211372",
     editorialNote:
       "一个当过拳击手、如今给码头黑帮跑腿的青年，在良心与义气之间挣扎，最终决定站出来指证盘剥工人的工会恶霸。卡赞调教出的马龙·白兰度，把方法派表演带上了新的高度——那段在出租车里对哥哥说出“我本可以是个人物，本可以是个真正的角色”的独白，成了美国电影史上最著名的时刻之一。粗粝的码头实景、赫尔曼式的配乐、赤裸的道德挣扎，让影片既是社会剧也是灵魂的救赎。有人从中读出卡赞为自己在麦卡锡时代作证的辩护，这层暧昧反而让它更加复杂动人。关于告密、勇气与自我救赎，它给出了灼热的回答。",
     editorialNoteEn:
@@ -1303,6 +1510,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["romance", "family-drama"],
     tmdbId: 21058,
+    imdbId: "tt0189219",
+    doubanId: "1323746",
+    wikidataId: "Q2995574",
     editorialNote:
       "五个人，一座炸塌了一半的园子，一段没有发生的私奔。费穆把中国电影史上最危险的题材——已婚妇人重逢旧日情人——拍成了最克制的作品：所有欲望都停在门槛前，所有台词都少说半句。玉纹在残破城墙上来回走的那几个镜头，是华语电影最早也最好的心理空间；摄影机几乎不动，人物却在原地把一生走完了。1948 年上映时正逢天翻地覆，它因「不问世事」被搁置了三十多年；重见天日之后，几乎每一次华语影史评选它都排在第一位。看它需要安静，也需要一点耐心，而那份耐心会被加倍偿还。",
     editorialNoteEn:
@@ -1356,6 +1566,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["romance"],
     tmdbId: 843,
+    imdbId: "tt0118694",
+    doubanId: "1291557",
+    wikidataId: "Q1056853",
     editorialNote:
       "两个被各自配偶背叛的人，在同一道楼梯上反复错身，用排练的方式演练一场不敢发生的爱情。王家卫把所有关键情节都拿掉了：出轨没有被拍，告白没有被说出，连那两位配偶的脸都始终不在画面里。剩下的是旗袍、走廊、慢镜里飘散的烟，以及梅林茂那段一响起就让人心口发紧的圆舞曲。张曼玉换了二十多件旗袍，每一件都在替她说她不能说的话；结尾梁朝伟对着吴哥窟的石洞低语，我们一个字也听不见。这是关于「错过」最精致的一部电影，也是最狠的一部。",
     editorialNoteEn:
@@ -1410,6 +1623,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["taiwan-new-cinema", "family-drama"],
     tmdbId: 15804,
+    imdbId: "tt0101985",
+    doubanId: "1292329",
+    wikidataId: "Q710745",
     editorialNote:
       "近四小时，上百个角色，一座 1961 年的台北。杨德昌用工程师般的耐心，把眷村少年的帮派、父亲被带走的白色恐怖审讯、教室的停电与一支手电筒，编进同一张电路图里——你以为在看成长故事，其实在看一整个社会如何一步步把十四岁的小四逼到刀口上。全片大量夜戏，光源常常只有一支手电或一盏昏灯，黑暗不是风格而是处境：那是一代外省家庭悬在半空、随时准备再次搬家的处境。片长会吓退很多人，但这是华语电影里少有的、真正配得上「史诗」二字的作品，也是杨德昌最完整的一次演算。",
     editorialNoteEn:
@@ -1449,8 +1665,12 @@ export const seedFilms: SeedFilm[] = [
     runtimeMinutes: 85,
     aspectRatio: "1.33:1",
     isBlackAndWhite: true,
+    isSilent: true,
     tagSlugs: ["silent-cinema"],
     tmdbId: 112698,
+    imdbId: "tt0195256",
+    doubanId: "1302210",
+    wikidataId: "Q2057159",
     editorialNote:
       "一个母亲白天带孩子，夜里站在街边。吴永刚拍这个题材时只有二十七岁，却做出了整个时代最成熟的选择：不控诉、不怜悯，把摄影机放在与她平视的高度，连盘剥她的流氓也只是环境的一部分，而不是供人唾骂的反派。阮玲玉的表演几乎不需要字幕卡——她把攒下的钱一张张塞进墙砖缝里的那个动作，比任何台词都清楚地说明了什么叫尊严。中国默片在这里到达顶点，而拍完次年，阮玲玉在二十四岁自尽。今天再看，最动人的仍是它对主人公的信任：她不是一个社会问题，她是一个人。",
     editorialNoteEn:
@@ -1497,6 +1717,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["comedy", "romance"],
     tmdbId: 112699,
+    imdbId: "tt0183828",
+    doubanId: "1307708",
+    wikidataId: "Q5238699",
     editorialNote:
       "上海的一条弄堂里，歌女、妓女、吹鼓手和剃头匠挤在一起过日子。袁牧之把好莱坞的喜剧节奏、苏联的剪辑与上海的市井小调焊在一起，做出了一部前所未见的中国电影：前一分钟还在窗对窗地插科打诨，后一分钟就有人被卖掉。周璇唱《四季歌》与《天涯歌女》的段落，是华语电影配乐史的起点之一，那两首歌至今还在被人传唱。笑声底下始终垫着一层薄冰——这正是三十年代上海左翼电影最厉害的地方：它从不说教，只是先让你笑，再让你明白自己笑的究竟是什么。",
     editorialNoteEn:
@@ -1528,6 +1751,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["war", "family-drama"],
     tmdbId: 140260,
+    imdbId: "tt0040009",
+    doubanId: "1389915",
+    wikidataId: "Q860483",
     editorialNote:
       "三个多小时，一个家庭，抗战八年。蔡楚生与郑君里让同一个丈夫在重庆步步高升，让妻子在沦陷的上海一寸寸沉下去，最后在一场宴会上把两条线狠狠撞在一起。这是中国通俗剧的巅峰：结构精确得像一部长篇小说，情感却毫不吝啬。1947 年上映时连映三个多月，观众在影院里哭成一片。它不掩饰自己的煽情，因为那份煽情是有出处的——战争刚刚结束，账还没有算完，而算账的方式就是让所有人看见谁在受难、谁在赴宴。素芬最后望向江水的那个镜头，是一代人的判决书。",
     editorialNoteEn:
@@ -1553,6 +1779,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["taiwan-new-cinema", "family-drama"],
     tmdbId: 45999,
+    imdbId: "tt0090185",
+    doubanId: "1300572",
+    wikidataId: "Q697070",
     editorialNote:
       "侯孝贤把摄影机架远、架定，让一个家庭的十几年自己走完。父亲死在藤椅上，母亲的病一点点加重，祖母始终念叨着要走路回大陆——这些事大多发生在画面深处或画外，没有配乐提醒你此刻该难过。这正是台湾新电影的方法：不追戏剧高潮，让时间承担全部重量，观众必须自己走进去看。片名直译是「一段活着的时间，一段死去的时间」，看完你会明白那不是文艺腔，而是对这部电影最准确的描述。它也是理解侯孝贤的最好入口：他后来所有的远景与省略，都从这里长出来。适合在一个不赶时间的晚上看，最好是一个人。",
     editorialNoteEn:
@@ -1578,6 +1807,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["wuxia"],
     tmdbId: 44154,
+    imdbId: "tt0064451",
+    doubanId: "1306490",
+    wikidataId: "Q704780",
     editorialNote:
       "胡金铨把武侠从打斗提升成了一种关于气与空的电影。竹林里那场埋伏——阳光穿过竹叶，刀光在叶隙间闪现，人在半空中被剪辑托住——是后来所有华语武侠动作的源头，李安在《卧虎藏龙》里几乎照着重拍了一遍。但真正让这部片子伟大的是它的后半段：厮杀忽然让位于禅，血污被日光吞没，一个和尚流出金色的血。它拒绝在类型片该结束的地方结束，而是继续往上走，走到动作片很少抵达的地方。1975 年它在戛纳拿下技术大奖，是华语电影第一次在那里被认真对待。三个多小时，前松后紧，值得那份耐心。",
     editorialNoteEn:
@@ -1629,6 +1861,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["suspense", "romance"],
     tmdbId: 426,
+    imdbId: "tt0052357",
+    doubanId: "1297294",
+    wikidataId: "Q202548",
     editorialNote:
       "一个恐高的退休警探跟踪一个女人，爱上她，失去她，然后在街上遇见一个长得像她的人——于是他开始改造对方，头发、衣服、口红，一件件逼近那个死去的幻影。希区柯克把悬疑片的外壳套在一个关于痴迷与控制的故事上，而最不安的地方在于：他让观众也成了同谋，因为我们和主角一样想看那个女人变回去。旧金山的绿色雾气、螺旋楼梯、伯纳德·赫尔曼那段永远解决不了的和声，共同做出了电影史上最美也最病态的爱情。詹姆斯·斯图尔特那张一贯可靠的脸，在这里第一次变得可怕。",
     editorialNoteEn:
@@ -1677,6 +1912,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["jidaigeki", "epic", "war"],
     tmdbId: 11645,
+    imdbId: "tt0089881",
+    doubanId: "1296196",
+    wikidataId: "Q565231",
     editorialNote:
       "黑泽明七十五岁时拍的《李尔王》，也是他一生最悲观的一部。老领主把领地分给三个儿子，随后被一一背弃，在焦土上疯掉。与早年那些相信人可以互相拯救的作品不同，这里没有救赎：城池焚毁的长镜头里没有一句台词，只有配乐，仿佛神明厌倦了往下看。色彩在这里是叙事本身——三个儿子各着一色，红黄蓝的军队在山野间移动，像棋子，也像血。他为这部片子准备了十年，画了几百张分镜彩图。如果说《七武士》是他对人的信任，《乱》就是他收回这份信任之后的账单。",
     editorialNoteEn:
@@ -1730,6 +1968,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["science-fiction", "modernism"],
     tmdbId: 62,
+    imdbId: "tt0062622",
+    doubanId: "1292226",
+    wikidataId: "Q103474",
     editorialNote:
       "一根被抛向空中的骨头，切给一艘飞船，四百万年在一个镜头里过去——这大概是电影史上最著名的一次剪辑，也说明了库布里克想干什么：他要拍的不是未来，而是人这个物种。影片几乎没有台词，最有人味的角色是一台电脑，而结尾那段没有解释的光之旅至今仍在被争论。1968 年首映时观众中途离场，评论刻薄；今天它被公认为科幻片的天花板，此后所有太空电影都在向它交学费。请尽可能在最大的银幕上看，并且不要中途查手机——这部电影的节奏本身就是它的论点。",
     editorialNoteEn:
@@ -1772,6 +2013,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["modernism"],
     tmdbId: 439,
+    imdbId: "tt0053779",
+    doubanId: "1293271",
+    wikidataId: "Q18407",
     editorialNote:
       "一架直升机吊着耶稣像飞过罗马上空，下面泳池边的女人挥手打招呼——开场三分钟，费里尼就把战后意大利的全部处境说完了。影片没有情节，只有七个昼夜、七场派对，一个记者在其中越陷越深。这是费里尼从新现实主义转身的时刻：他不再关心穷人如何活下去，而开始追问富起来之后的人为什么依然空。特莱维喷泉那场戏成了永恒的银幕图像，而片中那个摄影记者的名字 Paparazzo，从此变成了全世界通用的词。结尾海滩上那条怪鱼睁着眼睛，谁也没能给出解释。",
     editorialNoteEn:
@@ -1802,6 +2046,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["family-drama"],
     tmdbId: 50759,
+    imdbId: "tt0056444",
+    doubanId: "1294433",
+    wikidataId: "Q1189572",
     editorialNote:
       "小津的最后一部电影，也是他唯一一次在彩色里拍完那个讲了一辈子的故事：女儿要出嫁，父亲要独自留下。红色的水壶、蓝色的招牌、走廊尽头的一点橘光——他把颜色当作构图的支点，而不是写实的工具，于是彩色不但没有破坏他的形式，反而让那份克制更清晰。结尾父亲在婚礼后独自回家，哼着军歌，坐在空荡的屋子里，什么也没发生。次年小津去世，享年六十岁，生日与忌日是同一天。看过他其他作品的人会在这里感到某种告别；没看过的人，从这一部开始也完全可以。",
     editorialNoteEn:
@@ -1832,6 +2079,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["modernism"],
     tmdbId: 26638,
+    imdbId: "tt0058003",
+    doubanId: "1299261",
+    wikidataId: "Q399647",
     editorialNote:
       "安东尼奥尼的第一部彩色片，他的做法是把颜色直接刷到现实上：草地喷成灰色，水果摊漆成白色，工厂的管道涂成刺目的黄。这不是布景，是女主角的神经系统——她在工业化的拉文纳走来走去，无法说清自己得了什么病，而整个世界的颜色替她说了。影片几乎没有情节，很多人会觉得闷，但它是电影史上第一次真正把色彩当作心理状态来使用，此后所有关于「现代人异化」的画面都欠它一笔。莫妮卡·维蒂的表演同样反常规：她不演崩溃，只演一个人努力维持正常的那种吃力。适合在心情稳定的时候看，它不安慰人，也不打算安慰人。",
     editorialNoteEn:
@@ -1856,6 +2106,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["faith-and-redemption", "family-drama"],
     tmdbId: 10238,
+    imdbId: "tt0069467",
+    doubanId: "1296147",
+    wikidataId: "Q830874",
     editorialNote:
       "一栋红色的宅子里，一个女人正在死去，两个姐妹守在旁边，谁也无法真正靠近谁。伯格曼说他一生反复梦见一个全红的房间，于是整部电影就建在那个梦里——墙是红的，帷幕是红的，连场景之间的转场都用整幅红色画面切开，像血，也像子宫。摄影师尼克维斯特凭此片拿下奥斯卡，那些脸部特写在烛光下几乎是宗教画。这是伯格曼最不留情的一部：临终的痛苦被拍得毫不修饰，而亲情在这里没有拯救任何人，真正给出安慰的反而是那位不说话的女仆。九十分钟，看完需要缓一会儿再开口说话。",
     editorialNoteEn:
@@ -1881,6 +2134,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["modernism"],
     tmdbId: 1396,
+    imdbId: "tt0072443",
+    doubanId: "1299248",
+    wikidataId: "Q838149",
     editorialNote:
       "塔可夫斯基最私人也最难的一部：没有情节，没有连贯的时间，母亲、妻子由同一个演员扮演，童年、战争、新闻片与梦境彼此渗透。它不要求你看懂，它要求你回忆——很多人第一次看会困惑，第二次看会在某个毫无预兆的镜头前掉眼泪，比如风吹过荞麦地，或者一间木屋在雨中缓缓烧起来。彩色与黑白在片中交替出现，不按逻辑，只按记忆的温度。如果你想知道电影除了讲故事还能做什么，这部片子是最直接的答案。请挑一个不会被打断的夜晚。",
     editorialNoteEn:
@@ -1909,6 +2165,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["faith-and-redemption", "war"],
     tmdbId: 15244,
+    imdbId: "tt0049902",
+    doubanId: "1303562",
+    wikidataId: "Q2385009",
     editorialNote:
       "片名已经告诉你结局，布列松却依然让这一百分钟紧张得难以呼吸。一个法国抵抗组织成员在里昂的监狱里准备越狱：他磨勺子、拆门板、把床单撕成绳子，摄影机几乎只拍手和物件，声音全靠走廊的脚步与远处的火车。没有配乐渲染，没有闪回交代，也没有一场戏是为了让你认识这个人——但你会在结尾发现自己已经和他一起活了一百分钟。这是极简主义最有力的证明：越是拿掉，越是留下。布列松说他拍的是「圣灵随心所欲地吹拂」，这句话看完就懂了。",
     editorialNoteEn:
@@ -1930,6 +2189,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["neorealism", "war"],
     tmdbId: 307,
+    imdbId: "tt0038890",
+    doubanId: "1296669",
+    wikidataId: "Q721146",
     editorialNote:
       "新现实主义从这里开始。罗西里尼在德军刚撤走的罗马开拍，胶片是东拼西凑买来的，街道就是真的街道，很多群众演员几个月前刚刚经历过片里的事。安娜·马尼亚尼追着卡车奔跑然后倒下的那个镜头，是电影史上最著名的画面之一，而它之所以有力，正是因为周围的一切都不像在演戏。影片粗糙、噪点很重、录音也差，但这些「缺点」后来变成了一整套美学，直接影响了此后七十年的世界电影。看它不是看一部老片，是看一件在废墟上抢救出来的证物。",
     editorialNoteEn:
@@ -1954,6 +2216,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["jidaigeki"],
     tmdbId: 14537,
+    imdbId: "tt0056058",
+    doubanId: "1304920",
+    wikidataId: "Q1584406",
     editorialNote:
       "一个落魄浪人走进大名的宅邸，说要在此切腹。对方允许了，并打算看一场好戏——然后他开始讲一个故事，而这个故事会把整座宅子的体面拆得干干净净。小林正树用最工整的构图拍最锋利的控诉：庭院对称、家臣列坐、一切都合乎礼法，正因如此，当真相一层层揭开时才格外骇人。片中那把竹刀是电影史上最残忍的道具之一，它逼出的问题很简单：当荣誉只剩下形式，维持形式的代价由谁来付。仲代达矢的表演由始至终压着，直到最后才爆发。如果你觉得武士片就是打打杀杀，这部会彻底改变你的看法。",
     editorialNoteEn:
@@ -1989,6 +2254,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: true,
     tagSlugs: ["family-drama", "romance"],
     tmdbId: 77285,
+    imdbId: "tt0048757",
+    doubanId: "1298870",
+    wikidataId: "Q3346017",
     editorialNote:
       "一对在战时越南相爱的男女，回到战败后的东京，发现那段感情在这里没有位置。成濑巳喜男不给他们任何一个可以重新开始的机会，也不让他们干脆分开——两人就这样拖着，借钱、争吵、投奔、又离开，一路走到最南端的岛上。这是日本电影里最不浪漫的爱情片，也是最真实的一部：它明白人不是被一次打击摧毁的，而是被无数次微小的将就磨平的。高峰秀子的表演几乎没有情绪爆发，却让你看见一个女人如何一寸寸认命。看完会有点难过，但那种难过很干净。",
     editorialNoteEn:
@@ -2013,6 +2281,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["comedy", "modernism"],
     tmdbId: 10227,
+    imdbId: "tt0062136",
+    doubanId: "1303543",
+    wikidataId: "Q1454574",
     editorialNote:
       "塔蒂花光身家造了一座城：钢铁、玻璃、直角，全部按他的笑话尺寸定做。影片里没有主角——于洛先生只是众多迷路者之一——也几乎没有台词，笑点分散在画面的各个角落，同一个镜头里可能同时发生七八件事，你看哪里，哪里就是主线。这是对观众注意力的一次彻底反叛：别人的喜剧告诉你什么时候笑，塔蒂让你自己去找。影片当年惨败，令他破产，此后再没能恢复元气。今天它被视作电影史上最精密的喜剧建筑，值得为它专门腾出一个晚上，并且看第二遍。",
     editorialNoteEn:
@@ -2034,6 +2305,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["musical", "romance"],
     tmdbId: 19542,
+    imdbId: "tt0040725",
+    doubanId: "1299204",
+    wikidataId: "Q625780",
     editorialNote:
       "一个芭蕾舞者被要求在爱情与艺术之间二选一，而这部电影认为这个选择本身就是致命的。中段那场十七分钟的《红菱艳》舞剧，是特艺七彩最放肆的一次挥霍：布景在舞者脚下变形，纸张变成人，海浪变成舞台，电影彻底放弃了写实，改用舞蹈的逻辑说话。鲍威尔与普雷斯伯格把英国影坛的克制传统整个掀翻，拍出了一部关于「被自己的天赋吞噬」的恐怖片——那双红鞋一旦穿上就停不下来，这个童话在片中是字面意义上的真的。此后无数导演承认自己是因为这部片子才开始拍电影。",
     editorialNoteEn:
@@ -2058,6 +2332,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["epic", "war"],
     tmdbId: 947,
+    imdbId: "tt0056172",
+    doubanId: "1292349",
+    wikidataId: "Q228186",
     editorialNote:
       "一根火柴被吹灭，切给一轮沙漠上升起的红日——里恩用一个剪辑就宣告了什么叫大银幕。四个小时里，沙漠不是背景而是角色：它吞掉队伍、吞掉时间，也吞掉劳伦斯这个人。影片最了不起的地方不是场面，而是它对英雄的怀疑——你看着一个理想主义者一点点爱上自己的传奇，然后被这份传奇掏空，最后连他自己都认不出镜子里的人。这是史诗片的最高标准，也几乎是最后一部无法用电脑合成的史诗。请务必找最大的屏幕，四个小时不算长，前提是你别在手机上看。",
     editorialNoteEn:
@@ -2083,6 +2360,9 @@ export const seedFilms: SeedFilm[] = [
     isBlackAndWhite: false,
     tagSlugs: ["war", "epic"],
     tmdbId: 28,
+    imdbId: "tt0078788",
+    doubanId: "1292260",
+    wikidataId: "Q182692",
     editorialNote:
       "科波拉把康拉德的《黑暗之心》搬到越南，让一艘小艇逆流而上去刺杀一个疯掉的上校，结果拍出了一部本身就在发疯的电影。菲律宾的拍摄失控到近乎传奇：台风摧毁布景，主演心脏病发，预算靠他抵押家产维持，成片里那种越往上游越不讲道理的气氛，有一半来自剧组自己的处境。直升机伴着瓦格纳扫射村庄的段落已成经典，但真正留下的是后半段的黑暗——当叙事逻辑一起崩溃时，战争片终于不再假装战争可以被讲述。这不是一部关于越战的电影，它本身就是一场战争。",
     editorialNoteEn:
