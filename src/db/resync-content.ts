@@ -8,42 +8,25 @@
  * transaction. It touches ONLY the named slugs and only their content fields
  * (status/publishedAt are left untouched).
  *
- * TAGS: `--tags-only` resyncs a film's tag junctions and NOTHING else.
- * `seed-content.ts` writes junctions only for films it creates, so a
- * tagSlugs change to a film that already exists reaches production through
- * this mode and nowhere else.
- *
- * One invocation never writes both prose and tags. That separation is the
- * point, and it is a correction: an earlier version synced tags alongside
- * prose, so the command recommended for a missing tag also reverted any
- * note or essay an editor had rewritten in /admin — silently, while the
- * output mentioned only the tag. Each mode now writes one kind of thing:
- *
- *   --films=a,b               prose only (editorialNote/essay + En)
- *   --films=a,b --tags-only   tag junctions only
- *
- * Want both? Run it twice. Two explicit passes beat one command with two
- * effects.
- *
- * Tags are ADD-ONLY: a tag in the database but not in seed-data is reported
- * and left alone, because tags are a set that ADR 0014 places under admin
- * ownership — removing one stays an /admin act. A seed tag missing from the
- * vocabulary aborts the run before anything is written.
+ * Prose only — it does not touch tag junctions. `seed-content.ts` owns
+ * those, deciding what to write from a recorded baseline rather than from
+ * a flag anyone has to remember (ADR 0014). An earlier version synced tags
+ * here too, which meant the command someone ran to add a missing tag also
+ * reverted any note an editor had rewritten in /admin, silently, while the
+ * output mentioned only the tag.
  *
  * NOTE: after `--apply`, the ISR'd film/director pages stay stale until the
  * next deploy. This CLI runs outside the Next server, so it can't call
  * revalidate.ts (server-only) — redeploy to publish the corrected pages.
  *
  *   bun run src/db/resync-content.ts --films=a,b --directors=x,y [--apply]
- *   bun run src/db/resync-content.ts --films=a,b --tags-only [--apply]
  *   # prod: DATABASE_URL="$DATABASE_URL_UNPOOLED" bun run src/db/resync-content.ts ... --apply
  */
-import { eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "./index";
-import { films, filmTags, people, tags } from "./schema";
+import { films, people } from "./schema";
 import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
-import { diffFilmTags } from "./tag-plan";
 
 const APPLY = process.argv.includes("--apply");
 const listArg = (name: string): string[] => {
@@ -58,7 +41,6 @@ const listArg = (name: string): string[] => {
 };
 const filmSlugs = listArg("films");
 const directorSlugs = listArg("directors");
-const TAGS_ONLY = process.argv.includes("--tags-only");
 
 // Postgres stores jsonb with re-ordered keys, so compare a canonical
 // (recursively key-sorted) form to avoid false "differs" on tiptap docs.
@@ -96,14 +78,8 @@ async function main() {
     process.exit(1);
   }
   console.log(`\nContent resync → DB host: ${targetHost()}`);
-  console.log(
-    `SCOPE: ${TAGS_ONLY ? "tags only (prose untouched)" : "prose only (tags untouched)"}`,
-  );
+  console.log("SCOPE: editorial prose only (tag junctions are seed-content's)");
   console.log(APPLY ? "MODE: APPLY (writing)\n" : "MODE: dry run (no writes; pass --apply)\n");
-  if (TAGS_ONLY && directorSlugs.length) {
-    console.error("--tags-only applies to films; people have no tags. Drop --directors=.");
-    process.exit(1);
-  }
 
   let changed = 0;
 
@@ -119,60 +95,6 @@ async function main() {
         console.log(`  film ${slug}: ⚠ not in DB — skipped`);
         continue;
       }
-      if (TAGS_ONLY) {
-        // ── Tags only. Prose is not read, diffed, or written. ──────────
-        // `seed-content.ts` writes junctions only for films it creates, so a
-        // tagSlugs change to a film that already exists reaches the target
-        // through here and nowhere else.
-        const held = await tx
-          .select({ slug: tags.slug })
-          .from(filmTags)
-          .innerJoin(tags, eq(tags.id, filmTags.tagId))
-          .where(eq(filmTags.filmId, cur.id));
-        const heldSlugs = new Set(held.map((r) => r.slug));
-        // Add-only semantics live in one tested place (src/db/tag-plan.ts):
-        // the return type has no field a caller could turn into a DELETE.
-        const { missing, extra } = diffFilmTags(f.tagSlugs ?? [], heldSlugs);
-
-        let tagRows: { id: string; slug: string }[] = [];
-        if (missing.length) {
-          tagRows = await tx
-            .select({ id: tags.id, slug: tags.slug })
-            .from(tags)
-            .where(inArray(tags.slug, missing));
-          const unknown = missing.filter((s) => !tagRows.some((r) => r.slug === s));
-          if (unknown.length) {
-            // Abort rather than silently drop the junction — the same shape
-            // seed-content.ts uses. Throwing rolls the transaction back, so
-            // nothing from any earlier slug in this run is written either.
-            throw new Error(
-              `film ${slug}: tag(s) not in this database's vocabulary: ${unknown.join(", ")}\n` +
-                "  The vocabulary is admin-owned (ADR 0014), so this script will not create them.\n" +
-                "  Create them in /admin/tags, or:\n" +
-                `    bun run apply:tags -- --create-tags=${unknown.join(",")} --apply\n` +
-                "  then re-run. Nothing has been written.",
-            );
-          }
-        }
-
-        console.log(`  film ${slug}: ${missing.length ? "tags differ → resync" : "tags in sync"}`);
-        for (const s of missing) console.log(`      + tag ${s}`);
-        // Add-only: removing a tag stays an /admin act.
-        for (const s of extra) console.log(`      = DB also has "${s}" (not in seed) — left alone`);
-
-        if (missing.length) {
-          changed++;
-          if (APPLY) {
-            await tx
-              .insert(filmTags)
-              .values(tagRows.map((t) => ({ filmId: cur.id, tagId: t.id })))
-              .onConflictDoNothing();
-          }
-        }
-        continue;
-      }
-
-      // ── Prose only. Junctions are not read or written. ───────────────
       const next = {
         editorialNote: f.editorialNote,
         editorialNoteEn: f.editorialNoteEn ?? null,
