@@ -106,6 +106,25 @@ describe("filmJsonLd", () => {
     expect(actors[1].url).toBeUndefined();
   });
 
+  test("curated external ids become sameAs; none means no sameAs key", () => {
+    const withIds = {
+      ...film,
+      tmdbId: 8329,
+      imdbId: "tt0056801",
+      doubanId: "1291560",
+      wikidataId: "Q550027",
+    } as unknown as PublicFilm;
+    const [movie] = graphOf(filmJsonLd(withIds, "zh"));
+    expect(movie.sameAs).toEqual([
+      "https://www.imdb.com/title/tt0056801/",
+      "https://movie.douban.com/subject/1291560/",
+      "https://www.wikidata.org/wiki/Q550027",
+      "https://www.themoviedb.org/movie/8329",
+    ]);
+    const [bare] = graphOf(filmJsonLd(film, "zh"));
+    expect(bare.sameAs).toBeUndefined();
+  });
+
   test("en does not link a cast person who isn't en-published", () => {
     const withDraftEnActor = {
       ...film,
