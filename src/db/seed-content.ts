@@ -400,10 +400,21 @@ async function main() {
     if (rows.length) await tx.insert(filmTags).values(rows).onConflictDoNothing();
 
     // Record what seed-data asked for this run — including entries left
-    // alone, so a retired tag stays retired on every future run instead
-    // of flipping back to "new". Scoped to films actually present here:
-    // the baseline must describe what was evaluated, never what was
-    // merely hoped for.
+    // alone, so a retired tag stays retired on every future run instead of
+    // flipping back to "new".
+    //
+    // REPLACE, never merge. The baseline means "what seed-data asserted at
+    // the last run", so anything this run no longer asserts has to go. An
+    // insert-only version held the union of every run instead, which broke
+    // the merge on a sequence that happens over a normal editing life: a
+    // release asserts a tag, a later release drops it, an editor removes
+    // it, and a third release adds it back — the stale row then made that
+    // last addition look like an editorial removal, and it was silently
+    // refused. Delete-then-insert also drops junctions an admin created
+    // that seed-data never asserted, which the bootstrap swept in; those
+    // rows stay in the database untouched (`dropped-from-seed`), they just
+    // stop pretending to be ours.
+    await tx.delete(seedTagBaseline);
     if (seedTagSlugs.length) {
       await tx
         .insert(seedTagBaseline)
@@ -411,6 +422,7 @@ async function main() {
         .onConflictDoNothing();
     }
     const asserted = seededFilmTags(presentFilms);
+    await tx.delete(seedFilmTagBaseline);
     if (asserted.length) {
       await tx.insert(seedFilmTagBaseline).values(asserted).onConflictDoNothing();
     }

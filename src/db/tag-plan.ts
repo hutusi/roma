@@ -97,7 +97,15 @@ export function planFilmTags(
   return { apply, removedByEditor };
 }
 
-/** Every (film, tag) seed-data currently asserts — the next run's baseline. */
+/**
+ * Every (film, tag) seed-data currently asserts — the **complete** baseline
+ * for the next run.
+ *
+ * Callers must REPLACE the stored baseline with this, never merge into it.
+ * Merging leaves rows from releases that have since dropped an assignment,
+ * and a stale row is indistinguishable from a genuine one: it makes a later
+ * re-addition look like an editor's removal, and the change is refused.
+ */
 export function seededFilmTags(films: readonly TaggedFilm[]): FilmTag[] {
   return films.flatMap((f) => (f.tagSlugs ?? []).map((tagSlug) => ({ filmSlug: f.slug, tagSlug })));
 }
