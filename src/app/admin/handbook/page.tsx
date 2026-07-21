@@ -92,8 +92,9 @@ export default async function HandbookPage() {
           </p>
           <p>
             豆瓣与 IMDb 会以一行小字出现在影片页「哪里能看」附近（中文版豆瓣在前，英文版 IMDb
-            在前）；TMDB 用于资料重导，Wikidata 只提供给搜索引擎，都不会显示。 从 TMDB
-            导入元数据时会自动带出 TMDB 与 IMDb ID；豆瓣 ID 需要手工核对填写。
+            在前）；TMDB 固定影片身份（防止重复收录，也供播种与校对脚本使用），Wikidata
+            只提供给搜索引擎，都不会显示。 新建影片时「从 TMDB 导入元数据」会自动带出 TMDB 与 IMDb
+            ID；豆瓣 ID 需要手工核对填写。
             这只是给读者的指路牌——评分、榜单等一概不引入，收录即推荐不变。
           </p>
         </Section>

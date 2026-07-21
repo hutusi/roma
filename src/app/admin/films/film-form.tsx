@@ -298,7 +298,7 @@ export function FilmForm({
 
       <Section title="外部标识">
         <p className="text-ink-muted text-xs">
-          只填 ID 本身，不贴链接。豆瓣与 IMDb 会显示在影片页；TMDB 用于资料重导，Wikidata
+          只填 ID 本身，不贴链接。豆瓣与 IMDb 会显示在影片页；TMDB 用于唯一标识，Wikidata
           仅供搜索引擎。
         </p>
         <div className="grid grid-cols-4 gap-4">

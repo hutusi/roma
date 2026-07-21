@@ -19,7 +19,7 @@ Alongside the ids, two physical-metadata gaps surfaced: the corpus now contains 
 
 ## Consequences
 
-- The seeder now persists `tmdbId` instead of treating it as an image-lookup hint, and the admin TMDB import keeps the entered id and prefills `imdbId` from `external_ids`. Re-imports are deterministic for every film that carries the id.
+- The seeder now persists `tmdbId` instead of treating it as an image-lookup hint, and the admin TMDB import (new films only) keeps the entered id and prefills `imdbId` from `external_ids`. The stored id pins identity — the unique constraint blocks duplicate inclusion — and keeps the seed/enrich pipeline deterministic; it is also the handle an edit-page re-import flow would use, but no such flow exists yet.
 - Existing prod rows never receive new seed fields (`onConflictDoNothing`), so the corpus backfill is its own script, `src/db/backfill-metadata.ts` — metadata columns only, dry-run default, same host-banner conventions as `resync-content.ts`, which stays prose-only. After editors start correcting ids in /admin, run it only with an explicit `--films` list.
 - `films` gains three unique constraints; `saveFilm`'s duplicate-key error now names the colliding field instead of blaming the slug.
 - 73/74 films carry a Douban id (Wikidata has none for 一条安达鲁狗); Wikidata QIDs and IMDb ids are complete. Gaps stay null and render as nothing.
