@@ -46,7 +46,15 @@ export const filmFormSchema = z.object({
   year: z.coerce.number<number>().int().min(1888, "早于电影诞生年").max(2100),
   /** Comma/、-separated in the form; stored as text[]. */
   countries: z.string().optional(),
-  runtimeMinutes: z.coerce.number<number>().int().positive().optional().or(z.literal("")),
+  // Upper bounds on both int fields: values past int4 would otherwise
+  // reach Postgres and throw 22003 past saveFilm's constraint handlers.
+  runtimeMinutes: z.coerce
+    .number<number>()
+    .int()
+    .positive()
+    .max(6000, "片长超出合理范围")
+    .optional()
+    .or(z.literal("")),
   aspectRatio: z.string().optional(),
   isBlackAndWhite: z.boolean(),
   isSilent: z.boolean(),
@@ -54,7 +62,11 @@ export const filmFormSchema = z.object({
   tmdbId: z
     .string()
     .optional()
-    .refine((s) => !s || /^\d+$/.test(s.trim()), "TMDB ID 是纯数字"),
+    .refine((s) => {
+      if (!s) return true;
+      const t = s.trim();
+      return /^\d+$/.test(t) && Number(t) >= 1 && Number(t) <= 2_147_483_647;
+    }, "TMDB ID 是 1–2147483647 的数字"),
   imdbId: z
     .string()
     .optional()

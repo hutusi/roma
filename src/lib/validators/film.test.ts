@@ -124,6 +124,13 @@ describe("filmFormSchema", () => {
     expect(filmFormSchema.safeParse({ ...valid, year: "1800" }).success).toBe(false);
   });
 
+  test("caps runtime below int4 territory", () => {
+    expect(filmFormSchema.safeParse({ ...valid, runtimeMinutes: "138" }).success).toBe(true);
+    expect(filmFormSchema.safeParse({ ...valid, runtimeMinutes: "3000000000" }).success).toBe(
+      false,
+    );
+  });
+
   test("caps the editorial note at 500 code points but allows drafts below 200", () => {
     expect(filmFormSchema.safeParse({ ...valid, editorialNote: "短".repeat(50) }).success).toBe(
       true,
@@ -147,6 +154,10 @@ describe("filmFormSchema", () => {
         .success,
     ).toBe(false);
     expect(filmFormSchema.safeParse({ ...valid, tmdbId: "abc" }).success).toBe(false);
+    // int4 bounds — out-of-range values must die here, not as a pg 22003
+    expect(filmFormSchema.safeParse({ ...valid, tmdbId: "0" }).success).toBe(false);
+    expect(filmFormSchema.safeParse({ ...valid, tmdbId: "2147483647" }).success).toBe(true);
+    expect(filmFormSchema.safeParse({ ...valid, tmdbId: "2147483648" }).success).toBe(false);
     expect(
       filmFormSchema.safeParse({ ...valid, doubanId: "https://movie.douban.com/subject/1291560/" })
         .success,
