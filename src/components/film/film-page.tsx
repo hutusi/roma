@@ -7,6 +7,7 @@ import { heroOf, type PublicFilm } from "@/db/queries/public";
 import { countryToEn } from "@/i18n/countries";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
+import { externalLinks } from "@/lib/external-ids";
 import { personPath } from "@/lib/routes";
 
 /** Latin eyebrows are locale-neutral; zh pairs them with a zh title, en drops them. */
@@ -59,7 +60,12 @@ export function FilmPage({
     film.runtimeMinutes ? dict.runtime(film.runtimeMinutes) : null,
     film.aspectRatio,
     film.isBlackAndWhite ? dict.blackAndWhite : dict.color,
+    // Talkies are the default; only silence is worth a word.
+    film.isSilent ? dict.silent : null,
   ].filter(Boolean);
+
+  const elsewhere = externalLinks(film, locale);
+  const restoration = en ? film.restorationNoteEn : film.restorationNote;
 
   // Chips are safe on /en without a gate: nameEn is NOT NULL by schema
   // (ADR 0014), and a tag's visibility rides on the film itself.
@@ -249,6 +255,35 @@ export function FilmPage({
             ))}
           </div>
           <p className="mx-auto mt-3 max-w-md text-ink-muted text-xs">{dict.watchDisclaimer}</p>
+        </section>
+      )}
+
+      {(restoration || elsewhere.length > 0) && (
+        <section className="mx-auto mt-14 max-w-md text-center">
+          {restoration && (
+            <p className="text-ink-muted text-sm">
+              {dict.restoration}
+              {restoration}
+            </p>
+          )}
+          {elsewhere.length > 0 && (
+            <p className="mt-2 text-ink-muted text-sm">
+              {dict.elsewhere}
+              {elsewhere.map((link, i) => (
+                <span key={link.key}>
+                  {i > 0 && " · "}
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-brand hover:underline"
+                  >
+                    {dict.externalSites[link.key]}
+                  </a>
+                </span>
+              ))}
+            </p>
+          )}
         </section>
       )}
 

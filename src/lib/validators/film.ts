@@ -46,9 +46,41 @@ export const filmFormSchema = z.object({
   year: z.coerce.number<number>().int().min(1888, "早于电影诞生年").max(2100),
   /** Comma/、-separated in the form; stored as text[]. */
   countries: z.string().optional(),
-  runtimeMinutes: z.coerce.number<number>().int().positive().optional().or(z.literal("")),
+  // Upper bounds on both int fields: values past int4 would otherwise
+  // reach Postgres and throw 22003 past saveFilm's constraint handlers.
+  runtimeMinutes: z.coerce
+    .number<number>()
+    .int()
+    .positive()
+    .max(6000, "片长超出合理范围")
+    .optional()
+    .or(z.literal("")),
   aspectRatio: z.string().optional(),
   isBlackAndWhite: z.boolean(),
+  isSilent: z.boolean(),
+  /** External ids are stored bare — never paste URLs (see lib/external-ids.ts). */
+  tmdbId: z
+    .string()
+    .optional()
+    .refine((s) => {
+      if (!s) return true;
+      const t = s.trim();
+      return /^\d+$/.test(t) && Number(t) >= 1 && Number(t) <= 2_147_483_647;
+    }, "TMDB ID 是 1–2147483647 的数字"),
+  imdbId: z
+    .string()
+    .optional()
+    .refine((s) => !s || /^tt\d{7,8}$/.test(s.trim()), "IMDb ID 形如 tt0056801"),
+  doubanId: z
+    .string()
+    .optional()
+    .refine((s) => !s || /^\d+$/.test(s.trim()), "豆瓣 ID 是纯数字（subject/ 后的部分）"),
+  wikidataId: z
+    .string()
+    .optional()
+    .refine((s) => !s || /^[Qq]\d+$/.test(s.trim()), "Wikidata ID 形如 Q550027"),
+  restorationNote: z.string().optional(),
+  restorationNoteEn: z.string().optional(),
   editorialNote: z
     .string()
     .optional()

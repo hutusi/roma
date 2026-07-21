@@ -40,6 +40,22 @@ function isUniqueViolation(error: unknown): boolean {
   );
 }
 
+/**
+ * films now carries several unique columns (slug + external ids), so a
+ * 23505 must name the one that collided instead of blaming the slug.
+ */
+function uniqueViolationMessage(error: unknown, slug: string): string {
+  const constraint =
+    typeof error === "object" && error !== null && "constraint" in error
+      ? ((error as { constraint?: string }).constraint ?? "")
+      : "";
+  if (constraint.includes("tmdbId")) return "该 TMDB ID 已被其他影片使用";
+  if (constraint.includes("imdbId")) return "该 IMDb ID 已被其他影片使用";
+  if (constraint.includes("doubanId")) return "该豆瓣 ID 已被其他影片使用";
+  if (constraint.includes("wikidataId")) return "该 Wikidata ID 已被其他影片使用";
+  return `slug「${slug}」已被使用`;
+}
+
 function isForeignKeyViolation(error: unknown): boolean {
   return (
     typeof error === "object" &&
@@ -72,6 +88,13 @@ export async function saveFilm(
     runtimeMinutes: typeof v.runtimeMinutes === "number" ? v.runtimeMinutes : null,
     aspectRatio: v.aspectRatio || null,
     isBlackAndWhite: v.isBlackAndWhite,
+    isSilent: v.isSilent,
+    tmdbId: v.tmdbId?.trim() ? Number(v.tmdbId.trim()) : null,
+    imdbId: v.imdbId?.trim() || null,
+    doubanId: v.doubanId?.trim() || null,
+    wikidataId: v.wikidataId?.trim().toUpperCase() || null,
+    restorationNote: v.restorationNote || null,
+    restorationNoteEn: v.restorationNoteEn || null,
     editorialNote: v.editorialNote || null,
     essay: (v.essay as TiptapDoc) ?? null,
     editorialNoteEn: v.editorialNoteEn || null,
@@ -185,7 +208,7 @@ export async function saveFilm(
     }
     return ok({ id: filmId });
   } catch (error) {
-    if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
+    if (isUniqueViolation(error)) return fail(uniqueViolationMessage(error, v.slug));
     if (isForeignKeyViolation(error)) return fail("关联的人物或标签不存在，可能已被删除");
     throw error;
   }

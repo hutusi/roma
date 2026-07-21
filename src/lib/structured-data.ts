@@ -3,6 +3,7 @@ import type { PublicFilm, PublicList, PublicPerson } from "@/db/queries/public";
 import { visibleIn } from "@/db/queries/visibility";
 import { countryToEn } from "@/i18n/countries";
 import { HTML_LANG, type Locale, localePath } from "@/i18n/locales";
+import { filmSameAs } from "@/lib/external-ids";
 import { personPath } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 
@@ -139,6 +140,9 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
   );
   const description = (en ? film.editorialNoteEn : film.editorialNote)?.slice(0, 300);
   const image = pickImage(film.media);
+  // External ids → sameAs, the schema.org hook for entity reconciliation
+  // (IMDb / Douban / Wikidata / TMDB URLs, whichever are curated).
+  const sameAs = filmSameAs(film);
 
   const movie: JsonLdNode = {
     "@type": "Movie",
@@ -163,6 +167,7 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
       ? { genre: film.filmTags.map((ft) => (en ? ft.tag.nameEn : ft.tag.nameZh)) }
       : {}),
     ...(image ? { image } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
   };
 
   return graph([

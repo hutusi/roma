@@ -33,6 +33,22 @@ export const films = pgTable(
     /** e.g. "1.37:1" */
     aspectRatio: text(),
     isBlackAndWhite: boolean().notNull().default(false),
+    isSilent: boolean().notNull().default(false),
+    /**
+     * External identifiers, stored bare (never as URLs — URLs are built
+     * only in src/lib/external-ids.ts). tmdbId doubles as the stable
+     * handle for image/metadata re-import; wikidataId is sameAs-only.
+     */
+    tmdbId: integer().unique(),
+    /** e.g. "tt0056801" */
+    imdbId: text().unique(),
+    /** Douban subject id, numeric string — e.g. "1291560" */
+    doubanId: text().unique(),
+    /** e.g. "Q550027" */
+    wikidataId: text().unique(),
+    /** 修复版本 — e.g. "2019 年 4K 修复，博洛尼亚电影资料馆". */
+    restorationNote: text(),
+    restorationNoteEn: text(),
     /**
      * 编辑札记 — plain text. Publishing requires 200–500 code points
      * (enforced in the app layer so CJK counts correctly); drafts may be

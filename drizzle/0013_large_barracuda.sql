@@ -1,0 +1,1 @@
+ALTER TABLE "films" ADD CONSTRAINT "films_wikidataId_unique" UNIQUE("wikidata_id");

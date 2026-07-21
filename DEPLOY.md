@@ -68,10 +68,14 @@ For a batch of new films/people/lists added to `src/db/seed-data/`.
 # 0. Get production credentials locally; delete the file when you are done.
 vercel env pull --environment=production .env.production.local
 
-# 1. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
-
-# 2. Apply any schema change, and the seed baseline it depends on.
+# 1. Apply any schema change FIRST, and the seed baseline it depends on. Order matters:
+#    the Vercel build prerenders against this database, so deploying code that queries a
+#    column before the column exists fails the build (this applies to PR preview builds
+#    too). Our migrations are additive, which is why running them under the live site is
+#    the safe direction.
 bun --env-file=.env.production.local run db:migrate
+
+# 2. Merge to main; Vercel auto-deploys. Site unchanged — the DB has no new content yet.
 
 # 3. Seed. This is the whole content deploy: new films, people and lists, their tag
 #    junctions, and any tag the release introduces.
@@ -91,8 +95,13 @@ psql "$DATABASE_URL" -c "select slug, published_at from films order by published
 
 # 5. Changes to an existing row that are NOT tags — a corrected note, a list's sortOrder —
 #    still need their own step, because everything else is onConflictDoNothing:
-#      prose  → bun run src/db/resync-content.ts --films=… --apply
-#      lists  → /admin (moving the featured list, sortOrder 0)
+#      prose    → bun run src/db/resync-content.ts --films=… --apply
+#      lists    → /admin (moving the featured list, sortOrder 0)
+#      metadata → bun run src/db/backfill-metadata.ts (--films=… | --all) --apply
+#                 (external ids, isSilent, restoration notes — ADR 0016. Dry-run first:
+#                 omit --apply. --all sweeps the whole seed corpus, which is right for a
+#                 rollout; once editors correct ids in /admin, always pass an explicit
+#                 --films list — the script refuses an implicit whole-corpus --apply.)
 
 # 6. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
 #    pages rebuild against the populated database.

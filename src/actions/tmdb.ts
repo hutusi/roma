@@ -17,6 +17,7 @@ export type TmdbPrefill = {
   year?: number;
   runtimeMinutes?: number;
   countries: string;
+  imdbId?: string;
   cast: { name: string; character?: string; characterZh?: string }[];
 };
 
@@ -40,7 +41,7 @@ export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbP
   try {
     const id = tmdbId.trim();
     const [movie, translations, credits, creditsZh] = await Promise.all([
-      get(`/movie/${id}?language=zh-CN`),
+      get(`/movie/${id}?language=zh-CN&append_to_response=external_ids`),
       get(`/movie/${id}/translations`),
       get(`/movie/${id}/credits?language=en-US`),
       get(`/movie/${id}/credits?language=zh-CN`),
@@ -67,6 +68,7 @@ export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbP
         (movie.production_countries as { name: string }[] | undefined)
           ?.map((c) => c.name)
           .join("、") ?? "",
+      imdbId: (movie.external_ids as { imdb_id?: string } | undefined)?.imdb_id || undefined,
       cast:
         (credits.cast as { id: number; name: string; character?: string }[] | undefined)
           ?.slice(0, 8)
