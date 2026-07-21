@@ -93,11 +93,11 @@ psql "$DATABASE_URL" -c "select slug, published_at from films order by published
 #    still need their own step, because everything else is onConflictDoNothing:
 #      prose    → bun run src/db/resync-content.ts --films=… --apply
 #      lists    → /admin (moving the featured list, sortOrder 0)
-#      metadata → bun run src/db/backfill-metadata.ts [--films=…] --apply
+#      metadata → bun run src/db/backfill-metadata.ts (--films=… | --all) --apply
 #                 (external ids, isSilent, restoration notes — ADR 0016. Dry-run first:
-#                 omit --apply. Without --films it sweeps the whole seed corpus, which is
-#                 right for a rollout; once editors correct ids in /admin, always pass an
-#                 explicit --films list so seed-data can't silently revert their fixes.)
+#                 omit --apply. --all sweeps the whole seed corpus, which is right for a
+#                 rollout; once editors correct ids in /admin, always pass an explicit
+#                 --films list — the script refuses an implicit whole-corpus --apply.)
 
 # 6. Redeploy (dashboard "Redeploy", or an empty commit) so listings, sitemap and person
 #    pages rebuild against the populated database.
