@@ -10,7 +10,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 
 | Term | Meaning |
 |---|---|
-| 影片 (film) | A curated film — never an exhaustive database entry. Publishing requires a 200–500 code-point 编辑札记 and ≥1 director. |
+| 影片 (film) | A curated film — never an exhaustive database entry. Publishing requires a 200–500 code-point 编辑札记 and ≥1 director. Physical attributes are explicit booleans/columns (`isBlackAndWhite`, `isSilent`, aspect ratio, runtime, countries), plus optional 修复版本 notes (`restorationNote`/`restorationNoteEn`). Carries four optional external ids (TMDB/IMDb/豆瓣/Wikidata) stored bare — URLs built only in `src/lib/external-ids.ts`; the page shows just a discreet 外部链接 pair (豆瓣-first on /zh, IMDb-first on /en), the rest feeds JSON-LD `sameAs` (ADR 0016). |
 | 人物 (person) | A curated human — director, actor, or both; ONE row and one page per person (`people` table). `primaryRole` picks the canonical URL segment (`/director/` vs `/actor/`); the other segment 308s to it (ADR 0013). Directing credits live in `film_directors`; the 演员表 is curated `film_cast` rows (denormalized name + 角色, optional `personId` link). 收录即推荐 applies to people too: cast rows exist for every credit, but person rows/pages only for people the editors curate. |
 | 编辑札记 | The editorial note; plain text, counted in Unicode code points (CJK-correct). The heart of a film page. |
 | 译名 | Title variants: 大陆 (primary), 港, 台, plus original and English. Explicit columns, not a child table. |

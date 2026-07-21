@@ -84,6 +84,20 @@ export default async function HandbookPage() {
           </p>
         </Section>
 
+        <Section title="外部标识">
+          <p>
+            影片可关联四个外部 ID：TMDB、IMDb、豆瓣、Wikidata。<strong>只填 ID 本身</strong>
+            （如 <code>tt0056801</code>、豆瓣 <code>subject/</code> 后的数字、<code>Q550027</code>
+            ），不要粘贴链接——链接由代码统一生成。
+          </p>
+          <p>
+            豆瓣与 IMDb 会以一行小字出现在影片页「哪里能看」附近（中文版豆瓣在前，英文版 IMDb
+            在前）；TMDB 用于资料重导，Wikidata 只提供给搜索引擎，都不会显示。 从 TMDB
+            导入元数据时会自动带出 TMDB 与 IMDb ID；豆瓣 ID 需要手工核对填写。
+            这只是给读者的指路牌——评分、榜单等一概不引入，收录即推荐不变。
+          </p>
+        </Section>
+
         <Section title="译名规范">
           <p>
             大陆译名为主标题，必填；港译、台译在有通行版本时补充（例：《八部半》台译《八又二分之一》）。
