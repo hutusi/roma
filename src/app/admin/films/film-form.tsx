@@ -121,6 +121,8 @@ export function FilmForm({
                 year: d.year ?? getValues("year"),
                 runtimeMinutes: d.runtimeMinutes ?? "",
                 countries: d.countries,
+                tmdbId: id.trim(),
+                imdbId: d.imdbId ?? "",
                 cast: d.cast.map((m) => ({
                   name: m.name,
                   nameZh: "",
@@ -203,10 +205,34 @@ export function FilmForm({
             <Label htmlFor="countries">国家/地区（顿号或逗号分隔）</Label>
             <Input id="countries" placeholder="意大利、法国" {...register("countries")} />
           </div>
-          <label className="flex items-end gap-2 pb-2 text-sm">
-            <input type="checkbox" {...register("isBlackAndWhite")} />
-            黑白片
-          </label>
+          <div className="flex items-end gap-4 pb-2 text-sm">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isBlackAndWhite")} />
+              黑白片
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isSilent")} />
+              默片
+            </label>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="restorationNote">修复版本（可选）</Label>
+            <Input
+              id="restorationNote"
+              placeholder="2019 年 4K 修复，博洛尼亚电影资料馆"
+              {...register("restorationNote")}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="restorationNoteEn">修复版本 · 英文</Label>
+            <Input
+              id="restorationNoteEn"
+              placeholder="4K restoration, Cineteca di Bologna, 2019"
+              {...register("restorationNoteEn")}
+            />
+          </div>
         </div>
         <div className="space-y-1.5">
           <Label>导演 *</Label>
@@ -267,6 +293,35 @@ export function FilmForm({
               </div>
             )}
           />
+        </div>
+      </Section>
+
+      <Section title="外部标识">
+        <p className="text-ink-muted text-xs">
+          只填 ID 本身，不贴链接。豆瓣与 IMDb 会显示在影片页；TMDB 用于资料重导，Wikidata
+          仅供搜索引擎。
+        </p>
+        <div className="grid grid-cols-4 gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="tmdbId">TMDB</Label>
+            <Input id="tmdbId" placeholder="8329" {...register("tmdbId")} />
+            {fieldError(errors.tmdbId?.message)}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="imdbId">IMDb</Label>
+            <Input id="imdbId" placeholder="tt0056801" {...register("imdbId")} />
+            {fieldError(errors.imdbId?.message)}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="doubanId">豆瓣</Label>
+            <Input id="doubanId" placeholder="1291560" {...register("doubanId")} />
+            {fieldError(errors.doubanId?.message)}
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="wikidataId">Wikidata</Label>
+            <Input id="wikidataId" placeholder="Q550027" {...register("wikidataId")} />
+            {fieldError(errors.wikidataId?.message)}
+          </div>
         </div>
       </Section>
 

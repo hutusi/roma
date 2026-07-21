@@ -49,6 +49,26 @@ export const filmFormSchema = z.object({
   runtimeMinutes: z.coerce.number<number>().int().positive().optional().or(z.literal("")),
   aspectRatio: z.string().optional(),
   isBlackAndWhite: z.boolean(),
+  isSilent: z.boolean(),
+  /** External ids are stored bare — never paste URLs (see lib/external-ids.ts). */
+  tmdbId: z
+    .string()
+    .optional()
+    .refine((s) => !s || /^\d+$/.test(s.trim()), "TMDB ID 是纯数字"),
+  imdbId: z
+    .string()
+    .optional()
+    .refine((s) => !s || /^tt\d{7,8}$/.test(s.trim()), "IMDb ID 形如 tt0056801"),
+  doubanId: z
+    .string()
+    .optional()
+    .refine((s) => !s || /^\d+$/.test(s.trim()), "豆瓣 ID 是纯数字（subject/ 后的部分）"),
+  wikidataId: z
+    .string()
+    .optional()
+    .refine((s) => !s || /^[Qq]\d+$/.test(s.trim()), "Wikidata ID 形如 Q550027"),
+  restorationNote: z.string().optional(),
+  restorationNoteEn: z.string().optional(),
   editorialNote: z
     .string()
     .optional()
