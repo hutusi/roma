@@ -50,18 +50,29 @@ export const films = pgTable(
     restorationNote: text(),
     restorationNoteEn: text(),
     /**
-     * 编辑札记 — plain text. Publishing requires 200–500 code points
-     * (enforced in the app layer so CJK counts correctly); drafts may be
-     * empty.
+     * 影片介绍 — plain text, neutral and encyclopedic: what the film is,
+     * what happens, how it was made and received. Every sentence should
+     * be the kind of claim that could carry a citation. Publishing
+     * requires 200–500 code points (enforced in the app layer so CJK
+     * counts correctly); drafts may be empty.
      */
-    editorialNote: text(),
-    /** Optional long-form essay (Tiptap JSON). */
-    essay: jsonb().$type<TiptapDoc>(),
+    introduction: text(),
     /**
-     * English edition of the editorial note. Publishing the English
+     * English edition of the introduction. Publishing the English
      * edition requires 120–350 words (word-based, not code points).
      */
+    introductionEn: text(),
+    /**
+     * 编辑札记 — the editorial position, in an editor's own voice, and
+     * optional: a film publishes on its introduction alone. Bounded by a
+     * ceiling and no floor (see EDITORIAL_NOTE_MAX), which is the whole
+     * point. The old 200-code-point floor is what invited prose written
+     * to fill a quota; a ceiling cannot be satisfied by writing more.
+     */
+    editorialNote: text(),
     editorialNoteEn: text(),
+    /** Optional long-form essay (Tiptap JSON). */
+    essay: jsonb().$type<TiptapDoc>(),
     essayEn: jsonb().$type<TiptapDoc>(),
     status: contentStatus().notNull().default("draft"),
     /**
