@@ -82,14 +82,38 @@ async function filmsAtRef(ref: string): Promise<Map<string, Record<string, unkno
   }
 }
 
-/** Wrap on whitespace for en; on width for zh, which has no spaces to break at. */
+/** Punctuation that may never open a line (禁则处理). */
+const NO_LINE_START = /[，。、；：？！）」』】—…·%]/;
+
+/**
+ * Wrap on whitespace for en; on display width for zh, which has no spaces to
+ * break at. Slicing zh at a fixed offset splits years down the middle and
+ * strands commas at the head of a line, which makes prose written to be judged
+ * by eye harder to judge. So: treat each run of Latin/digits as one unit, and
+ * pull a closing mark back onto the line it belongs to.
+ */
 function wrap(text: string, width: number): string[] {
   const out: string[] = [];
   for (const para of text.split("\n")) {
     if (/[一-鿿]/.test(para)) {
       // CJK glyphs are double-width in a terminal, so halve the budget.
       const per = Math.floor(width / 2);
-      for (let i = 0; i < para.length; i += per) out.push(para.slice(i, i + per));
+      const units = para.match(/[A-Za-z0-9][A-Za-z0-9.,:'’-]*|\s+|./gu) ?? [];
+      let line = "";
+      let w = 0;
+      for (const u of units) {
+        // Latin/digit runs are single-width; CJK is double.
+        const uw = /^[A-Za-z0-9\s]/.test(u) ? u.length / 2 : u.length;
+        if (w + uw > per && line && !NO_LINE_START.test(u)) {
+          out.push(line);
+          line = u.trimStart();
+          w = line ? uw : 0;
+        } else {
+          line += u;
+          w += uw;
+        }
+      }
+      if (line.trim()) out.push(line);
     } else {
       let line = "";
       for (const word of para.split(/\s+/)) {
