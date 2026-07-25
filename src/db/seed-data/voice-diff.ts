@@ -9,9 +9,12 @@
  * evaluates the two revisions of seed-data in a child bun process, so it can
  * compare a working tree against any ref without checking anything out.
  *
+ * Compares against the branch point (merge-base with main) unless --ref says
+ * otherwise, so it keeps working after the rewrite is committed.
+ *
  *   bun run src/db/seed-data/voice-diff.ts --films=otto-e-mezzo,tokyo-story
- *   bun run src/db/seed-data/voice-diff.ts --all --ref=main
- *   bun run src/db/seed-data/voice-diff.ts --films=… --stats   # lengths only
+ *   bun run src/db/seed-data/voice-diff.ts --all --stats        # lengths only
+ *   bun run src/db/seed-data/voice-diff.ts --all --ref=HEAD~3   # explicit ref
  */
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -25,7 +28,20 @@ const arg = (name: string): string | undefined => {
 };
 const flag = (name: string) => process.argv.includes(`--${name}`);
 
-const REF = arg("ref") ?? "HEAD";
+/**
+ * Default to where this branch left main, not to HEAD. A prose rewrite is
+ * reviewed for far longer than it sits uncommitted, and against HEAD every
+ * committed rewrite reports "identical" — the one output that looks like a
+ * working tool and answers nothing. On main the merge-base is HEAD anyway,
+ * so this stays correct there.
+ */
+function defaultRef(): string {
+  const base = Bun.spawnSync(["git", "merge-base", "main", "HEAD"]);
+  if (base.exitCode !== 0) return "HEAD";
+  return base.stdout.toString().trim() || "HEAD";
+}
+
+const REF = arg("ref") ?? defaultRef();
 const STATS_ONLY = flag("stats");
 const slugs = flag("all")
   ? seedFilms.map((f) => f.slug)
@@ -118,7 +134,8 @@ async function main() {
   const before = await filmsAtRef(REF);
   const after = new Map(seedFilms.map((f) => [f.slug, f]));
 
-  console.log(`\nEditorial prose: ${REF} → working tree  (${slugs.length} film(s))`);
+  const shown = /^[0-9a-f]{40}$/.test(REF) ? `${REF.slice(0, 8)} (branch point)` : REF;
+  console.log(`\nEditorial prose: ${shown} → working tree  (${slugs.length} film(s))`);
 
   const zhLens: number[] = [];
   const enLens: number[] = [];
