@@ -90,6 +90,8 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
             careerEssay: person.careerEssay ?? null,
             bioEn: person.bioEn ?? "",
             careerEssayEn: person.careerEssayEn ?? null,
+            editorialNote: person.editorialNote ?? "",
+            editorialNoteEn: person.editorialNoteEn ?? "",
           }}
         />
       </div>

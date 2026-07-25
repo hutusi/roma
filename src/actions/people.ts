@@ -39,6 +39,8 @@ export async function savePerson(
     careerEssay: (v.careerEssay as TiptapDoc) ?? null,
     bioEn: v.bioEn || null,
     careerEssayEn: (v.careerEssayEn as TiptapDoc) ?? null,
+    editorialNote: v.editorialNote || null,
+    editorialNoteEn: v.editorialNoteEn || null,
   };
   try {
     const outcome = await db.transaction(async (tx) => {
@@ -53,6 +55,7 @@ export async function savePerson(
         const problems = publishProblems({
           bio: v.bio || null,
           careerEssay: (v.careerEssay as TiptapDoc) ?? null,
+          editorialNote: v.editorialNote || null,
         });
         if (problems.length) {
           return {

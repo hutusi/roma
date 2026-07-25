@@ -129,6 +129,7 @@ export async function saveFilm(
 
       if (isPublic) {
         const problems = publishProblems({
+          introduction: v.introduction || null,
           editorialNote: v.editorialNote || null,
           directorCount: v.directorIds.length,
         });
@@ -141,6 +142,7 @@ export async function saveFilm(
       if (existing?.statusEn === "published") {
         const problems = publishEnProblems({
           titleEn: v.titleEn || null,
+          introductionEn: v.introductionEn || null,
           editorialNoteEn: v.editorialNoteEn || null,
         });
         if (problems.length) {
@@ -223,7 +225,11 @@ export async function publishFilm(id: string): Promise<ActionResult> {
       .select({ n: count() })
       .from(filmDirectors)
       .where(eq(filmDirectors.filmId, id));
-    const problems = publishProblems({ editorialNote: film.editorialNote, directorCount });
+    const problems = publishProblems({
+      introduction: film.introduction,
+      editorialNote: film.editorialNote,
+      directorCount,
+    });
     if (problems.length) return { error: problems.join("；") } as const;
     await tx
       .update(films)
@@ -243,6 +249,7 @@ export async function publishFilmEn(id: string): Promise<ActionResult> {
     if (!film) return { error: "影片不存在" } as const;
     const problems = publishEnProblems({
       titleEn: film.titleEn,
+      introductionEn: film.introductionEn,
       editorialNoteEn: film.editorialNoteEn,
     });
     if (problems.length) return { error: problems.join("；") } as const;

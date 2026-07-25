@@ -55,6 +55,7 @@ export const zh = {
     elsewhere: "外部链接：",
     externalSites: { douban: "豆瓣", imdb: "IMDb" },
     castAs: (character: string) => `饰 ${character}`,
+    introduction: "影片介绍",
     editorialNote: "编辑札记",
     titles: "译名",
     cast: "主演",

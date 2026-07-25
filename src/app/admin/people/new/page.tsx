@@ -30,6 +30,8 @@ export default async function NewPersonPage() {
             careerEssay: null,
             bioEn: "",
             careerEssayEn: null,
+            editorialNote: "",
+            editorialNoteEn: "",
           }}
         />
       </div>

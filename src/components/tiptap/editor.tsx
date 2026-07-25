@@ -12,6 +12,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import {
+  codePointLength,
+  EDITORIAL_NOTE_EN_MAX,
+  EDITORIAL_NOTE_MAX,
+  INTRODUCTION_EN_MAX,
+  INTRODUCTION_EN_MIN,
+  INTRODUCTION_MAX,
+  INTRODUCTION_MIN,
+  wordCount,
+} from "@/lib/validators/film";
 import { essayExtensions } from "./extensions";
 import { isAllowedLinkHref } from "./link-policy";
 
@@ -211,23 +221,45 @@ export function TiptapEditor({
   );
 }
 
-export function NoteCounter({ text }: { text: string }) {
-  const len = Array.from(text).length;
-  const inRange = len >= 200 && len <= 500;
+/**
+ * 影片介绍 — a range, so the counter reads as progress toward a band.
+ * Bounds come from the validator rather than being repeated here: they
+ * were hardcoded once and silently described the wrong field after the
+ * introduction and the note were split.
+ */
+export function IntroCounter({ text }: { text: string }) {
+  const len = codePointLength(text);
+  const inRange = len >= INTRODUCTION_MIN && len <= INTRODUCTION_MAX;
   return (
     <p className={cn("text-right text-xs", inRange ? "text-ink-muted" : "text-destructive")}>
-      {len} / 200–500 字
+      {len} / {INTRODUCTION_MIN}–{INTRODUCTION_MAX} 字
     </p>
   );
 }
 
-/** English notes measure in words (see EDITORIAL_NOTE_EN_* in the validator). */
-export function NoteCounterEn({ text }: { text: string }) {
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  const inRange = words >= 120 && words <= 350;
+/** English introductions measure in words, not code points. */
+export function IntroCounterEn({ text }: { text: string }) {
+  const words = wordCount(text);
+  const inRange = words >= INTRODUCTION_EN_MIN && words <= INTRODUCTION_EN_MAX;
   return (
     <p className={cn("text-right text-xs", inRange ? "text-ink-muted" : "text-destructive")}>
-      {words} / 120–350 词
+      {words} / {INTRODUCTION_EN_MIN}–{INTRODUCTION_EN_MAX} 词
+    </p>
+  );
+}
+
+/**
+ * 编辑札记 — a ceiling with no floor, so this counts down rather than up.
+ * An empty note is valid and must not read as an error; the number only
+ * turns red once it is over.
+ */
+export function CeilingCounter({ text, en = false }: { text: string; en?: boolean }) {
+  const used = en ? wordCount(text) : codePointLength(text);
+  const max = en ? EDITORIAL_NOTE_EN_MAX : EDITORIAL_NOTE_MAX;
+  const unit = en ? "词" : "字";
+  return (
+    <p className={cn("text-right text-xs", used <= max ? "text-ink-muted" : "text-destructive")}>
+      {used > max ? `超出 ${used - max} ${unit}` : `${used} / ${max} ${unit}（选填）`}
     </p>
   );
 }

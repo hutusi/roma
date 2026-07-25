@@ -96,12 +96,16 @@ async function main() {
         continue;
       }
       const next = {
-        editorialNote: f.editorialNote,
+        introduction: f.introduction,
+        introductionEn: f.introductionEn ?? null,
+        editorialNote: f.editorialNote ?? null,
         editorialNoteEn: f.editorialNoteEn ?? null,
         essay: f.essay ?? null,
         essayEn: f.essayEn ?? null,
       };
       const proseDiff =
+        !same(cur.introduction, next.introduction) ||
+        !same(cur.introductionEn, next.introductionEn) ||
         !same(cur.editorialNote, next.editorialNote) ||
         !same(cur.editorialNoteEn, next.editorialNoteEn) ||
         !same(cur.essay, next.essay) ||

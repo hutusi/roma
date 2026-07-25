@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { EDITORIAL_NOTE_EN_MAX, EDITORIAL_NOTE_EN_MIN, wordCount } from "../../lib/validators/film";
+import {
+  EDITORIAL_NOTE_EN_MAX,
+  INTRODUCTION_EN_MAX,
+  INTRODUCTION_EN_MIN,
+  wordCount,
+} from "../../lib/validators/film";
 import { seedActors } from "./actors";
 import { seedDirectors } from "./directors";
 import { seedFilms } from "./films";
@@ -16,18 +21,27 @@ const isTiptapDoc = (v: unknown) =>
   typeof v === "object" && v !== null && (v as { type?: unknown }).type === "doc";
 
 describe("English film editions", () => {
-  const withNote = seedFilms.filter((f) => f.editorialNoteEn);
+  const withIntro = seedFilms.filter((f) => f.introductionEn);
 
-  test("every editorialNoteEn is within the 120–350-word publish gate", () => {
-    const offenders = withNote
-      .map((f) => ({ slug: f.slug, words: wordCount(f.editorialNoteEn as string) }))
-      .filter((r) => r.words < EDITORIAL_NOTE_EN_MIN || r.words > EDITORIAL_NOTE_EN_MAX);
+  test("every introductionEn is within the 120–350-word publish gate", () => {
+    const offenders = withIntro
+      .map((f) => ({ slug: f.slug, words: wordCount(f.introductionEn as string) }))
+      .filter((r) => r.words < INTRODUCTION_EN_MIN || r.words > INTRODUCTION_EN_MAX);
     expect(offenders).toEqual([]);
   });
 
-  test("every film with an English note also has titleEn", () => {
-    const missing = withNote.filter((f) => !f.titleEn?.trim()).map((f) => f.slug);
+  test("every film with an English introduction also has titleEn", () => {
+    const missing = withIntro.filter((f) => !f.titleEn?.trim()).map((f) => f.slug);
     expect(missing).toEqual([]);
+  });
+
+  // The note is capped and optional, so this checks only the ceiling.
+  test("no editorialNoteEn exceeds its ceiling", () => {
+    const offenders = seedFilms
+      .filter((f) => f.editorialNoteEn)
+      .map((f) => ({ slug: f.slug, words: wordCount(f.editorialNoteEn as string) }))
+      .filter((r) => r.words > EDITORIAL_NOTE_EN_MAX);
+    expect(offenders).toEqual([]);
   });
 
   test("every essayEn is a tiptap doc", () => {

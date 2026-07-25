@@ -50,6 +50,7 @@ export const en = {
     elsewhere: "Elsewhere: ",
     externalSites: { douban: "Douban", imdb: "IMDb" },
     castAs: (character: string) => `as ${character}`,
+    introduction: "Introduction",
     editorialNote: "Editorial Note",
     titles: "Titles",
     cast: "Cast",

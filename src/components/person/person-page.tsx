@@ -23,6 +23,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
   const displayName = en ? person.name : (person.nameZh ?? person.name);
   const subName = en ? person.nameZh : person.name;
   const bio = en ? person.bioEn : person.bio;
+  const editorialNote = en ? person.editorialNoteEn : person.editorialNote;
   const careerEssay = en ? person.careerEssayEn : person.careerEssay;
 
   return (
@@ -53,6 +54,14 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
       {bio && (
         <p className="mx-auto mt-10 max-w-[70ch] text-[17px] text-ink-muted leading-[1.9] tracking-[0.02em]">
           {bio}
+        </p>
+      )}
+
+      {/* Set apart from the introduction: short, optional, and the one
+          place on the page carrying an editor's own view. */}
+      {editorialNote && (
+        <p className="mx-auto mt-8 max-w-[62ch] border-line border-l-2 pl-5 text-[17px] text-ink-muted italic leading-[1.9] tracking-[0.02em]">
+          {editorialNote}
         </p>
       )}
 

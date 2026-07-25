@@ -6,8 +6,8 @@ const film = (over: Partial<FeedFilm>): FeedFilm => ({
   titleZh: "八部半",
   titleEn: "8½",
   titleOriginal: "Otto e mezzo",
-  editorialNote: "zh note",
-  editorialNoteEn: "en note",
+  introduction: "zh intro",
+  introductionEn: "en intro",
   publishedAt: new Date("2026-07-11T00:00:00Z"),
   publishedEnAt: new Date("2026-07-11T00:00:00Z"),
   ...over,
@@ -23,7 +23,7 @@ describe("renderFilmsFeed", () => {
       '<guid isPermaLink="true">https://babuban.com/zh/film/otto-e-mezzo</guid>',
     );
     expect(xml).toContain("<pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>");
-    expect(xml).toContain("<description>zh note</description>");
+    expect(xml).toContain("<description>zh intro</description>");
     expect(xml).toContain('href="https://babuban.com/zh/rss.xml"');
   });
 
@@ -32,13 +32,13 @@ describe("renderFilmsFeed", () => {
     expect(xml).toContain("<title>Babuban</title>");
     expect(xml).toContain("<language>en</language>");
     expect(xml).toContain("<link>https://babuban.com/en/film/otto-e-mezzo</link>");
-    expect(xml).toContain("<description>en note</description>");
+    expect(xml).toContain("<description>en intro</description>");
     expect(xml).toContain('href="https://babuban.com/en/rss.xml"');
   });
 
-  test("escapes XML metacharacters in titles and notes", () => {
+  test("escapes XML metacharacters in titles and introductions", () => {
     const xml = renderFilmsFeed("zh", [
-      film({ titleZh: "R&D <film>", editorialNote: 'a "quote" & <tag>' }),
+      film({ titleZh: "R&D <film>", introduction: 'a "quote" & <tag>' }),
     ]);
     expect(xml).toContain("<title>R&amp;D &lt;film&gt;</title>");
     expect(xml).toContain("a &quot;quote&quot; &amp; &lt;tag&gt;");

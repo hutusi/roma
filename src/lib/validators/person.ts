@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { codePointLength, EDITORIAL_NOTE_EN_MAX, EDITORIAL_NOTE_MAX, wordCount } from "./film";
 import { hasProse, tiptapDocSchema } from "./prose";
 
 export const personFormSchema = z.object({
@@ -10,10 +11,26 @@ export const personFormSchema = z.object({
   nameZh: z.string().optional(),
   /** Picks the canonical URL segment (/director vs /actor). */
   primaryRole: z.enum(["director", "actor"]),
+  /** 人物介绍 — also the card blurb and meta description. */
   bio: z.string().optional(),
   careerEssay: tiptapDocSchema,
   bioEn: z.string().optional(),
   careerEssayEn: tiptapDocSchema,
+  /** 编辑札记 — same ceiling-not-floor rule as films. */
+  editorialNote: z
+    .string()
+    .optional()
+    .refine(
+      (s) => !s || codePointLength(s) <= EDITORIAL_NOTE_MAX,
+      `编辑札记不能超过 ${EDITORIAL_NOTE_MAX} 字`,
+    ),
+  editorialNoteEn: z
+    .string()
+    .optional()
+    .refine(
+      (s) => !s || wordCount(s) <= EDITORIAL_NOTE_EN_MAX,
+      `英文札记不能超过 ${EDITORIAL_NOTE_EN_MAX} 词`,
+    ),
 });
 
 export type PersonFormValues = z.infer<typeof personFormSchema>;
@@ -28,10 +45,19 @@ export type PersonFormValues = z.infer<typeof personFormSchema>;
 export function publishProblems(person: {
   bio: string | null;
   careerEssay: Record<string, unknown> | null;
+  editorialNote?: string | null;
 }): string[] {
+  const problems: string[] = [];
   // careerEssay must actually render — an empty { type: "doc" } used to
   // pass as a truthy object while rendering nothing (see hasProse).
-  return person.bio?.trim() || hasProse(person.careerEssay) ? [] : ["发布前请填写简介或创作历程"];
+  if (!person.bio?.trim() && !hasProse(person.careerEssay)) {
+    problems.push("发布前请填写人物介绍或创作历程");
+  }
+  const noteLen = codePointLength((person.editorialNote ?? "").trim());
+  if (noteLen > EDITORIAL_NOTE_MAX) {
+    problems.push(`编辑札记不能超过 ${EDITORIAL_NOTE_MAX} 字（当前 ${noteLen} 字）`);
+  }
+  return problems;
 }
 
 /** Gate for the English edition; the career essay stays optional. */
