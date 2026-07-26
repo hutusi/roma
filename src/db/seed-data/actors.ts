@@ -17,9 +17,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "三船敏郎",
     primaryRole: "actor",
     tmdbPersonId: 7450,
-    bio: "日本演员，1920–1997。黑泽明的银幕化身，十六部合作片里的火山：狂放的强盗、伪装成疯犬的武士、剃刀般的浪人，动作快过思想，却总在某个瞬间露出羞怯。",
+    bio: "日本演员，1920–1997。1947 年入东宝，与黑泽明合作十六部影片，包括《罗生门》《七武士》《用心棒》。1961 年与 1965 年两度获威尼斯电影节最佳男演员奖。1963 年起自组制片公司。",
     bioEn:
-      "Japanese actor, 1920–1997. Kurosawa's screen incarnation across sixteen films — a volcano of an actor whose bandits, mad-dog samurai and razor-sharp ronin move faster than thought, then betray a sudden shyness.",
+      "Japanese actor, 1920–1997. He joined Toho in 1947 and appeared in sixteen films with Akira Kurosawa, among them Rashomon, Seven Samurai and Yojimbo. He received the award for Best Actor at Venice twice, in 1961 and 1965, and set up his own production company in 1963.",
   },
   {
     slug: "setsuko-hara",
@@ -27,9 +27,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "原节子",
     primaryRole: "actor",
     tmdbPersonId: 95504,
-    bio: "日本演员，1920–2015。小津镜头里三个「纪子」的面孔：微笑之下藏着拒绝与哀伤。1963 年息影后半个世纪深居简出，把「永远的女儿」留在了银幕上。",
+    bio: "日本演员，1920–2015。1935 年出道，战后参演小津安二郎六部影片，其中三部饰演名为纪子的角色。1963 年小津去世同年息影，此后长居镰仓，不再公开露面，至 2015 年去世。",
     bioEn:
-      "Japanese actor, 1920–2015. The face of Ozu's three Norikos — a smile with refusal and grief folded inside it. She retired in 1963 and lived half a century in seclusion, leaving the eternal daughter on screen.",
+      "Japanese actor, 1920–2015. She began appearing in films in 1935 and after the war worked on six films with Ozu, playing a character named Noriko in three of them. She stopped acting in 1963, the year Ozu died, and lived in Kamakura without public appearances until her death in 2015.",
   },
   {
     slug: "giulietta-masina",
@@ -37,9 +37,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "朱丽叶塔·马西纳",
     primaryRole: "actor",
     tmdbPersonId: 5402,
-    bio: "意大利演员，1921–1994。费里尼的妻子与缪斯，被称作「女卓别林」：杰尔索米娜与卡比利亚的那双眼睛，把喜剧的天真和悲剧的知情放在同一张脸上。",
+    bio: "意大利演员，1921–1994。1943 年与费德里科·费里尼结婚，此后参演其多部影片，包括《大路》《卡比利亚之夜》《朱丽叶与魔鬼》。1957 年以《卡比利亚之夜》获戛纳电影节最佳女演员奖。",
     bioEn:
-      "Italian actor, 1921–1994. Fellini's wife and muse, often called a female Chaplin: the eyes of Gelsomina and Cabiria hold comic innocence and tragic knowledge in a single face.",
+      "Italian actor, 1921–1994. She married Federico Fellini in 1943 and appeared in a number of his films, including La strada, Nights of Cabiria and Juliet of the Spirits. She received the award for Best Actress at Cannes in 1957 for Nights of Cabiria.",
   },
   {
     slug: "marcello-mastroianni",
@@ -47,9 +47,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "马塞洛·马斯楚安尼",
     primaryRole: "actor",
     tmdbPersonId: 5676,
-    bio: "意大利演员，1924–1996。现代主义电影的疲惫面孔：费里尼的另一个自我、安东尼奥尼的失语丈夫。他把「无所作为」演成了一种优雅，也演成了一种病。",
+    bio: "意大利演员，1924–1996。参演影片逾一百五十部，与费里尼合作《生活的甜蜜》《八部半》等六部作品，另与安东尼奥尼、维斯康蒂、德西卡等人合作。三度获奥斯卡最佳男主角提名。",
     bioEn:
-      "Italian actor, 1924–1996. The weary face of modernist cinema — Fellini's alter ego, Antonioni's speechless husband. He played inertia as an elegance, and as an illness.",
+      "Italian actor, 1924–1996. He appeared in more than a hundred and fifty films, working with Fellini six times, including La Dolce Vita and 8½, and also with Antonioni, Visconti and De Sica. He was nominated three times for the Academy Award for Best Actor.",
   },
   {
     slug: "takashi-shimura",
@@ -57,9 +57,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "志村乔",
     primaryRole: "actor",
     tmdbPersonId: 7453,
-    bio: "日本演员，1905–1982。黑泽明班底的另一根支柱：《七武士》里沉稳的勘兵卫，《生之欲》里在秋千上唱歌的渡边。三船是火，他是承接火焰的大地。",
+    bio: "日本演员，1905–1982。参演影片逾两百部，与黑泽明合作二十一部，包括《罗生门》《生之欲》《七武士》。另出演 1954 年的《哥斯拉》。",
     bioEn:
-      "Japanese actor, 1905–1982. The other pillar of Kurosawa's company: Kambei's calm authority in Seven Samurai, Watanabe singing on the swing in Ikiru. Mifune was the fire; Shimura was the ground that received it.",
+      "Japanese actor, 1905–1982. He appeared in more than two hundred films and worked with Kurosawa twenty-one times, including Rashomon, Ikiru and Seven Samurai. He also appeared in the 1954 Godzilla.",
   },
   {
     slug: "chishu-ryu",
@@ -67,9 +67,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "笠智众",
     primaryRole: "actor",
     tmdbPersonId: 33135,
-    bio: "日本演员，1904–1993。小津电影里近乎恒常的父亲：语调平缓，坐姿端正，把告别说成「是吗」。他用几十年的克制证明，最深的情感可以几乎不动声色。",
+    bio: "日本演员，1904–1993。1925 年入松竹，参演小津安二郎影片逾五十部，多饰演父亲一角，包括《晚春》《东京物语》《秋刀鱼之味》。演艺生涯延续逾六十年。",
     bioEn:
-      "Japanese actor, 1904–1993. The near-constant father of Ozu's cinema — level voice, upright posture, farewells spoken as a quiet 'is that so.' Decades of restraint proving the deepest feeling can pass almost without expression.",
+      "Japanese actor, 1904–1993. He joined Shochiku in 1925 and appeared in more than fifty of Ozu's films, frequently as the father, including Late Spring, Tokyo Story and An Autumn Afternoon. His career spanned more than sixty years.",
   },
   {
     slug: "anna-karina",
@@ -77,9 +77,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "安娜·卡里娜",
     primaryRole: "actor",
     tmdbPersonId: 18197,
-    bio: "丹麦裔法国演员，1940–2019。新浪潮的面孔：戈达尔七部影片里的娜娜与玛丽安娜，会突然对着镜头眨眼。她让「被拍摄」本身成了表演的一部分。",
+    bio: "丹麦裔法国演员，1940–2019。原在哥本哈根做模特，1960 年起参演让-吕克·戈达尔的影片，共七部，包括《随心所欲》《狂人皮埃罗》。两人于 1961 至 1965 年间为夫妻。",
     bioEn:
-      "Danish-French actor, 1940–2019. The face of the New Wave: Godard's Nana and Marianne across seven films, liable to wink straight into the lens. She made being filmed part of the performance itself.",
+      "Danish-French actor, 1940–2019. She worked as a model in Copenhagen before appearing from 1960 in seven films by Jean-Luc Godard, among them Vivre sa Vie and Pierrot le Fou. The two were married between 1961 and 1965.",
   },
   {
     slug: "marilyn-monroe",
@@ -87,9 +87,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "玛丽莲·梦露",
     primaryRole: "actor",
     tmdbPersonId: 3149,
-    bio: "美国演员，1926–1962。被神话吞没的喜剧演员：《热情如火》里的糖果·凯恩证明，她的节奏感和脆弱感一样精确。银幕形象越亮，人越看不见。",
+    bio: "美国演员，1926–1962。1950 年代主演多部喜剧与歌舞片，包括《绅士爱美人》《七年之痒》《热情如火》，并凭后者获金球奖最佳女主角。1962 年在洛杉矶去世，年三十六。",
     bioEn:
-      "American actor, 1926–1962. A comedian swallowed by her own myth: Sugar Kane in Some Like It Hot proves her timing was as precise as her fragility. The brighter the image burned, the harder the person was to see.",
+      "American actor, 1926–1962. She starred in a number of comedies and musicals in the 1950s, among them Gentlemen Prefer Blondes, The Seven Year Itch and Some Like It Hot, for which she received a Golden Globe. She died in Los Angeles in 1962, aged thirty-six.",
   },
   {
     slug: "marlon-brando",
@@ -97,9 +97,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "马龙·白兰度",
     primaryRole: "actor",
     tmdbPersonId: 3084,
-    bio: "美国演员，1924–2004。方法派表演的分水岭：《码头风云》里的特里让「我本可以有出息」成了整代人的台词。他之后，银幕上的男人换了一种呼吸方式。",
+    bio: "美国演员，1924–2004。演员工作室出身，1951 年以《欲望号街车》成名，1954 年凭《码头风云》、1972 年凭《教父》两获奥斯卡最佳男主角奖，后者他拒绝领取。",
     bioEn:
-      "American actor, 1924–2004. The watershed of Method acting: Terry Malloy's 'I coulda been a contender' became a generation's line. After him, men on screen breathed differently.",
+      "American actor, 1924–2004. He trained at the Actors Studio and became known with A Streetcar Named Desire in 1951. He received the Academy Award for Best Actor twice, for On the Waterfront in 1954 and The Godfather in 1972, declining the second.",
   },
   {
     slug: "jeanne-moreau",
@@ -107,9 +107,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "让娜·莫罗",
     primaryRole: "actor",
     tmdbPersonId: 14812,
-    bio: "法国演员，1928–2017。智性与感官在同一张脸上：安东尼奥尼的莉迪亚、特吕弗的凯瑟琳、马勒的电梯之夜。她走路的样子本身就是一种叙事。",
+    bio: "法国演员，1928–2017。原为法兰西喜剧院成员，1950 年代后期起参演路易·马勒、特吕弗、安东尼奥尼等人的影片，包括《夜》《朱尔与吉姆》。1960 年获戛纳电影节最佳女演员奖。",
     bioEn:
-      "French actor, 1928–2017. Intellect and sensuality on one face: Antonioni's Lidia, Truffaut's Catherine, Malle's night in the elevator. The way she walked was already narration.",
+      "French actor, 1928–2017. She began at the Comédie-Française and from the late 1950s appeared in films by Louis Malle, Truffaut and Antonioni, among them La Notte and Jules and Jim. She received the award for Best Actress at Cannes in 1960.",
   },
   {
     slug: "max-von-sydow",
@@ -117,9 +117,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "马克斯·冯·叙多",
     primaryRole: "actor",
     tmdbPersonId: 2201,
-    bio: "瑞典演员，1929–2020。伯格曼的十一部影片里，他是与死神对弈的骑士、面对沉默上帝的信徒。那张骨骼分明的脸，天生适合承载形而上的重量。",
+    bio: "瑞典演员，1929–2020。参演英格玛·伯格曼影片十一部，包括《第七封印》《处女泉》。1960 年代后期起在国际影坛工作，两度获奥斯卡提名，2002 年入法国籍。",
     bioEn:
-      "Swedish actor, 1929–2020. Across eleven Bergman films he was the knight who played chess with Death, the believer facing a silent God — a face whose architecture was built for metaphysical weight.",
+      "Swedish actor, 1929–2020. He appeared in eleven films by Ingmar Bergman, including The Seventh Seal and The Virgin Spring. From the late 1960s he worked internationally, received two Academy Award nominations, and took French citizenship in 2002.",
   },
   {
     slug: "anthony-perkins",
@@ -127,9 +127,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "安东尼·博金斯",
     primaryRole: "actor",
     tmdbPersonId: 7301,
-    bio: "美国演员，1932–1992。诺曼·贝茨既成就也囚禁了他：那种彬彬有礼的紧张、随时会碎的微笑，让「邻家男孩」从此成了悬疑本身。",
+    bio: "美国演员，1932–1992。1957 年以《铁汉柔情》获奥斯卡提名，1960 年在《惊魂记》中饰演诺曼·贝茨，此后四度重演该角色。1992 年因艾滋病相关疾病去世。",
     bioEn:
-      "American actor, 1932–1992. Norman Bates both made and imprisoned him: that courteous nervousness, a smile always about to crack — after him, the boy next door was suspense itself.",
+      "American actor, 1932–1992. He received an Academy Award nomination for Friendly Persuasion in 1957 and played Norman Bates in Psycho in 1960, returning to the part four times afterwards. He died of an AIDS-related illness in 1992.",
   },
   {
     slug: "gloria-swanson",
@@ -137,9 +137,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "葛洛丽亚·斯旺森",
     primaryRole: "actor",
     tmdbPersonId: 8629,
-    bio: "美国演员，1899–1983。默片时代的女王，在《日落大道》里扮演被有声片抛下的女王：诺玛·德斯蒙德是表演，也是一次带着刀锋的自我注解。",
+    bio: "美国演员，1899–1983。默片时期的主要明星之一，1920 年代亦自任制片。有声片时期作品渐少，1950 年在《日落大道》中饰演过气默片女星诺玛·戴斯蒙德，获奥斯卡提名。",
     bioEn:
-      "American actor, 1899–1983. A queen of the silent era who, in Sunset Boulevard, played a queen the talkies left behind: Norma Desmond is a performance, and a self-annotation with a blade in it.",
+      "American actor, 1899–1983. She was among the leading stars of the silent period and also produced her own films in the 1920s. Her output declined after the arrival of sound, and in 1950 she played the forgotten silent star Norma Desmond in Sunset Boulevard, for which she was nominated for an Academy Award.",
   },
 
   // ── 华语电影 ────────────────────────────────────────────────────────
@@ -149,9 +149,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "阮玲玉",
     primaryRole: "actor",
     tmdbPersonId: 1021587,
-    bio: "中国演员，1910–1935。默片时代最好的一张脸：不靠字幕卡，只用眼睑与嘴角完成整段独白。1935 年自尽，年仅二十四岁，遗书上写着“人言可畏”。",
+    bio: "中国演员，1910–1935。十六岁入行，共参演影片二十九部，包括《神女》《新女性》。1935 年三月自尽，年二十四，葬礼引发大规模围观，鲁迅曾就此事撰文。",
     bioEn:
-      "Chinese actor, 1910–1935. The finest face of the silent era, capable of delivering an entire monologue with an eyelid and the corner of a mouth, no intertitle required. She took her own life in 1935 at twenty-four, leaving a note that read: gossip is a fearful thing.",
+      "Chinese actor, 1910–1935. She entered the industry at sixteen and appeared in twenty-nine films, among them The Goddess and New Women. She took her own life in March 1935 at twenty-four; the funeral drew enormous crowds, and Lu Xun wrote an essay on the affair.",
   },
   {
     slug: "zhou-xuan",
@@ -159,9 +159,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "周璇",
     primaryRole: "actor",
     tmdbPersonId: 1366187,
-    bio: "中国演员、歌手，1920–1957。“金嗓子”，《马路天使》里唱《四季歌》与《天涯歌女》的歌女；歌声甜，命运苦，三十七岁病逝于上海。",
+    bio: "中国演员、歌手，1920–1957。1930 年代在上海以歌唱与电影两栖成名，参演《马路天使》并演唱其中两首插曲，录制唱片逾两百首。1957 年病逝于上海，年三十七。",
     bioEn:
-      "Chinese actor and singer, 1920–1957. The “golden voice” of her generation and the singsong girl of Street Angel, where she performs the Four Seasons Song and The Wandering Songstress. The voice is sweet and the life was not; she died in Shanghai at thirty-seven.",
+      "Chinese actor and singer, 1920–1957. She became known in Shanghai in the 1930s in both singing and film, appeared in Street Angel and performed two of its songs, and recorded more than two hundred titles. She died in Shanghai in 1957, aged thirty-seven.",
   },
   {
     slug: "wei-wei",
@@ -171,9 +171,9 @@ export const seedActors: SeedDirector[] = [
     tmdbPersonId: 236193,
     // Birth year per TMDB; no death date recorded there. Left open rather
     // than asserting one we cannot verify — confirm before adding.
-    bio: "中国演员，1922 年生。《小城之春》里的周玉纹：一部几乎没有事件的电影，全靠她走在城墙上的步子与几次不敢落下的目光撑住。",
+    bio: "中国演员，1922–2023。1940 年代在上海文华影业拍片，1948 年在费穆的《小城之春》中饰演周玉纹。1950 年代迁居香港，此后在当地影视界工作。",
     bioEn:
-      "Chinese actor, born 1922. As Zhou Yuwen in Spring in a Small Town she carries a film in which almost nothing happens — held up entirely by the way she walks the ruined city wall and by the glances she cannot quite let land.",
+      "Chinese actor, 1922–2023. She worked at the Wenhua company in Shanghai in the 1940s and played Zhou Yuwen in Fei Mu's Spring in a Small Town in 1948. She moved to Hong Kong in the 1950s and worked there in film and television.",
   },
   {
     slug: "maggie-cheung",
@@ -181,9 +181,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "张曼玉",
     primaryRole: "actor",
     tmdbPersonId: 1338,
-    bio: "香港演员，1964 年生。从选美与打闹喜剧起步，最终成为华语电影最精准的表演者之一：《花样年华》里她二十多件旗袍下的隐忍，比任何台词都清楚。",
+    bio: "香港演员，1964 年生。1983 年经选美入行，早期多演喜剧，其后转向剧情片。1992 年以《阮玲玉》获柏林电影节最佳女演员奖，2004 年以《清洁》获戛纳电影节最佳女演员奖。",
     bioEn:
-      "Hong Kong actor, born 1964. She began in beauty pageants and knockabout comedies and became one of the most precise performers in Chinese-language cinema; the restraint she holds beneath two dozen cheongsams in In the Mood for Love says more than any line of dialogue.",
+      "Hong Kong actor, born 1964. She entered the industry through a beauty pageant in 1983 and worked mainly in comedies before turning to dramatic roles. She received the award for Best Actress at Berlin in 1992 for Center Stage and at Cannes in 2004 for Clean.",
   },
   {
     slug: "tony-leung-chiu-wai",
@@ -191,9 +191,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "梁朝伟",
     primaryRole: "actor",
     tmdbPersonId: 1337,
-    bio: "香港演员，1962 年生。王家卫的常用面孔，擅长演“不说”：《花样年华》结尾他对着吴哥窟的石洞说话，观众一个字也听不见，却全都懂了。",
+    bio: "香港演员，1962 年生。自无线电视训练班出身，与王家卫合作七部影片，包括《重庆森林》《春光乍泄》《花样年华》。2000 年以《花样年华》获戛纳电影节最佳男演员奖。",
     bioEn:
-      "Hong Kong actor, born 1962. Wong Kar-wai's recurring face, and a specialist in the unsaid: at the close of In the Mood for Love he speaks into a hollow in the stone at Angkor and the audience hears not one word of it, yet understands all of it.",
+      "Hong Kong actor, born 1962. He trained at the TVB actors' course and has worked with Wong Kar-wai on seven films, among them Chungking Express, Happy Together and In the Mood for Love. He received the award for Best Actor at Cannes in 2000 for In the Mood for Love.",
   },
   {
     slug: "hsu-feng",
@@ -201,9 +201,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "徐枫",
     primaryRole: "actor",
     tmdbPersonId: 130394,
-    bio: "台湾演员、制片人，1950 年生。胡金铨镜头下的侠女杨慧贞，冷峻、不笑、几乎没有台词；后来转任制片，促成了《霸王别姬》。",
+    bio: "台湾演员、制片人，1950 年生。1960 年代末起参演胡金铨的影片，包括《侠女》《龙门客栈》。1980 年代转任制片，创办汤臣电影公司，出品《霸王别姬》，该片 1993 年获戛纳电影节金棕榈奖。",
     bioEn:
-      "Taiwanese actor and producer, born 1950. As Yang Hui-zhen in A Touch of Zen she is severe, unsmiling, and nearly wordless. She later turned producer and brought Farewell My Concubine into being.",
+      "Taiwanese actor and producer, born 1950. From the late 1960s she appeared in King Hu's films, including A Touch of Zen and Dragon Inn. She turned to producing in the 1980s and founded Tomson Films, which produced Farewell My Concubine, awarded the Palme d'Or at Cannes in 1993.",
   },
   {
     slug: "tatsuya-nakadai",
@@ -211,9 +211,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "仲代达矢",
     primaryRole: "actor",
     tmdbPersonId: 70131,
-    bio: "日本演员，1932–2025。三船之外黑泽明的另一极：《乱》里的秀虎从暴君走到疯癫，白面妆下几乎只剩眼睛在演；《切腹》里则用一柄竹刀讨回全部尊严。",
+    bio: "日本演员，1932–2025。参演影片逾一百部，与黑泽明合作五部，包括《用心棒》《影武者》《乱》，另主演小林正树的《切腹》与《人间的条件》。",
     bioEn:
-      "Japanese actor, 1932–2025. Kurosawa's other pole beside Mifune: his Hidetora in Ran walks from tyrant to madman with almost nothing left acting but the eyes beneath the white makeup, and in Harakiri he reclaims an entire family's dignity with a bamboo blade.",
+      "Japanese actor, 1932–2025. He appeared in more than a hundred films, working with Kurosawa five times, including Yojimbo, Kagemusha and Ran, and starring in Masaki Kobayashi's Harakiri and The Human Condition.",
   },
   {
     slug: "james-stewart",
@@ -221,8 +221,8 @@ export const seedActors: SeedDirector[] = [
     nameZh: "詹姆斯·斯图尔特",
     primaryRole: "actor",
     tmdbPersonId: 854,
-    bio: "美国演员，1908–1997。好莱坞最可信的好人，也正因如此，希区柯克用他来演坏掉的人：《迷魂记》里的痴迷与控制，恰恰因为那张脸本该无害才令人不安。",
+    bio: "美国演员，1908–1997。1930 年代起在好莱坞工作，二战期间在美国陆军航空队服役并参与轰炸任务。与希区柯克合作四部影片，包括《后窗》《迷魂记》。1941 年获奥斯卡最佳男主角奖。",
     bioEn:
-      "American actor, 1908–1997. Hollywood's most trustworthy decent man, which is precisely why Hitchcock cast him as men coming apart: the obsession and control of Vertigo unsettle exactly because that face was supposed to be harmless.",
+      "American actor, 1908–1997. He worked in Hollywood from the 1930s and served in the United States Army Air Forces during the war, flying combat missions. He made four films with Hitchcock, among them Rear Window and Vertigo. He received the Academy Award for Best Actor in 1941.",
   },
 ];
