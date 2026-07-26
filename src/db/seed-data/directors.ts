@@ -905,20 +905,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "法国导演、演员，1907–1982。原为音乐厅哑剧演员，1949 年起自编自导自演，共完成长片六部，多由其饰演的于洛先生串联。对白极少，笑料多依靠声音设计与场面调度。《游戏时间》票房失利使其破产。",
     careerEssay: doc([
       p(
-        "塔蒂出身默剧，于洛先生这个角色——高个子、雨衣、烟斗、永远迈错一步——是他对现代生活的固定测量仪。《于洛先生的假期》里，他让海滨旅馆的每一个声音都成为笑点，而不是靠一句台词。",
+        "塔蒂三十年代在巴黎的音乐厅表演哑剧，模仿运动员的段子使他成名，同期参与拍摄数部短片。1949 年他执导第一部长片《节日》。1953 年的《于洛先生的假期》确立了于洛这一角色，此后又有三部长片由他自己扮演该角色。",
       ),
       p(
-        "《游戏时间》则近乎疯狂：他花光身家搭出一座钢铁玻璃的“塔蒂城”，用 70mm 宽银幕拍摄，画面里同时发生七八件事，观众得自己去找笑点。影片票房惨败，令他破产，却在今天被视作电影史上最精密的喜剧建筑。",
+        "《游戏时间》在巴黎郊外搭建整片街区的布景，以 70 毫米摄制，拍摄历时三年。影片 1967 年公映后未能收回成本，他因此失去自有影片的版权，1974 年被宣告破产。此后他只完成《交通意外》与一部电视片，1982 年去世。",
       ),
     ]),
     bioEn:
       "French director and actor, 1907–1982. He came from music-hall mime and from 1949 wrote, directed and starred in his own films, completing six features, most of them built around the character of Monsieur Hulot. Dialogue is minimal, and the comedy depends largely on sound design and staging. The commercial failure of Playtime bankrupted him.",
     careerEssayEn: doc([
       p(
-        "Tati came out of mime, and Monsieur Hulot — tall, raincoated, pipe in mouth, forever half a step wrong — is his fixed instrument for measuring modern life. In Monsieur Hulot's Holiday he turns every sound in a seaside hotel into a joke, without recourse to a single line.",
+        "Tati performed mime in the Paris music halls in the 1930s, making his name with a routine impersonating sportsmen, and appeared in several short films. He directed his first feature, Jour de fête, in 1949. Monsieur Hulot's Holiday, in 1953, introduced the character of Hulot, whom he played again in three later features.",
       ),
       p(
-        "Playtime is close to madness: he spent his entire fortune building a city of steel and glass, shot it in 70mm, and staged seven or eight things at once in every frame so that the audience has to find the jokes for itself. It failed catastrophically and bankrupted him. It is now regarded as the most precisely engineered comic architecture in cinema.",
+        "Playtime was shot in 70mm on a set of whole streets built outside Paris and took three years to make. It failed to recover its cost after opening in 1967; Tati lost the rights to his own films and was declared bankrupt in 1974. He completed only Trafic and one television film afterwards, and died in 1982.",
       ),
     ]),
   },
@@ -930,20 +930,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "美国导演，1928–1999。少年时任《展望》杂志摄影记者，1950 年代转入电影，共完成长片十三部。1960 年代起长住英国，几乎所有作品均在当地拍摄。题材横跨战争、科幻、恐怖与历史片，每部筹备期均长。",
     careerEssay: doc([
       p(
-        "库布里克的每部片子几乎都换一个类型——战争、黑色喜剧、科幻、恐怖、古装——但方法从不变：对称构图、缓慢推进的镜头、把人放在巨大结构的正中央，然后看着他缩小。",
+        "库布里克十几岁时为《Look》杂志做摄影师，二十出头自筹资金拍摄短片与长片。1957 年的《光荣之路》与 1960 年的《斯巴达克斯》使他进入好莱坞体制，后者是他唯一一次不掌握终剪权的影片。1961 年他移居英国，此后所有影片都在当地拍摄。",
       ),
       p(
-        "《2001 太空漫游》是他最极端的一次实验，用近乎无声的十分钟开场与一段没有解释的结尾，逼观众自己完成意义。此后的《发条橙》《闪灵》都在同一个问题上打转：文明这层壳到底有多薄。",
+        "他的题材横跨战争、黑色喜剧、科幻、古装与恐怖，产量则逐渐下降，后期约每五至七年一部。《发条橙》在英国上映后引发争议，他自行要求发行方撤片，直到 2000 年、即他去世的次年才重新公映。他一生只获得一次奥斯卡奖，为《2001 太空漫游》的视觉效果。",
       ),
     ]),
     bioEn:
       "American director, 1928–1999. He worked as a staff photographer for Look magazine in his teens and moved into film in the 1950s, completing thirteen features. From the 1960s he lived in England and shot almost everything there. He worked across war, science fiction, horror and period subjects, spending long periods in preparation on each.",
     careerEssayEn: doc([
       p(
-        "Kubrick changed genre with nearly every film — war, black comedy, science fiction, horror, costume drama — but never changed method: symmetrical framing, the slow advancing camera, a man placed dead centre of an enormous structure and then watched as he shrinks.",
+        "Kubrick photographed for Look magazine as a teenager and financed his first shorts and features himself. Paths of Glory in 1957 and Spartacus in 1960 brought him into the studio system; Spartacus was the only one of his films over which he did not hold final cut. He moved to England in 1961 and shot everything afterwards there.",
       ),
       p(
-        "2001: A Space Odyssey is his most extreme experiment, opening with ten near-silent minutes and closing on an ending he refuses to explain, forcing the audience to complete the meaning itself. A Clockwork Orange and The Shining circle the same question afterwards: exactly how thin the shell of civilization is.",
+        "His subjects ranged across war, black comedy, science fiction, costume drama and horror, while his output slowed to roughly one film every five to seven years. A Clockwork Orange was withdrawn from British distribution at his own request and not shown again until 2000, the year after his death. He won a single Academy Award, for the visual effects of 2001: A Space Odyssey.",
       ),
     ]),
   },
@@ -955,20 +955,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "英国导演，1905–1990。1939 年起与编剧埃默里克·普雷斯伯格合作，两人以「射箭者」名义联合署名编导制片，作品包括《红菱艳》《百战将军》。1960 年《偷窥狂》公映后遭猛烈抨击，其导演生涯此后大幅萎缩。",
     careerEssay: doc([
       p(
-        "鲍威尔与普雷斯伯格以“射箭者”的名义联合署名，编剧与导演共享一个头衔，这在电影史上几乎绝无仅有。在崇尚纪录式冷静的英国影坛，他们偏要拍浓得化不开的特艺七彩情节剧——《黑水仙》《平步青云》《红菱艳》。",
+        "鲍威尔二十年代在法国的片场入行，三十年代在英国拍摄大量低成本影片。1939 年他与匈牙利裔编剧艾默力·普雷斯伯格开始合作，1943 年起两人以“射箭者”的名义共用一个“编剧、制片、导演”的署名，这种做法在制片业中罕见。",
       ),
       p(
-        "鲍威尔的事业毁于《偷窥狂》：一个用摄影机杀人的故事，1960 年被批为下流，今天却成了关于「观看即暴力」的奠基文本。多年后是斯科塞斯等人把他从遗忘里请了回来。",
+        "二人合作的作品包括《平步青云》《黑水仙》与《红菱艳》，合作于 1957 年结束。1960 年鲍威尔独立执导《偷窥狂》，英国评论界反应激烈，他此后在本国几乎无法开工。七十年代后期起，斯科塞斯等美国导演推动其作品重映；1984 年他与剪辑师塞尔玛·斯昆梅克结婚，1990 年去世。",
       ),
     ]),
     bioEn:
       "British director, 1905–1990. From 1939 he worked with the writer Emeric Pressburger, the two taking joint credit as writers, producers and directors under the name The Archers, on films including The Red Shoes and The Life and Death of Colonel Blimp. His career contracted sharply after the hostile reception of Peeping Tom in 1960.",
     careerEssayEn: doc([
       p(
-        "Powell and Emeric Pressburger signed their films jointly as The Archers, an almost unheard-of arrangement in which writer and director shared a single credit. Against a British film culture that prized documentary sobriety, they made Technicolor melodramas of overwhelming intensity — Black Narcissus, A Matter of Life and Death, The Red Shoes.",
+        "Powell entered the business in French studios in the 1920s and made a great many low-budget films in Britain in the 1930s. He began working with the Hungarian screenwriter Emeric Pressburger in 1939, and from 1943 the two signed as The Archers under a single shared credit reading written, produced and directed by, an arrangement with almost no precedent in the industry.",
       ),
       p(
-        "Powell's career was effectively ended by Peeping Tom, a film about a killer who films his victims that critics found obscene in 1960 and that is now taught as a founding text on the violence of looking. Scorsese was among those who later brought him back from obscurity.",
+        "Their films together include A Matter of Life and Death, Black Narcissus and The Red Shoes; the partnership ended in 1957. Powell directed Peeping Tom alone in 1960, and the reaction of the British press was severe enough that he found little work at home afterwards. From the late 1970s Scorsese and other American directors pressed for his films to be reissued. He married the editor Thelma Schoonmaker in 1984 and died in 1990.",
       ),
     ]),
   },
@@ -989,20 +989,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "英国导演，1908–1991。剪辑师出身，1940 年代先拍摄《相见恨晚》《远大前程》等中小型影片，1950 年代后转向大制作，包括《桂河大桥》《阿拉伯的劳伦斯》《日瓦戈医生》。两度获奥斯卡最佳导演奖。",
     careerEssay: doc([
       p(
-        "很多人只记得后期的里恩，但他真正的功底在早年：《相见恨晚》全片发生在一个车站茶室，两个中年人克制的告别，是英国电影最精确的一次情感手术。",
+        "里恩 1927 年进入片场做杂务，三十年代成为英国最受重用的剪辑师之一，1942 年与诺埃尔·科沃德合导《效忠祖国》，由此转任导演。战后他拍摄《相见恨晚》《孤星血泪》与《雾都孤儿》。",
       ),
       p(
-        "《桂河大桥》之后他转向大银幕。《阿拉伯的劳伦斯》几乎重新定义了「史诗」——沙漠不是背景而是角色，而那位英雄越走越大，人却越来越碎。剪辑师的出身让他知道：真正的宏大来自节奏，而不是尺寸。",
+        "1957 年的《桂河大桥》与 1962 年的《阿拉伯的劳伦斯》先后为他赢得奥斯卡最佳导演奖，此后他多拍外景大制作。1970 年的《雷恩的女儿》遭评论界严厉批评，他此后十四年未再执导，直到 1984 年的《印度之行》。1991 年去世。",
       ),
     ]),
     bioEn:
       "British director, 1908–1991. He trained as an editor and made modestly scaled films in the 1940s, among them Brief Encounter and Great Expectations, before turning to large productions from the 1950s onwards, including The Bridge on the River Kwai, Lawrence of Arabia and Doctor Zhivago. He received the Academy Award for Best Director twice.",
     careerEssayEn: doc([
       p(
-        "Lean is remembered for the late films, but the craft was laid down early: Brief Encounter takes place almost entirely in a station tea room, and the restrained parting of two middle-aged people is the most precise piece of emotional surgery in British cinema.",
+        "Lean started in the studios in 1927 doing odd jobs, became one of the most sought-after editors in Britain in the 1930s, and moved to directing in 1942 when he co-directed In Which We Serve with Noël Coward. Brief Encounter, Great Expectations and Oliver Twist followed after the war.",
       ),
       p(
-        "After The Bridge on the River Kwai he moved onto the wide screen. Lawrence of Arabia effectively redefined the epic — the desert is a character rather than a backdrop, and the hero grows larger as the man inside him comes apart. The editor in him knew that real scale comes from rhythm, not from size.",
+        "The Bridge on the River Kwai in 1957 and Lawrence of Arabia in 1962 each won him the Academy Award for directing, and he worked mainly on large productions shot on location from then on. Ryan's Daughter was attacked by critics in 1970, after which he did not direct for fourteen years, until A Passage to India in 1984. He died in 1991.",
       ),
     ]),
   },
@@ -1014,20 +1014,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "美国导演，1939 年生。1970 年代拍摄《教父》《教父 2》与《对话》，1969 年创办美国活动影像公司。《现代启示录》在菲律宾拍摄逾一年，超支部分由其个人担保，此后长期负债。五度获奥斯卡奖。",
     careerEssay: doc([
       p(
-        "七十年代属于科波拉。《教父》两部把类型片提升为美国资本与家族的史诗，《对话》则安静得像一部欧洲电影——同一个人在同一个十年里做到了这两件事。",
+        "科波拉在加州大学洛杉矶分校读电影，六十年代初为罗杰·科曼工作，1970 年以《巴顿将军》的剧本获奥斯卡奖。1972 年他为派拉蒙拍摄《教父》，制片方在拍摄期间曾数次试图撤换他。《对话》与《教父 2》均于 1974 年公映，前者获戛纳金棕榈奖。",
       ),
       p(
-        "《现代启示录》几乎摧毁了他：菲律宾拍摄失控，台风毁掉布景，主演心脏病发，预算靠他抵押家产撑着。成片却因此带上了一种别的电影没有的疯狂——它不是关于越战的电影，它本身就是一次战争。",
+        "《现代启示录》在菲律宾拍摄十六个月，其间台风摧毁布景，主演马丁·辛心脏病发，超支部分由科波拉以个人资产担保。影片 1979 年公映，与《铁皮鼓》并列获金棕榈奖。1982 年的《旧爱新欢》票房失利，令他的西洋镜制片厂破产，此后他长期为偿债接拍影片。",
       ),
     ]),
     bioEn:
       "American director, born 1939. He made The Godfather, The Godfather Part II and The Conversation in the 1970s, and founded the studio American Zoetrope in 1969. Apocalypse Now took more than a year to shoot in the Philippines, with the overruns guaranteed against his own property, leaving him in debt for years afterwards. He has received five Academy Awards.",
     careerEssayEn: doc([
       p(
-        "The seventies belonged to Coppola. The two Godfather films lifted genre into an epic of American capital and family, while The Conversation is as quiet as a European art film — the same man did both inside the same decade.",
+        "Coppola studied film at UCLA, worked for Roger Corman in the early 1960s and won an Academy Award in 1970 for the screenplay of Patton. Paramount tried more than once to replace him during the production of The Godfather in 1972. The Conversation and The Godfather Part II both opened in 1974; the first took the Palme d'Or at Cannes.",
       ),
       p(
-        "Apocalypse Now almost finished him: the Philippine shoot ran out of control, a typhoon destroyed the sets, his lead actor had a heart attack, and he mortgaged his own property to keep the budget alive. The finished film carries a derangement no other film has, precisely because of it. It is not a picture about the war in Vietnam so much as a war in its own right.",
+        "Apocalypse Now was shot in the Philippines over sixteen months, during which a typhoon destroyed the sets and Martin Sheen had a heart attack; Coppola guaranteed the overruns against his own property. It opened in 1979 and shared the Palme d'Or with The Tin Drum. One from the Heart lost money in 1982 and bankrupted his Zoetrope studio, after which he took work for years to pay off the debt.",
       ),
     ]),
   },
