@@ -528,20 +528,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "苏联导演、电影理论家，1898–1948。以《战舰波将金号》等片实践其关于镜头对列的剪辑主张，另著有多种理论文字。1930 年代在墨西哥的拍摄计划未能完成，后期作品受官方审查影响。",
     careerEssay: doc([
       p(
-        "爱森斯坦认为电影的力量不在单个镜头，而在镜头的碰撞。两个画面相接会迸出第三重意义——这就是他的“蒙太奇”。",
+        "爱森斯坦原习工程，内战期间随红军做宣传工作，其后转入戏剧，1924 年开始拍片。《战舰波将金号》为纪念 1905 年革命二十周年而作，1925 年完成。他同时著述与授课，1930 年代起任教于国立电影学院，所写的蒙太奇理论文章被广泛译介。",
       ),
       p(
-        "《战舰波将金号》的敖德萨阶梯至今仍是剪辑教科书的第一课：婴儿车滚落台阶的几秒钟，把革命的悲剧凝成了永恒的节奏。他的理论深刻影响了此后整个世纪的电影语言。",
+        "1929 至 1932 年他在欧洲、好莱坞与墨西哥考察，在墨西哥拍摄的素材被投资方收回，影片未能完成。回国后《白静草原》拍至中途遭停。《亚历山大·涅夫斯基》与《伊凡雷帝》上集获斯大林奖，下集被禁，1958 年才公映，其时他已去世十年。",
       ),
     ]),
     bioEn:
       "Soviet director and film theorist, 1898–1948. He put his arguments about the collision of shots into practice in Battleship Potemkin and other films, and wrote extensively on theory. A project shot in Mexico in the 1930s was never completed, and his later work was subject to official interference.",
     careerEssayEn: doc([
       p(
-        "For Eisenstein, the power of cinema lay not in any single shot but in the collision between shots. Set two images against each other and a third meaning leaps out of the cut, belonging to neither one — this was his montage.",
+        "Eisenstein trained as an engineer, did propaganda work with the Red Army during the civil war, moved into theatre, and began directing films in 1924. Battleship Potemkin was made for the twentieth anniversary of the 1905 revolution and finished in 1925. He wrote and taught alongside directing, joining the state film school in the 1930s; his essays on montage were widely translated.",
       ),
       p(
-        "The Odessa Steps in Battleship Potemkin remain the first lesson in every editing textbook: in the few seconds it takes a baby carriage to tumble down the stairs, the tragedy of revolution is compressed into a rhythm that never lets go. His theory went on to shape the language of film for the entire century that followed.",
+        "From 1929 to 1932 he travelled in Europe, Hollywood and Mexico, where the backers took possession of the footage and the film was never completed. Bezhin Meadow was stopped in production after his return. Alexander Nevsky and the first part of Ivan the Terrible won Stalin Prizes; the second part was banned and not released until 1958, ten years after his death.",
       ),
     ]),
   },
@@ -552,20 +552,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "法国导演，1906–1996。1930 至 40 年代与编剧雅克·普莱维长期合作，作品多在摄影棚内搭景拍摄。《天堂的孩子》摄于德占期间，1945 年公映。",
     careerEssay: doc([
       p(
-        "卡尔内与诗人普莱维的合作，把三十年代法国的忧郁凝成了“诗意现实主义”：雾气、街灯、码头，命中注定要失败的爱情在人工搭建的街景里上演。",
+        "卡尔内做过雅克·费戴尔与雷内·克莱尔的助手，1936 年起独立执导。他与诗人雅克·普莱维合作了多部影片，包括《雾码头》与《天色破晓》，两片的布景均由亚历山大·特罗内设计、约瑟夫·科斯马配乐。",
       ),
       p(
-        "在纳粹占领下拍摄的《天堂的孩子》是这一风格的绝唱——一部关于剧场、表演与不可得之爱的鸿篇，被许多法国人视为民族电影的骄傲。",
+        "《天堂的孩子》在德军占领期间拍摄，特罗内与科斯马因犹太身份只能匿名工作，影片至 1945 年才公映。战后卡尔内继续执导至七十年代，反响远不及前作；新浪潮一代批评家把他归入他们要反对的“品质传统”。",
       ),
     ]),
     bioEn:
       "French director, 1906–1996. He worked closely with the screenwriter Jacques Prévert through the 1930s and 1940s, shooting largely on constructed studio sets. Children of Paradise was made under the German occupation and released in 1945.",
     careerEssayEn: doc([
       p(
-        "Carné's partnership with the poet Jacques Prévert distilled the melancholy of 1930s France into what came to be called poetic realism: fog, streetlamps, the quays of the harbor, and a love doomed to fail, all of it playing out on streets built by hand for the camera. Nothing here is found; everything is composed — fate itself conjured whole on the backlot.",
+        "Carné assisted Jacques Feyder and René Clair before directing on his own from 1936. He made a series of films with the poet Jacques Prévert, among them Port of Shadows and Le Jour se lève, both designed by Alexandre Trauner with music by Joseph Kosma.",
       ),
       p(
-        "Children of Paradise, shot under the Nazi occupation, is the swan song of that style — a sprawling work about the theater, about performance, and about a love that can never be possessed, which many in France have long claimed as the pride of their national cinema.",
+        "Children of Paradise was shot under the German occupation, with Trauner and Kosma working anonymously because they were Jewish, and did not open until 1945. Carné went on directing into the 1970s to far less attention; the critics of the New Wave placed him in the tradition of quality they were writing against.",
       ),
     ]),
   },
@@ -576,20 +576,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "希腊裔美国导演，1909–2003。为演员工作室的创办人之一，在舞台与电影两方面工作。1952 年在众议院非美活动调查委员会作证并供出他人姓名，此事此后长期引发争议。",
     careerEssay: doc([
       p(
-        "卡赞出身舞台，是“方法派”的重要推手，他调教出的白兰度与詹姆斯·迪恩，把一种全新的、赤裸的表演带进了好莱坞。",
+        "卡赞生于伊斯坦布尔的希腊家庭，幼年随父母移居美国。1930 年代在群剧社当演员，后转做导演，在百老汇首演了《欲望号街车》与《推销员之死》。1947 年他参与创办演员工作室，推广以斯坦尼斯拉夫斯基体系为本的表演训练。",
       ),
       p(
-        "《码头风云》里白兰度那句“我本可以是个人物”，是这种表演的巅峰，也隐约映照着卡赞自己在麦卡锡时代作证的争议。他的电影始终在社会良知与个人软弱之间灼烧。",
+        "他执导的《君子协定》与《码头风云》先后获奥斯卡最佳导演奖。1952 年他在众议院非美活动委员会作证，供出八名曾加入共产党的群剧社旧同事，与不少同行就此决裂。1999 年他获奥斯卡终身成就奖时，会场有一部分人拒绝起立。",
       ),
     ]),
     bioEn:
       "Greek-American director, 1909–2003. He was among the founders of the Actors Studio and worked in both theatre and film. In 1952 he testified before the House Un-American Activities Committee and named others, which remained a matter of controversy for the rest of his life.",
     careerEssayEn: doc([
       p(
-        "Kazan came up through the theater and became one of the Method's indispensable champions; the Brando and the James Dean he shaped carried a wholly new, nakedly exposed kind of acting into Hollywood.",
+        "Kazan was born in Istanbul to a Greek family and moved to the United States as a child. He acted with the Group Theatre in the 1930s before turning to directing, and staged the first Broadway productions of A Streetcar Named Desire and Death of a Salesman. In 1947 he was among the founders of the Actors Studio, which taught an approach to acting derived from Stanislavski.",
       ),
       p(
-        "Brando's \"I coulda been a contender\" in On the Waterfront is the summit of that acting, and it quietly mirrors Kazan's own controversy over the names he gave in his McCarthy-era testimony. His films are forever smoldering in the gap between social conscience and personal weakness.",
+        "He won Academy Awards for directing Gentleman's Agreement and On the Waterfront. In 1952 he testified before the House Un-American Activities Committee and named eight former Group Theatre colleagues who had belonged to the Communist Party, ending a number of those friendships for good. When he received an honorary Oscar in 1999, part of the audience declined to stand.",
       ),
     ]),
   },
@@ -603,20 +603,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "中国导演，1906–1951。1930 年代在上海拍片，作品包括《城市之夜》《孔夫子》。1948 年与梅兰芳合作《生死恨》，为中国第一部彩色影片。同年完成《小城之春》，1951 年病逝于香港，年四十五。",
     careerEssay: doc([
       p(
-        "费穆是三十年代上海影坛最不像同代人的那一个。同行忙着把电影当武器，他却在《城市之夜》《香雪海》里琢磨光线与静默；沦陷期间拍《孔夫子》，用一个不合时宜的圣人说不能明说的话。1948 年他与梅兰芳合作《生死恨》，拍出了中国第一部彩色影片。",
+        "费穆 1932 年起在联华影业执导，早期作品有《城市之夜》《香雪海》《天伦》。抗战期间他留在上海，1940 年拍摄《孔夫子》。1948 年他与梅兰芳合作《生死恨》，为中国第一部彩色影片。",
       ),
       p(
-        "《小城之春》是他唯一一次把全部本领用在一件小事上：五个人，一座破园子，一段没有发生的私奔。上映时正值天翻地覆，批评者嫌它耽于个人情绪，影片随即被封存数十年。八十年代重新出土后，它几乎在每一次华语影史评选中位居榜首。费穆 1951 年病逝于香港，四十五岁，只留下这一部完成度极高的杰作。",
+        "同年完成的《小城之春》上映时正值内战末期，因不合当时对电影的要求而受批评，此后数十年少有放映。1949 年费穆移居香港，1951 年病逝，年四十五。八十年代影片重新流通后，在多次华语影史评选中位列前茅。",
       ),
     ]),
     bioEn:
       "Chinese director, 1906–1951. He worked in Shanghai through the 1930s, on films including Night in the City and Confucius. In 1948 he made Remorse at Death with Mei Lanfang, the first Chinese colour film, and completed Spring in a Small Town the same year. He died in Hong Kong in 1951, aged forty-five.",
     careerEssayEn: doc([
       p(
-        "Fei Mu was the least typical figure in 1930s Shanghai cinema. While his contemporaries were busy treating film as a weapon, he was studying light and silence in Night in the City and Sea of Fragrant Snow; under the occupation he made Confucius, using an unfashionable sage to say what could not be said outright. In 1948, working with the opera master Mei Lanfang, he shot Remorse at Death — the first Chinese film in color.",
+        "Fei Mu began directing for Lianhua in 1932; his early films include Night in the City, Sea of Fragrant Snow and Song of China. He remained in Shanghai through the war and made Confucius in 1940. In 1948 he filmed Mei Lanfang in the Peking opera Sheng si hen, the first Chinese colour feature.",
       ),
       p(
-        "Spring in a Small Town is the one time he spent everything he knew on something small: five people, a ruined garden, an elopement that never happens. It opened as the country was turning upside down, critics found it self-absorbed, and it was shelved for decades. Unearthed in the 1980s, it has since topped nearly every poll of Chinese-language cinema ever conducted. Fei Mu died in Hong Kong in 1951 at forty-five, leaving this one fully realized masterpiece behind.",
+        "Spring in a Small Town, finished the same year, opened in the closing months of the civil war and was criticised for standing apart from politics; it was rarely shown for the next thirty years. Fei Mu moved to Hong Kong in 1949 and died there in 1951, aged forty-five. After the film returned to circulation in the 1980s it placed at or near the top of successive polls of Chinese-language cinema.",
       ),
     ]),
   },
@@ -628,20 +628,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "中国导演，1907–1982。先在片场任美术，1934 年以二十七岁之龄编导第一部作品《神女》，由阮玲玉主演。此后长期在上海与北京两地拍片，作品逾二十部。",
     careerEssay: doc([
       p(
-        "吴永刚做过美工，对画面的洁癖贯穿一生。《神女》是他的第一部片子，也是默片时代中国电影的最高点之一——他拒绝把主人公拍成道德案例，镜头始终与她平视，连那个流氓也只是环境的一部分，而不是可供唾骂的反派。",
+        "吴永刚出身美术，1920 年代在几家上海影业公司做布景与美工，1934 年首次执导，作品即《神女》。次年的《浪淘沙》让两个铐在一起的人流落荒岛，在当时的中国电影中题材罕见。",
       ),
       p(
-        "此后的《浪淘沙》走得更远，两个人困在荒岛上互相铐着，几乎是中国电影里少见的存在主义寓言。战后与新中国的数十年里他历经批判与沉默，直到 1980 年与吴贻弓合导《巴山夜雨》，才重新被看见。",
+        "1949 年后他继续在上海拍片，1957 年被划为右派，此后二十余年几乎未再执导。1980 年他与吴贻弓合导《巴山夜雨》，该片与《天云山传奇》并列获首届金鸡奖最佳故事片。",
       ),
     ]),
     bioEn:
       "Chinese director, 1907–1982. He worked first in art departments, and at twenty-seven wrote and directed his first film, The Goddess, with Ruan Lingyu. He went on to work in Shanghai and Beijing over several decades, directing more than twenty films.",
     careerEssayEn: doc([
       p(
-        "Wu Yonggang trained as a set designer, and a fastidiousness about the image never left him. The Goddess was his debut and remains one of the summits of Chinese silent cinema — he refused to turn his heroine into a moral case study, kept the camera level with her throughout, and let even the thug who exploits her register as part of the environment rather than a villain to be hissed at.",
+        "Wu trained in art and spent the 1920s as a set designer at several Shanghai studios. He directed for the first time in 1934, with The Goddess. Waves Washing the Sand, the following year, strands two men handcuffed together on a desert island, a subject with few parallels in Chinese films of the period.",
       ),
       p(
-        "Waves Wash the Sand, two years later, went further still: two men shackled to each other on a desert island, an existential parable of a kind Chinese cinema rarely attempted. The decades that followed brought criticism and long silences, and it was not until 1980, co-directing Evening Rain with Wu Yigong, that he was properly seen again.",
+        "He kept working in Shanghai after 1949 until he was labelled a rightist in 1957, after which he directed almost nothing for more than twenty years. He returned in 1980 with Evening Rain, co-directed with Wu Yigong, which shared the first Golden Rooster award for best feature with Legend of Tianyun Mountain.",
       ),
     ]),
   },
