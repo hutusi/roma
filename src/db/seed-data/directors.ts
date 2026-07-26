@@ -19,7 +19,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "federico-fellini",
     name: "Federico Fellini",
     nameZh: "费德里科·费里尼",
-    bio: "意大利导演，1920–1993。从新现实主义的街道出发，最终走进梦境与马戏团，把私人记忆拍成了公共的神话。",
+    bio: "意大利导演，1920–1993。早期作品属新现实主义，1960 年代后转向以记忆与梦境组织结构。代表作有《大路》《卡比利亚之夜》《八部半》，四度获奥斯卡最佳外语片奖。",
     careerEssay: doc([
       p(
         "费里尼的前半生属于新现实主义。《大路》里还残留着战后意大利的尘土与饥饿，但那头流浪艺人赞巴诺的眼泪已经不只是社会问题，而是灵魂的问题。",
@@ -29,7 +29,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Italian director, 1920–1993. He set out from the streets of neorealism and walked into dreams and circus rings, filming private memory until it became public myth.",
+      "Italian director, 1920–1993. His early films belong to neorealism; from the 1960s he built them instead around memory and dream. La strada, Nights of Cabiria and 8½ are among the best known, and he received the Academy Award for Best Foreign Language Film four times.",
     careerEssayEn: doc([
       p(
         "The first half of Fellini's career belonged to neorealism. La strada still carries the dust and hunger of postwar Italy, but the strongman Zampano's tears are already less a social question than a question of the soul.",
@@ -45,7 +45,7 @@ export const seedDirectors: SeedDirector[] = [
     nameZh: "英格玛·伯格曼",
     // Pinned: TMDB person search surfaces an actor namesake first (no photo).
     tmdbPersonId: 6648,
-    bio: "瑞典导演，1918–2007。牧师之子，一生向沉默的上帝提问，把信仰、死亡与婚姻的裂缝逼到人脸的特写里。",
+    bio: "瑞典导演，1918–2007。牧师之子，作品多围绕信仰、死亡与婚姻，大量使用面部特写。长期与摄影师斯文·尼克维斯特合作，另有大量舞台剧导演工作。",
     careerEssay: doc([
       p(
         "伯格曼的电影几乎都发生在两三个人之间，却承载着最大的问题：上帝是否存在，若不存在，人如何活下去。《第七封印》让骑士与死神下棋，把这问题摆成了寓言。",
@@ -55,7 +55,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Swedish director, 1918–2007. A pastor's son who spent his life interrogating a silent God, driving faith, death, and the fault lines of marriage into the close-up of a human face.",
+      "Swedish director, 1918–2007. The son of a pastor, he made films largely concerned with faith, death and marriage, relying heavily on the close-up. He worked with the cinematographer Sven Nykvist over many years and directed extensively for the stage.",
     careerEssayEn: doc([
       p(
         "Almost every Bergman film unfolds among just two or three people, and yet each one shoulders the largest question there is: whether God exists, and if He does not, how a person is to go on living. The Seventh Seal sets a knight down to play chess with Death and casts that question as a parable.",
@@ -69,7 +69,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "akira-kurosawa",
     name: "Akira Kurosawa",
     nameZh: "黑泽明",
-    bio: "日本导演，1910–1998。以西方的叙事力量重铸东方题材，让运动、天气与群像在银幕上迸发出雕塑般的力度。",
+    bio: "日本导演，1910–1998。作品兼及时代剧与现代题材，惯用多机位同时拍摄与长焦镜头。《罗生门》1951 年获威尼斯电影节金狮奖，为日本电影首次在国际影展获此奖项。",
     careerEssay: doc([
       p(
         "黑泽明是最懂得让电影“动”起来的导演之一。《七武士》的雨中决战、《罗生门》穿过树林的移动镜头，都把摄影机变成了参与者而非旁观者。",
@@ -79,7 +79,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "The Japanese director (1910–1998) who recast Eastern material with the narrative force of the West, making movement, weather, and the massed crowd erupt across the screen with a sculptor's weight.",
+      "Japanese director, 1910–1998. He worked in both period and contemporary settings and habitually shot with several cameras at once and with long lenses. Rashomon received the Golden Lion at Venice in 1951, the first such award to a Japanese film.",
     careerEssayEn: doc([
       p(
         "Few directors have understood better than Kurosawa how to make a film move. The rain-lashed final battle of Seven Samurai, the camera threading through the forest in Rashomon — each of these turns the lens into a participant rather than a bystander.",
@@ -93,7 +93,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "yasujiro-ozu",
     name: "Yasujirō Ozu",
     nameZh: "小津安二郎",
-    bio: "日本导演，1903–1963。用固定的低机位与四季的重复，拍尽了家庭的聚散，是电影史上最克制也最深情的目光。",
+    bio: "日本导演，1903–1963。长期在松竹拍摄家庭题材，摄影机固定于接近榻榻米坐姿的低机位，极少移动，段落之间插入没有人物的空镜。生卒同为十二月十二日。",
     careerEssay: doc([
       p(
         "小津几乎一辈子只拍一个故事：孩子长大，父母老去，家庭在婚嫁与死亡中悄悄解体。他把摄影机放在榻榻米的高度，几乎从不移动，让人物端坐着，向时间本身让步。",
@@ -103,7 +103,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Japanese director, 1903–1963. From a fixed low camera and the endless turning of the seasons he drew the whole quiet cycle of a family gathering and coming apart — the most restrained, and most tender, gaze in all of cinema.",
+      "Japanese director, 1903–1963. He worked at Shochiku on domestic subjects, keeping the camera fixed low at about the height of a person seated on a tatami mat, moving it almost never, and placing shots of empty rooms between scenes. He was born and died on 12 December.",
     careerEssayEn: doc([
       p(
         "Ozu spent almost his entire life telling a single story: children grow up, parents grow old, and the household quietly dissolves through marriage and death. He set the camera at the height of a tatami mat and hardly ever moved it, letting his people sit upright and give way to time itself.",
@@ -117,7 +117,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "andrei-tarkovsky",
     name: "Andrei Tarkovsky",
     nameZh: "安德烈·塔可夫斯基",
-    bio: "苏联导演，1932–1986。以缓慢、水、火与记忆构筑“雕刻时光”的电影，把胶片当作通向信仰与乡愁的祭坛。",
+    bio: "苏联导演，1932–1986。共完成七部长片，多以长镜头、水与火的影像及不作标示的时序为特征。1980 年代初离开苏联，此后在意大利与瑞典工作，著有《雕刻时光》。",
     careerEssay: doc([
       p(
         "塔可夫斯基把电影称作“雕刻时光”。他的长镜头不是炫技，而是要求观众放弃日常的时间感，进入一种近乎祈祷的凝视——雨水浸透废墟，火焰缓缓吞噬木屋。",
@@ -127,7 +127,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      'A Soviet director (1932–1986) who built his films out of slowness, water, fire, and memory — "sculpting in time," he called it — treating the strip of film as an altar that opens onto faith and longing.',
+      "Soviet director, 1932–1986. He completed seven features, marked by long takes, imagery of water and fire, and chronology left unmarked. He left the Soviet Union in the early 1980s and worked afterwards in Italy and Sweden. His book on filmmaking is Sculpting in Time.",
     careerEssayEn: doc([
       p(
         'Tarkovsky called cinema "sculpting in time." His long takes are never a display of virtuosity; they ask you to give up your everyday sense of time and settle into something close to prayer — rain soaking through ruins, fire creeping slowly through a wooden house.',
@@ -141,7 +141,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "robert-bresson",
     name: "Robert Bresson",
     nameZh: "罗贝尔·布列松",
-    bio: "法国导演，1901–1999。反对“表演”，只用非职业“模特”、手与声音，锤炼出电影史上最纯粹、最严苛的风格。",
+    bio: "法国导演，1901–1999。主张不用职业演员，要求出演者平读台词、不作表演，称之为「模特」；多用手部与物件的近景，配乐极少。代表作《死囚越狱》《扒手》《驴子巴特萨》。",
     careerEssay: doc([
       p(
         "布列松厌恶戏剧腔。他让非职业演员反复重复动作直到掏空一切表情，只留下手、脚、目光与物件的运动。他称他们为“模特”而非演员。",
@@ -151,7 +151,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      'French director, 1901–1999. He rejected acting itself, working only with non-professional "models," with hands and with sound, to forge the purest and most exacting style in all of cinema.',
+      "French director, 1901–1999. He declined to use professional actors, directing those he cast to speak flatly and without performing and calling them models; he relied on close shots of hands and objects and used little music. A Man Escaped, Pickpocket and Au Hasard Balthazar are among the best known.",
     careerEssayEn: doc([
       p(
         'Bresson despised theatricality. He would have his non-professional actors repeat a gesture over and over until every last trace of expression had drained away, leaving only the movement of hands, feet, glances, and objects. He refused to call them actors at all; they were his "models."',
@@ -165,7 +165,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "michelangelo-antonioni",
     name: "Michelangelo Antonioni",
     nameZh: "米开朗基罗·安东尼奥尼",
-    bio: "意大利导演，1912–2007。用建筑般的构图与漫长的留白，记录现代人之间无法弥合的疏离与情感的荒漠。",
+    bio: "意大利导演，1912–2007。作品多以现代城市与工业景观为背景，情节淡化，人物常置于构图边缘。1960 年代初的《奇遇》《夜》《蚀》通常合称一组。",
     careerEssay: doc([
       p(
         "安东尼奥尼拍的是“情感的建筑学”。在《奇遇》中一个女人失踪了，电影却拒绝寻找答案，转而凝视留下的人如何在空旷的岛屿与城市里彼此失联。",
@@ -175,7 +175,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Italian director, 1912–2007. With architectural compositions and long, unhurried stretches of emptiness, he chronicled the unbridgeable estrangement between modern people and the emotional deserts they wander.",
+      "Italian director, 1912–2007. His films are set largely in modern cities and industrial landscapes, with plot reduced and figures often placed at the edge of the frame. L'Avventura, La Notte and L'Eclisse, made in the early 1960s, are usually grouped together.",
     careerEssayEn: doc([
       p(
         "What Antonioni filmed was an architecture of feeling. In L'Avventura a woman vanishes, and yet the film refuses to go looking for an answer; it turns instead to watch the people she left behind lose each other across empty islands and emptier cities.",
@@ -189,7 +189,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "jean-luc-godard",
     name: "Jean-Luc Godard",
     nameZh: "让-吕克·戈达尔",
-    bio: "法国导演，1930–2022。新浪潮最激进的破坏者与重建者，一生都在拆解电影语言，逼它重新学会说话。",
+    bio: "法国导演，1930–2022。原为《电影手册》影评人，1960 年以《精疲力尽》转入导演，此后长期试验剪辑、声画关系与叙事形式，晚年多拍论文式影片。",
     careerEssay: doc([
       p(
         "戈达尔的《精疲力尽》用跳接砸碎了古典剪辑的连贯性，宣告电影可以像思想一样任性地跳跃。此后他把引文、字幕、直视镜头统统请进画面，让虚构随时提醒你它是虚构。",
@@ -199,7 +199,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "French director, 1930–2022. The New Wave's most radical wrecker and rebuilder, he spent a lifetime taking cinema's language apart and forcing it to learn to speak all over again.",
+      "French director, 1930–2022. He wrote criticism for Cahiers du Cinéma before directing Breathless in 1960, and spent the decades that followed experimenting with editing, with the relation of sound to image, and with narrative form, turning later to essay films.",
     careerEssayEn: doc([
       p(
         "With Breathless, Godard took the jump cut and shattered the seamless continuity of classical editing, announcing that a film could leap as freely and as willfully as a thought. From then on he ushered quotations, title cards, and looks straight down the lens into the frame, so that the fiction was forever reminding you it was a fiction.",
@@ -213,7 +213,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "francois-truffaut",
     name: "François Truffaut",
     nameZh: "弗朗索瓦·特吕弗",
-    bio: "法国导演，1932–1984。从影评人到新浪潮旗手，用最温柔的目光拍下童年、书籍与对电影本身的痴迷。",
+    bio: "法国导演，1932–1984。原为《电影手册》影评人，1959 年以《四百击》获戛纳电影节最佳导演奖。此后围绕安托万·杜瓦内尔一角拍摄五部作品，均由让-皮埃尔·利奥主演。",
     careerEssay: doc([
       p(
         "特吕弗曾是《电影手册》最尖刻的笔，提出“作者论”，把导演推上了作品署名者的位置。转身拍片，他却是新浪潮里最抒情、最念旧的一个。",
@@ -223,7 +223,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "French director, 1932–1984. He came to filmmaking from criticism, a standard-bearer of the New Wave who turned the tenderest of gazes on childhood, on books, and on his own lifelong infatuation with cinema itself.",
+      "French director, 1932–1984. He wrote for Cahiers du Cinéma before directing The 400 Blows, which brought him the director's prize at Cannes in 1959. He went on to make five films following the character Antoine Doinel, played throughout by Jean-Pierre Léaud.",
     careerEssayEn: doc([
       p(
         "Truffaut was once the most caustic pen at Cahiers du Cinéma, the critic who championed the auteur theory and installed the director as the true author of a film. Yet the moment he stepped behind the camera himself, he turned out to be the most lyrical and nostalgic figure the New Wave ever produced.",
@@ -237,7 +237,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "alfred-hitchcock",
     name: "Alfred Hitchcock",
     nameZh: "阿尔弗雷德·希区柯克",
-    bio: "英裔美国导演，1899–1980。“悬念大师”，把观众的恐惧与窥视欲变成一门可以精密计算的电影工程。",
+    bio: "英裔美国导演，1899–1980。自英国默片时期从业，1939 年赴好莱坞，共导演长片逾五十部。作品多为惊悚题材，惯以观众已知而角色未知的信息差构造悬念。",
     careerEssay: doc([
       p(
         "希区柯克区分“惊吓”与“悬念”：让观众比角色先知道桌下有炸弹，等待才成了折磨。他毕生都在操纵这份等待，把观众变成共谋。",
@@ -247,7 +247,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "British-American director, 1899–1980. The Master of Suspense, who turned the audience's fear and voyeurism into a precisely engineered machine of cinema.",
+      "British-American director, 1899–1980. He began in British silent films, moved to Hollywood in 1939, and directed more than fifty features. He worked chiefly in the thriller, and built suspense by giving the audience information the characters do not have.",
     careerEssayEn: doc([
       p(
         "Hitchcock drew the crucial line between surprise and suspense: let the audience know, before the characters do, that there is a bomb under the table, and the mere act of waiting becomes torment. His whole career was an exercise in manipulating that wait, until the viewer is no longer a spectator but an accomplice.",
@@ -261,7 +261,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "orson-welles",
     name: "Orson Welles",
     nameZh: "奥逊·威尔斯",
-    bio: "美国导演、演员，1915–1985。二十五岁便以《公民凯恩》重写电影语法，此后一生与好莱坞的资金与剪刀缠斗。",
+    bio: "美国导演、演员，1915–1985。二十五岁完成第一部影片《公民凯恩》。此后多部作品遭制片方重剪或未能完成，晚年主要在欧洲自行筹资拍片。",
     careerEssay: doc([
       p(
         "威尔斯带着舞台与广播的胆识闯入电影，《公民凯恩》的深焦摄影、天花板入镜与时间碎片，几乎一次性刷新了何为“电影感”。",
@@ -271,7 +271,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "American director and actor, 1915–1985. At twenty-five he rewrote the grammar of cinema with Citizen Kane, and spent the rest of his life wrestling Hollywood for its money and against its scissors.",
+      "American director and actor, 1915–1985. He completed his first film, Citizen Kane, at twenty-five. Several of those that followed were recut by their studios or left unfinished, and he spent his later years raising money independently in Europe.",
     careerEssayEn: doc([
       p(
         "Welles came to film carrying the nerve of the stage and the radio studio, and Citizen Kane redrew the rules almost in a single stroke — its deep-focus photography, its ceilinged frames, its splintered chronology all but reinvented what it means for an image to feel cinematic.",
@@ -285,7 +285,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "carl-theodor-dreyer",
     name: "Carl Theodor Dreyer",
     nameZh: "卡尔·西奥多·德莱叶",
-    bio: "丹麦导演，1889–1968。以近乎宗教的严谨拍摄信仰、殉难与神迹，每一部都像用光雕刻的祭品。",
+    bio: "丹麦导演，1889–1968。一生完成长片十四部，题材多涉信仰与审判，惯用缓慢横移的长镜头与素净布景。代表作《圣女贞德蒙难记》《词语》。",
     careerEssay: doc([
       p(
         "德莱叶产量极少，却每一部都逼近电影的精神极限。《圣女贞德蒙难记》几乎全用特写，让一张受难的脸成为整部默片的战场。",
@@ -295,7 +295,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "A Danish director, 1889–1968, who filmed faith, martyrdom, and miracle with an almost religious rigor — every one of his films an offering carved out of light.",
+      "Danish director, 1889–1968. He completed fourteen features, most of them concerned with faith and judgment, and worked in slow lateral takes and spare settings. The Passion of Joan of Arc and Ordet are among the best known.",
     careerEssayEn: doc([
       p(
         "Dreyer made only a handful of films, yet each one pushes to the spiritual limit of what cinema can do. The Passion of Joan of Arc is built almost entirely from close-ups, until a single suffering face becomes the battlefield on which the whole silent film is fought.",
@@ -309,7 +309,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "kenji-mizoguchi",
     name: "Kenji Mizoguchi",
     nameZh: "沟口健二",
-    bio: "日本导演，1898–1956。以流动的长镜头与对女性苦难的凝视，把封建社会的残酷拍成了凄美的卷轴。",
+    bio: "日本导演，1898–1956。作品多以女性的处境为中心，惯用长镜头与远景，避免以近景拍摄苦难场面。1950 年代连续三年在威尼斯电影节获奖。",
     careerEssay: doc([
       p(
         "沟口偏爱“一场一镜”，让摄影机像卷轴般缓缓横移，把人物置于命运的全景之中而不轻易切近。这份距离里藏着最深的悲悯。",
@@ -319,7 +319,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "The Japanese director Kenji Mizoguchi (1898–1956) turned the cruelty of feudal society into something like a mournful hand scroll, unrolling his flowing long takes with a gaze fixed steadily on the suffering of women.",
+      "Japanese director, 1898–1956. His films centre largely on the circumstances of women, and he worked in long takes and distant framings, keeping scenes of suffering out of close-up. He took prizes at Venice in three consecutive years during the 1950s.",
     careerEssayEn: doc([
       p(
         "Mizoguchi favored one scene, one shot: he let the camera glide sideways like an unrolling scroll, holding his figures within the full panorama of their fate rather than cutting in close. It is in that very distance that his deepest compassion hides.",
@@ -333,7 +333,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "luis-bunuel",
     name: "Luis Buñuel",
     nameZh: "路易斯·布努埃尔",
-    bio: "西班牙导演，1900–1983。超现实主义的老顽童，一生用冷静的幽默解剖宗教、欲望与资产阶级的虚伪。",
+    bio: "西班牙导演，1900–1983。1929 年与萨尔瓦多·达利合作《一条安达鲁狗》，此后长期流亡，在墨西哥拍片近二十年，晚年回到法国工作。作品常涉宗教与资产阶级题材。",
     careerEssay: doc([
       p(
         "布努埃尔从《一条安达鲁狗》割裂眼球的一刀起，就把梦、欲望与亵渎请上了银幕。他从不解释符号，只让它们像梦一样自明又不可解。",
@@ -343,7 +343,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Spanish director, 1900–1983. The grand old imp of surrealism, who spent a lifetime dissecting religion, desire, and bourgeois hypocrisy with a cool, deadpan wit.",
+      "Spanish director, 1900–1983. He made Un Chien Andalou with Salvador Dalí in 1929, then spent years in exile, working for close to two decades in Mexico before returning to France late in his career. Religion and the bourgeoisie recur throughout his work.",
     careerEssayEn: doc([
       p(
         "From the first stroke of the razor in Un Chien Andalou, splitting an eye open, Buñuel summoned dream, desire, and blasphemy onto the screen. He never explains his symbols; he simply lets them stand, the way a dream does — self-evident and impossible to decode.",
@@ -357,7 +357,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "jean-renoir",
     name: "Jean Renoir",
     nameZh: "让·雷诺阿",
-    bio: "法国导演，1894–1979。画家之子，以流动的场面调度与宽厚的人道主义，被誉为“电影的人性本身”。",
+    bio: "法国导演，1894–1979。画家奥古斯特·雷诺阿之子，作品多用景深调度与连续的摄影机运动。1930 年代拍摄《大幻影》与《游戏规则》，二战期间赴美工作。",
     careerEssay: doc([
       p(
         "雷诺阿的镜头总在呼吸、游走，让人物在纵深的空间里自由进出。他厌恶把人简单地分成好坏，《游戏规则》里每个人都可笑又可怜，包括他自己扮演的那一个。",
@@ -367,7 +367,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "French director, 1894–1979. The son of the painter Auguste Renoir, he brought to the screen a camera that seems to flow and a humanism so wide-hearted that he has been called the very humanity of cinema.",
+      "French director, 1894–1979. The son of the painter Auguste Renoir, he worked in depth staging and continuous camera movement. He made Grand Illusion and The Rules of the Game in the 1930s and moved to the United States during the war.",
     careerEssayEn: doc([
       p(
         "Renoir's camera is always breathing, always drifting, letting his characters wander freely in and out of a deep, living space. He could not bear to sort people neatly into the good and the bad: in The Rules of the Game everyone is at once ridiculous and worthy of pity, including the man he plays himself.",
@@ -381,7 +381,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "vittorio-de-sica",
     name: "Vittorio De Sica",
     nameZh: "维托里奥·德西卡",
-    bio: "意大利导演，1901–1974。新现实主义的良心，用非职业演员与真实街道，拍下战后小人物的尊严与心碎。",
+    bio: "意大利导演、演员，1901–1974。先以演员成名，1940 年代起转向导演，与编剧柴伐蒂尼长期合作，多用非职业演员实景拍摄。四部作品获奥斯卡外语片相关奖项。",
     careerEssay: doc([
       p(
         "德西卡与编剧柴伐蒂尼一起，把摄影机搬到罗马的街头，用真实的失业者演出真实的绝望。《偷自行车的人》里一对父子在城市里徒劳寻找，几乎不需要情节就令人落泪。",
@@ -391,7 +391,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Italian director, 1901–1974. The conscience of neorealism, who cast nonprofessional actors against the backdrop of real streets to record the dignity and heartbreak of ordinary people in the rubble of the postwar years.",
+      "Italian director and actor, 1901–1974. He was known first as an actor and turned to directing in the 1940s, working over many years with the screenwriter Cesare Zavattini and casting non-professionals on location. Four of his films were honoured by the Academy in its foreign-language categories.",
     careerEssayEn: doc([
       p(
         "Together with his screenwriter Cesare Zavattini, De Sica carried the camera out into the streets of Rome and let real unemployed men act out a despair they knew firsthand. In Bicycle Thieves, a father and son search the city in vain for a stolen bicycle, and the film needs almost no plot at all to bring you to tears.",
