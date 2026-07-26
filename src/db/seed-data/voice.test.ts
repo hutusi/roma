@@ -167,35 +167,20 @@ describe("note-ceiling", () => {
 describe("the seeded corpus", () => {
   const findings = blocking(runVoiceChecks(proseUnits()));
 
-  /** Films whose introduction has had the register pass (ADR 0017). */
-  const REWRITTEN = [
-    "otto-e-mezzo",
-    "tokyo-story",
-    "sunset-boulevard",
-    "spring-in-a-small-town",
-    "in-the-mood-for-love",
-    "the-goddess",
-  ];
-
-  test("every rewritten introduction is clean", () => {
-    const offenders = findings
-      .filter((f) => f.family === "film.introduction")
-      .filter((f) => REWRITTEN.includes(f.unit.replace("film:", "")))
-      .map((f) => `${f.unit} (${f.lang}) ${f.rule}: ${f.detail}`);
-    expect(offenders).toEqual([]);
+  // Live since the register pass finished (ADR 0017). It was `todo` while
+  // the corpus was half-rewritten, because a test that fails on prose known
+  // to be waiting teaches people to ignore it. Nothing is exempt now: new
+  // prose that trips a rule fails CI, in either language, in any field.
+  test("the whole corpus is clean", () => {
+    expect(findings.map((f) => `${f.unit} (${f.lang}) ${f.rule}: ${f.detail}`)).toEqual([]);
   });
 
+  // Kept separate from the sweep above so a regression names itself in the
+  // failure output rather than arriving as one line among many.
   test("every editorial note is within its ceiling", () => {
     const offenders = findings
       .filter((f) => f.rule === "note-ceiling")
       .map((f) => `${f.unit} (${f.lang}): ${f.detail}`);
     expect(offenders).toEqual([]);
-  });
-
-  // Turns live when the last of the 74 films, 63 people and 8 lists has
-  // been through the register pass. Until then it would fail on prose
-  // that is known to be waiting, which trains people to ignore it.
-  test.todo("the whole corpus is clean", () => {
-    expect(findings.map((f) => `${f.unit} (${f.lang}) ${f.rule}`)).toEqual([]);
   });
 });
