@@ -542,9 +542,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1298248",
     wikidataId: "Q503046",
     introduction:
-      "以十五世纪圣像画家卢布廖夫为轴，塔可夫斯基拍下了一个艺术家如何在鞑靼铁蹄、饥荒与暴力中丧失又重拾信仰的漫长历程。影片由八个篇章缀成，气象恢弘却又粗粝真实，把中世纪罗斯的泥泞、苦难与偶尔迸发的神性一并托起。最著名的“铸钟”一段，一个少年在毫无把握中赌上性命铸出巨钟，钟声轰然响起的那一刻，几乎是对一切创造行为的献词。黑白的苦难在结尾骤然转为卢布廖夫真迹的彩色特写——艺术终于从血与土里升起。这是关于信仰、暴力与创作代价的沉思，也是塔可夫斯基“雕刻时光”的第一座丰碑。",
+      "《安德烈·卢布廖夫》是安德烈·塔可夫斯基执导的 1966 年苏联电影，莫斯科电影制片厂出品，以十五世纪圣像画家安德烈·卢布廖夫为中心。影片分为八个段落，跨越约二十五年，穿插鞑靼人劫掠弗拉基米尔、饥荒、异教仪式与卢布廖夫长期封笔不画等情节。末段讲一名少年在父亲死后独力承担铸钟，声称掌握配方，实则并不知晓。全片以黑白拍摄，结尾转为彩色，以特写呈现卢布廖夫存世的圣像作品。影片完成后在苏联国内多年未获正式公映，先在国外放映。",
     introductionEn:
-      "Around the fifteenth-century icon painter Andrei Rublev, Tarkovsky films the long ordeal of an artist who loses and then recovers his faith amid Tatar raids, famine, and violence. Assembled from eight chapters, the film is vast in scope yet raw and physical, carrying the mud, the suffering, and the sudden flashes of the divine in medieval Russia. In the celebrated bell-casting episode, a boy gambles his life on founding a great bell with no idea whether he can, and the moment it finally sounds becomes a hymn to every act of creation. The suffering, filmed in black and white, gives way at the end to color close-ups of Rublev's actual icons — art rising at last out of blood and earth. This is a meditation on faith, on violence, and on the price of making anything, and the first monument in Tarkovsky's lifelong project of sculpting in time.",
+      "Andrei Rublev is a 1966 Soviet film directed by Andrei Tarkovsky, produced by Mosfilm, centred on the fifteenth-century icon painter of that name. It is built as eight episodes spanning roughly twenty-five years, taking in the Tatar sack of Vladimir, famine, a pagan rite, and a long period during which Rublev gives up painting and keeps silent. The final episode follows a boy who takes charge of casting a great bell after his father's death, claiming to know the secret of the alloy when he does not. The film is shot in black and white and shifts to colour at the end for close-ups of Rublev's surviving icons. It went unreleased in the Soviet Union for several years after completion and was screened abroad first.",
     directorSlugs: ["andrei-tarkovsky"],
   },
   {
@@ -564,9 +564,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1294421",
     wikidataId: "Q147878",
     introduction:
-      "十二岁的伊万在战争中失去全家，成了红军的侦察兵，穿行于生死之间的前线沼泽。塔可夫斯基的处女作就已显露天才：他让梦境与战争交替浮现，明亮的童年闪回与阴冷的现实互为伤口。倒映的白桦、滴水的地窖、被炮火犁过的荒原，都被拍出了一种令人窒息的诗意。伊万把整个童年献给了复仇，也因此被战争彻底吞噬。影片没有一处正面歌颂英勇，只是静静记录一个孩子如何被时代碾碎。它一举拿下威尼斯金狮，宣告了一位把苦难拍成挽歌的诗人导演的诞生。",
+      "《伊万的童年》是安德烈·塔可夫斯基执导的 1962 年苏联电影，莫斯科电影制片厂出品，是他的第一部长片，改编自弗拉基米尔·博戈莫洛夫的短篇《伊万》。故事设在东线：十二岁的伊万全家死于战争，此后为红军担任侦察员，往返穿越前线的沼泽地带传递情报。军官几次试图送他去后方读书，他都拒绝。影片将战场场景与几段童年梦境交替剪接，梦境以过曝的白桦林、井水与海滩为主要意象。结尾以战后缴获的德军档案交代伊万的下落。本片获威尼斯电影节金狮奖。",
     introductionEn:
-      "Twelve-year-old Ivan loses his entire family in the war and becomes a scout for the Red Army, slipping through the deadly marshes of the front. Tarkovsky's first feature already shows the genius to come: dreams and war alternate, so that the bright flashbacks of childhood and the cold present keep reopening each other's wounds. Reflected birches, a dripping cellar, a wasteland plowed by shellfire are all shot with a poetry close to suffocating. Ivan gives his whole childhood over to revenge, and for that the war devours him whole. Not one scene celebrates courage; the film simply records, quietly, how a child is ground down by history. It took the Golden Lion at Venice and announced the arrival of a poet among directors — one who films suffering as elegy.",
+      "Ivan's Childhood is a 1962 Soviet film directed by Andrei Tarkovsky, produced by Mosfilm. It was his first feature, adapted from Vladimir Bogomolov's short story Ivan. Twelve-year-old Ivan has lost his family in the war and works as a scout for the Red Army, crossing the marshes at the front to carry back intelligence. The officers around him repeatedly try to send him to school behind the lines and he refuses. Scenes at the front are intercut with several dream sequences of his childhood, built around overexposed birch woods, a well, and a beach. His fate is established at the close through German records captured after the war. Vadim Yusov photographed it, working in high contrast with the water, mud and bare trees of the marsh. The film received the Golden Lion at Venice.",
     directorSlugs: ["andrei-tarkovsky"],
   },
 
@@ -588,9 +588,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1303559",
     wikidataId: "Q664726",
     introduction:
-      "一个自视甚高的青年沉迷于扒窃，把偷盗当作对平庸世界的智力反叛，直到爱与被捕才让他真正低头。布列松剥去一切表演的痕迹，让手指、目光与物件的运动承担全部叙事。地铁站、火车里那几段扒窃的“手部芭蕾”，被剪辑得如同一场精密的仪式，紧张却毫不煽情。这是他“恩典”主题最凝练的一次表达：救赎不来自主人公的悔悟，而来自监狱铁窗前那一句“我走了多么远的路才到你身边”。全片仅七十余分钟，却把犯罪、骄傲与爱写得像一则冷峻的祈祷。理解布列松，不妨从这里开始。",
+      "《扒手》是罗贝尔·布列松执导的 1959 年法国电影，马丁·拉萨勒饰演米歇尔。影片讲述一名生活拮据的青年在巴黎学习扒窃，先后与两名同伙在赛马场、地铁与火车站作案，其间警长几次找他谈话，母亲病故，邻居让娜始终试图劝阻。他最终在赛马场被捕入狱，让娜前往探视。布列松使用非职业演员，要求他们平读台词、不作表演，多用手部与物件的特写，扒窃段落以近景剪接完成，全片几乎不用配乐。片长约七十五分钟。故事结构参照陀思妥耶夫斯基的《罪与罚》。",
     introductionEn:
-      "A young man who thinks highly of himself grows addicted to picking pockets, treating theft as an intellectual revolt against a mediocre world — until love and arrest finally bring him low. Bresson strips away every trace of acting and lets fingers, glances, and objects carry the whole story. The pickpocketing sequences in the Métro and on the train, a ballet of hands, are cut like a precise ritual, taut yet utterly unsentimental. It is the most distilled statement of his theme of grace: redemption arrives not through the hero's remorse but in a few words spoken across the prison bars — what a strange, long road he had to travel to reach her. In just over seventy minutes the film writes crime, pride, and love as a cold and steady prayer. If you want to understand Bresson, this is the place to begin.",
+      "Pickpocket is a 1959 French film directed by Robert Bresson, with Martin LaSalle as Michel. A young man living in poverty in Paris teaches himself to steal from pockets and works with two accomplices at the racecourse, in the Métro and at the Gare de Lyon. A police inspector interviews him several times, his mother dies, and a neighbour named Jeanne repeatedly tries to turn him from it. He is arrested at the racecourse and imprisoned, and Jeanne comes to visit him. Bresson cast non-professionals and directed them to speak flatly and without performance; the film relies heavily on close shots of hands and objects, builds the thefts entirely through close cutting, and uses almost no score. It runs about seventy-five minutes, and its structure follows Dostoevsky's Crime and Punishment.",
     directorSlugs: ["robert-bresson"],
   },
   {
@@ -611,9 +611,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1401619",
     wikidataId: "Q228937",
     introduction:
-      "一头名叫巴特萨的驴子，从一个主人辗转到另一个主人，默默承受人间的爱抚、鞭打、利用与遗弃，最终死在羊群之中。布列松借这头驴的一生，写下了一部关于圣徒、苦难与人类残忍的寓言。驴子从不表演情绪，正因如此，它那双温顺的眼睛成了一面镜子，照出周遭每一个人的贪婪与软弱。结尾它中弹后缓缓卧倒在阳光下的草坡上，羊群围拢过来——那是电影史上最接近“殉道”的死亡。没有一句说教，却让戈达尔感叹“这就是整个世界”。它要求的不是理解，而是凝视与谦卑。",
+      "《驴子巴特萨》是罗贝尔·布列松执导的 1966 年法国、瑞典合拍电影，安妮·维亚泽姆斯基饰演玛丽。影片以一头名为巴特萨的驴子为线索：它先由农家孩子饲养，此后数度易主，先后落到面包店伙计热拉尔、酒鬼阿尔诺与一名商人手中，被驮货、鞭打、用于马戏表演，最后在越境走私途中中弹，卧倒于羊群之间死去。与之平行的是玛丽的遭遇，她受制于热拉尔并逐步失去一切。布列松使用非职业演员，镜头多为中近景，驴的反应始终不作拟人化处理。影片在威尼斯电影节首映。",
     introductionEn:
-      "A donkey named Balthazar passes from one owner to the next, silently bearing caresses and beatings, use and abandonment, until it dies among a flock of sheep. Through this animal's life Bresson writes a parable of sainthood, suffering, and human cruelty. The donkey never performs an emotion, and so its gentle eyes become a mirror that reflects the greed and weakness of everyone around it. At the end, shot and bleeding, it sinks slowly onto a sunlit slope while the sheep gather in — the closest thing to a martyrdom that cinema has ever filmed. There is not a sermon anywhere in it, and yet Godard could only sigh that here was the whole world. The film asks not to be understood but to be watched, and watched with humility.",
+      "Au Hasard Balthazar is a 1966 French and Swedish co-production directed by Robert Bresson, with Anne Wiazemsky as Marie. The film follows a donkey named Balthazar, first kept by farm children and afterwards passed between several owners: Gérard, who works at a bakery, a drunkard named Arnold, and a merchant. He is used to carry loads, beaten, put to work in a circus, and finally shot while being driven across a border with smuggled goods, dying among a flock of sheep. Marie's story runs alongside his; she becomes bound to Gérard and loses everything in turn. Bresson worked with non-professional performers, shot largely in medium and close range, and never has the donkey react in a way that reads as human. The film premiered at Venice.",
     directorSlugs: ["robert-bresson"],
   },
 
@@ -636,9 +636,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1389923",
     wikidataId: "Q514531",
     introduction:
-      "一群富人乘游艇出海，一个女人在荒岛上离奇失踪，然而电影很快放弃了寻找，转而凝视她的情人与好友如何在寻人途中彼此吸引。安东尼奥尼故意抽掉悬疑的答案，把注意力交给现代人之间无法填补的空洞。人物常被压到画面一角，让岩石、建筑与空旷的街道占据中心，仿佛环境本身就在制造疏离。这份“反情节”曾在戛纳招致嘘声，却很快被奉为现代主义电影的里程碑。它不提供故事的满足，只留下一种挥之不去的怅惘：我们如此靠近，却谁也无法真正抵达谁。看它，需要放下对答案的执念。",
+      "《奇遇》是米开朗基罗·安东尼奥尼执导的 1960 年意大利、法国合拍电影，莫尼卡·维蒂与加布里埃莱·费泽蒂主演。一群人乘游艇出海，在西西里北面的一座火山岩小岛上，女子安娜失踪；搜寻无果，影片此后跟随她的男友桑德罗与好友克劳迪娅继续在西西里各地寻人，两人途中发展出关系。安娜的下落自始至终没有交代。影片大量使用长镜头，人物常被置于画面边缘，由岩石、建筑与空旷街道占据构图中心。本片在戛纳电影节首映时观众中出现嘘声，其后获评审团奖。片长约一百四十五分钟。",
     introductionEn:
-      "A party of wealthy friends sails to a barren island, where one woman vanishes without explanation — and the film promptly abandons the search, turning instead to watch her lover and her closest friend drift toward each other in the very act of looking for her. Antonioni withholds the mystery's solution on purpose and gives his attention instead to the void between modern people that nothing can fill. His figures are often pressed into a corner of the frame while rock faces, buildings, and empty streets take the center, as though the environment itself were manufacturing estrangement. This refusal of plot was jeered at Cannes and then, almost at once, canonized as a landmark of modernist cinema. It offers none of the satisfactions of story, only a melancholy that will not lift: we come so close and still cannot reach one another. To watch it, you have to set down the craving for an answer.",
+      "L'Avventura is a 1960 Italian and French co-production directed by Michelangelo Antonioni, starring Monica Vitti and Gabriele Ferzetti. A yachting party puts in at a volcanic islet north of Sicily, where a woman named Anna disappears. The search finds nothing, and the film then follows her lover Sandro and her friend Claudia as they continue looking for her across Sicily and become involved with each other. What became of Anna is never established. The film works largely in long takes, with the figures frequently placed at the edge of the frame while rock, architecture and empty streets occupy the centre. It was jeered by part of the audience at its Cannes premiere and went on to take the Jury Prize there. It runs about a hundred and forty-five minutes.",
     directorSlugs: ["michelangelo-antonioni"],
   },
   {
@@ -658,9 +658,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1361252",
     wikidataId: "Q1215047",
     introduction:
-      "一对婚姻走到尽头的夫妻，用一整夜的时间——探望病危的友人、参加喧闹的派对、在清晨的高尔夫球场上摊牌——确认爱情已经死去。安东尼奥尼让米兰的现代建筑成为冷漠的共谋，玻璃幕墙映出的是无处安放的空虚。让娜·莫罗独自穿行城市的长段落，几乎没有对白，却把一个女人的幻灭写得淋漓尽致。片尾妻子读起丈夫多年前写给她的情书，丈夫却记不得那是自己所写——最痛的不是背叛，而是激情如何在日常里悄无声息地蒸发。这是“疏离三部曲”中最冷静的一部，献给所有在长久关系里感到彼此陌生的人。",
+      "《夜》是米开朗基罗·安东尼奥尼执导的 1961 年意大利、法国合拍电影，马塞洛·马斯楚安尼与让娜·莫罗饰演作家乔瓦尼与其妻莉迪亚，莫尼卡·维蒂饰演瓦伦蒂娜。影片时间跨度为一昼夜：夫妇二人先探望住院的友人托马索，随后各自游荡于米兰，夜里出席一场工业家宅邸的派对，天亮时在别墅外的草地上谈及婚姻。莉迪亚在其中读出一封旧信，乔瓦尼未认出那是自己所写。全片以米兰战后新建的玻璃与混凝土建筑为主要外景，人物常被墙面与柱列分隔在构图两侧。本片获柏林电影节金熊奖。",
     introductionEn:
-      "A husband and wife whose marriage has quietly ended spend one night — visiting a dying friend, drifting through a loud party, having it out at dawn on a golf course — confirming that the love between them is gone. Antonioni makes the modern architecture of Milan a cold accomplice, its glass curtain walls reflecting an emptiness with nowhere to settle. Jeanne Moreau's long, near-wordless walk through the city writes a woman's disenchantment in full. At the end his wife reads aloud a love letter he wrote her years earlier, and he cannot recall that he was the one who wrote it — because the sharpest wound is not betrayal but the way passion evaporates, without a sound, inside daily life. This is the most glacial film in the alienation trilogy, and it belongs to everyone who has felt like a stranger inside a long relationship.",
+      "La Notte is a 1961 Italian and French co-production directed by Michelangelo Antonioni, with Marcello Mastroianni and Jeanne Moreau as the writer Giovanni and his wife Lidia, and Monica Vitti as Valentina. The action covers a single day and night. The couple visit their friend Tommaso in hospital, then drift separately through Milan, attend a party at an industrialist's villa in the evening, and talk about their marriage on the grounds at dawn. Lidia reads an old letter aloud there, and Giovanni does not recognise it as his own. The exteriors are largely the glass and concrete Milan built after the war, and the two are often divided to opposite sides of the frame by walls and colonnades. The film received the Golden Bear at Berlin.",
     cast: [
       {
         name: "Jeanne Moreau",
@@ -694,9 +694,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1293105",
     wikidataId: "Q1468980",
     introduction:
-      "一个刚结束一段感情的女子，与在证券交易所里追逐金钱的年轻经纪人短暂相恋，却始终无法真正投入。安东尼奥尼“疏离三部曲”的终章，把现代情感的虚无推向极致。喧嚣的股市与空荡的街角形成刺目的对照，爱情像日食一样，明明发生过，却迅速被阴影吞没。影片最惊人的是结尾：两人约好再见，镜头却在约定的街角空等了七分钟，只有路灯、水桶、陌生人的脸，恋人始终没有出现。这段“无人的蒙太奇”宣告了现代人情感的彻底缺席，也把电影语言推到了抽象的边缘。它冷峻得近乎残酷，却精准得令人心悸。",
+      "《蚀》是米开朗基罗·安东尼奥尼执导的 1962 年意大利、法国合拍电影，莫尼卡·维蒂饰演翻译维多利亚，阿兰·德龙饰演证券经纪人皮耶罗。影片开场，维多利亚结束一段长期关系；她随后在罗马证券交易所遇到皮耶罗，两人交往一段时间，其间经历一次股市暴跌。二人约定在某个街角再见，影片最后数分钟只拍这个街角及周边：路灯亮起、水从桶中漏出、行人经过，两人都未出现。外景多取自罗马新建的 EUR 区。本片获戛纳电影节评审团特别奖。",
     introductionEn:
-      "A woman just out of one affair drifts into another with a young stockbroker chasing money on the exchange floor, yet can never truly give herself to it. The finale of Antonioni's alienation trilogy carries modern emotional emptiness to its limit. The roar of the trading floor and the desolation of a bare street corner strike a glaring contrast, and love here is like an eclipse — clearly it happened, and just as clearly the shadow swallows it. The most astonishing stroke is the close: the two arrange to meet again, but the camera keeps the appointment at the agreed corner for seven minutes with only streetlamps, a water barrel, and the faces of strangers — the lovers never come. This montage of no one announces the total absence of modern feeling and pushes film language to the edge of abstraction. It is cold nearly to the point of cruelty, and precise enough to make the heart stop.",
+      "L'Eclisse is a 1962 Italian and French co-production directed by Michelangelo Antonioni, with Monica Vitti as Vittoria, a translator, and Alain Delon as Piero, a stockbroker. The film opens as Vittoria ends a long relationship. She meets Piero at the Rome stock exchange, where her mother speculates, and the two see each other over a period that includes a market crash. They agree to meet at a particular street corner, and the last several minutes of the film show only that corner and its surroundings: the streetlamps coming on, water running from a barrel, passers-by. Neither of them arrives. Much of the location work was done in the newly built EUR district of Rome. The film received the Special Jury Prize at Cannes.",
     directorSlugs: ["michelangelo-antonioni"],
   },
 
@@ -946,9 +946,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1293783",
     wikidataId: "Q51520",
     introduction:
-      "德莱叶依据真实审判记录，重现贞德受审、受辱直至火刑的最后时日。他几乎全程使用特写，让镜头贴近一张张脸——审判者的傲慢、贞德的泪水与信仰，在毫无修饰的皮肤纹理间纤毫毕现。法尔康内蒂奉献了电影史上最震撼的表演之一，据说她的泪水是真实痛苦的结晶。没有华丽布景，没有配乐（默片），只有面孔与信念的正面交锋，把一场宗教审判拍成了灵魂的酷刑。当火焰终于升起，殉道与救赎合为一体。这部近百年前的默片，至今仍是“电影能否承载超验之物”这一问题最有力的回答。",
+      "《圣女贞德蒙难记》是卡尔·西奥多·德莱叶执导的 1928 年法国无声电影，玛丽亚·法尔康内蒂饰演贞德。剧本依据 1431 年鲁昂审判的存世记录编写，情节压缩为一天，涵盖多次讯问、签署悔过书、随后翻供，直至处以火刑。全片以特写为主，人物多为无妆或极淡的妆面，背景常留白，摄影机时常从下方仰拍审判者。法尔康内蒂此前主要在舞台演出，这是她唯一的重要银幕角色。影片原始底片在实验室火灾中损毁，1981 年在奥斯陆一家精神病院的储藏室内发现一份完整拷贝，现存版本据此修复。",
     introductionEn:
-      "Dreyer built the film from the actual transcripts of Joan's trial, then threw away everything a period drama is supposed to offer — the lavish sets, the pageantry, the safe middle distance. What remains is the face. In close-up after close-up he presses the camera against skin, so that the judges' cold arrogance and Joan's tears and faith register in every unretouched pore. Falconetti gives one of the most shattering performances the medium has ever held; it is said her tears were wrung from real suffering, and you believe it. There is no music — this is silent cinema — no ornament, nothing to hide behind, only faces and conviction meeting head-on, until an ecclesiastical trial becomes a torture of the soul. When the flames at last rise, martyrdom and redemption fuse into a single image. Nearly a century old, this silent film remains the most persuasive answer anyone has given to a stubborn question: whether cinema can carry the transcendent. Watch it in silence, and let one human face do what spectacle never could.",
+      "The Passion of Joan of Arc is a 1928 French silent film directed by Carl Theodor Dreyer, with Maria Falconetti as Joan. The screenplay was written from the surviving records of the 1431 trial at Rouen, and compresses the proceedings into a single day: repeated interrogations, a signed recantation, its withdrawal, and the execution by burning. The film is built predominantly from close-ups, with the performers wearing little or no makeup, backgrounds often left blank, and the judges frequently shot from below. Falconetti had worked mainly in the theatre, and this was her only significant screen role. The original negative was destroyed in a laboratory fire; a complete print was found in 1981 in a storage room at a psychiatric hospital in Oslo, and current versions derive from it.",
     directorSlugs: ["carl-theodor-dreyer"],
   },
   {
@@ -968,9 +968,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1303566",
     wikidataId: "Q2352630",
     introduction:
-      "丹麦乡间一个笃信上帝的农家，因信仰的分歧、疯癫的次子与一场难产的死亡而陷入危机，直到影片结尾迎来一场令人屏息的复活。德莱叶用极其克制、缓慢横移的长镜头，把日常的厨房与病榻拍出了祭坛般的庄严。他不解释、不煽情，只是耐心地让怀疑与信念在白墙之间交锋。当自称是基督的次子握住死者的手，奇迹真的发生——那一刻，最理性的观众也被逼到神迹的门前。这是电影史上少有的、敢于正面呈现“复活”而毫不滑向廉价的作品。它要求的不是相信，而是屏住呼吸的敬畏。",
+      "《词语》是卡尔·西奥多·德莱叶执导的 1955 年丹麦电影，改编自剧作家、牧师凯伊·蒙克的同名戏剧。故事设在 1925 年前后的日德兰乡间：老农博尔延三个儿子中，长子米克尔不信教，次子约翰内斯因研读神学而精神失常，自称基督，幼子安德斯欲娶邻家女儿，两家因教派不同而结怨。米克尔之妻英格尔难产去世，葬礼上约翰内斯当众为其祈祷。全片长镜头极多，摄影机以缓慢横移跟随人物，室内多为白墙与自然光。本片获威尼斯电影节金狮奖。",
     introductionEn:
-      "On a devout Danish farm, faith itself splits a family — one son gone mad believing he is Christ, a rift over faith, and a beloved daughter-in-law dying in childbirth — until the film closes on a resurrection that stops the breath. Dreyer films the ordinary kitchen and the sickbed with the gravity of an altar, his camera gliding in long, glacially patient lateral takes that turn white walls into a chamber where doubt and belief are made to face each other. He refuses to explain and refuses to manipulate; he simply waits, letting the argument between reason and grace play out in real time. Then the mad son, the one who says he is Christ, takes the dead woman's hand, and the miracle actually happens — and in that instant even the most skeptical viewer is pushed to the very threshold of the sacred. This is one of the few films in all of cinema that dares to stage a literal resurrection and never once slides into the cheap. It asks of you not belief, but a held-breath awe you did not know you still had.",
+      "Ordet is a 1955 Danish film directed by Carl Theodor Dreyer, adapted from the play of the same name by the dramatist and pastor Kaj Munk. It is set on a Jutland farm in the mid-1920s. Of old Borgen's three sons, Mikkel has no faith, Johannes has lost his reason studying theology and declares himself Christ, and Anders wishes to marry a girl from a neighbouring family with whom the Borgens are at odds over doctrine. Mikkel's wife Inger dies in childbirth, and at the funeral Johannes prays over her before the assembled household. The film is composed largely in long takes, the camera tracking slowly sideways with the figures, the interiors white-walled and lit naturally. It received the Golden Lion at Venice.",
     directorSlugs: ["carl-theodor-dreyer"],
   },
 
@@ -2112,9 +2112,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1299261",
     wikidataId: "Q399647",
     introduction:
-      "安东尼奥尼的第一部彩色片，他的做法是把颜色直接刷到现实上：草地喷成灰色，水果摊漆成白色，工厂的管道涂成刺目的黄。这不是布景，是女主角的神经系统——她在工业化的拉文纳走来走去，无法说清自己得了什么病，而整个世界的颜色替她说了。影片几乎没有情节，很多人会觉得闷，但它是电影史上第一次真正把色彩当作心理状态来使用，此后所有关于「现代人异化」的画面都欠它一笔。莫妮卡·维蒂的表演同样反常规：她不演崩溃，只演一个人努力维持正常的那种吃力。适合在心情稳定的时候看，它不安慰人，也不打算安慰人。",
+      "《红色沙漠》是米开朗基罗·安东尼奥尼执导的 1964 年意大利、法国合拍电影，莫尼卡·维蒂饰演朱莉安娜，理查德·哈里斯饰演工程师科拉多。故事设在拉文纳的石化工业区：朱莉安娜在一次车祸后长期情绪失常，丈夫在当地厂区任职，她与来访的科拉多短暂往来。这是安东尼奥尼第一部彩色片，拍摄中对实景直接施色——草地喷灰、街边摊位刷白、厂区管道涂成黄色，用以配合人物状态而非还原环境。影片几乎没有戏剧冲突，多用工厂、雾气与滩涂的远景。本片获威尼斯电影节金狮奖。",
     introductionEn:
-      "Antonioni's first film in color, and his method was to paint color directly onto reality: grass sprayed gray, a fruit stall painted white, factory pipework in a punishing yellow. This is not set dressing, it is the heroine's nervous system — she moves through industrial Ravenna unable to say what is wrong with her, and the color of the world says it on her behalf. There is almost no plot and plenty of viewers find it inert. It is also the first time cinema used color as a psychological state rather than a description, and every subsequent image of modern alienation is in its debt. Monica Vitti's performance is equally against the grain: she does not play breakdown, she plays the effort of holding normality together. Watch it when you are feeling steady; it offers no comfort and has no intention of offering any.",
+      "Red Desert is a 1964 Italian and French co-production directed by Michelangelo Antonioni, with Monica Vitti as Giuliana and Richard Harris as Corrado, an engineer. It is set among the petrochemical works at Ravenna. Giuliana has been in an unsettled state since a car accident; her husband holds a post at one of the plants, and she and the visiting Corrado see each other briefly. It was Antonioni's first film in colour, and much of it was achieved by painting the locations themselves: grass sprayed grey, a market stall whitened, factory pipework rendered in yellow, matched to the character's condition rather than to how the place looked. There is little dramatic incident, and the film relies on distant views of the works, the fog and the mudflats. It received the Golden Lion at Venice.",
     cast: [
       { name: "Monica Vitti", zhName: "莫妮卡·维蒂", character: "Giuliana" },
       { name: "Richard Harris", zhName: "理查德·哈里斯", character: "Corrado Zeller" },
@@ -2167,9 +2167,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1299248",
     wikidataId: "Q838149",
     introduction:
-      "塔可夫斯基最私人也最难的一部：没有情节，没有连贯的时间，母亲、妻子由同一个演员扮演，童年、战争、新闻片与梦境彼此渗透。它不要求你看懂，它要求你回忆——很多人第一次看会困惑，第二次看会在某个毫无预兆的镜头前掉眼泪，比如风吹过荞麦地，或者一间木屋在雨中缓缓烧起来。彩色与黑白在片中交替出现，不按逻辑，只按记忆的温度。如果你想知道电影除了讲故事还能做什么，这部片子是最直接的答案。请挑一个不会被打断的夜晚。",
+      "《镜子》是安德烈·塔可夫斯基执导的 1975 年苏联电影，莫斯科电影制片厂出品，玛格丽塔·捷列霍娃一人分饰主人公的母亲与妻子，伊格纳特·丹尼尔采夫分饰其童年与其子。影片没有连贯情节，由童年记忆、战时片段、梦境与纪录影像交替构成，时序不作标示。素材取自导演本人的家庭经历，片中朗诵的诗作出自其父阿尔谢尼·塔可夫斯基，由本人诵读。彩色、黑白与褪色片段交替使用。全片约一百零七分钟，公映后在苏联被列为限制发行。",
     introductionEn:
-      "Tarkovsky's most private and most difficult film: no plot, no continuous time, the mother and the wife played by the same actor, and childhood, war, newsreel and dream all seeping into one another. It does not ask you to follow it; it asks you to remember. Most people are baffled the first time and then, on a second viewing, find themselves crying at something entirely unheralded — wind moving across a field of buckwheat, or a wooden barn burning slowly in the rain. Color and black-and-white alternate throughout on no logic but the temperature of memory, and the poems on the soundtrack are read by the director's own father. If you want to know what film can do besides tell a story, this is the most direct answer available. Choose an evening when nothing will interrupt you.",
+      "The Mirror is a 1975 Soviet film directed by Andrei Tarkovsky, produced by Mosfilm, with Margarita Terekhova playing both the narrator's mother and his wife and Ignat Daniltsev playing both his son and himself as a boy. There is no continuous plot: the film alternates between childhood recollection, wartime episodes, dreams and documentary footage, and does not mark the chronology. The material is drawn from the director's own family history, and the poems heard on the soundtrack are by his father, Arseny Tarkovsky, read aloud by the poet himself. Colour, black-and-white and desaturated passages alternate throughout, and the documentary inserts include Soviet newsreel of the Spanish Civil War and of a stratospheric balloon ascent. It runs about a hundred and seven minutes, and its distribution within the Soviet Union was restricted after release.",
     cast: [
       {
         name: "Margarita Terekhova",
@@ -2198,9 +2198,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1303562",
     wikidataId: "Q2385009",
     introduction:
-      "片名已经告诉你结局，布列松却依然让这一百分钟紧张得难以呼吸。一个法国抵抗组织成员在里昂的监狱里准备越狱：他磨勺子、拆门板、把床单撕成绳子，摄影机几乎只拍手和物件，声音全靠走廊的脚步与远处的火车。没有配乐渲染，没有闪回交代，也没有一场戏是为了让你认识这个人——但你会在结尾发现自己已经和他一起活了一百分钟。这是极简主义最有力的证明：越是拿掉，越是留下。布列松说他拍的是「圣灵随心所欲地吹拂」，这句话看完就懂了。",
+      "《死囚越狱》是罗贝尔·布列松执导的 1956 年法国电影，弗朗索瓦·勒特里耶饰演方丹。影片取材自安德烈·德维尼的回忆录，讲述 1943 年一名法国抵抗组织成员被囚于里昂蒙吕克监狱、等待处决期间策划越狱：他把汤匙磨成工具拆解牢门板，将床单与铁丝编成绳索，通过敲击墙壁与放风时的低语与邻室联络。行动前夕，一名少年犯被并入他的牢房，其身份无从判断。全片以手部与器物的近景为主，无配乐，声音多为走廊脚步、钥匙与远处火车。片名已交代结局。",
     introductionEn:
-      "The title gives away the ending and Bresson still makes these hundred minutes almost too tense to breathe through. A member of the French Resistance prepares to break out of a prison in Lyon: he grinds down a spoon, works a door apart, tears bedding into rope, and the camera looks at almost nothing but hands and objects while the sound is footsteps in a corridor and a train somewhere outside. No score underlines anything, no flashback explains him, and not one scene exists to introduce him as a personality — yet by the end you find you have been living alongside him the whole time. It is the most forceful demonstration of minimalism there is: the more that is removed, the more remains. Bresson said his subject was the wind blowing where it wishes, and the film makes that plain.",
+      "A Man Escaped is a 1956 French film directed by Robert Bresson, with François Leterrier as Fontaine. It is based on the memoir of André Devigny, a member of the Resistance held at Montluc prison in Lyon in 1943. Awaiting execution, Fontaine grinds a spoon into a tool to work the panels of his cell door apart, plaits rope from bedding and wire, and communicates with the neighbouring cells by tapping on walls and speaking low in the exercise yard. On the eve of the attempt a young prisoner is moved in with him, and there is no way to establish whether he can be trusted. The film is built from close shots of hands and objects, carries no score, and takes its sound mostly from footsteps, keys and a distant train. The title states the outcome in advance.",
     cast: [{ name: "François Leterrier", zhName: "弗朗索瓦·勒泰里耶", character: "Fontaine" }],
     directorSlugs: ["robert-bresson"],
   },
