@@ -22,20 +22,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "意大利导演，1920–1993。早期作品属新现实主义，1960 年代后转向以记忆与梦境组织结构。代表作有《大路》《卡比利亚之夜》《八部半》，四度获奥斯卡最佳外语片奖。",
     careerEssay: doc([
       p(
-        "费里尼的前半生属于新现实主义。《大路》里还残留着战后意大利的尘土与饥饿，但那头流浪艺人赞巴诺的眼泪已经不只是社会问题，而是灵魂的问题。",
+        "费里尼 1940 年代为罗西里尼等人编剧，1950 年起独立执导。《大路》《骗子》《卡比利亚之夜》三片仍以战后意大利的边缘人物为题材，其中《大路》与《卡比利亚之夜》先后获奥斯卡最佳外语片奖。",
       ),
       p(
-        "《八部半》是分水岭。从这里开始，他不再假装摄影机是客观的：回忆、欲望、白日梦挤进同一个画面，谁也不必让路。晚期的《阿玛柯德》与《船续前行》干脆把整个世界搭成布景，因为对费里尼来说，真实从来都是被记忆重新导演过的。",
+        "1960 年的《生活的甜蜜》以七个昼夜的段落取代连贯情节，此后《八部半》进一步取消梦境与当下的区隔，两者可在同一镜头内换位。1970 年代的《阿玛柯德》与《卡萨诺瓦》多在罗马电影城搭景完成，外景使用渐少。",
       ),
     ]),
     bioEn:
       "Italian director, 1920–1993. His early films belong to neorealism; from the 1960s he built them instead around memory and dream. La strada, Nights of Cabiria and 8½ are among the best known, and he received the Academy Award for Best Foreign Language Film four times.",
     careerEssayEn: doc([
       p(
-        "The first half of Fellini's career belonged to neorealism. La strada still carries the dust and hunger of postwar Italy, but the strongman Zampano's tears are already less a social question than a question of the soul.",
+        "Fellini wrote screenplays for Rossellini and others through the 1940s and began directing on his own in 1950. La strada, Il bidone and Nights of Cabiria still take their subjects from the margins of postwar Italy, and the first and third each received the Academy Award for Best Foreign Language Film.",
       ),
       p(
-        "8½ is the watershed. From there on he stopped pretending the camera was objective: memory, desire, and daydream crowd into the same frame, and none of them yields. In the late films — Amarcord, And the Ship Sails On — he simply built the whole world as a set, because for Fellini the real was always something memory had already re-directed.",
+        "La Dolce Vita, in 1960, replaced continuous plot with seven days and nights of loosely linked episodes, and 8½ went further, removing the boundary between dream and present action so that the two could change places within a single shot. From the 1970s, Amarcord and Casanova were built largely on sets at Cinecittà, with location work falling away.",
       ),
     ]),
   },
@@ -48,20 +48,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "瑞典导演，1918–2007。牧师之子，作品多围绕信仰、死亡与婚姻，大量使用面部特写。长期与摄影师斯文·尼克维斯特合作，另有大量舞台剧导演工作。",
     careerEssay: doc([
       p(
-        "伯格曼的电影几乎都发生在两三个人之间，却承载着最大的问题：上帝是否存在，若不存在，人如何活下去。《第七封印》让骑士与死神下棋，把这问题摆成了寓言。",
+        "伯格曼 1940 年代起在瑞典电影业工作，同时长期担任舞台剧导演，两项工作贯穿其一生。1957 年完成的《第七封印》与《野草莓》确立了他在国际影展上的声誉。",
       ),
       p(
-        "到了《假面》，寓言被剥掉，只剩下两张女人的脸互相渗透、吞噬。此后他越来越不需要中世纪或象征，一间夏屋、一段婚姻就足以让沉默变得震耳欲聋。摄影师尼克维斯特的光，是他探照人脸的手术灯。",
+        "1960 年代起，作品规模缩小，人物减少，室内场景增多，《假面》《呼喊与细语》与电视剧集《婚姻生活》多围绕两三人之间的关系展开。同一时期起与摄影师斯文·尼克维斯特固定合作，晚期作品多在法罗岛拍摄。",
       ),
     ]),
     bioEn:
       "Swedish director, 1918–2007. The son of a pastor, he made films largely concerned with faith, death and marriage, relying heavily on the close-up. He worked with the cinematographer Sven Nykvist over many years and directed extensively for the stage.",
     careerEssayEn: doc([
       p(
-        "Almost every Bergman film unfolds among just two or three people, and yet each one shoulders the largest question there is: whether God exists, and if He does not, how a person is to go on living. The Seventh Seal sets a knight down to play chess with Death and casts that question as a parable.",
+        "Bergman worked in the Swedish film industry from the 1940s and directed extensively for the stage throughout his life, keeping both occupations in parallel. The Seventh Seal and Wild Strawberries, both completed in 1957, established his standing at international festivals.",
       ),
       p(
-        "By Persona the parable has been stripped away, leaving only two women's faces seeping into and consuming one another. From there on he needed the Middle Ages and its symbols less and less; a summer house, a single marriage, was enough to make silence deafening. The light of his cinematographer Sven Nykvist was the surgical lamp he trained on the human face.",
+        "From the 1960s the films grew smaller, with fewer characters and more interiors: Persona, Cries and Whispers and the television serial Scenes from a Marriage turn on the relations between two or three people. He worked regularly with the cinematographer Sven Nykvist from that period onwards, and shot much of his later work on the island of Fårö.",
       ),
     ]),
   },
@@ -72,20 +72,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "日本导演，1910–1998。作品兼及时代剧与现代题材，惯用多机位同时拍摄与长焦镜头。《罗生门》1951 年获威尼斯电影节金狮奖，为日本电影首次在国际影展获此奖项。",
     careerEssay: doc([
       p(
-        "黑泽明是最懂得让电影“动”起来的导演之一。《七武士》的雨中决战、《罗生门》穿过树林的移动镜头，都把摄影机变成了参与者而非旁观者。",
+        "黑泽明 1936 年入 P.C.L.（东宝前身）任助理导演，1943 年首次独立执导。1950 年的《罗生门》在威尼斯电影节获奖后，其作品开始在日本以外发行。",
       ),
       p(
-        "但他真正的主题是人如何在混乱与谎言中确认意义。《生之欲》里一个将死的公务员在雪夜的秋千上找到了答案；《罗生门》却告诉我们真相可能永远无法抵达。晚年他转向色彩与史诗，底色仍是同一份人道主义的焦虑。",
+        "1950 至 60 年代多与三船敏郎合作，题材兼及时代剧与现代剧，动作场面惯用多机位同时拍摄与长焦镜头。1970 年《电车狂》票房失利后筹资一度困难，1975 年与苏联合拍《德尔苏·乌扎拉》，1980 年代的《影武者》与《乱》均有外国制片方参与投资。",
       ),
     ]),
     bioEn:
       "Japanese director, 1910–1998. He worked in both period and contemporary settings and habitually shot with several cameras at once and with long lenses. Rashomon received the Golden Lion at Venice in 1951, the first such award to a Japanese film.",
     careerEssayEn: doc([
       p(
-        "Few directors have understood better than Kurosawa how to make a film move. The rain-lashed final battle of Seven Samurai, the camera threading through the forest in Rashomon — each of these turns the lens into a participant rather than a bystander.",
+        "Kurosawa joined P.C.L., the studio that became Toho, as an assistant director in 1936, and directed his first film in 1943. After Rashomon took the prize at Venice in 1950, his work began to be distributed outside Japan.",
       ),
       p(
-        "But his true subject is how a person holds on to meaning in the midst of chaos and lies. In Ikiru, a dying civil servant finds his answer on a playground swing in the falling snow; Rashomon, by contrast, tells us the truth itself may be forever out of reach. In his later years he turned toward color and epic scale, yet the ground note never changed — the same humanist disquiet, unresolved.",
+        "Through the 1950s and 1960s he worked repeatedly with Toshiro Mifune, in both period and contemporary settings, shooting action with several cameras running at once and with long lenses. Financing became difficult after Dodes'ka-den failed commercially in 1970; he made Dersu Uzala with Soviet backing in 1975, and both Kagemusha and Ran in the 1980s drew on foreign investment.",
       ),
     ]),
   },
@@ -96,20 +96,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "日本导演，1903–1963。长期在松竹拍摄家庭题材，摄影机固定于接近榻榻米坐姿的低机位，极少移动，段落之间插入没有人物的空镜。生卒同为十二月十二日。",
     careerEssay: doc([
       p(
-        "小津几乎一辈子只拍一个故事：孩子长大，父母老去，家庭在婚嫁与死亡中悄悄解体。他把摄影机放在榻榻米的高度，几乎从不移动，让人物端坐着，向时间本身让步。",
+        "小津 1923 年入松竹，默片时期拍摄喜剧与青春题材，1930 年代逐步转向家庭题材。战时应征入伍，先后前往中国与新加坡，1946 年返回日本复工。",
       ),
       p(
-        "这种极简是一种纪律。空镜头里的走廊、晾着的衣服、驶过的火车，承担了所有没有说出口的情绪。看懂小津，往往是在自己也开始送别至亲的年纪。",
+        "战后作品几乎全为家庭题材，摄影机固定于低机位，取消移动镜头与淡入淡出，段落之间以没有人物的空镜衔接。1949 年的《晚春》起与野田高梧固定合作，此后每部剧本均由二人共同写成。1958 年起改用彩色拍摄。",
       ),
     ]),
     bioEn:
       "Japanese director, 1903–1963. He worked at Shochiku on domestic subjects, keeping the camera fixed low at about the height of a person seated on a tatami mat, moving it almost never, and placing shots of empty rooms between scenes. He was born and died on 12 December.",
     careerEssayEn: doc([
       p(
-        "Ozu spent almost his entire life telling a single story: children grow up, parents grow old, and the household quietly dissolves through marriage and death. He set the camera at the height of a tatami mat and hardly ever moved it, letting his people sit upright and give way to time itself.",
+        "Ozu joined Shochiku in 1923, making comedies and youth pictures during the silent period and moving gradually towards domestic subjects in the 1930s. He was conscripted during the war, served in China and Singapore, and returned to work in Japan in 1946.",
       ),
       p(
-        "That minimalism is a discipline. The empty shots — a corridor, laundry hung out to dry, a train sliding past — carry every feeling no one manages to say aloud. And you tend to understand Ozu only once you have reached the age of seeing your own loved ones off.",
+        "His postwar films are almost entirely domestic. The camera is fixed low, camera movement and dissolves are dropped, and shots of empty space link the scenes. From Late Spring in 1949 he wrote every screenplay with Kogo Noda, and from 1958 he worked in colour.",
       ),
     ]),
   },
@@ -120,20 +120,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "苏联导演，1932–1986。共完成七部长片，多以长镜头、水与火的影像及不作标示的时序为特征。1980 年代初离开苏联，此后在意大利与瑞典工作，著有《雕刻时光》。",
     careerEssay: doc([
       p(
-        "塔可夫斯基把电影称作“雕刻时光”。他的长镜头不是炫技，而是要求观众放弃日常的时间感，进入一种近乎祈祷的凝视——雨水浸透废墟，火焰缓缓吞噬木屋。",
+        "塔可夫斯基 1960 年毕业于莫斯科国立电影学院，1962 年以《伊万的童年》获威尼斯电影节金狮奖。其后完成的《安德烈·卢布廖夫》在苏联多年未获正式公映。",
       ),
       p(
-        "从《伊万的童年》到《安德烈·卢布廖夫》，他反复追问艺术家在暴力与怀疑中如何保持创造的信念。西方时期的《乡愁》与《牺牲》，把这份追问推向了殉道般的顶点。",
+        "1970 年代的《飞向太空》《镜子》《潜行者》均由莫斯科电影制片厂出品，发行范围受限。1982 年赴意大利拍摄《乡愁》后不再返回苏联，最后一部作品《牺牲》在瑞典完成，1986 年在巴黎去世。",
       ),
     ]),
     bioEn:
       "Soviet director, 1932–1986. He completed seven features, marked by long takes, imagery of water and fire, and chronology left unmarked. He left the Soviet Union in the early 1980s and worked afterwards in Italy and Sweden. His book on filmmaking is Sculpting in Time.",
     careerEssayEn: doc([
       p(
-        'Tarkovsky called cinema "sculpting in time." His long takes are never a display of virtuosity; they ask you to give up your everyday sense of time and settle into something close to prayer — rain soaking through ruins, fire creeping slowly through a wooden house.',
+        "Tarkovsky graduated from the state film school in Moscow in 1960 and received the Golden Lion at Venice for Ivan's Childhood in 1962. Andrei Rublev, which he completed next, went without official release in the Soviet Union for several years.",
       ),
       p(
-        "From Ivan's Childhood to Andrei Rublev, he returned again and again to a single question: how the artist keeps faith in the act of creation amid violence and doubt. Nostalghia and The Sacrifice, the films of his final years working in the West, carry that question to a martyr's pitch.",
+        "Solaris, The Mirror and Stalker, all made for Mosfilm during the 1970s, were given restricted distribution. He travelled to Italy in 1982 to make Nostalghia and did not return; he completed his last film, The Sacrifice, in Sweden, and died in Paris in 1986.",
       ),
     ]),
   },
@@ -144,20 +144,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "法国导演，1901–1999。主张不用职业演员，要求出演者平读台词、不作表演，称之为「模特」；多用手部与物件的近景，配乐极少。代表作《死囚越狱》《扒手》《驴子巴特萨》。",
     careerEssay: doc([
       p(
-        "布列松厌恶戏剧腔。他让非职业演员反复重复动作直到掏空一切表情，只留下手、脚、目光与物件的运动。他称他们为“模特”而非演员。",
+        "布列松早年学绘画，1940 年被德军俘虏，关押逾一年。战后自 1943 年起执导长片，一生共完成十三部。",
       ),
       p(
-        "这种“去戏剧化”反而释放出惊人的精神强度。《扒手》里手指的芭蕾、《驴子巴特萨》里一头驴承受的人间罪恶，都指向他毕生的主题：恩典如何在最卑微处降临。他的极简主义影响了此后所有相信“少即是多”的导演。",
+        "自 1951 年的《乡村牧师日记》起，他不再使用职业演员，改用他称为「模特」的非职业者，要求其平读台词、不作表情。此后作品普遍取消配乐，以环境声与物件近景承担叙事，《死囚越狱》《扒手》《驴子巴特萨》均循此法。",
       ),
     ]),
     bioEn:
       "French director, 1901–1999. He declined to use professional actors, directing those he cast to speak flatly and without performing and calling them models; he relied on close shots of hands and objects and used little music. A Man Escaped, Pickpocket and Au Hasard Balthazar are among the best known.",
     careerEssayEn: doc([
       p(
-        'Bresson despised theatricality. He would have his non-professional actors repeat a gesture over and over until every last trace of expression had drained away, leaving only the movement of hands, feet, glances, and objects. He refused to call them actors at all; they were his "models."',
+        "Bresson trained as a painter, was taken prisoner by German forces in 1940 and held for more than a year. He directed features from 1943 onwards and completed thirteen in all.",
       ),
       p(
-        "That very stripping-away of drama is what unleashes his astonishing spiritual intensity. The ballet of fingers in Pickpocket, the sins of the world laid upon the back of a single donkey in Au Hasard Balthazar — everything points to the theme he pursued all his life: how grace descends upon the lowliest of places. His minimalism left its mark on every director since who has believed that less is more.",
+        "From Diary of a Country Priest in 1951 he stopped using professional actors, working instead with non-professionals he called models and directing them to speak flatly and without expression. The later films largely dispense with score, carrying the narrative through ambient sound and close shots of objects; A Man Escaped, Pickpocket and Au Hasard Balthazar all proceed this way.",
       ),
     ]),
   },
@@ -168,20 +168,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "意大利导演，1912–2007。作品多以现代城市与工业景观为背景，情节淡化，人物常置于构图边缘。1960 年代初的《奇遇》《夜》《蚀》通常合称一组。",
     careerEssay: doc([
       p(
-        "安东尼奥尼拍的是“情感的建筑学”。在《奇遇》中一个女人失踪了，电影却拒绝寻找答案，转而凝视留下的人如何在空旷的岛屿与城市里彼此失联。",
+        "安东尼奥尼 1940 年代从影评与纪录短片入行，1950 年起执导长片。1960 年的《奇遇》在戛纳电影节首映时观众中出现嘘声，其后获评审团奖。",
       ),
       p(
-        "他把人物压缩到画面边缘，让墙壁、街道与工业风景占据中心，因为在他看来，现代人的孤独正是被这些空间塑造的。“爱情三部曲”之后的《红色沙漠》让色彩也染上了神经质，疏离由此有了颜色。",
+        "《奇遇》《夜》《蚀》通常合称一组，共同特征是情节淡化、人物置于构图边缘、由建筑与空间承担叙事。1964 年的《红色沙漠》为其第一部彩色片，拍摄中对实景直接施色。此后他在英国、美国与中国工作，1985 年中风后仍参与完成数部作品。",
       ),
     ]),
     bioEn:
       "Italian director, 1912–2007. His films are set largely in modern cities and industrial landscapes, with plot reduced and figures often placed at the edge of the frame. L'Avventura, La Notte and L'Eclisse, made in the early 1960s, are usually grouped together.",
     careerEssayEn: doc([
       p(
-        "What Antonioni filmed was an architecture of feeling. In L'Avventura a woman vanishes, and yet the film refuses to go looking for an answer; it turns instead to watch the people she left behind lose each other across empty islands and emptier cities.",
+        "Antonioni came to film through criticism and documentary shorts in the 1940s and began directing features in 1950. L'Avventura was jeered by part of the audience at its Cannes premiere in 1960 and went on to take the Jury Prize there.",
       ),
       p(
-        "He presses his figures to the edges of the frame and lets walls, streets, and industrial landscapes hold the center, convinced that modern loneliness is something these spaces build in us. After the trilogy of love, Red Desert let color itself turn neurotic, and estrangement, at last, had a hue.",
+        "L'Avventura, La Notte and L'Eclisse are usually grouped together, sharing a reduced plot, figures placed at the edge of the frame, and a reliance on architecture and space to carry the film. Red Desert, in 1964, was his first in colour, achieved by painting the locations themselves. He later worked in Britain, the United States and China, and took part in completing several films after a stroke in 1985.",
       ),
     ]),
   },
@@ -192,20 +192,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "法国导演，1930–2022。原为《电影手册》影评人，1960 年以《精疲力尽》转入导演，此后长期试验剪辑、声画关系与叙事形式，晚年多拍论文式影片。",
     careerEssay: doc([
       p(
-        "戈达尔的《精疲力尽》用跳接砸碎了古典剪辑的连贯性，宣告电影可以像思想一样任性地跳跃。此后他把引文、字幕、直视镜头统统请进画面，让虚构随时提醒你它是虚构。",
+        "戈达尔 1950 年代为《电影手册》撰稿，1960 年以《精疲力尽》转入导演。此后数年产量极高，至 1967 年已完成十五部长片，包括《随心所欲》《轻蔑》《狂人皮埃罗》。",
       ),
       p(
-        "六十年代末他愈发政治化，几乎放弃了叙事。但即便在最艰涩的时期，他也始终在追问同一件事：图像与声音能否承载真理？他不是在拍电影，而是在用电影思考电影。",
+        "1968 年后他转向政治题材与集体署名，与人组建吉加·维尔托夫小组，作品不再进入常规发行。1970 年代末起以录像与胶片并行创作，1988 至 1998 年间完成八集的《电影史》，晚期作品多为论文式结构。",
       ),
     ]),
     bioEn:
       "French director, 1930–2022. He wrote criticism for Cahiers du Cinéma before directing Breathless in 1960, and spent the decades that followed experimenting with editing, with the relation of sound to image, and with narrative form, turning later to essay films.",
     careerEssayEn: doc([
       p(
-        "With Breathless, Godard took the jump cut and shattered the seamless continuity of classical editing, announcing that a film could leap as freely and as willfully as a thought. From then on he ushered quotations, title cards, and looks straight down the lens into the frame, so that the fiction was forever reminding you it was a fiction.",
+        "Godard wrote for Cahiers du Cinéma through the 1950s and turned to directing with Breathless in 1960. He worked at great speed in the years that followed, completing fifteen features by 1967, among them Vivre sa Vie, Contempt and Pierrot le Fou.",
       ),
       p(
-        "By the late sixties he had turned ever more political and all but abandoned storytelling. Yet even at his most forbidding he kept circling the same question: can images and sounds hold truth? He was never simply making films — he was using film to think about film.",
+        "After 1968 he moved to political subjects and collective credit, forming the Dziga Vertov Group with others, and the work left normal distribution. From the late 1970s he worked in video alongside film, completed the eight-part Histoire(s) du cinéma between 1988 and 1998, and structured much of his late work as essay.",
       ),
     ]),
   },
