@@ -1,11 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { queryOne } from "./utils/db";
 
-const NOTE_200 = "字".repeat(220);
+/** Clears the introduction's 200-code-point publish floor. */
+const INTRO_200 = "字".repeat(220);
 
 test.use({ storageState: "e2e/.auth/admin.json" });
 
-test("publish gate: short 札记 blocked with count, then publish goes live without redeploy", async ({
+test("publish gate: short 介绍 blocked with count, then publish goes live without redeploy", async ({
   page,
 }) => {
   await page.goto("/admin/films/new");
@@ -14,14 +15,14 @@ test("publish gate: short 札记 blocked with count, then publish goes live with
   await page.fill("#slug", "publish-flow-film");
   await page.fill("#year", "1960");
   await page.getByLabel("费德里科·费里尼").check();
-  await page.locator('textarea[name="editorialNote"]').fill("太短。");
+  await page.locator('textarea[name="introduction"]').fill("太短。");
   await page.click("button[type=submit]");
   await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
 
   await page.getByRole("button", { name: "发布", exact: true }).click();
-  await expect(page.locator("[data-sonner-toast]", { hasText: "编辑札记需 200" })).toBeVisible();
+  await expect(page.locator("[data-sonner-toast]", { hasText: "影片介绍需 200" })).toBeVisible();
 
-  await page.locator('textarea[name="editorialNote"]').fill(NOTE_200);
+  await page.locator('textarea[name="introduction"]').fill(INTRO_200);
   await page.getByRole("button", { name: /^保存/ }).click();
   await expect(page.locator("[data-sonner-toast]", { hasText: "已保存" })).toBeVisible();
   await page.getByRole("button", { name: "发布", exact: true }).click();
@@ -143,14 +144,14 @@ async function filmId(slug: string): Promise<string> {
 // (auto-unpublishes the list, since blocking the film edit is the wrong
 // coupling). Both would otherwise leave the list rendering a bare <ol>.
 test("empty-list invariant: last published member is protected", async ({ page }) => {
-  // A published film (note + director) that will be a list's only member.
+  // A published film (introduction + director) that will be a list's only member.
   await page.goto("/admin/films/new");
   await page.fill("#titleZh", "唯一成员");
   await page.fill("#titleOriginal", "Sole Member");
   await page.fill("#slug", "sole-member-film");
   await page.fill("#year", "1961");
   await page.getByLabel("费德里科·费里尼").check();
-  await page.locator('textarea[name="editorialNote"]').fill(NOTE_200);
+  await page.locator('textarea[name="introduction"]').fill(INTRO_200);
   await page.click("button[type=submit]");
   await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
   const filmUrl = page.url();

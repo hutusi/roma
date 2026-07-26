@@ -95,9 +95,11 @@ export async function saveFilm(
     wikidataId: v.wikidataId?.trim().toUpperCase() || null,
     restorationNote: v.restorationNote || null,
     restorationNoteEn: v.restorationNoteEn || null,
+    introduction: v.introduction || null,
+    introductionEn: v.introductionEn || null,
     editorialNote: v.editorialNote || null,
-    essay: (v.essay as TiptapDoc) ?? null,
     editorialNoteEn: v.editorialNoteEn || null,
+    essay: (v.essay as TiptapDoc) ?? null,
     essayEn: (v.essayEn as TiptapDoc) ?? null,
   };
 

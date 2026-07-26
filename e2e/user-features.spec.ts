@@ -89,7 +89,7 @@ test.describe("reader", () => {
     await adminPage.fill("#slug", "temp-unpublish-member");
     await adminPage.fill("#year", "1975");
     await adminPage.getByLabel("费德里科·费里尼").check();
-    await adminPage.locator('textarea[name="editorialNote"]').fill("字".repeat(220));
+    await adminPage.locator('textarea[name="introduction"]').fill("字".repeat(220));
     await adminPage.click("button[type=submit]");
     await adminPage.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
     const filmAdminUrl = adminPage.url();
