@@ -216,20 +216,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "法国导演，1932–1984。原为《电影手册》影评人，1959 年以《四百击》获戛纳电影节最佳导演奖。此后围绕安托万·杜瓦内尔一角拍摄五部作品，均由让-皮埃尔·利奥主演。",
     careerEssay: doc([
       p(
-        "特吕弗曾是《电影手册》最尖刻的笔，提出“作者论”，把导演推上了作品署名者的位置。转身拍片，他却是新浪潮里最抒情、最念旧的一个。",
+        "特吕弗少年时期屡次逃学并一度被送入少年管教所，其后受影评人安德烈·巴赞照顾，为《电影手册》撰稿。1954 年他发表《法国电影的某种倾向》，抨击当时以文学改编为主的制片路线。",
       ),
       p(
-        "《四百击》里那个奔向大海的少年安托万，几乎是他自己的化身，并在此后的系列里陪他一起长大。无论是《祖与占》还是《日以继夜》，他镜头里始终有一种对生活与虚构双重的、几近感激的爱。",
+        "1959 年以《四百击》转入导演，此后围绕安托万·杜瓦内尔一角完成五部作品，均由让-皮埃尔·利奥主演，时间跨度二十年。另有《祖与占》《日以继夜》等片，后者获奥斯卡最佳外语片奖。1984 年因脑瘤去世，年五十二。",
       ),
     ]),
     bioEn:
       "French director, 1932–1984. He wrote for Cahiers du Cinéma before directing The 400 Blows, which brought him the director's prize at Cannes in 1959. He went on to make five films following the character Antoine Doinel, played throughout by Jean-Pierre Léaud.",
     careerEssayEn: doc([
       p(
-        "Truffaut was once the most caustic pen at Cahiers du Cinéma, the critic who championed the auteur theory and installed the director as the true author of a film. Yet the moment he stepped behind the camera himself, he turned out to be the most lyrical and nostalgic figure the New Wave ever produced.",
+        "Truffaut truanted repeatedly as a boy and spent time in an observation centre for delinquents before the critic André Bazin took him in and brought him to Cahiers du Cinéma. In 1954 he published an attack on the literary-adaptation tradition then dominant in French production.",
       ),
       p(
-        "The boy Antoine racing toward the sea at the end of The 400 Blows is very nearly Truffaut's own double, a self who would go on growing up beside him across the films that followed. Whether in Jules and Jim or Day for Night, his camera carries a doubled, almost grateful love — for life and for fiction alike.",
+        "He began directing with The 400 Blows in 1959 and went on to make five films following the character Antoine Doinel, played throughout by Jean-Pierre Léaud across twenty years. Jules and Jim and Day for Night are also among his best known; the latter received the Academy Award for Best Foreign Language Film. He died of a brain tumour in 1984, aged fifty-two.",
       ),
     ]),
   },
@@ -240,20 +240,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "英裔美国导演，1899–1980。自英国默片时期从业，1939 年赴好莱坞，共导演长片逾五十部。作品多为惊悚题材，惯以观众已知而角色未知的信息差构造悬念。",
     careerEssay: doc([
       p(
-        "希区柯克区分“惊吓”与“悬念”：让观众比角色先知道桌下有炸弹，等待才成了折磨。他毕生都在操纵这份等待，把观众变成共谋。",
+        "希区柯克 1920 年代在英国入行，先做字幕卡设计，1925 年起执导。1929 年的《讹诈》为英国第一部有声长片。1939 年应制片人塞尔兹尼克之邀赴美，此后长期在好莱坞工作。",
       ),
       p(
-        "从英国时期到好莱坞，他把类型片提升为对窥视、罪疚与欲望的深层研究。《惊魂记》用一场淋浴谋杀改写了观众能被如何对待的底线，也证明了商业类型可以是最锋利的作者电影。",
+        "他区分「惊吓」与「悬念」：前者依靠意外，后者依靠观众比角色先掌握信息。1950 至 60 年代的《后窗》《迷魂记》《西北偏北》《惊魂记》多围绕窥视、身份与罪责展开。1955 至 65 年间另主持电视剧集《希区柯克剧场》。他从未获奥斯卡最佳导演奖。",
       ),
     ]),
     bioEn:
       "British-American director, 1899–1980. He began in British silent films, moved to Hollywood in 1939, and directed more than fifty features. He worked chiefly in the thriller, and built suspense by giving the audience information the characters do not have.",
     careerEssayEn: doc([
       p(
-        "Hitchcock drew the crucial line between surprise and suspense: let the audience know, before the characters do, that there is a bomb under the table, and the mere act of waiting becomes torment. His whole career was an exercise in manipulating that wait, until the viewer is no longer a spectator but an accomplice.",
+        "Hitchcock entered the industry in Britain in the 1920s, designing title cards before directing from 1925. Blackmail, in 1929, was the first British sound feature. He moved to the United States in 1939 at the invitation of the producer David O. Selznick and worked in Hollywood thereafter.",
       ),
       p(
-        "From his British years to Hollywood, he raised the genre picture into a deep inquiry into voyeurism, guilt, and desire. Psycho, with a single shower murder, rewrote the limits of what an audience could be made to endure — and proved that a commercial genre could be the sharpest auteur cinema of all.",
+        "He distinguished surprise from suspense: the first depends on the unexpected, the second on the audience knowing more than the characters do. Rear Window, Vertigo, North by Northwest and Psycho, made between the mid-1950s and 1960, turn largely on watching, identity and guilt. He also presented the television series Alfred Hitchcock Presents between 1955 and 1965. He never received the Academy Award for Best Director.",
       ),
     ]),
   },
@@ -264,20 +264,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "美国导演、演员，1915–1985。二十五岁完成第一部影片《公民凯恩》。此后多部作品遭制片方重剪或未能完成，晚年主要在欧洲自行筹资拍片。",
     careerEssay: doc([
       p(
-        "威尔斯带着舞台与广播的胆识闯入电影，《公民凯恩》的深焦摄影、天花板入镜与时间碎片，几乎一次性刷新了何为“电影感”。",
+        "威尔斯先在舞台与广播工作，1938 年的广播剧《世界大战》引发听众恐慌。雷电华公司随后与他签下罕见的合约，给予剧本、剪辑与最终定剪的控制权，《公民凯恩》即在此条件下完成，时年二十五岁。",
       ),
       p(
-        "此后他的作品屡屡被制片厂剪坏、抽资，却仍在《历劫佳人》的长镜头开场、《审判》的迷宫布景里迸发天才。他是好莱坞供养又背叛的巨人，残缺的作品比许多人完整的一生更有分量。",
+        "此后他不再享有同等权限。《伟大的安巴逊》在他离美期间遭制片方大幅重剪，《历劫佳人》交片后亦被另行剪辑与补拍。1950 年代起他多在欧洲筹资，以演员报酬支持自己的项目，《堂吉诃德》等片始终未能完成。",
       ),
     ]),
     bioEn:
       "American director and actor, 1915–1985. He completed his first film, Citizen Kane, at twenty-five. Several of those that followed were recut by their studios or left unfinished, and he spent his later years raising money independently in Europe.",
     careerEssayEn: doc([
       p(
-        "Welles came to film carrying the nerve of the stage and the radio studio, and Citizen Kane redrew the rules almost in a single stroke — its deep-focus photography, its ceilinged frames, its splintered chronology all but reinvented what it means for an image to feel cinematic.",
+        "Welles worked first in theatre and radio; his 1938 broadcast of The War of the Worlds caused public alarm. RKO then signed him to an unusual contract giving him control of script, cast and final cut, and Citizen Kane was made under those terms when he was twenty-five.",
       ),
       p(
-        "From then on his films were repeatedly recut and defunded by the studios, yet the genius broke through anyway: in the unbroken crane shot that opens Touch of Evil, in the labyrinthine sets of The Trial. He was the giant Hollywood both nourished and betrayed, and his mutilated, unfinished work still carries more weight than many artists' whole and intact lives.",
+        "He never held equivalent authority again. The Magnificent Ambersons was heavily recut by the studio while he was out of the country, and Touch of Evil was recut and partly reshot after delivery. From the 1950s he raised money in Europe and funded his own projects with acting fees; several, among them a version of Don Quixote, were never finished.",
       ),
     ]),
   },
@@ -288,20 +288,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "丹麦导演，1889–1968。一生完成长片十四部，题材多涉信仰与审判，惯用缓慢横移的长镜头与素净布景。代表作《圣女贞德蒙难记》《词语》。",
     careerEssay: doc([
       p(
-        "德莱叶产量极少，却每一部都逼近电影的精神极限。《圣女贞德蒙难记》几乎全用特写，让一张受难的脸成为整部默片的战场。",
+        "德莱叶原为记者，1910 年代进入丹麦电影业，先任字幕撰写与编剧，1919 年起执导。1920 年代在瑞典、德国与法国拍片，1928 年在法国完成《圣女贞德蒙难记》。",
       ),
       p(
-        "他相信影像可以承载超验之物。《词语》以一场平静得令人战栗的复活收尾，逼迫最理性的观众直面神迹的可能。他的白墙、缓移与静默，是对灵魂的一种耐心测量。",
+        "此后他长期难以获得投资，1930 至 40 年代仅完成《吸血鬼》与《愤怒之日》两部长片，一度回到报社工作。1955 年的《词语》与 1964 年的《葛楚》为其最后两部作品。一生共完成长片十四部。",
       ),
     ]),
     bioEn:
       "Danish director, 1889–1968. He completed fourteen features, most of them concerned with faith and judgment, and worked in slow lateral takes and spare settings. The Passion of Joan of Arc and Ordet are among the best known.",
     careerEssayEn: doc([
       p(
-        "Dreyer made only a handful of films, yet each one pushes to the spiritual limit of what cinema can do. The Passion of Joan of Arc is built almost entirely from close-ups, until a single suffering face becomes the battlefield on which the whole silent film is fought.",
+        "Dreyer worked as a journalist before entering the Danish film industry in the 1910s, writing titles and screenplays and directing from 1919. He made films in Sweden, Germany and France during the 1920s, completing The Passion of Joan of Arc in France in 1928.",
       ),
       p(
-        "He believed an image could carry the transcendent. Ordet closes on a resurrection so quiet it makes you shudder, cornering even the most rational viewer into facing the possibility of a miracle. His white walls, his slow tracking shots, his silences are a patient way of taking the measure of the soul.",
+        "Funding proved difficult for long stretches afterwards. He completed only two features in the 1930s and 1940s, Vampyr and Day of Wrath, and returned for a time to newspaper work. Ordet in 1955 and Gertrud in 1964 were his last two films. He completed fourteen features in all.",
       ),
     ]),
   },
@@ -312,20 +312,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "日本导演，1898–1956。作品多以女性的处境为中心，惯用长镜头与远景，避免以近景拍摄苦难场面。1950 年代连续三年在威尼斯电影节获奖。",
     careerEssay: doc([
       p(
-        "沟口偏爱“一场一镜”，让摄影机像卷轴般缓缓横移，把人物置于命运的全景之中而不轻易切近。这份距离里藏着最深的悲悯。",
+        "沟口 1920 年代入日活，默片时期即已多产，战前作品包括《浪华悲歌》《祇园姊妹》。战时受审查限制，转拍《元禄忠臣藏》等题材。其早年作品多数已散佚。",
       ),
       p(
-        "他一生反复拍摄被出卖、被牺牲的女性——《雨月物语》的幽灵妻子、《山椒大夫》里投水守护手足的安寿。美与残酷在他镜头里从不分离，苦难被拍得越是优雅，越是叫人心碎。",
+        "战后作品以《西鹤一代女》《雨月物语》《山椒大夫》为代表，三片先后在威尼斯电影节获奖，1952 至 1954 连续三年。他惯用一场一镜，摄影机缓慢横移，避免以近景拍摄苦难场面。1956 年因白血病去世，年五十八。",
       ),
     ]),
     bioEn:
       "Japanese director, 1898–1956. His films centre largely on the circumstances of women, and he worked in long takes and distant framings, keeping scenes of suffering out of close-up. He took prizes at Venice in three consecutive years during the 1950s.",
     careerEssayEn: doc([
       p(
-        "Mizoguchi favored one scene, one shot: he let the camera glide sideways like an unrolling scroll, holding his figures within the full panorama of their fate rather than cutting in close. It is in that very distance that his deepest compassion hides.",
+        "Mizoguchi joined Nikkatsu in the 1920s and was already prolific in the silent period; his prewar work includes Osaka Elegy and Sisters of the Gion. Wartime censorship pushed him towards subjects such as The 47 Ronin. Most of his early films have not survived.",
       ),
       p(
-        "All his life he returned again and again to women who are betrayed and sacrificed — the ghost wife of Ugetsu, Anju in Sansho the Bailiff, who drowns herself to shield her brother. In his frames beauty and cruelty are never parted; the more gracefully he films their suffering, the more it breaks your heart.",
+        "His postwar work is represented by The Life of Oharu, Ugetsu and Sansho the Bailiff, which took prizes at Venice in three consecutive years from 1952. He worked in single takes for whole scenes, moving the camera slowly sideways and keeping suffering out of close-up. He died of leukaemia in 1956, aged fifty-eight.",
       ),
     ]),
   },
@@ -336,20 +336,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "西班牙导演，1900–1983。1929 年与萨尔瓦多·达利合作《一条安达鲁狗》，此后长期流亡，在墨西哥拍片近二十年，晚年回到法国工作。作品常涉宗教与资产阶级题材。",
     careerEssay: doc([
       p(
-        "布努埃尔从《一条安达鲁狗》割裂眼球的一刀起，就把梦、欲望与亵渎请上了银幕。他从不解释符号，只让它们像梦一样自明又不可解。",
+        "布努埃尔与达利合作的《一条安达鲁狗》（1929）与《黄金时代》（1930）在巴黎放映后引发争议，后者一度遭禁。西班牙内战期间他为共和政府工作，其后流亡美国，在纽约现代艺术博物馆任职数年。",
       ),
       p(
-        "流亡墨西哥时期，他用《被遗忘的人们》把超现实的锋利对准了贫民窟的残酷现实。晚年回到欧洲，《资产阶级的审慎魅力》则以微笑戳破体面世界的荒诞。反叛之下，是一颗始终清醒的道德之心。",
+        "1946 年起在墨西哥拍片近二十年，产量甚高，《被遗忘的人们》使他重获国际关注。1960 年代后主要在法国与西班牙工作，《维莉迪安娜》获戛纳金棕榈奖后在西班牙遭禁，《资产阶级的审慎魅力》获奥斯卡最佳外语片奖。",
       ),
     ]),
     bioEn:
       "Spanish director, 1900–1983. He made Un Chien Andalou with Salvador Dalí in 1929, then spent years in exile, working for close to two decades in Mexico before returning to France late in his career. Religion and the bourgeoisie recur throughout his work.",
     careerEssayEn: doc([
       p(
-        "From the first stroke of the razor in Un Chien Andalou, splitting an eye open, Buñuel summoned dream, desire, and blasphemy onto the screen. He never explains his symbols; he simply lets them stand, the way a dream does — self-evident and impossible to decode.",
+        "Un Chien Andalou (1929) and L'Age d'Or (1930), both made with Salvador Dalí, caused controversy on their Paris screenings, and the second was banned for a time. Buñuel worked for the Republican government during the Spanish Civil War and afterwards went into exile, spending several years at the Museum of Modern Art in New York.",
       ),
       p(
-        "In exile in Mexico, Los Olvidados turned that surrealist edge on the brutal reality of the slums. Back in Europe in his later years, The Discreet Charm of the Bourgeoisie punctures the absurdity of the respectable world with nothing more than a smile. Beneath all the mischief beats a moral heart that never once loses its clarity.",
+        "From 1946 he worked in Mexico for close to twenty years and at a high rate of production; Los Olvidados returned him to international attention. From the 1960s he worked mainly in France and Spain. Viridiana took the Palme d'Or at Cannes and was then banned in Spain, and The Discreet Charm of the Bourgeoisie received the Academy Award for Best Foreign Language Film.",
       ),
     ]),
   },
@@ -360,20 +360,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "法国导演，1894–1979。画家奥古斯特·雷诺阿之子，作品多用景深调度与连续的摄影机运动。1930 年代拍摄《大幻影》与《游戏规则》，二战期间赴美工作。",
     careerEssay: doc([
       p(
-        "雷诺阿的镜头总在呼吸、游走，让人物在纵深的空间里自由进出。他厌恶把人简单地分成好坏，《游戏规则》里每个人都可笑又可怜，包括他自己扮演的那一个。",
+        "雷诺阿以父亲留下的画作变卖所得资助早期创作，1920 年代起拍摄默片。1930 年代与人民阵线关系密切，作品包括《兰基先生的罪行》《大幻影》《游戏规则》。",
       ),
       p(
-        "《大幻影》在战俘营里谈的却是阶级如何跨越国界，友谊如何跨越敌意。“每个人都有他的理由”，这句台词几乎是他全部电影的信条：理解先于审判。",
+        "《游戏规则》1939 年公映失利后遭删剪，其原始底片毁于战时。1940 年他离开法国赴美，在好莱坞工作数年，其后又赴印度拍摄《大河》。1950 年代返回欧洲，晚期作品多为彩色。1975 年获奥斯卡终身成就奖。",
       ),
     ]),
     bioEn:
       "French director, 1894–1979. The son of the painter Auguste Renoir, he worked in depth staging and continuous camera movement. He made Grand Illusion and The Rules of the Game in the 1930s and moved to the United States during the war.",
     careerEssayEn: doc([
       p(
-        "Renoir's camera is always breathing, always drifting, letting his characters wander freely in and out of a deep, living space. He could not bear to sort people neatly into the good and the bad: in The Rules of the Game everyone is at once ridiculous and worthy of pity, including the man he plays himself.",
+        "Renoir financed his early work partly by selling paintings left by his father, and made silent films from the 1920s. He was closely associated with the Popular Front in the 1930s, when he made The Crime of Monsieur Lange, Grand Illusion and The Rules of the Game.",
       ),
       p(
-        "The Grand Illusion is set inside a prisoner-of-war camp, yet what it is really about is how class can reach across a national border and how friendship can outlast enmity. Everyone has their reasons, runs the line that is very nearly the creed of his entire body of work: to understand before you judge.",
+        "The Rules of the Game failed on release in 1939 and was cut; its original negative was destroyed during the war. He left France in 1940 for the United States, worked in Hollywood for several years, and then went to India to make The River. He returned to Europe in the 1950s and worked mostly in colour thereafter. He received an honorary Academy Award in 1975.",
       ),
     ]),
   },
@@ -384,20 +384,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "意大利导演、演员，1901–1974。先以演员成名，1940 年代起转向导演，与编剧柴伐蒂尼长期合作，多用非职业演员实景拍摄。四部作品获奥斯卡外语片相关奖项。",
     careerEssay: doc([
       p(
-        "德西卡与编剧柴伐蒂尼一起，把摄影机搬到罗马的街头，用真实的失业者演出真实的绝望。《偷自行车的人》里一对父子在城市里徒劳寻找，几乎不需要情节就令人落泪。",
+        "德西卡 1920 年代以舞台与银幕演员成名，1940 年起兼任导演。1943 年的《孩子们在注视我们》起与编剧柴伐蒂尼固定合作，此后二十余年共同完成多部作品。",
       ),
       p(
-        "他的伟大在于从最朴素的事件里看见人的尊严如何被贫穷一点点碾碎。《温别尔托·D》对一位孤独老人的凝视，至今仍是电影同情心的标尺。",
+        "《擦鞋童》《偷自行车的人》《温别尔托·D》多用非职业演员实景拍摄，前两部先后获奥斯卡荣誉奖。1950 年代后期起他为筹措资金频繁接拍演员工作，作品风格转向喜剧与情节剧，《昨天、今天、明天》与《费尼兹花园》再获奥斯卡最佳外语片奖。",
       ),
     ]),
     bioEn:
       "Italian director and actor, 1901–1974. He was known first as an actor and turned to directing in the 1940s, working over many years with the screenwriter Cesare Zavattini and casting non-professionals on location. Four of his films were honoured by the Academy in its foreign-language categories.",
     careerEssayEn: doc([
       p(
-        "Together with his screenwriter Cesare Zavattini, De Sica carried the camera out into the streets of Rome and let real unemployed men act out a despair they knew firsthand. In Bicycle Thieves, a father and son search the city in vain for a stolen bicycle, and the film needs almost no plot at all to bring you to tears.",
+        "De Sica became known in the 1920s as a stage and screen actor and began directing in 1940. From The Children Are Watching Us in 1943 he worked steadily with the screenwriter Cesare Zavattini, a collaboration that continued for more than twenty years.",
       ),
       p(
-        "His greatness lies in seeing, within the plainest of events, exactly how poverty grinds a person's dignity down bit by bit. The unhurried gaze of Umberto D. upon one lonely old man remains, to this day, the measure by which we take the compassion of the movies.",
+        "Shoeshine, Bicycle Thieves and Umberto D. were made largely with non-professionals on location, and the first two each received an Academy Honorary Award. From the late 1950s he took acting work frequently to raise money, and his own films moved towards comedy and melodrama; Yesterday, Today and Tomorrow and The Garden of the Finzi-Continis brought two further Academy Awards for foreign-language film.",
       ),
     ]),
   },
@@ -408,20 +408,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "奥地利裔美国导演、编剧，1906–2002。1930 年代因纳粹上台离开欧洲赴美，先以编剧起家，后自编自导。作品兼及黑色电影与喜剧，多与查尔斯·布拉克特、I·A·L·戴蒙德合作编剧。",
     careerEssay: doc([
       p(
-        "怀尔德是好莱坞最锋利的笔。他能把谋杀写成《双重赔偿》里冷冽的宿命，也能把变装闹剧写成《热情如火》里那句“人无完人”的宽容收尾。",
+        "怀尔德原在柏林做记者与编剧，1933 年纳粹上台后经巴黎赴美，其母与外祖母死于集中营。抵美初期以编剧为业，与查尔斯·布拉克特合作多年。",
       ),
       p(
-        "《日落大道》让一具浮尸开口讲述好莱坞如何吞噬自己的明星，犬儒到极致，却又饱含对失败者的怜悯。在他手里，玩世不恭从来只是深情的伪装。",
+        "1942 年起自编自导，作品兼及黑色电影与喜剧，包括《双重赔偿》《日落大道》《热情如火》《公寓春光》。1957 年起改与 I·A·L·戴蒙德合作编剧，直至 1981 年最后一部作品。共获奥斯卡奖六座。",
       ),
     ]),
     bioEn:
       "Austrian-American director and screenwriter, 1906–2002. He left Europe for the United States in the 1930s after the Nazis came to power, worked first as a screenwriter, and later directed his own scripts. He made both films noir and comedies, writing chiefly with Charles Brackett and later I. A. L. Diamond.",
     careerEssayEn: doc([
       p(
-        "Wilder had the sharpest pen in Hollywood. He could carve murder into the icy fatalism of Double Indemnity and then send up a cross-dressing farce that lands on the most forgiving line in the movies, the shrug of Some Like It Hot: nobody's perfect.",
+        "Wilder worked as a journalist and screenwriter in Berlin and left for Paris and then the United States after the Nazis came to power in 1933; his mother and grandmother died in the camps. He wrote for the studios on arrival, for many years with Charles Brackett.",
       ),
       p(
-        "Sunset Boulevard hands the narration to a corpse floating face-down in a swimming pool, letting the dead man tell you how Hollywood swallows its own stars — cynicism taken to the limit, and yet aching with pity for the has-beens and the also-rans. In Wilder's hands, contempt for the world was only ever a disguise worn over tenderness.",
+        "From 1942 he directed his own scripts, working across film noir and comedy in Double Indemnity, Sunset Boulevard, Some Like It Hot and The Apartment. From 1957 he wrote with I. A. L. Diamond instead, through to his last film in 1981. He received six Academy Awards.",
       ),
     ]),
   },
