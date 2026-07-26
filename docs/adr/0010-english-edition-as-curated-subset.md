@@ -25,7 +25,7 @@ The product is a Chinese-language curatorial site (ADR 0002's audience), but we 
 
 ## Deferred follow-ups
 
-The edition is complete and live: the full corpus is authored and English-published (all 50 films / 24 directors / 7 lists), the `/en` user areas are localized (PR #12), and the AI-drafted prose was fact-checked and corrected in both languages (PR #13, via `src/db/resync-content.ts`). The SEO surface is verified healthy — `sitemap.xml` carries every en entity with a hreflang cluster, page `<head>` alternates are bidirectional (`zh-CN` / `en` / `x-default`, x-default → zh root), and the user areas stay `noindex`.
+The edition is complete and live: the full corpus is authored and English-published (74 films / 42 directors / 21 actors / 8 lists, grown from 50 / 24 / 7 when this was written), the `/en` user areas are localized (PR #12), and the AI-drafted prose was fact-checked and corrected in both languages (PR #13, via `src/db/resync-content.ts`) — facts only. The register was never checked, and correcting it is ADR 0017, which also found that the PR #13 pass predates 24 of the current films. The SEO surface is verified healthy — `sitemap.xml` carries every en entity with a hreflang cluster, page `<head>` alternates are bidirectional (`zh-CN` / `en` / `x-default`, x-default → zh root), and the user areas stay `noindex`.
 
 Remaining, in rough priority — none blocking:
 
