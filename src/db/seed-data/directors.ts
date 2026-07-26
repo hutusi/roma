@@ -778,20 +778,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "香港导演，1958 年生。多不使用完整剧本，边拍边写，成片时长与结构常与开拍时设想不同。长期与摄影师杜可风、美术兼剪辑张叔平合作。2000 年以《花样年华》获戛纳最佳男演员等奖项，1997 年以《春光乍泄》获戛纳最佳导演奖。",
     careerEssay: doc([
       p(
-        "王家卫从编剧起家，成名后却几乎不写完整剧本，靠现场与演员一起长出电影。《阿飞正传》里“一分钟的朋友”和无脚鸟，已经定下他一生的主题：时间、错过、无法着陆。",
+        "王家卫生于上海，五岁随家人移居香港。他在无线电视受训后于八十年代做编剧，1988 年以《旺角卡门》首次执导。1990 年的《阿飞正传》票房失利，但获香港电影金像奖最佳影片与最佳导演；次年他与人合办泽东电影公司。",
       ),
       p(
-        "与摄影师杜可风、美术张叔平的合作，把这份情绪变成了可见的东西——《重庆森林》的抽帧与霓虹，《春光乍泄》的布宜诺斯艾利斯，《花样年华》里张曼玉每一件不重样的旗袍。到《2046》，他索性把记忆本身写成了一列开不回去的火车。",
+        "他此后的影片多在没有完成剧本的情况下开拍，摄影多由杜可风担任，美术、服装与剪辑长期由张叔平负责。1997 年他以《春光乍泄》获戛纳最佳导演奖，为香港导演首次；2000 年的《花样年华》使梁朝伟获该届戛纳最佳男演员。",
       ),
     ]),
     bioEn:
       "Hong Kong director, born 1958. He generally works without a finished screenplay, writing as he shoots, so that the length and structure of a film often differ from what was planned. He has worked over many years with the cinematographer Christopher Doyle and with William Chang as production designer and editor. Happy Together brought him the director's prize at Cannes in 1997.",
     careerEssayEn: doc([
       p(
-        "Wong started as a screenwriter and then, once established, largely stopped writing finished scripts, growing his films on set with his actors instead. Days of Being Wild — the one-minute friend, the bird with no feet — already fixes the themes of his whole career: time, missed chances, the inability to land.",
+        "Wong was born in Shanghai and moved to Hong Kong with his family at the age of five. He trained at the television station TVB, wrote screenplays through the 1980s and directed his first film, As Tears Go By, in 1988. Days of Being Wild lost money in 1990 but won best film and best director at the Hong Kong awards; he set up the Jet Tone company with partners the following year.",
       ),
       p(
-        "His work with cinematographer Christopher Doyle and designer William Chang made that mood visible: the step-printing and neon of Chungking Express, the Buenos Aires of Happy Together, the procession of never-repeated cheongsams Maggie Cheung wears in In the Mood for Love. By 2046 he had simply written memory itself as a train that cannot go back.",
+        "Most of his films since have gone into production without a finished script. Christopher Doyle shot many of them, and William Chang has handled design, costume and editing throughout. Happy Together won him the directing prize at Cannes in 1997, the first Hong Kong director to take it, and In the Mood for Love brought Tony Leung the festival's acting award in 2000.",
       ),
     ]),
   },
@@ -803,20 +803,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "华语导演，1932–1997。生于北京，1949 年后在香港入行，先在邵氏任美术与演员，1960 年代转入导演，其后赴台湾拍片。作品多为明代背景的武侠片，动作段落以短镜头剪接完成。1975 年《侠女》在戛纳电影节获最高技术委员会大奖。",
     careerEssay: doc([
       p(
-        "胡金铨生于北平，做过演员与美术，对明代掌故、京剧与佛理都下过功夫。《大醉侠》《龙门客栈》先后确立了他的招牌：客栈里的对峙、一触即发的静默，以及从戏曲借来的锣鼓节奏。",
+        "胡金铨生于北平，1949 年到香港，先做广告美术与演员，后进邵氏兄弟公司。1966 年他为邵氏执导《大醉侠》，次年赴台湾拍摄《龙门客栈》，该片创下当时华语片的票房纪录。",
       ),
       p(
-        "《侠女》则把他推到了另一个层面。竹林一战至今是所有武侠动作的源头之一，而影片后半段忽然转入禅意，血战让位给了顿悟。1975 年它在戛纳拿下技术大奖，是华语电影首次在那里获得肯定。",
+        "《侠女》拍摄逾两年，1970 至 1971 年分上下集在台湾公映，1975 年在戛纳获最高技术委员会大奖，是华语电影首次在该影展获奖。此后他在台湾与韩国拍摄《空山灵雨》与《山中传奇》。1997 年他在台北接受心脏手术时去世。",
       ),
     ]),
     bioEn:
       "Chinese-language director, 1932–1997. Born in Beijing, he entered the industry in Hong Kong after 1949, working at Shaw Brothers in art departments and as an actor before turning to directing in the 1960s, and later worked in Taiwan. His films are largely wuxia set in the Ming dynasty, with action built from short takes. A Touch of Zen received the Grand Prize of the Technical Commission at Cannes in 1975.",
     careerEssayEn: doc([
       p(
-        "Born in Beijing, King Hu worked as an actor and a designer and read seriously in Ming history, Peking opera, and Buddhism. Come Drink with Me and Dragon Inn established his signatures in turn: the standoff inside an inn, the silence a hair before violence, and a cutting rhythm borrowed from the opera percussion.",
+        "King Hu was born in Beijing and moved to Hong Kong in 1949, working in advertising art and as an actor before joining Shaw Brothers. He directed Come Drink with Me for Shaw in 1966, then went to Taiwan for Dragon Inn, which set a box-office record for a Chinese-language film in 1967.",
       ),
       p(
-        "A Touch of Zen pushed him somewhere else entirely. Its bamboo-forest duel remains one of the headwaters of all wuxia action, and then the film's second half turns abruptly contemplative, with bloodshed giving way to enlightenment. It won a technical prize at Cannes in 1975 — the first recognition a Chinese-language film received there.",
+        "A Touch of Zen took more than two years to shoot and was released in Taiwan in two parts, in 1970 and 1971. At Cannes in 1975 it won the technical grand prize, the first award a Chinese-language film had taken at the festival. He later shot Raining in the Mountain and Legend of the Mountain in Taiwan and Korea. He died in Taipei in 1997 during heart surgery.",
       ),
     ]),
   },
@@ -830,20 +830,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "意大利导演，1906–1977。1945 年在德军撤离后不久拍摄《罗马，不设防的城市》，与其后的《战火》《德意志零年》合称战争三部曲。1950 年代与英格丽·褒曼合作数部影片，后期主要为电视拍摄历史题材。",
     careerEssay: doc([
       p(
-        "《罗马，不设防的城市》几乎是在废墟里抢拍出来的——胶片是零星凑来的，街道是真的街道，群众演员刚刚经历过片中的事。它一举确立了新现实主义：不要摄影棚，不要明星，不要圆满。",
+        "罗西里尼三十年代起拍片，战时为意大利海军的电影机构拍过数部影片。1945 年的《罗马，不设防的城市》在盟军进入罗马后不久开拍，胶片零星购得，多用实景。此片与《战火》《德意志零年》合称战争三部曲。",
       ),
       p(
-        "但罗西里尼很快离开了自己开创的运动。与英格丽·褒曼合作的《意大利之旅》几乎没有情节，只有一对夫妻在异乡的沉默里逐渐看清彼此——这部片子后来被新浪潮奉为现代电影的起点。",
+        "1949 年他与英格丽·褒曼开始合作，两人当时各有婚姻，此事在美国引起风波，褒曼数年间无法在好莱坞工作。二人合作的影片，包括《游览意大利》，当时反响冷淡，后来受到《电影手册》一代推重。1960 年代起他转向电视，拍摄一系列历史与教育题材影片。",
       ),
     ]),
     bioEn:
       "Italian director, 1906–1977. He shot Rome, Open City shortly after the German withdrawal in 1945, and followed it with Paisan and Germany Year Zero, the three usually grouped together. He made several films with Ingrid Bergman in the 1950s and worked mainly on historical subjects for television in his later years.",
     careerEssayEn: doc([
       p(
-        "Rome, Open City was very nearly stolen out of the rubble — the film stock was scraped together in short ends, the streets were real streets, and the extras had lived through what the picture depicts. It established neorealism at a stroke: no studio, no stars, no resolution.",
+        "Rossellini had been directing since the 1930s, including several wartime films for the Italian navy's film unit. Rome, Open City went into production not long after the Allies entered Rome in 1945, shot largely on location on stock bought in small lots. With Paisan and Germany Year Zero it is usually grouped as his war trilogy.",
       ),
       p(
-        "But Rossellini left the movement he had started almost immediately. Journey to Italy, made with Ingrid Bergman, has almost no plot at all — only a married couple coming to see each other clearly through the silence of a foreign country. The New Wave later canonized it as the beginning of modern cinema.",
+        "He began working with Ingrid Bergman in 1949. Both were married to other people, and the affair caused a scandal that kept her out of Hollywood for several years. The films they made together, Journey to Italy among them, were received coldly at the time and taken up later by the critics of Cahiers du cinéma. From the early 1960s he worked mainly in television, on a long series of historical and educational films.",
       ),
     ]),
   },
@@ -855,20 +855,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "日本导演，1916–1996。战时应征入伍，拒绝晋升，被派往满洲，其后在冲绳被俘。1950 年代起在松竹拍片，代表作有九个半小时的《人间的条件》三部曲与《切腹》。作品多涉个人与体制的冲突。",
     careerEssay: doc([
       p(
-        "小林正树本人当过兵，且刻意拒绝升迁以示抗议，这份经历烧进了他所有作品。长达九小时的《人间的条件》几乎是他的自传，一个善良的人如何被战争一层层剥掉，直到只剩下不肯低头这一件事。",
+        "小林正树在早稻田读哲学与东洋美术，1941 年进松竹，次年应征入伍，被派往满洲。他在军中拒绝晋升，战争结束时身在冲绳的战俘营。1952 年起独立执导。",
       ),
       p(
-        "《切腹》把同样的怒火装进了时代剧的外壳：一个浪人走进大名的庭院，用一个故事把整套武士道的体面拆得粉碎。到了《怪谈》他转向色彩与鬼故事，画面华丽如屏风，底下依旧是那份对权力的不信任。",
+        "《人间的条件》分三部于 1959 至 1961 年上映，全长约九个半小时。1962 年的《切腹》与 1964 年的《怪谈》先后获戛纳评审团奖，《怪谈》并获奥斯卡最佳外语片提名。此后他执导《夺命剑》《化石》等片，1996 年去世。",
       ),
     ]),
     bioEn:
       "Japanese director, 1916–1996. Conscripted during the war, he refused promotion, was sent to Manchuria and was later held as a prisoner in Okinawa. He worked at Shochiku from the 1950s; his best-known films are the nine-and-a-half-hour trilogy The Human Condition and Harakiri. Conflict between an individual and an institution recurs throughout his work.",
     careerEssayEn: doc([
       p(
-        "Kobayashi served, and deliberately refused promotion as a protest, and that experience is burned into everything he made. The nine-hour Human Condition is close to autobiography: a decent man stripped layer by layer by war until nothing is left but his refusal to bow.",
+        "Kobayashi studied philosophy and East Asian art at Waseda and joined Shochiku in 1941. Conscripted the following year and sent to Manchuria, he refused promotion beyond the lowest rank and ended the war in a prisoner-of-war camp on Okinawa. He began directing on his own in 1952.",
       ),
       p(
-        "Harakiri packs the same anger into the shell of a period picture — a masterless samurai walks into a lord's courtyard and, by telling a story, dismantles the entire decorum of bushido. By Kwaidan he had turned to color and ghost stories, images as lavish as painted screens, with the same distrust of power underneath.",
+        "The Human Condition was released in three parts between 1959 and 1961 and runs about nine and a half hours. Harakiri in 1962 and Kwaidan in 1964 each took the jury prize at Cannes, and Kwaidan was nominated for the foreign-language Academy Award. Samurai Rebellion and Fossils followed. He died in 1996.",
       ),
     ]),
   },
@@ -880,20 +880,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "日本导演，1905–1969。自默片时期起从业，共导演约八十九部影片，现存约六十部。作品多以女性的经济处境为中心，题材集中于家庭、旅舍与小本生意。多次改编林芙美子的小说。",
     careerEssay: doc([
       p(
-        "成濑一生拍了八十多部片子，主角几乎都是女人——酒吧女招待、寡妇、被丈夫拖累的妻子。他不像沟口那样把她们写成受难者，也不像小津那样让她们体面地退场，而是让她们在账本、房租和一次次算计里熬下去。",
+        "成濑巳喜男 1920 年进松竹做道具，1930 年开始执导，早期默片多已散佚。1934 年他转入 P.C.L.（后并入东宝），次年的《愿妻如蔷薇》是最早在美国商业公映的日本影片之一。",
       ),
       p(
-        "《浮云》是这条路的终点。一对在战时殖民地相爱的男女回到破败的东京，感情早已耗尽，却谁也走不开。有人说成濑的电影像水，看起来平静，底下的流速会把人卷走。",
+        "他一生完成八十余部影片，多数以女性为主角，并六次改编林芙美子的小说，其中包括 1955 年的《浮云》。最后一部《乱云》完成于 1967 年，1969 年他去世。",
       ),
     ]),
     bioEn:
       "Japanese director, 1905–1969. He worked from the silent period onwards and directed some eighty-nine films, of which about sixty survive. His work centres largely on the economic circumstances of women, set among families, lodging houses and small businesses. He adapted the novels of Fumiko Hayashi several times.",
     careerEssayEn: doc([
       p(
-        "Naruse made more than eighty films and the protagonist is almost always a woman — a bar hostess, a widow, a wife dragged down by her husband. He does not write them as martyrs the way Mizoguchi does, nor let them exit with dignity the way Ozu does; he makes them endure, through account books and rent and one calculation after another.",
+        "Naruse joined Shochiku in 1920 as a props assistant and began directing in 1930; most of his early silent films are lost. He moved to P.C.L., later absorbed into Toho, in 1934. Wife! Be Like a Rose!, the following year, was among the first Japanese films given a commercial release in the United States.",
       ),
       p(
-        "Floating Clouds is the end of that road. A man and a woman who fell in love in a wartime colony return to a ruined Tokyo with the feeling long since spent, and neither can leave. Naruse's films have been likened to water: placid on the surface, with a current underneath fast enough to carry you off.",
+        "He completed more than eighty films, most of them with women as the central characters, and adapted the novelist Fumiko Hayashi six times, including Floating Clouds in 1955. His last film, Scattered Clouds, appeared in 1967. He died in 1969.",
       ),
     ]),
   },
