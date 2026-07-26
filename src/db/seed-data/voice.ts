@@ -52,22 +52,23 @@ export type Family =
   /** Long-form; register follows the field it sits under. */
   | "film.essay"
   | "person.careerEssay"
-  /**
-   * 入选理由 — deliberately unclassified. Whether it stays voiced or goes
-   * neutral is an open editorial decision, so only universal rules apply
-   * until it is settled (ADR 0017).
-   */
+  /** 入选理由 — neutral, like every other descriptive field (ADR 0017). */
   | "list.reasoning";
 
-const NEUTRAL: Family[] = ["film.introduction", "person.introduction", "list.theme", "list.intro"];
-const VOICED: Family[] = ["film.note", "person.note"];
-const ALL_FAMILIES: Family[] = [
-  ...NEUTRAL,
-  ...VOICED,
-  "film.essay",
-  "person.careerEssay",
+/**
+ * Everything descriptive. With 入选理由 neutral too, the editorial
+ * position lives in exactly three places: what is included, the order it
+ * is included in, and 编辑札记. No descriptive field carries a view.
+ */
+const NEUTRAL: Family[] = [
+  "film.introduction",
+  "person.introduction",
+  "list.theme",
+  "list.intro",
   "list.reasoning",
 ];
+const VOICED: Family[] = ["film.note", "person.note"];
+const ALL_FAMILIES: Family[] = [...NEUTRAL, ...VOICED, "film.essay", "person.careerEssay"];
 
 export type ProseUnit = {
   id: string;
