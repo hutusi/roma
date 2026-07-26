@@ -98,9 +98,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1292719",
     wikidataId: "Q18402",
     introduction:
-      "费里尼尚未离开新现实主义，却已长出翅膀。《大路》讲一个被卖给流浪艺人的傻姑娘杰索米娜，跟着粗暴的赞巴诺卖艺为生，直到死亡才让这个铁石心肠的男人明白自己失去了什么。朱丽叶塔·马西纳用小丑般的脸演出了近乎圣愚的天真，让最卑微的生命也闪着神性的光。这不是一部愤怒控诉社会的电影，而是一则关于爱与孤独的寓言：我们常常在失去之后，才认得出曾拥有的东西。结尾赞巴诺在海边的恸哭，是电影史上最沉重的一次迟到的觉悟。",
+      "《大路》是费德里科·费里尼执导的 1954 年意大利电影，朱丽叶塔·马西纳与安东尼·奎因主演。影片讲述贫家女杰索米娜被母亲卖给流浪艺人赞巴诺，随他辗转各地卖艺，长期受其粗暴对待；两人分开多年后，赞巴诺得知她已去世，在海边失声痛哭。影片保留了新现实主义的实景拍摄与街头取材，叙事重心却从社会境况转到两个人物的关系上，费里尼此后的创作由此展开。马西纳的表演大量借用默剧与小丑的手法，很少依赖台词。本片获第二十九届奥斯卡最佳外语片奖，该奖项自这一届起设为竞赛单元。",
     introductionEn:
-      "Fellini had not yet left neorealism, but the wings were already growing. La strada follows Gelsomina, a simple-hearted girl sold to the traveling strongman Zampano, who bullies her across the roads of postwar Italy until death finally teaches this stone of a man what he has lost. Giulietta Masina plays her with a clown's face and a holy fool's innocence, letting the humblest of lives shine with something close to grace. This is not a film of social protest; it is a parable about love and loneliness \u2014 we tend to recognize what we had only after it is gone. Zampano's sobbing collapse on the beach in the final scene is one of cinema's heaviest arrivals of understanding, and it arrives, as understanding usually does, too late.",
+      "La strada is a 1954 Italian film directed by Federico Fellini, starring Giulietta Masina and Anthony Quinn. Gelsomina, a young woman from a poor family, is sold by her mother to Zampan\u00f2, an itinerant strongman, and travels with him performing at fairs and in village squares while he treats her harshly. Years after the two part, Zampan\u00f2 learns that she has died and breaks down on a beach. The film retains the location shooting and street casting of neorealism, but moves its weight from social circumstance to the relationship between two people, and Fellini's later work proceeds from that shift. Masina built the performance largely out of mime and clowning, with little reliance on dialogue. It received the Academy Award for Best Foreign Language Film at the 29th ceremony, the first at which the category was competitive rather than honorary.",
     cast: [
       {
         name: "Giulietta Masina",
@@ -129,9 +129,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1294781",
     wikidataId: "Q18405",
     introduction:
-      "一个罗马街头的妓女卡比利亚，一次次被欺骗、被抢劫、被抛弃，却一次次重新相信爱情。费里尼与马西纳这对夫妻，把一个最容易被写成悲剧的题材，拍成了对人类韧性的礼赞。影片最后那个著名的长镜头——卡比利亚刚被未婚夫骗走全部积蓄，眼含泪水走在路上，一群年轻人载歌载舞地经过，她抬起头，对着镜头几乎是对着我们，露出一个破碎又倔强的微笑。那一刻，绝望与希望同时在场。马西纳凭这个角色摘得戛纳影后，她那张仿佛不谙世事的脸，把苦难与天真同时写尽。这是电影送给所有跌倒又爬起的人的一封情书。",
+      "《卡比利亚之夜》是费德里科·费里尼执导的 1957 年意大利电影，朱丽叶塔·马西纳主演。影片讲述在罗马街头接客的卡比利亚，接连被交往的男人欺骗、抢劫，仍愿意相信下一段感情；结尾她被订婚对象骗走全部积蓄，独自走在路上，遇见一群唱歌跳舞的年轻人，抬头望向摄影机，露出笑容。全片由若干段落串联，没有贯穿始终的情节线。皮埃尔·保罗·帕索里尼参与了对白写作，主要负责罗马方言部分。马西纳凭本片获戛纳电影节最佳女演员奖，影片获奥斯卡最佳外语片奖。",
     introductionEn:
-      "A Roman streetwalker named Cabiria is cheated, robbed, and abandoned, over and over \u2014 and over and over she decides to believe in love again. Fellini and Masina, husband and wife, took a subject that invites easy tragedy and made a tribute to human resilience instead. In the famous final shot, Cabiria \u2014 freshly swindled out of her savings by the fiance she trusted \u2014 walks down a road with tears in her eyes as a band of young revelers passes around her; she lifts her head and gives the camera, gives us, a broken and stubborn smile. Despair and hope stand in the same frame. Masina won Best Actress at Cannes for the role; her seemingly guileless face carries suffering and innocence in a single expression. This is cinema's love letter to everyone who has fallen down and gotten up again.",
+      "Nights of Cabiria is a 1957 Italian film directed by Federico Fellini, starring Giulietta Masina. Cabiria works the streets of Rome and is repeatedly deceived and robbed by the men she attaches herself to, and each time resolves to trust the next one. In the closing sequence she is swindled out of her savings by the man she has agreed to marry, and walks alone along a road until she meets a group of young people singing and dancing, at which point she looks up into the camera and smiles. The film is assembled from loosely connected episodes rather than a continuous plot. Pier Paolo Pasolini worked on the dialogue, chiefly the passages in Roman dialect. Masina received the award for Best Actress at the Cannes Film Festival, and the film won the Academy Award for Best Foreign Language Film.",
     cast: [
       {
         name: "Giulietta Masina",
@@ -2046,9 +2046,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1293271",
     wikidataId: "Q18407",
     introduction:
-      "一架直升机吊着耶稣像飞过罗马上空，下面泳池边的女人挥手打招呼——开场三分钟，费里尼就把战后意大利的全部处境说完了。影片没有情节，只有七个昼夜、七场派对，一个记者在其中越陷越深。这是费里尼从新现实主义转身的时刻：他不再关心穷人如何活下去，而开始追问富起来之后的人为什么依然空。特莱维喷泉那场戏成了永恒的银幕图像，而片中那个摄影记者的名字 Paparazzo，从此变成了全世界通用的词。结尾海滩上那条怪鱼睁着眼睛，谁也没能给出解释。",
+      "《生活的甜蜜》是费德里科·费里尼执导的 1960 年意大利电影，马塞洛·马斯楚安尼、安妮塔·艾克伯格与阿努克·艾梅主演。影片以直升机吊运耶稣像飞越罗马上空开场，随后跟随八卦记者马塞洛在七个昼夜之间辗转于聚会、片场与街头。各段落之间不作因果衔接，全片没有连贯的情节线，片长约三小时。特莱维喷泉的一场戏与结尾海滩上那具巨大鱼形生物的镜头流传最广。片中摄影记者的名字帕帕拉佐（Paparazzo）此后演变为多国通用的名词，指追拍名人的摄影师。本片获戛纳电影节金棕榈奖与奥斯卡最佳黑白片服装设计奖。",
     introductionEn:
-      "A helicopter carries a statue of Christ over Rome while women beside a rooftop pool wave up at it — three minutes in, Fellini has already stated the entire condition of postwar Italy. There is no plot, only seven days and nights and seven parties, with a journalist sinking further at each one. This is the moment Fellini turns away from neorealism: he stops asking how the poor survive and starts asking why people remain empty after they get rich. The Trevi Fountain sequence became a permanent image, and the name of the film's photographer, Paparazzo, became a word in every language on earth. On the beach at the end a monstrous fish lies staring, and nobody has ever satisfactorily explained it — which is exactly right, because the film is about a society that has run out of things it can explain to itself.",
+      "La Dolce Vita is a 1960 Italian film directed by Federico Fellini, starring Marcello Mastroianni, Anita Ekberg and Anouk Aimée. It opens with a helicopter carrying a statue of Christ over Rome, then follows Marcello, a gossip journalist, through seven days and nights of parties, film sets and encounters in the street. The episodes are not causally linked and there is no continuous plot; the film runs close to three hours. The sequence in the Trevi Fountain and the closing shot of a large fish-like creature on a beach are the most widely reproduced images from it. The name of the film's press photographer, Paparazzo, passed into general use in several languages as a term for photographers who pursue celebrities. It received the Palme d'Or at Cannes and the Academy Award for Best Costume Design in black and white.",
     cast: [
       {
         name: "Marcello Mastroianni",
