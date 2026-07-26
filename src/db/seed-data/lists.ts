@@ -46,12 +46,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "the-goddess",
         reasoning: doc([
           p(
-            "1934 年联华影业出品的无声片，阮玲玉主演，为吴永刚首部导演作品。摄影机多与人物齐平，字幕卡数量少于同期影片。",
+            "1934 年联华影业出品，为名单中年代最早的一部，也是唯一的无声片。主演阮玲玉于次年去世，年二十四。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "A 1934 Lianhua silent starring Ruan Lingyu, and the first film Wu Yonggang directed. The camera is generally level with its subject, and it uses fewer intertitles than was usual at the time.",
+            "Produced by Lianhua in 1934, the earliest film here and the only silent one. Ruan Lingyu, who plays the lead, died the following year at twenty-four.",
           ),
         ]),
       },
@@ -85,12 +85,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "a-touch-of-zen",
         reasoning: doc([
           p(
-            "1971 年台港合拍，胡金铨编导，1975 年在戛纳获最高技术委员会大奖。竹林中的一场打斗以短镜头剪接完成，此后为多部影片沿用。",
+            "1971 年台港合拍，胡金铨编导，为名单中唯一的类型片。1975 年它在戛纳获奖，是华语电影首次在该影展获得奖项。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "A 1971 Taiwan and Hong Kong co-production written and directed by King Hu, which took the Grand Prize of the Technical Commission at Cannes in 1975. Its bamboo-grove fight, built from short takes, has been reused in many films since.",
+            "A 1971 Taiwan and Hong Kong co-production written and directed by King Hu, and the only genre film here. Its award at Cannes in 1975 was the first taken at that festival by a Chinese-language film.",
           ),
         ]),
       },
@@ -111,12 +111,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "a-brighter-summer-day",
         reasoning: doc([
           p(
-            "1991 年杨德昌作品，长约二百三十七分钟，取材自 1961 年台北一起少年杀人案，获金马奖最佳剧情片。",
+            "1991 年杨德昌作品，为名单中篇幅最长的一部。演员多为非职业，张震拍摄时十四岁，其父张国柱在片中饰演他的父亲。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Edward Yang's 1991 film, running about two hundred and thirty-seven minutes and drawn from a killing carried out by a teenager in Taipei in 1961. It won the Golden Horse Award for best feature.",
+            "Edward Yang's 1991 film and the longest here. Most of the cast were non-professionals; Chang Chen was fourteen during the shoot, and his own father plays his father in the film.",
           ),
         ]),
       },
@@ -155,33 +155,35 @@ export const seedLists: SeedList[] = [
       {
         filmSlug: "bicycle-thieves",
         reasoning: doc([
-          p("1948 年德西卡作品，主要角色由非职业演员出演，全片在罗马实景拍摄，获奥斯卡荣誉奖。"),
+          p("1948 年德西卡作品，摄影卡洛·蒙托里，全片在罗马街头以自然光拍摄，未使用摄影棚。"),
         ]),
         reasoningEn: doc([
           p(
-            "De Sica's 1948 film, cast in its main roles with non-professionals and shot on location in Rome. It received an honorary Academy Award.",
+            "De Sica's 1948 film, photographed by Carlo Montuori entirely on the streets of Rome in available light, with no studio work.",
           ),
         ]),
       },
       {
         filmSlug: "tokyo-story",
         reasoning: doc([
-          p("1953 年小津安二郎作品，机位置于榻榻米坐姿的视线高度，极少移动，少用近景与正反打。"),
+          p("1953 年小津安二郎作品，摄影厚田雄春。室内多用均匀的散射光，很少制造强烈的明暗对比。"),
         ]),
         reasoningEn: doc([
           p(
-            "Ozu's 1953 film. The camera sits at the eye level of a person seated on a tatami mat and rarely moves; close-ups and shot-reverse-shot are used sparingly.",
+            "Ozu's 1953 film, photographed by Yūharu Atsuta. Interiors are lit evenly and diffusely, with little strong contrast between light and shadow.",
           ),
         ]),
       },
       {
         filmSlug: "seven-samurai",
         reasoning: doc([
-          p("1954 年黑泽明作品，结尾的雨中战斗以多台摄影机同时开机并使用长焦镜头拍摄。"),
+          p(
+            "1954 年黑泽明作品，摄影中井朝一，全片以阴天的自然光为主，结尾的战斗在泥地与人工降雨中完成。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Kurosawa's 1954 film. The final battle in the rain was shot with several cameras running at once and long lenses.",
+            "Kurosawa's 1954 film, photographed by Asakazu Nakai largely in the flat light of overcast weather. Its final battle was staged in mud under artificial rain.",
           ),
         ]),
       },
@@ -199,11 +201,13 @@ export const seedLists: SeedList[] = [
       {
         filmSlug: "citizen-kane",
         reasoning: doc([
-          p("1941 年威尔斯首部长片，摄影格雷格·托兰，大量使用深焦与仰角，多处布景搭出天花板。"),
+          p(
+            "1941 年威尔斯首部长片，摄影格雷格·托兰主动要求参与，片尾字幕将他与导演并列于同一张卡片上，这在当时极少见。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Welles's first feature, from 1941, photographed by Gregg Toland with deep focus and low angles throughout, and ceilings built into many of the sets.",
+            "Welles's first feature, from 1941. Gregg Toland asked to shoot it, and the closing credits put his name on a single card with the director's, which was almost unheard of.",
           ),
         ]),
       },
@@ -211,23 +215,25 @@ export const seedLists: SeedList[] = [
         filmSlug: "breathless",
         reasoning: doc([
           p(
-            "1960 年戈达尔首部长片，手持摄影，成片过长后以剪去镜头中段的方式压缩，因而形成大量跳接。",
+            "摄影拉乌尔·库塔尔为戈达尔这部 1960 年的首作使用了为静照生产的高感光胶片，接成长卷，以便在自然光下于巴黎街头拍摄。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Godard's first feature, from 1960, shot handheld and shortened after assembly by cutting sections out of the middle of shots, which produced its jump cuts.",
+            "Raoul Coutard shot Godard's 1960 debut on high-speed stock made for stills photography, spliced into long rolls, so that the Paris streets could be filmed in available light.",
           ),
         ]),
       },
       {
         filmSlug: "la-strada",
         reasoning: doc([
-          p("1954 年费里尼作品，朱丽叶塔·马西纳与安东尼·奎因主演，获第二十九届奥斯卡最佳外语片。"),
+          p(
+            "1954 年费里尼作品，奥特罗·马泰利摄影，外景多在意大利中部的冬季拍摄，荒地与阴天构成全片的基调。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Fellini's 1954 film, with Giulietta Masina and Anthony Quinn. It received the Academy Award for Best Foreign Language Film at the 29th ceremony.",
+            "Fellini's 1954 film, photographed by Otello Martelli, its exteriors shot in central Italy in winter; waste ground and overcast light set the tone throughout.",
           ),
         ]),
       },
@@ -235,12 +241,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "the-passion-of-joan-of-arc",
         reasoning: doc([
           p(
-            "1928 年德莱叶作品，台词取自审判记录，全片以大量特写构成。原始底片佚失，1981 年在奥斯陆一家精神病院寻得一份完整拷贝。",
+            "1928 年德莱叶作品，摄影鲁道夫·马泰，全片以大量特写构成。演员一律不施粉黛，在当时是罕见的做法。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Dreyer's 1928 film, its dialogue taken from the trial records and its images built largely from close-ups. The original negative was lost, and a complete print was found in an Oslo psychiatric hospital in 1981.",
+            "Dreyer's 1928 film, photographed by Rudolph Maté and built largely from close-ups. The cast wore no makeup, which was unusual at the time.",
           ),
         ]),
       },
@@ -268,33 +274,39 @@ export const seedLists: SeedList[] = [
       {
         filmSlug: "la-strada",
         reasoning: doc([
-          p("1954 年作品，费里尼由新现实主义转向的开始，获第二十九届奥斯卡最佳外语片。"),
+          p(
+            "1954 年作品，费里尼由新现实主义转向的开始，也是他与作曲家尼诺·罗塔长期合作中的早期一部。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "From 1954, and the start of Fellini's move away from neorealism. It received the foreign-language Academy Award at the 29th ceremony.",
+            "From 1954, the start of Fellini's move away from neorealism, and an early film in his long working relationship with the composer Nino Rota.",
           ),
         ]),
       },
       {
         filmSlug: "le-notti-di-cabiria",
         reasoning: doc([
-          p("1957 年作品，马西纳凭此片获戛纳最佳女演员奖，影片获次年奥斯卡最佳外语片。"),
+          p(
+            "1957 年作品，马西纳凭此片获戛纳最佳女演员奖。这是费里尼最后一部以罗马底层为题材的影片。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "From 1957. Masina took the acting award at Cannes for it, and the film received the foreign-language Academy Award the following year.",
+            "From 1957, and the film for which Masina took the acting award at Cannes. It is the last of Fellini's films set among the poor of Rome.",
           ),
         ]),
       },
       {
         filmSlug: "otto-e-mezzo",
         reasoning: doc([
-          p("1963 年作品，费里尼开拍前已定下档期与预算而题材未决，遂将这一处境写入剧本。"),
+          p(
+            "1963 年作品，马斯楚安尼饰演的圭多是一名导演，为费里尼首次以拍电影本身为题材，此后的《朱丽叶与魔鬼》《罗马风情画》延续这一倾向。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "From 1963. Fellini had a start date and a budget in place before he had a subject, and wrote that situation into the screenplay.",
+            "From 1963, and the first time Fellini took film-making itself as his subject, with Mastroianni as a director named Guido. Juliet of the Spirits and Roma continue in the same direction.",
           ),
         ]),
       },
@@ -349,12 +361,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "le-notti-di-cabiria",
         reasoning: doc([
           p(
-            "1957 年费里尼作品，剧本部分取材自罗马街头的实地采访，皮埃尔·保罗·帕索里尼参与对白写作。",
+            "1957 年费里尼作品，外景在罗马郊外实地拍摄，片中的棚户区与卡比利亚的住处均为实景，工作方式仍是这一路数的。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Fellini's 1957 film. Parts of the script came from interviews conducted on the streets of Rome, and Pier Paolo Pasolini worked on the dialogue.",
+            "Fellini's 1957 film, shot on location on the outskirts of Rome, where the shanty settlement and Cabiria's own house are real places. The working method is still the movement's.",
           ),
         ]),
       },
@@ -453,40 +465,46 @@ export const seedLists: SeedList[] = [
       {
         filmSlug: "tokyo-story",
         reasoning: doc([
-          p("1953 年小津作品，剧本与野田高梧合写。日本公映时反响平常，1960 年代起经海外影展流通。"),
+          p("1953 年小津作品，剧本与野田高梧合写。名单六部中只有本片与《生存》以当代为背景。"),
         ]),
         reasoningEn: doc([
           p(
-            "Ozu's 1953 film, written with Kōgo Noda. The response on release in Japan was modest; it circulated abroad through festivals from the 1960s.",
+            "Ozu's 1953 film, written with Kōgo Noda. It and Ikiru are the only two of these six set in the present day.",
           ),
         ]),
       },
       {
         filmSlug: "ugetsu",
-        reasoning: doc([p("1953 年沟口健二作品，改编自上田秋成的同名小说集，获威尼斯银狮奖。")]),
+        reasoning: doc([
+          p("1953 年沟口健二作品，改编自上田秋成的同名小说集，摄影宫川一夫，获该届威尼斯银狮奖。"),
+        ]),
         reasoningEn: doc([
           p(
-            "Mizoguchi's 1953 film, adapted from Ueda Akinari's collection of the same name. It took the Silver Lion at Venice.",
+            "Mizoguchi's 1953 film, adapted from Ueda Akinari's collection of the same name and photographed by Kazuo Miyagawa. It took a Silver Lion at Venice that year.",
           ),
         ]),
       },
       {
         filmSlug: "sansho-the-bailiff",
-        reasoning: doc([p("1954 年沟口健二作品，取材自森鸥外的同名小说，获威尼斯银狮奖。")]),
+        reasoning: doc([
+          p(
+            "1954 年沟口健二作品，取材自森鸥外的同名小说。连同前两年的《西鹤一代女》与《雨月物语》，沟口连续三年在威尼斯获奖。",
+          ),
+        ]),
         reasoningEn: doc([
           p(
-            "Mizoguchi's 1954 film, taken from Mori Ōgai's story of the same title. It took the Silver Lion at Venice.",
+            "Mizoguchi's 1954 film, taken from Mori Ōgai's story of the same title. With The Life of Oharu and Ugetsu in the two preceding years, it gave him prizes at Venice three years running.",
           ),
         ]),
       },
       {
         filmSlug: "seven-samurai",
         reasoning: doc([
-          p("1954 年黑泽明作品，片长约二百零七分钟，为当时成本最高的日本影片，获威尼斯银狮奖。"),
+          p("1954 年黑泽明作品，东宝出品，片长约二百零七分钟，与《山椒大夫》同届在威尼斯获奖。"),
         ]),
         reasoningEn: doc([
           p(
-            "Kurosawa's 1954 film, running about two hundred and seven minutes and the most expensive Japanese production made to that date. It took the Silver Lion at Venice.",
+            "Kurosawa's 1954 film for Toho, running about two hundred and seven minutes. It was honoured at the same Venice festival as Sansho the Bailiff.",
           ),
         ]),
       },
@@ -524,25 +542,23 @@ export const seedLists: SeedList[] = [
         filmSlug: "battleship-potemkin",
         reasoning: doc([
           p(
-            "1925 年爱森斯坦作品，为纪念 1905 年革命二十周年而作，敖德萨阶梯一段被反复引用与仿作。",
+            "1925 年爱森斯坦作品，摄影爱德华·蒂塞。影片在多国长期遭禁，英国的审查机构至 1954 年才准其公映。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Eisenstein's 1925 film, made for the twentieth anniversary of the 1905 revolution. Its Odessa Steps sequence has been quoted and imitated many times since.",
+            "Eisenstein's 1925 film, photographed by Eduard Tisse. It was banned in a number of countries for years; the British censors refused it a certificate until 1954.",
           ),
         ]),
       },
       {
         filmSlug: "metropolis",
         reasoning: doc([
-          p(
-            "1927 年弗里茨·朗作品，剧本与特娅·冯·哈布合写。公映后遭大幅删剪，2008 年在布宜诺斯艾利斯寻得较完整的拷贝，据以重建。",
-          ),
+          p("1927 年弗里茨·朗作品，为当时成本最高的德国影片，乌发公司因其开销陷入财务困境。"),
         ]),
         reasoningEn: doc([
           p(
-            "Fritz Lang's 1927 film, written with Thea von Harbou. It was heavily cut after release; a fuller print found in Buenos Aires in 2008 was used to reconstruct it.",
+            "Fritz Lang's 1927 film and the most expensive German production of its day; its cost pushed the UFA studio into financial difficulty.",
           ),
         ]),
       },
@@ -562,11 +578,13 @@ export const seedLists: SeedList[] = [
       {
         filmSlug: "the-passion-of-joan-of-arc",
         reasoning: doc([
-          p("1928 年德莱叶作品，台词取自审判记录，全片以大量特写构成，摄影为鲁道夫·马泰。"),
+          p(
+            "1928 年德莱叶作品，台词取自 1431 年的审判记录，以字幕卡呈现。原始底片佚失，1981 年在奥斯陆一家精神病院寻得一份完整拷贝。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Dreyer's 1928 film, its dialogue taken from the trial records and its images built largely from close-ups, photographed by Rudolph Maté.",
+            "Dreyer's 1928 film, its words taken from the trial records of 1431 and carried on intertitles. The original negative was lost; a complete print was found in an Oslo psychiatric hospital in 1981.",
           ),
         ]),
       },
@@ -629,11 +647,13 @@ export const seedLists: SeedList[] = [
       {
         filmSlug: "double-indemnity",
         reasoning: doc([
-          p("1944 年比利·怀尔德作品，剧本由怀尔德与雷蒙德·钱德勒合写，改编自詹姆斯·凯恩的小说。"),
+          p(
+            "1944 年比利·怀尔德作品，雷蒙德·钱德勒此前未写过剧本，两人合作过程并不融洽。影片获七项奥斯卡提名，一项未得。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Billy Wilder's 1944 film, written with Raymond Chandler from a novel by James M. Cain.",
+            "Billy Wilder's 1944 film. Raymond Chandler had never written a screenplay before, and the collaboration went badly. It took seven Academy Award nominations and won none.",
           ),
         ]),
       },
