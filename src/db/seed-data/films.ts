@@ -162,9 +162,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1293234",
     wikidataId: "Q217189",
     introduction:
-      "一个从十字军东征归来的骑士，在黑死病肆虐的中世纪与死神下起一盘棋，只为在死前弄清上帝是否存在。伯格曼把最古老的恐惧——死亡与神的沉默——拍成了一则既凝重又意外幽默的寓言。海边棋局、教堂告解、火刑柱上的女巫，一幕幕逼问着信仰的意义；而那对天真的杂耍夫妻，则是黑暗中留下的微光。影片以死神领着众人在山脊上跳起“死亡之舞”收尾，成为电影史上最著名的画面之一。它诞生于二战的余悸与核阴影之下，至今仍是每个在信与不信之间挣扎者的镜子。",
+      "《第七封印》是英格玛·伯格曼执导的 1957 年瑞典电影，马克斯·冯·叙多夫饰演骑士安东尼乌斯·布洛克，本格特·埃克罗特饰演死神。影片背景设在黑死病流行的中世纪：布洛克自十字军东征归来，在海边与死神对弈以拖延时间，试图在死前弄清上帝是否存在。旅途中他遇见一对流浪杂耍艺人夫妇、一支鞭笞派的游行队伍，以及一名被指为女巫、即将处以火刑的少女。全片以死神牵引众人在山脊上列队远去的一场戏收束，这一画面此后被反复引用。伯格曼此前曾把同一题材写成独幕剧《木刻画》。",
     introductionEn:
-      "A knight home from the Crusades finds medieval Sweden in the grip of the plague and challenges Death to a game of chess, stalling for the time to learn whether God exists. Bergman takes the oldest fears — death, and the silence of God — and makes of them a parable that is grave and, without warning, funny. A seaside chess match, a confession overheard, a girl burning at the stake: each scene interrogates what faith is for, while a pair of innocent traveling players keeps one small light burning in the dark. The film closes with Death leading his captives in a dance along the ridge, among the most famous images cinema has produced. Made in the long shadow of the war and the bomb, it remains a mirror for everyone caught between belief and disbelief — and it refuses to tell them which way to fall.",
+      "The Seventh Seal is a 1957 Swedish film directed by Ingmar Bergman, with Max von Sydow as the knight Antonius Block and Bengt Ekerot as Death. Returning from the Crusades to a country in the grip of plague, Block plays a game of chess against Death on a beach, using the delay to press for an answer about whether God exists. Gunnar Björnstrand plays his squire Jöns, who travels with him and argues the sceptical case throughout. On the road they encounter a married pair of travelling performers, a procession of flagellants, and a girl condemned to burn as a witch. The film closes with Death leading a line of figures away along a ridge, an image quoted repeatedly since. Bergman had written the same material earlier as a one-act play, Wood Painting.",
     essay: doc([
       h2("与沉默对弈"),
       p(
@@ -209,9 +209,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1293071",
     wikidataId: "Q239756",
     introduction:
-      "一位年迈的医学教授驱车前往领取荣誉学位，一路上却被梦境、回忆与懊悔层层拦截。伯格曼让老人重返童年采野草莓的夏日、重历爱情的失落，在时间的褶皱里审判自己一生的冷漠。由默片大师维克多·舍斯特勒姆亲自出演，那张苍老的脸承载了整个二十世纪对孤独的理解。这是一部关于和解的电影：不是与他人，而是与那个逐渐变得铁石心肠的自己。当老人在片尾终于梦见父母在河边向他招手，冰封的心在一瞬间融化——衰老原来也可以是一次迟来的温柔的醒悟。",
+      "《野草莓》是英格玛·伯格曼执导的 1957 年瑞典电影，由默片时期的导演维克多·舍斯特勒姆饰演老年医学教授伊萨克·博里，毕比·安德松饰演萨拉。影片记录博里驱车前往隆德接受荣誉学位的一天：途中所见不断牵出他的梦境与回忆——童年采野草莓的夏天、被兄弟娶走的未婚妻、行医多年间对身边人的疏远。梦境与当下之间直接切换，不作提示，这一手法在当时并不常见。结尾他梦见父母在水边向他挥手。本片获柏林电影节金熊奖，也是舍斯特勒姆最后一次出演电影。",
     introductionEn:
-      "An elderly medical professor drives across Sweden to receive an honorary degree and is ambushed along the way by dreams, memories, and regret. Bergman sends the old man back to the childhood summers where wild strawberries grew and forward through the loves he let slip, putting a lifetime of coldness on trial within the folds of a single day. Victor Sjöström — himself a master of the silent era — wears that weathered face like the whole twentieth century's understanding of loneliness. This is a film about reconciliation, not with others but with the guarded, stony man one has slowly become. When the professor at last dreams of his parents waving to him from across a summer river and his frozen heart thaws in an instant, the film proposes something rare: that old age, too, can be a late and tender awakening.",
+      "Wild Strawberries is a 1957 Swedish film directed by Ingmar Bergman. Victor Sjöström, a leading director of the silent period, plays Isak Borg, an elderly medical professor; Bibi Andersson plays Sara. The film covers a single day, as Borg drives to Lund to receive an honorary degree and what he passes on the way draws out dreams and recollections: the childhood summers spent at a wild strawberry patch, the fiancée who married his brother, and a long career conducted at a distance from the people in it. Dream and present action are cut directly against one another without signalling, a treatment that was uncommon at the time. It closes on a dream of his parents waving to him from across the water. The film received the Golden Bear at the Berlin International Film Festival.",
     cast: [
       { name: "Victor Sjöström", zhName: "维克多·舍斯特勒姆", character: "Isak Borg" },
       { name: "Bibi Andersson", zhName: "毕比·安德松", character: "Sara" },
@@ -236,9 +236,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1294438",
     wikidataId: "Q695255",
     introduction:
-      "一个突然拒绝说话的女演员，与照顾她的护士在海边独处，两个女人的身份逐渐渗透、交换、直至难分彼此。伯格曼在这里抛弃了一切故事的安全感，让胶片自燃、让银幕断裂，把电影本身的虚构性推到台前。这是他最难解也最大胆的作品：关于身份、沉默与我们戴给世界的那副面具。丽芙·乌曼与毕比·安德松两张脸在著名的叠印镜头里合为一张，成为二十世纪现代主义电影最令人不安的图像。它拒绝被讲清楚，却在每一次重看时都逼你面对：所谓“自我”，是否只是一场无人拆穿的表演。",
+      "《假面》是英格玛·伯格曼执导的 1966 年瑞典电影，丽芙·乌曼饰演突然停止说话的舞台演员伊丽莎白·沃格勒，毕比·安德松饰演护理她的护士阿尔玛。两人被安排到海边的一处住所独处，阿尔玛不断说话，伊丽莎白始终不答，两人的界限逐渐模糊。影片以一段与情节无关的影像开场，中途又出现胶片烧毁、画面断裂的处理，把放映这件事本身摆到观众面前。片中一场戏将两位演员的半张脸叠为一张，此后被广泛引用。全片八十余分钟，主要人物只有四个。",
     introductionEn:
-      "An actress abruptly stops speaking, and the nurse assigned to care for her withdraws with her to a house by the sea, where the two women's identities begin to seep into each other, trade places, and finally blur past telling apart. Bergman strips away every narrative comfort — the film seems to catch fire, the image tears, the machinery of cinema is dragged into view — in his most difficult and most daring work. It is a film about identity, silence, and the mask each of us holds up to the world. The celebrated shot in which Liv Ullmann's and Bibi Andersson's faces fuse into a single face is among the most unsettling images modernist cinema ever made. Persona refuses to be explained, and that refusal is its power: on every viewing it presses the same question, whether the thing we call a self is anything more than a performance no one has yet caught out.",
+      "Persona is a 1966 Swedish film directed by Ingmar Bergman. Liv Ullmann plays Elisabet Vogler, a stage actress who abruptly stops speaking, and Bibi Andersson plays Alma, the nurse assigned to her. The two are sent to a house by the sea, where Alma talks continuously and Elisabet does not answer, and the boundary between them gradually dissolves. The film opens with a montage unconnected to the story, and partway through the film stock appears to burn and the image breaks, placing the act of projection in front of the audience. One shot joins half of each actress's face into a single composite, and has been quoted widely since. It runs a little over eighty minutes and has four significant characters.",
     directorSlugs: ["ingmar-bergman"],
   },
   {
@@ -258,9 +258,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1293156",
     wikidataId: "Q753141",
     introduction:
-      "中世纪的瑞典，一个虔诚人家的少女在去教堂途中被牧羊人奸杀，凶手却阴差阳错借宿到死者父亲的家中。当真相败露，父亲手刃仇人，随即在女儿倒下之处涌出一眼清泉。伯格曼借一则古老民谣，逼问最尖锐的神义论问题：全能的上帝为何容许无辜者受难。父亲在泉边跪地立誓建起教堂的一幕，既是忏悔也是与沉默之神的艰难和解。冷峻的黑白影像与几乎残酷的克制，让暴力与神迹并置，毫不煽情却直抵灵魂。这部为伯格曼赢得奥斯卡的作品，是他信仰追问的一次凛冽结晶。",
+      "《处女泉》是英格玛·伯格曼执导的 1960 年瑞典电影，剧本由乌拉·伊萨克松根据一首中世纪瑞典民谣改编，马克斯·冯·叙多夫饰演父亲托雷。片中一户虔诚人家的少女在前往教堂途中被几名牧羊人奸杀，凶手当晚又恰好投宿到死者父亲家中；真相败露后，父亲将他们杀死，随后在女儿倒下的位置涌出一眼泉水。影片以黑白摄影拍成，摄影为斯文·尼克维斯特，暴力场面处理得直接而不加渲染，父亲在泉边立誓建造教堂的一场戏收束全片。本片获奥斯卡最佳外语片奖。",
     introductionEn:
-      "In medieval Sweden the daughter of a devout family is raped and murdered by herdsmen on her way to church, and by a cruel turn of chance the killers take shelter that night in the dead girl's own father's house. When the truth comes out the father slaughters them — and a clear spring wells up from the ground where his daughter fell. Working from an old ballad, Bergman presses the sharpest question theodicy can ask: why does an all-powerful God permit the innocent to suffer? The image of the father kneeling by the spring, vowing to raise a church on that spot, is at once penance and a hard-won reconciliation with a silent God. The austere black-and-white photography and near-merciless restraint set violence and miracle side by side, unsentimental yet aimed straight at the soul. The film that won Bergman an Oscar is a stark crystallization of his lifelong interrogation of faith.",
+      "The Virgin Spring is a 1960 Swedish film directed by Ingmar Bergman, from a screenplay by Ulla Isaksson adapted from a medieval Swedish ballad, with Max von Sydow as the father, Töre. The daughter of a devout family is raped and killed by herdsmen on her way to church, and the men take shelter that same night in her father's house without knowing whose it is. When the father learns what they have done he kills them, and a spring rises from the ground where his daughter died. The film is shot in black and white by Sven Nykvist, and stages its violence directly and without embellishment. It ends with the father vowing at the spring to build a church on the site. It received the Academy Award for Best Foreign Language Film.",
     directorSlugs: ["ingmar-bergman"],
   },
 
@@ -2139,9 +2139,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1296147",
     wikidataId: "Q830874",
     introduction:
-      "一栋红色的宅子里，一个女人正在死去，两个姐妹守在旁边，谁也无法真正靠近谁。伯格曼说他一生反复梦见一个全红的房间，于是整部电影就建在那个梦里——墙是红的，帷幕是红的，连场景之间的转场都用整幅红色画面切开，像血，也像子宫。摄影师尼克维斯特凭此片拿下奥斯卡，那些脸部特写在烛光下几乎是宗教画。这是伯格曼最不留情的一部：临终的痛苦被拍得毫不修饰，而亲情在这里没有拯救任何人，真正给出安慰的反而是那位不说话的女仆。九十分钟，看完需要缓一会儿再开口说话。",
+      "《呼喊与细语》是英格玛·伯格曼执导的 1972 年瑞典电影，哈里特·安德森饰演患病垂死的艾格尼丝，英格丽·图林与丽芙·乌曼饰演她的两个姐妹。故事发生在十九世纪末一栋宅子里：两位姐妹回来陪伴临终的妹妹，彼此之间始终隔着距离，反而是女仆安娜给了艾格尼丝最直接的照料。影片以红色为主导色，墙面与帷幕均为红色，场景之间用整幅红色画面转场。摄影由斯文·尼克维斯特担任，多用烛光下的面部特写。本片获奥斯卡最佳摄影奖。",
     introductionEn:
-      "In a red house a woman is dying while two sisters keep vigil, and none of the three can genuinely reach another. Bergman said he dreamed repeatedly of a room that was entirely red, and the film is built inside that dream — red walls, red drapes, and even the transitions between scenes cut through a full frame of red, like blood and like a womb. Sven Nykvist won an Oscar for the photography, and the faces in candlelight are close to religious painting. This is Bergman at his least merciful: the pain of dying is filmed without softening, and family love saves precisely nobody. The only real comfort in the house comes from the servant, who says almost nothing and is not related to any of them. Ninety minutes, and you will want to sit still for a while afterwards before speaking to anyone.",
+      "Cries and Whispers is a 1972 Swedish film directed by Ingmar Bergman, with Harriet Andersson as Agnes, who is dying, and Ingrid Thulin and Liv Ullmann as her sisters. It is set in a manor house at the end of the nineteenth century, where the two sisters have come to sit with Agnes and remain at a distance from her and from each other; the most direct care she receives comes from Anna, the servant. Red dominates the production design, in the walls and the drapes, and the scenes are separated from one another by transitions through a full red frame. Sven Nykvist photographed it, working largely in close-up and by candlelight. The film was nominated for Best Picture, unusually for a foreign-language production, and received the Academy Award for Best Cinematography.",
     cast: [
       { name: "Harriet Andersson", zhName: "哈里特·安德森", character: "Agnes" },
       { name: "Ingrid Thulin", zhName: "英格丽·图林", character: "Karin" },
