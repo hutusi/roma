@@ -1652,9 +1652,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1292329",
     wikidataId: "Q710745",
     introduction:
-      "近四小时，上百个角色，一座 1961 年的台北。杨德昌用工程师般的耐心，把眷村少年的帮派、父亲被带走的白色恐怖审讯、教室的停电与一支手电筒，编进同一张电路图里——你以为在看成长故事，其实在看一整个社会如何一步步把十四岁的小四逼到刀口上。全片大量夜戏，光源常常只有一支手电或一盏昏灯，黑暗不是风格而是处境：那是一代外省家庭悬在半空、随时准备再次搬家的处境。片长会吓退很多人，但这是华语电影里少有的、真正配得上「史诗」二字的作品，也是杨德昌最完整的一次演算。",
+      "《牯岭街少年杀人事件》是杨德昌执导的 1991 年台湾电影，张震饰演初中生小四，杨静怡饰演小明，张国柱饰演其父。故事取材自 1961 年台北一起真实的少年杀人案：小四就读夜间部，周旋于两个帮派之间，与小明往来；同一时期，其父因政治审查被带走问话，返家后处境改变。影片人物众多，涉及外省家庭、学校、帮派与警备系统数条线索。大量场景在夜间拍摄，光源常只有手电筒或单盏灯，画面长时间处于暗部。全片长约二百三十七分钟，原公映版本较短。本片获金马奖最佳剧情片。",
     introductionEn:
-      "Nearly four hours, a cast of more than a hundred, and the city of Taipei in 1961. Edward Yang applies an engineer's patience to wiring a single circuit diagram out of a teenage gang, a father hauled in for interrogation under the White Terror, a classroom blackout, and one flashlight — you think you are watching a coming-of-age story, and you are in fact watching an entire society walk a fourteen-year-old boy step by step onto the point of a knife. Much of the film is shot at night with a torch or a single dim bulb as the only source, and the darkness is not a style but a condition: the condition of a generation of mainlander families suspended in mid-air, always packed to move again. The running time will frighten people off. It should not. This is one of the rare Chinese-language films that genuinely earns the word epic, and it is Yang's most complete piece of reasoning about how a place shapes the people who grow up inside it.",
+      "A Brighter Summer Day is a 1991 Taiwanese film directed by Edward Yang, with Chang Chen as Xiao Si'r, a secondary-school student, Lisa Yang as Ming, and Chang Kuo-chu as his father. It draws on a killing carried out by a teenager in Taipei in 1961. Xiao Si'r attends night classes and moves between two gangs while becoming involved with Ming; during the same period his father is taken in for political questioning and returns to reduced circumstances. The film carries a large cast and follows several threads at once: mainlander families, the school, the gangs, and the security apparatus. Much of it was shot at night with a torch or a single lamp as the only light source. It runs about two hundred and thirty-seven minutes, longer than the version originally released. It received the Golden Horse Award for Best Feature Film.",
     essay: doc([
       h2("电路图"),
       p(
@@ -1750,9 +1750,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1307708",
     wikidataId: "Q5238699",
     introduction:
-      "上海的一条弄堂里，歌女、妓女、吹鼓手和剃头匠挤在一起过日子。袁牧之把好莱坞的喜剧节奏、苏联的剪辑与上海的市井小调焊在一起，做出了一部前所未见的中国电影：前一分钟还在窗对窗地插科打诨，后一分钟就有人被卖掉。周璇唱《四季歌》与《天涯歌女》的段落，是华语电影配乐史的起点之一，那两首歌至今还在被人传唱。笑声底下始终垫着一层薄冰——这正是三十年代上海左翼电影最厉害的地方：它从不说教，只是先让你笑，再让你明白自己笑的究竟是什么。",
+      "《马路天使》是袁牧之编剧并执导的 1937 年中国电影，明星影片公司出品，周璇饰演歌女小红，赵丹饰演吹鼓手陈少平，赵慧深饰演其姐小云。故事发生在上海的一处弄堂：小红姐妹自东北逃难而来，由一对夫妇收养并逼其卖唱与接客，小红与住在对面的陈少平往来，众人设法助她脱身，小云则在冲突中身亡。影片将喜剧段落与底层处境并置，室内多用对窗的构图。周璇在片中演唱两首插曲，由贺绿汀作曲、田汉作词，此后长期流传。本片摄于抗战全面爆发前数月。",
     introductionEn:
-      "In one Shanghai lane a singsong girl, a prostitute, a trumpeter and a barber live crammed together. Yuan Muzhi welded Hollywood comic timing, Soviet cutting, and Shanghai street song into a Chinese film unlike any before it: one minute the neighbours are clowning at each other window to window, the next a young woman has been sold. Zhou Xuan's performances of the Four Seasons Song and The Wandering Songstress are among the founding moments of Chinese film music, and both songs are still sung today. There is always thin ice under the laughter, and that is exactly what made the Shanghai left-wing cinema of the 1930s so formidable — it never lectures. It gets you laughing first, and only then lets you work out what it is you have been laughing at. Made months before the Japanese invasion closed the studios, it is a comedy with a trapdoor under it.",
+      "Street Angel is a 1937 Chinese film written and directed by Yuan Muzhi, produced by the Mingxing Film Company, with Zhou Xuan as the singer Xiao Hong, Zhao Dan as Chen Shaoping, a trumpeter, and Zhao Huishen as her sister Xiao Yun. The sisters have fled south from the northeast and been taken in by a couple who force them to sing in a teahouse and to receive men. Xiao Hong becomes friendly with Chen, who lives across the lane, and the neighbours try to help her get away; Xiao Yun is killed in the ensuing struggle. The film sets comic scenes directly against the conditions of the people in them, and stages much of the action between facing windows. Zhou Xuan performs two songs written by He Luting and Tian Han. It was made a few months before the Japanese invasion closed the Shanghai studios.",
     cast: [
       {
         name: "Zhou Xuan",
@@ -1784,9 +1784,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1389915",
     wikidataId: "Q860483",
     introduction:
-      "三个多小时，一个家庭，抗战八年。蔡楚生与郑君里让同一个丈夫在重庆步步高升，让妻子在沦陷的上海一寸寸沉下去，最后在一场宴会上把两条线狠狠撞在一起。这是中国通俗剧的巅峰：结构精确得像一部长篇小说，情感却毫不吝啬。1947 年上映时连映三个多月，观众在影院里哭成一片。它不掩饰自己的煽情，因为那份煽情是有出处的——战争刚刚结束，账还没有算完，而算账的方式就是让所有人看见谁在受难、谁在赴宴。素芬最后望向江水的那个镜头，是一代人的判决书。",
+      "《一江春水向东流》是蔡楚生与郑君里共同编导的 1947 年中国电影，白杨饰演素芬，陶金饰演张忠良，舒绣文饰演王丽珍。影片分《八年离乱》与《天亮前后》上下两集，时间跨度自 1931 年至抗战结束后：张忠良离沪赴内地，其后在重庆攀附权贵、另行成家；素芬留在沦陷的上海抚育幼子、奉养婆母，靠做工与领救济度日。抗战结束后两人在一场宴会上重逢，素芬投江自尽。影片 1947 年在上海公映，连映约三个月。全片长约一百九十分钟。",
     introductionEn:
-      "Three hours and more, one family, eight years of war. Cai Chusheng and Zheng Junli let the same husband rise through wartime Chongqing while his wife sinks inch by inch in occupied Shanghai, then slam the two lines together at a banquet. This is the summit of Chinese melodrama: a structure as precise as a long novel, and an emotional register with nothing held back. On release in 1947 it ran for over three months to full houses and audiences wept in the aisles. It makes no apology for its sentiment, because the sentiment had somewhere to come from — the war had only just ended, the accounting was not finished, and the way this film does the accounting is to make everyone see plainly who suffered and who went to the party. Sufen's final look out at the river is a verdict handed down on behalf of a whole generation.",
+      "The Spring River Flows East is a 1947 Chinese film written and directed by Cai Chusheng and Zheng Junli, with Bai Yang as Sufen, Tao Jin as Zhang Zhongliang, and Shu Xiuwen as Wang Lizhen. It is in two parts and covers the years from 1931 to just after the war. Zhang leaves Shanghai for the interior, attaches himself to influential people in Chongqing and starts a second household there, while Sufen remains in the occupied city raising their son and supporting his mother by factory work and relief handouts. The two meet again at a reception after the war, and Sufen drowns herself. It opened in Shanghai in 1947 and ran for about three months. The complete film is roughly a hundred and ninety minutes.",
     cast: [
       { name: "Bai Yang", zhName: "白杨", character: "Sufen", characterZh: "素芬" },
       { name: "Tao Jin", zhName: "陶金", character: "Zhang Zhongliang", characterZh: "张忠良" },
@@ -1812,9 +1812,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1300572",
     wikidataId: "Q697070",
     introduction:
-      "侯孝贤把摄影机架远、架定，让一个家庭的十几年自己走完。父亲死在藤椅上，母亲的病一点点加重，祖母始终念叨着要走路回大陆——这些事大多发生在画面深处或画外，没有配乐提醒你此刻该难过。这正是台湾新电影的方法：不追戏剧高潮，让时间承担全部重量，观众必须自己走进去看。片名直译是「一段活着的时间，一段死去的时间」，看完你会明白那不是文艺腔，而是对这部电影最准确的描述。它也是理解侯孝贤的最好入口：他后来所有的远景与省略，都从这里长出来。适合在一个不赶时间的晚上看，最好是一个人。",
+      "《童年往事》是侯孝贤执导的 1985 年台湾电影，中影出品，游安顺饰演少年阿孝，唐如韫饰演祖母，梅芳饰演母亲。影片取材自侯孝贤本人的成长经历，讲述一户 1940 年代末自广东迁台的家庭在凤山生活的十余年：父亲病故，母亲其后患病去世，祖母始终以为可以走路回大陆，阿孝在此期间由童年进入青年。摄影机多为固定机位与远景，重要事件常发生在画面深处或画外，配乐使用极少。本片获金马奖最佳原著剧本奖，并在柏林电影节获国际影评人奖。",
     introductionEn:
-      "Hou Hsiao-hsien sets the camera far back, locks it down, and lets a decade of one family's life walk itself to the end. The father dies in a rattan chair, the mother's illness deepens by degrees, the grandmother keeps announcing she will walk back to the mainland — and most of this happens deep in the frame or just outside it, with no score to tell you when to grieve. That is the method of Taiwan New Cinema: refuse the dramatic peak, let time carry the weight, and make the viewer come in and look. The Chinese title translates as a time to live and a time to die, and by the end you understand that this is not a literary flourish but the most accurate description of the film available. It is also the best door into Hou: every distant framing and every ellipsis in his later work grows from here. Watch it on an evening when you are not in a hurry, preferably alone.",
+      "A Time to Live, a Time to Die is a 1985 Taiwanese film directed by Hou Hsiao-hsien, produced by Central Pictures, with You An-shun as the teenage Ah-ha, Tang Ru-yun as his grandmother and Mei Fang as his mother. It draws on Hou's own upbringing and follows a family that moved from Guangdong to Taiwan in the late 1940s and settled in Fengshan, across more than a decade: the father dies of illness, the mother later falls ill and dies, the grandmother continues to believe she can walk back to the mainland, and Ah-ha passes from childhood into adolescence. The camera is mostly fixed and distant, significant events frequently occur deep in the frame or outside it, and there is very little score. The film received the Golden Horse Award for Best Original Screenplay and the FIPRESCI prize at Berlin.",
     cast: [
       { name: "You An-shun", zhName: "游安顺", character: "Ah-ha (teenage)", characterZh: "阿孝" },
       { name: "Tang Ru-yun", zhName: "唐如韫", character: "Grandmother", characterZh: "祖母" },
@@ -1840,9 +1840,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1306490",
     wikidataId: "Q704780",
     introduction:
-      "胡金铨把武侠从打斗提升成了一种关于气与空的电影。竹林里那场埋伏——阳光穿过竹叶，刀光在叶隙间闪现，人在半空中被剪辑托住——是后来所有华语武侠动作的源头，李安在《卧虎藏龙》里几乎照着重拍了一遍。但真正让这部片子伟大的是它的后半段：厮杀忽然让位于禅，血污被日光吞没，一个和尚流出金色的血。它拒绝在类型片该结束的地方结束，而是继续往上走，走到动作片很少抵达的地方。1975 年它在戛纳拿下技术大奖，是华语电影第一次在那里被认真对待。三个多小时，前松后紧，值得那份耐心。",
+      "《侠女》是胡金铨编导的 1971 年台湾、香港合拍电影，联邦影业出品，徐枫饰演杨慧贞，石隽饰演书生顾省斋，乔宏饰演慧圆和尚。故事设在明代：官宦之女杨慧贞因家门遭东厂构陷而逃亡，藏身于顾省斋所居的荒废驿站，东厂番子追踪而至。影片前段以驿站中的埋伏与心理周旋为主，后段转入荒野与山寺，加入僧人一线。竹林中的一场打斗以短镜头剪接与跳跃动作完成，此后为多部影片沿用。全片长约三小时，原分上下两集公映。本片在 1975 年戛纳电影节获最高技术委员会大奖。",
     introductionEn:
-      "King Hu lifted wuxia out of fighting and into a cinema of breath and emptiness. The bamboo-forest ambush — sunlight coming through the leaves, blades flashing in the gaps, bodies held in mid-air by the cutting itself — is the headwater of all Chinese-language action that followed, and Ang Lee restaged it almost shot for shot in Crouching Tiger, Hidden Dragon. But what makes the film great is its second half, where combat abruptly gives way to Zen, gore is swallowed by daylight, and a monk bleeds gold. It refuses to end where the genre says it should and instead keeps climbing, into territory action cinema almost never reaches. It took a technical prize at Cannes in 1975, the first time a Chinese-language film was taken seriously there. Three hours and twenty minutes, slow to gather and then relentless — worth the patience it asks for.",
+      "A Touch of Zen is a 1971 Taiwanese and Hong Kong co-production written and directed by King Hu, produced by Union Film, with Hsu Feng as Yang Hui-zhen, Shih Chun as the scholar Gu Sheng-zhai, and Roy Chiao as the monk Hui Yuan. It is set in the Ming dynasty. Yang, the daughter of an official destroyed by the Eastern Depot, is in hiding at the derelict garrison where Gu lives, and the Depot's agents track her there. The first half turns on the ambush and the manoeuvring inside the garrison, and the second moves out to open country and a mountain temple, bringing in the monks. A fight in a bamboo grove is built from short takes and leaping movement, a treatment widely reused since. The film runs about three hours and was originally released in two parts. It received the Grand Prize of the Technical Commission at Cannes in 1975.",
     essay: doc([
       h2("从武打到顿悟"),
       p(
@@ -2365,9 +2365,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1292349",
     wikidataId: "Q228186",
     introduction:
-      "一根火柴被吹灭，切给一轮沙漠上升起的红日——里恩用一个剪辑就宣告了什么叫大银幕。四个小时里，沙漠不是背景而是角色：它吞掉队伍、吞掉时间，也吞掉劳伦斯这个人。影片最了不起的地方不是场面，而是它对英雄的怀疑——你看着一个理想主义者一点点爱上自己的传奇，然后被这份传奇掏空，最后连他自己都认不出镜子里的人。这是史诗片的最高标准，也几乎是最后一部无法用电脑合成的史诗。请务必找最大的屏幕，四个小时不算长，前提是你别在手机上看。",
+      "《阿拉伯的劳伦斯》是大卫·里恩执导的 1962 年英国、美国合拍电影，彼得·奥图尔饰演 T·E·劳伦斯，奥马尔·沙里夫饰演谢里夫·阿里，亚历克·吉尼斯饰演费萨尔亲王。影片取材自劳伦斯在一战期间的经历与其著作《智慧七柱》：他作为英军联络官参与阿拉伯起义，促成部族联合攻取亚喀巴，其后在大马士革目睹起义成果被英法瓜分。全片以 70 毫米胶片在约旦、摩洛哥与西班牙实地拍摄，片长约二百一十六分钟，中间设休息时段。本片获七项奥斯卡奖，包括最佳影片与最佳导演。",
     introductionEn:
-      "A match is blown out and the film cuts to a red sun rising over the desert — with one edit Lean declared what a large screen is for. Across four hours the desert is not scenery but a character: it swallows columns of men, swallows time, and swallows Lawrence himself. What is most remarkable is not the scale but the film's suspicion of its own hero — you watch an idealist fall gradually in love with his legend, get hollowed out by it, and end unable to recognise the man in the mirror. This is the standard against which epics are measured, and very nearly the last epic that could not have been assembled in a computer. Find the largest screen available to you. Four hours is not long, provided you are not watching it on a phone.",
+      "Lawrence of Arabia is a 1962 British and American co-production directed by David Lean, with Peter O'Toole as T. E. Lawrence, Omar Sharif as Sherif Ali and Alec Guinness as Prince Faisal. It draws on Lawrence's service during the First World War and on his book Seven Pillars of Wisdom: attached to the Arab Revolt as a British liaison officer, he helps bring rival tribes together to take Aqaba across the Nefud desert, and later sees the outcome of the revolt divided between Britain and France at Damascus. It was shot in 70mm on location in Jordan, Morocco and Spain, runs about two hundred and sixteen minutes, and was released with an intermission. It received seven Academy Awards, including Best Picture and Best Director.",
     cast: [
       { name: "Peter O'Toole", zhName: "彼得·奥图尔", character: "T. E. Lawrence" },
       { name: "Omar Sharif", zhName: "奥马尔·沙里夫", character: "Sherif Ali" },
@@ -2393,9 +2393,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1292260",
     wikidataId: "Q182692",
     introduction:
-      "科波拉把康拉德的《黑暗之心》搬到越南，让一艘小艇逆流而上去刺杀一个疯掉的上校，结果拍出了一部本身就在发疯的电影。菲律宾的拍摄失控到近乎传奇：台风摧毁布景，主演心脏病发，预算靠他抵押家产维持，成片里那种越往上游越不讲道理的气氛，有一半来自剧组自己的处境。直升机伴着瓦格纳扫射村庄的段落已成经典，但真正留下的是后半段的黑暗——当叙事逻辑一起崩溃时，战争片终于不再假装战争可以被讲述。这不是一部关于越战的电影，它本身就是一场战争。",
+      "《现代启示录》是弗朗西斯·福特·科波拉执导的 1979 年美国电影，美国活动影像公司出品，马丁·辛饰演威拉德上尉，马龙·白兰度饰演库尔兹上校，罗伯特·杜瓦尔饰演基尔戈中校。剧本以约瑟夫·康拉德的小说《黑暗之心》为底本，移入越战：威拉德受命溯河进入柬埔寨，找到并处决脱离指挥体系、自行建立据点的库尔兹。影片在菲律宾拍摄，历时约十六个月，期间台风摧毁布景，马丁·辛心脏病发，超支部分由科波拉个人担保。现存三个不同长度的版本。本片获戛纳电影节金棕榈奖，以及奥斯卡最佳摄影与最佳音响奖。",
     introductionEn:
-      "Coppola moved Conrad's Heart of Darkness to Vietnam, sent a patrol boat upriver to assassinate a colonel who has gone mad, and ended up making a film that is itself deranged. The Philippine shoot became legendary for going out of control: a typhoon destroyed the sets, the lead actor had a heart attack, and the budget was kept alive against his own mortgaged property — and fully half of the film's sense that reason thins the further upriver you go comes from the circumstances of the crew. The helicopter assault set to Wagner is long since canonical, but what actually stays with you is the darkness of the last hour, where the narrative logic collapses along with everything else and the war film finally stops pretending war can be narrated at all.",
+      "Apocalypse Now is a 1979 American film directed by Francis Ford Coppola, produced by American Zoetrope, with Martin Sheen as Captain Willard, Marlon Brando as Colonel Kurtz and Robert Duvall as Lieutenant Colonel Kilgore. The screenplay takes Joseph Conrad's Heart of Darkness as its basis and relocates it to the Vietnam War: Willard is ordered upriver into Cambodia to find and kill Kurtz, an officer who has left the chain of command and established a base of his own. Shooting took place in the Philippines over roughly sixteen months, during which a typhoon destroyed sets, Sheen suffered a heart attack, and Coppola guaranteed the overruns against his own property. Three versions of differing length exist. The film received the Palme d'Or at Cannes and Academy Awards for cinematography and sound.",
     cast: [
       {
         name: "Martin Sheen",

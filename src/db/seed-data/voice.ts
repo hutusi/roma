@@ -189,8 +189,13 @@ const EN_UNBOUNDED =
 
 /** Reference prose does not address the reader or tell them what to do. */
 const ZH_SECOND_PERSON = /(^|[，。；：])(你|您|我们|咱们)|不妨|请务必|值得你|如果你/g;
+// The pronoun list must not swallow proper names: "You An-shun as the
+// teenage Ah-ha" is a cast credit, not an address to the reader. A capital
+// followed by another capitalised word is a name, so it is excluded. Same
+// class of false positive as the case-sensitive director check in
+// verify-facts — a rule that cries wolf on correct prose gets ignored.
 const EN_SECOND_PERSON =
-  /\b(you|your|we|us|our)\b|\b(watch|see|note|imagine|consider) (it|this|the film)\b/gi;
+  /\b(?!You\s+[A-Z])(you|your|we|us|our)\b|\b(watch|see|note|imagine|consider) (it|this|the film)\b/gi;
 
 export const RULES: Rule[] = [
   {
