@@ -405,7 +405,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "billy-wilder",
     name: "Billy Wilder",
     nameZh: "比利·怀尔德",
-    bio: "奥地利裔美国导演，1906–2002。犬儒与温情兼备的剧本大师，在黑色电影与喜剧之间游刃有余。",
+    bio: "奥地利裔美国导演、编剧，1906–2002。1930 年代因纳粹上台离开欧洲赴美，先以编剧起家，后自编自导。作品兼及黑色电影与喜剧，多与查尔斯·布拉克特、I·A·L·戴蒙德合作编剧。",
     careerEssay: doc([
       p(
         "怀尔德是好莱坞最锋利的笔。他能把谋杀写成《双重赔偿》里冷冽的宿命，也能把变装闹剧写成《热情如火》里那句“人无完人”的宽容收尾。",
@@ -415,7 +415,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Austrian-American director, 1906–2002. A screenwriter's screenwriter, cynical and tender in equal measure, equally at home in film noir and in comedy.",
+      "Austrian-American director and screenwriter, 1906–2002. He left Europe for the United States in the 1930s after the Nazis came to power, worked first as a screenwriter, and later directed his own scripts. He made both films noir and comedies, writing chiefly with Charles Brackett and later I. A. L. Diamond.",
     careerEssayEn: doc([
       p(
         "Wilder had the sharpest pen in Hollywood. He could carve murder into the icy fatalism of Double Indemnity and then send up a cross-dressing farce that lands on the most forgiving line in the movies, the shrug of Some Like It Hot: nobody's perfect.",
@@ -429,7 +429,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "fritz-lang",
     name: "Fritz Lang",
     nameZh: "弗里茨·朗",
-    bio: "奥地利裔导演，1890–1976。德国表现主义巨匠，从未来都市到杀人凶手，勾勒出命运与体制的冰冷几何。",
+    bio: "奥地利裔导演，1890–1976。先在德国拍摄《大都会》《M就是凶手》等片，1933 年离开德国，此后在法国短暂停留并转赴好莱坞，在美国工作逾二十年，多拍犯罪与黑色电影。",
     careerEssay: doc([
       p(
         "朗的世界由几何与阴影构成。《大都会》把阶级压迫铸成宏伟的未来城，《M就是凶手》则让一座城市的光影本身成为追捕的天罗地网。",
@@ -439,7 +439,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Austrian-born director, 1890–1976. A titan of German Expressionism who, from the towering city of the future to the hunted child-killer, traced the cold geometry of fate and the machinery of the state.",
+      "Austrian-born director, 1890–1976. He made Metropolis and M in Germany, left the country in 1933, and after a brief period in France worked in Hollywood for more than twenty years, largely on crime pictures and films noir.",
     careerEssayEn: doc([
       p(
         "Lang built his worlds out of geometry and shadow. In Metropolis he casts class oppression as a magnificent city of the future; in M he turns the light and dark of an entire city into the dragnet that slowly closes around a killer.",
@@ -453,7 +453,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "satyajit-ray",
     name: "Satyajit Ray",
     nameZh: "萨蒂亚吉特·雷伊",
-    bio: "印度导演，1921–1992。以《阿普三部曲》把印度乡村的贫困与诗意带向世界，是亚洲人文电影的奠基者之一。",
+    bio: "印度导演，1921–1992。原从事广告设计，1955 年以《大地之歌》转入电影，此后完成《阿普三部曲》。共导演约三十部影片，多以孟加拉语拍摄，并自任编剧与作曲。",
     careerEssay: doc([
       p(
         "雷伊深受雷诺阿与意大利新现实主义影响，却把这份写实酿成了独属于孟加拉乡村的抒情。《大地之歌》里孩子第一次看见火车穿过芦苇丛的镜头，是电影史上最纯净的惊奇之一。",
@@ -463,7 +463,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Indian director, 1921–1992. With the Apu Trilogy he carried the poverty and poetry of rural India out into the world, and stands among the founders of Asia's humanist cinema.",
+      "Indian director, 1921–1992. He worked in advertising design before making Pather Panchali in 1955, which he followed with the rest of the Apu Trilogy. He directed some thirty films, most of them in Bengali, and wrote and scored much of his own work.",
     careerEssayEn: doc([
       p(
         "Ray absorbed Renoir and Italian neorealism and then distilled that plainspoken realism into a lyricism that could belong only to the villages of Bengal. In Pather Panchali, the moment a child first sees a train tearing through the reeds is one of the purest jolts of wonder in all of cinema.",
@@ -477,7 +477,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "friedrich-wilhelm-murnau",
     name: "F. W. Murnau",
     nameZh: "弗里德里希·威廉·茂瑙",
-    bio: "德国导演，1888–1931。默片时代的诗人，用流动的摄影机与光影，把恐惧与柔情都推向了纯视觉的极致。",
+    bio: "德国导演，1888–1931。默片时期作品包括《诺斯费拉图》《最卑贱的人》，1926 年赴美，为福斯拍摄《日出》。1931 年在加州死于车祸，时年四十二岁。",
     careerEssay: doc([
       p(
         "茂瑙相信电影可以完全靠画面说话。《诺斯费拉图》让吸血鬼的阴影爬上楼梯，把恐惧变成纯粹的光学事件；《最卑贱的人》几乎不用字幕，只凭移动的摄影机就讲完了一个人的尊严崩塌。",
@@ -487,7 +487,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "German director, 1888–1931. A poet of the silent era who, with a roving camera and pure light and shadow, pushed both terror and tenderness to the far edge of the purely visual.",
+      "German director, 1888–1931. His silent work includes Nosferatu and The Last Laugh. He moved to the United States in 1926 and made Sunrise for Fox. He died in a car accident in California in 1931, aged forty-two.",
     careerEssayEn: doc([
       p(
         "Murnau believed a film could speak entirely through its images. In Nosferatu he sends the vampire's shadow climbing a staircase and turns dread into a purely optical event; in The Last Laugh he does away with intertitles almost completely and lets a moving camera alone tell the whole story of a man's dignity coming apart.",
@@ -501,7 +501,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "charlie-chaplin",
     name: "Charlie Chaplin",
     nameZh: "查理·卓别林",
-    bio: "英国导演、演员，1889–1977。“流浪汉”夏尔洛的创造者，用喜剧承载最深的悲悯与最尖锐的社会批判。",
+    bio: "英国导演、演员，1889–1977。以流浪汉一角成名，自编自导自演并为多部影片配乐，1919 年参与创办联美公司。1952 年赴英期间被美国吊销再入境许可，此后长居瑞士。",
     careerEssay: doc([
       p(
         "卓别林的“流浪汉”是电影史上最著名的形象：礼帽、手杖、外八字，永远被世界踢来踢去，却永远保有尊严。笑与泪在他这里从来是一体两面。",
@@ -511,7 +511,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "British director and actor (1889–1977). The creator of the Tramp, who made comedy carry the deepest tenderness and the sharpest social criticism the screen had yet known.",
+      "British director and actor, 1889–1977. He became known for the character of the Tramp, and wrote, directed, starred in and scored much of his own work. He was among the founders of United Artists in 1919. His re-entry permit to the United States was revoked while he was travelling to Britain in 1952, and he settled in Switzerland.",
     careerEssayEn: doc([
       p(
         "Chaplin's Tramp is the most famous figure in all of cinema: the bowler hat, the cane, the splayed-out walk, a little man forever kicked around by the world and yet forever holding on to his dignity. With Chaplin, laughter and tears were never opposites but the same gesture seen from two sides.",
@@ -525,7 +525,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "sergei-eisenstein",
     name: "Sergei Eisenstein",
     nameZh: "谢尔盖·爱森斯坦",
-    bio: "苏联导演、理论家，1898–1948。蒙太奇理论的奠基人，把剪辑变成撞击观众思想与情感的武器。",
+    bio: "苏联导演、电影理论家，1898–1948。以《战舰波将金号》等片实践其关于镜头对列的剪辑主张，另著有多种理论文字。1930 年代在墨西哥的拍摄计划未能完成，后期作品受官方审查影响。",
     careerEssay: doc([
       p(
         "爱森斯坦认为电影的力量不在单个镜头，而在镜头的碰撞。两个画面相接会迸出第三重意义——这就是他的“蒙太奇”。",
@@ -535,7 +535,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Soviet director and theorist, 1898–1948. The founding mind of montage, he turned editing into a weapon aimed straight at the viewer's thoughts and feelings.",
+      "Soviet director and film theorist, 1898–1948. He put his arguments about the collision of shots into practice in Battleship Potemkin and other films, and wrote extensively on theory. A project shot in Mexico in the 1930s was never completed, and his later work was subject to official interference.",
     careerEssayEn: doc([
       p(
         "For Eisenstein, the power of cinema lay not in any single shot but in the collision between shots. Set two images against each other and a third meaning leaps out of the cut, belonging to neither one — this was his montage.",
@@ -549,7 +549,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "marcel-carne",
     name: "Marcel Carné",
     nameZh: "马塞尔·卡尔内",
-    bio: "法国导演，1906–1996。“诗意现实主义”的代表，与编剧普莱维合作，在布景的街灯下拍出宿命的爱情。",
+    bio: "法国导演，1906–1996。1930 至 40 年代与编剧雅克·普莱维长期合作，作品多在摄影棚内搭景拍摄。《天堂的孩子》摄于德占期间，1945 年公映。",
     careerEssay: doc([
       p(
         "卡尔内与诗人普莱维的合作，把三十年代法国的忧郁凝成了“诗意现实主义”：雾气、街灯、码头，命中注定要失败的爱情在人工搭建的街景里上演。",
@@ -559,7 +559,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "A French director (1906–1996) and the defining figure of poetic realism, who, working with the screenwriter Jacques Prévert, staged love as destiny beneath the streetlamps of the studio backlot.",
+      "French director, 1906–1996. He worked closely with the screenwriter Jacques Prévert through the 1930s and 1940s, shooting largely on constructed studio sets. Children of Paradise was made under the German occupation and released in 1945.",
     careerEssayEn: doc([
       p(
         "Carné's partnership with the poet Jacques Prévert distilled the melancholy of 1930s France into what came to be called poetic realism: fog, streetlamps, the quays of the harbor, and a love doomed to fail, all of it playing out on streets built by hand for the camera. Nothing here is found; everything is composed — fate itself conjured whole on the backlot.",
@@ -573,7 +573,7 @@ export const seedDirectors: SeedDirector[] = [
     slug: "elia-kazan",
     name: "Elia Kazan",
     nameZh: "伊利亚·卡赞",
-    bio: "希腊裔美国导演，1909–2003。方法派表演的推手，把社会现实与内心冲突逼进演员滚烫的身体里。",
+    bio: "希腊裔美国导演，1909–2003。为演员工作室的创办人之一，在舞台与电影两方面工作。1952 年在众议院非美活动调查委员会作证并供出他人姓名，此事此后长期引发争议。",
     careerEssay: doc([
       p(
         "卡赞出身舞台，是“方法派”的重要推手，他调教出的白兰度与詹姆斯·迪恩，把一种全新的、赤裸的表演带进了好莱坞。",
@@ -583,7 +583,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Greek-American director, 1909–2003. A prime mover of Method acting, he drove social reality and inner conflict into the actor's hot, living body.",
+      "Greek-American director, 1909–2003. He was among the founders of the Actors Studio and worked in both theatre and film. In 1952 he testified before the House Un-American Activities Committee and named others, which remained a matter of controversy for the rest of his life.",
     careerEssayEn: doc([
       p(
         "Kazan came up through the theater and became one of the Method's indispensable champions; the Brando and the James Dean he shaped carried a wholly new, nakedly exposed kind of acting into Hollywood.",
@@ -600,7 +600,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Fei Mu",
     nameZh: "费穆",
     tmdbPersonId: 233200,
-    bio: "中国导演，1906–1951。把中国古典诗的留白带进电影：镜头缓慢游移，人物欲言又止，一段战后废墟上的私情因此有了千年的重量。",
+    bio: "中国导演，1906–1951。1930 年代在上海拍片，作品包括《城市之夜》《孔夫子》。1948 年与梅兰芳合作《生死恨》，为中国第一部彩色影片。同年完成《小城之春》，1951 年病逝于香港，年四十五。",
     careerEssay: doc([
       p(
         "费穆是三十年代上海影坛最不像同代人的那一个。同行忙着把电影当武器，他却在《城市之夜》《香雪海》里琢磨光线与静默；沦陷期间拍《孔夫子》，用一个不合时宜的圣人说不能明说的话。1948 年他与梅兰芳合作《生死恨》，拍出了中国第一部彩色影片。",
@@ -610,7 +610,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Chinese director, 1906–1951. He carried the negative space of classical Chinese poetry into cinema: the camera drifts, the characters stop short of saying what they mean, and a private affair among postwar ruins takes on the weight of a thousand years.",
+      "Chinese director, 1906–1951. He worked in Shanghai through the 1930s, on films including Night in the City and Confucius. In 1948 he made Remorse at Death with Mei Lanfang, the first Chinese colour film, and completed Spring in a Small Town the same year. He died in Hong Kong in 1951, aged forty-five.",
     careerEssayEn: doc([
       p(
         "Fei Mu was the least typical figure in 1930s Shanghai cinema. While his contemporaries were busy treating film as a weapon, he was studying light and silence in Night in the City and Sea of Fragrant Snow; under the occupation he made Confucius, using an unfashionable sage to say what could not be said outright. In 1948, working with the opera master Mei Lanfang, he shot Remorse at Death — the first Chinese film in color.",
@@ -625,7 +625,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Wu Yonggang",
     nameZh: "吴永刚",
     tmdbPersonId: 1073182,
-    bio: "中国导演，1907–1982。二十七岁以处女作《神女》立身：不控诉、不说教，只是把摄影机架在与妓女平视的高度上。",
+    bio: "中国导演，1907–1982。先在片场任美术，1934 年以二十七岁之龄编导第一部作品《神女》，由阮玲玉主演。此后长期在上海与北京两地拍片，作品逾二十部。",
     careerEssay: doc([
       p(
         "吴永刚做过美工，对画面的洁癖贯穿一生。《神女》是他的第一部片子，也是默片时代中国电影的最高点之一——他拒绝把主人公拍成道德案例，镜头始终与她平视，连那个流氓也只是环境的一部分，而不是可供唾骂的反派。",
@@ -635,7 +635,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Chinese director, 1907–1982. He established himself at twenty-seven with his first film, The Goddess: no indictment, no sermon, simply a camera placed at eye level with a prostitute.",
+      "Chinese director, 1907–1982. He worked first in art departments, and at twenty-seven wrote and directed his first film, The Goddess, with Ruan Lingyu. He went on to work in Shanghai and Beijing over several decades, directing more than twenty films.",
     careerEssayEn: doc([
       p(
         "Wu Yonggang trained as a set designer, and a fastidiousness about the image never left him. The Goddess was his debut and remains one of the summits of Chinese silent cinema — he refused to turn his heroine into a moral case study, kept the camera level with her throughout, and let even the thug who exploits her register as part of the environment rather than a villain to be hissed at.",
@@ -650,7 +650,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Yuan Muzhi",
     nameZh: "袁牧之",
     tmdbPersonId: 1173642,
-    bio: "中国导演、演员，1909–1978。从话剧舞台走来的“千面人”，把好莱坞的节奏、苏联的剪辑与上海的市井小调焊成了一种全新的中国电影。",
+    bio: "中国导演、演员，1909–1978。出身话剧舞台，1930 年代在上海任演员并转入导演，作品有《都市风光》《马路天使》。1949 年后任首任电影局局长，此后不再拍片。",
     careerEssay: doc([
       p(
         "袁牧之先以演技闻名，人称“千面人”。转到导演位置后，他做的第一件事是拿电影玩形式：《都市风光》用歌唱和西洋镜串起都市讽刺，被视作中国第一部音乐喜剧。",
@@ -660,7 +660,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      'Chinese director and actor, 1909–1978. A stage-trained "man of a thousand faces" who welded Hollywood tempo, Soviet cutting, and Shanghai street song into a new kind of Chinese film.',
+      "Chinese director and actor, 1909–1978. He came from the stage, acted in Shanghai during the 1930s and turned to directing, making Scenes of City Life and Street Angel. After 1949 he served as the first head of the national film bureau and did not direct again.",
     careerEssayEn: doc([
       p(
         "Yuan Muzhi made his name as an actor first, nicknamed the man of a thousand faces. His first move as a director was to play with form: Scenes of City Life strings urban satire through songs and a peep-show frame, and is generally counted China's first musical comedy.",
@@ -675,7 +675,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Cai Chusheng",
     nameZh: "蔡楚生",
     tmdbPersonId: 1112330,
-    bio: "中国导演，1906–1968。左翼电影最会讲故事的人：把家国离散写成通俗剧，让观众为时代哭，也为自己哭。",
+    bio: "中国导演，1906–1968。1930 年代在联华影业拍片，作品包括《渔光曲》，该片 1935 年在莫斯科国际电影节获奖，为中国影片首次在国际影展获奖。1947 年与郑君里合导《一江春水向东流》。",
     careerEssay: doc([
       p(
         "蔡楚生出身贫寒，学徒出身，这让他始终相信电影必须先让普通人看懂。《渔光曲》讲渔家姐弟的破产与流离，1935 年在莫斯科拿下荣誉奖，是中国电影第一次在国际上获奖。",
@@ -685,7 +685,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Chinese director, 1906–1968. The finest storyteller of the left-wing cinema, he wrote national catastrophe as melodrama so audiences would weep for the age and for themselves at once.",
+      "Chinese director, 1906–1968. He worked at the Lianhua company in the 1930s, and his Song of the Fishermen took a prize at the Moscow International Film Festival in 1935, the first international festival award to a Chinese film. In 1947 he co-directed The Spring River Flows East with Zheng Junli.",
     careerEssayEn: doc([
       p(
         "Cai Chusheng was born poor and apprenticed young, and he never stopped believing a film had to be legible to ordinary people first. Song of the Fishermen follows a fishing family's ruin and dispersal; it took an honorable mention at Moscow in 1935, the first international prize any Chinese film had won.",
@@ -700,7 +700,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Zheng Junli",
     nameZh: "郑君里",
     tmdbPersonId: 1112331,
-    bio: "中国导演，1911–1969。演员出身，因此最懂得把镜头交给脸；他镜头下的市井群像，是四十年代中国最锋利的一面镜子。",
+    bio: "中国导演、演员，1911–1969。先以演员身份参演《大路》《马路天使》等片，1940 年代转入导演，与蔡楚生合导《一江春水向东流》，另导有《乌鸦与麻雀》。",
     careerEssay: doc([
       p(
         "郑君里三十年代是活跃的演员，也翻译表演理论。转做导演后，他把舞台上练出的对人的观察带进了片场——与蔡楚生合导《一江春水向东流》时，那些细碎的家庭场面几乎全是他的笔触。",
@@ -710,7 +710,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Chinese director, 1911–1969. An actor first, which is why he knew to give the camera to faces; his crowded tenements are the sharpest mirror 1940s China held up to itself.",
+      "Chinese director and actor, 1911–1969. He appeared as an actor in The Big Road and Street Angel among others before turning to directing in the 1940s, co-directing The Spring River Flows East with Cai Chusheng and directing Crows and Sparrows.",
     careerEssayEn: doc([
       p(
         "Zheng Junli was a working actor through the 1930s and a translator of acting theory besides. Turning director, he brought a stage-trained attention to people onto the set — co-directing The Spring River Flows East with Cai Chusheng, the small domestic scenes are almost entirely his hand.",
@@ -725,7 +725,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Hou Hsiao-hsien",
     nameZh: "侯孝贤",
     tmdbPersonId: 64992,
-    bio: "台湾导演，1947 年生。把摄影机放远、放定、放久，让时间自己走完一场戏——台湾新电影最沉着的那双眼睛。",
+    bio: "台湾导演，1947 年生。1980 年代初起为台湾新电影的主要导演之一，作品多用固定机位与远景长镜头，重要事件常发生在画面深处或画外。1989 年《悲情城市》获威尼斯电影节金狮奖。",
     careerEssay: doc([
       p(
         "侯孝贤从商业片起步，直到《风柜来的人》才找到自己的语法：远景、长镜头、不追戏剧高潮。《童年往事》把这套方法对准他自己的成长，祖母一次次说要走路回大陆，成为整部片的节拍器。",
@@ -735,7 +735,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Taiwanese director, born 1947. He set the camera far back, held it still, and let it run until time had finished the scene by itself — the most composed pair of eyes in Taiwan New Cinema.",
+      "Taiwanese director, born 1947. He was among the principal directors of Taiwan New Cinema from the early 1980s, working largely in fixed setups and distant long takes, with significant events often placed deep in the frame or outside it. A City of Sadness received the Golden Lion at Venice in 1989.",
     careerEssayEn: doc([
       p(
         "Hou began in commercial pictures and did not find his grammar until The Boys from Fengkuei: wide, long, uninterested in dramatic peaks. A Time to Live, a Time to Die turns that method on his own childhood, where a grandmother repeatedly announcing she will walk back to the mainland becomes the film's metronome.",
@@ -750,7 +750,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Edward Yang",
     nameZh: "杨德昌",
     tmdbPersonId: 143035,
-    bio: "台湾导演，1947–2007。工程师出身，用建筑般的精确解剖台北：玻璃幕墙、公寓格局与人际关系是同一张图纸。",
+    bio: "台湾导演，1947–2007。原学电机与计算机工程，在美国工作数年后返台拍片，为台湾新电影主要导演之一。2000 年以《一一》获戛纳电影节最佳导演奖。共完成长片七部。",
     careerEssay: doc([
       p(
         "杨德昌在美国读电机、做过电脑工程师，三十出头才回台湾拍片。这段经历留在他的结构里：《恐怖分子》像一道多线并置的方程式，人物彼此不识，命运却互相咬合。",
@@ -760,7 +760,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Taiwanese director, 1947–2007. Trained as an engineer, he dissected Taipei with an architect's precision: curtain walls, apartment layouts, and human relations are all the same blueprint.",
+      "Taiwanese director, 1947–2007. He trained in electrical engineering and computing and worked in the United States for several years before returning to Taiwan to make films, becoming one of the principal directors of Taiwan New Cinema. Yi Yi brought him the director's prize at Cannes in 2000. He completed seven features.",
     careerEssayEn: doc([
       p(
         "Yang studied electrical engineering in the United States and worked as a computer engineer; he was past thirty before he came back to Taiwan to make films. The training stayed in his structures: Terrorizers runs like a simultaneous equation, its characters strangers to each other whose fates nonetheless interlock.",
