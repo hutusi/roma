@@ -653,20 +653,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "中国导演、演员，1909–1978。出身话剧舞台，1930 年代在上海任演员并转入导演，作品有《都市风光》《马路天使》。1949 年后任首任电影局局长，此后不再拍片。",
     careerEssay: doc([
       p(
-        "袁牧之先以演技闻名，人称“千面人”。转到导演位置后，他做的第一件事是拿电影玩形式：《都市风光》用歌唱和西洋镜串起都市讽刺，被视作中国第一部音乐喜剧。",
+        "袁牧之三十年代初以舞台与银幕表演知名，因戏路宽被称为“千面人”。1935 年他在电通影片公司自编自导《都市风光》，用歌曲与西洋镜的形式串起故事，通常被算作中国第一部音乐喜剧。",
       ),
       p(
-        "《马路天使》则把这份聪明收进了人情里。妓女、歌女、吹鼓手、报贩挤在同一条弄堂，周璇唱《四季歌》，赵丹插科打诨，笑声底下是随时可能塌掉的生活。抗战爆发后他北上延安，后来成为新中国电影事业的第一任主事者，从此几乎不再导戏。",
+        "1937 年他为明星影片公司拍摄《马路天使》。抗战爆发后他赴延安，参与拍摄《延安与八路军》，1940 年转赴苏联，1946 年回国主持东北电影制片厂。1949 年他出任新政府电影局首任局长，1952 年因病去职，此后未再执导。",
       ),
     ]),
     bioEn:
       "Chinese director and actor, 1909–1978. He came from the stage, acted in Shanghai during the 1930s and turned to directing, making Scenes of City Life and Street Angel. After 1949 he served as the first head of the national film bureau and did not direct again.",
     careerEssayEn: doc([
       p(
-        "Yuan Muzhi made his name as an actor first, nicknamed the man of a thousand faces. His first move as a director was to play with form: Scenes of City Life strings urban satire through songs and a peep-show frame, and is generally counted China's first musical comedy.",
+        "Yuan was known in the early 1930s as a stage and screen actor, nicknamed the man of a thousand faces for his range. In 1935 he wrote and directed Scenes of City Life for the Diantong company, carrying the story on songs and a peep-show frame; it is generally counted as the first Chinese musical comedy.",
       ),
       p(
-        "Street Angel folds that cleverness back into feeling. A prostitute, a singsong girl, a trumpeter and a newspaper hawker are crowded into one lane; Zhou Xuan sings the Four Seasons Song, Zhao Dan clowns, and under the laughter is a life that could collapse at any moment. After the war with Japan broke out he went north to Yan'an, later becoming the first head of the new republic's film administration — and directed almost nothing again.",
+        "He made Street Angel for the Mingxing company in 1937. After the war began he went to Yan'an and worked on Yan'an and the Eighth Route Army, then to the Soviet Union in 1940, returning in 1946 to run the Northeast Film Studio. In 1949 he became the first head of the new government's film bureau, left the post through illness in 1952, and never directed again.",
       ),
     ]),
   },
@@ -678,20 +678,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "中国导演，1906–1968。1930 年代在联华影业拍片，作品包括《渔光曲》，该片 1935 年在莫斯科国际电影节获奖，为中国影片首次在国际影展获奖。1947 年与郑君里合导《一江春水向东流》。",
     careerEssay: doc([
       p(
-        "蔡楚生出身贫寒，学徒出身，这让他始终相信电影必须先让普通人看懂。《渔光曲》讲渔家姐弟的破产与流离，1935 年在莫斯科拿下荣誉奖，是中国电影第一次在国际上获奖。",
+        "蔡楚生生于上海的广东家庭，少年时在汕头做过学徒，1927 年进入电影业，从场记做起，1931 年起在联华影业执导。1934 年的《渔光曲》在上海连映八十四天，创当时国产片纪录；次年在莫斯科国际电影节获荣誉奖，是中国影片第一次在国际影展获奖。",
       ),
       p(
-        "《一江春水向东流》是这条路的终点，也是顶点。他与郑君里用三个多小时、一个家庭的八年，把抗战的全部代价具体到一个女人的脸上。影片连映三个多月，万人空巷。文革中他遭到批斗，1968 年含冤去世。",
+        "抗战期间他辗转香港与内地，1947 年与郑君里合导《一江春水向东流》，全片分上下两集，上映后连映三个多月。1949 年后他任电影局副局长与中国电影工作者协会主席。文革开始后遭批斗，1968 年去世。",
       ),
     ]),
     bioEn:
       "Chinese director, 1906–1968. He worked at the Lianhua company in the 1930s, and his Song of the Fishermen took a prize at the Moscow International Film Festival in 1935, the first international festival award to a Chinese film. In 1947 he co-directed The Spring River Flows East with Zheng Junli.",
     careerEssayEn: doc([
       p(
-        "Cai Chusheng was born poor and apprenticed young, and he never stopped believing a film had to be legible to ordinary people first. Song of the Fishermen follows a fishing family's ruin and dispersal; it took an honorable mention at Moscow in 1935, the first international prize any Chinese film had won.",
+        "Cai was born in Shanghai to a Cantonese family, was apprenticed to a shop in Shantou as a boy, and entered the film business back in Shanghai in 1927 as a continuity assistant. He began directing for Lianhua in 1931. Song of the Fishermen ran for eighty-four days in 1934, a record for a Chinese film at the time, and took an honorary award at the Moscow festival the following year, the first international prize won by a Chinese picture.",
       ),
       p(
-        "The Spring River Flows East is both the end of that road and its summit. With Zheng Junli he spent more than three hours and eight years of one family's life bringing the entire cost of the war to rest on a single woman's face. It ran for over three months to packed houses. During the Cultural Revolution he was denounced, and he died under persecution in 1968.",
+        "He spent the war between Hong Kong and the interior, and in 1947 co-directed The Spring River Flows East with Zheng Junli; released in two parts, it played for more than three months. After 1949 he was a deputy head of the film bureau and chaired the association of Chinese film workers. He was denounced at the start of the Cultural Revolution and died in 1968.",
       ),
     ]),
   },
@@ -703,20 +703,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "中国导演、演员，1911–1969。先以演员身份参演《大路》《马路天使》等片，1940 年代转入导演，与蔡楚生合导《一江春水向东流》，另导有《乌鸦与麻雀》。",
     careerEssay: doc([
       p(
-        "郑君里三十年代是活跃的演员，也翻译表演理论。转做导演后，他把舞台上练出的对人的观察带进了片场——与蔡楚生合导《一江春水向东流》时，那些细碎的家庭场面几乎全是他的笔触。",
+        "郑君里三十年代在上海做演员，同时翻译表演与电影理论，译有波列斯拉夫斯基的《演技六讲》。抗战期间他在内地拍摄纪录片，战后转做剧情片导演，与蔡楚生合导《一江春水向东流》。",
       ),
       p(
-        "真正属于他自己的是《乌鸦与麻雀》：一栋上海石库门楼房里，房东、房客、投机者各怀鬼胎，政权更迭就在楼梯间发生。这部片子在 1949 年前后偷偷拍完，是中国电影里少有的群戏杰作。他在文革中入狱，1969 年死于狱中。",
+        "1949 年他独立完成《乌鸦与麻雀》，故事集中在上海一栋石库门楼房的房东与房客之间。此后他执导《宋景诗》《林则徐》《聂耳》等片。文革中他被捕入狱，1969 年死于狱中。",
       ),
     ]),
     bioEn:
       "Chinese director and actor, 1911–1969. He appeared as an actor in The Big Road and Street Angel among others before turning to directing in the 1940s, co-directing The Spring River Flows East with Cai Chusheng and directing Crows and Sparrows.",
     careerEssayEn: doc([
       p(
-        "Zheng Junli was a working actor through the 1930s and a translator of acting theory besides. Turning director, he brought a stage-trained attention to people onto the set — co-directing The Spring River Flows East with Cai Chusheng, the small domestic scenes are almost entirely his hand.",
+        "Zheng acted in Shanghai through the 1930s and translated books on acting and film theory, among them Boleslavsky's Acting: The First Six Lessons. He shot documentaries in the interior during the war and turned to features afterwards, co-directing The Spring River Flows East with Cai Chusheng.",
       ),
       p(
-        "What is wholly his is Crows and Sparrows: in one Shanghai tenement a landlord, his tenants and a speculator all scheme past each other while a change of regime happens on the stairwell. Shot half in secret across 1949, it is one of the rare great ensemble films in Chinese cinema. He was imprisoned during the Cultural Revolution and died in custody in 1969.",
+        "Crows and Sparrows, which he directed alone in 1949, keeps its story inside one Shanghai house, among the landlord and his tenants. He went on to make Song Jingshi, Lin Zexu and Nie Er. He was imprisoned during the Cultural Revolution and died in custody in 1969.",
       ),
     ]),
   },
@@ -728,20 +728,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "台湾导演，1947 年生。1980 年代初起为台湾新电影的主要导演之一，作品多用固定机位与远景长镜头，重要事件常发生在画面深处或画外。1989 年《悲情城市》获威尼斯电影节金狮奖。",
     careerEssay: doc([
       p(
-        "侯孝贤从商业片起步，直到《风柜来的人》才找到自己的语法：远景、长镜头、不追戏剧高潮。《童年往事》把这套方法对准他自己的成长，祖母一次次说要走路回大陆，成为整部片的节拍器。",
+        "侯孝贤从编剧与副导演做起，1980 年开始执导，最初三部是卖座的爱情喜剧。1983 年的《风柜来的人》改用远景与长镜头，此后成为他固定的方法；《童年往事》取材自他自己在凤山的成长。",
       ),
       p(
-        "《悲情城市》让他第一次直视台湾的历史伤口，也让华语电影第一次拿到威尼斯金狮。此后他越走越远：《戏梦人生》几乎不解释，《海上花》全片在室内的油灯下完成，《刺客聂隐娘》把武侠拍成了风与树叶的电影。",
+        "1989 年的《悲情城市》处理二二八事件，是台湾解严后第一部正面触及此事的影片，并获威尼斯金狮奖。其后他拍摄《戏梦人生》《海上花》《千禧曼波》等片，2015 年以《刺客聂隐娘》获戛纳最佳导演奖。2023 年家人宣布他因阿尔茨海默病停止工作。",
       ),
     ]),
     bioEn:
       "Taiwanese director, born 1947. He was among the principal directors of Taiwan New Cinema from the early 1980s, working largely in fixed setups and distant long takes, with significant events often placed deep in the frame or outside it. A City of Sadness received the Golden Lion at Venice in 1989.",
     careerEssayEn: doc([
       p(
-        "Hou began in commercial pictures and did not find his grammar until The Boys from Fengkuei: wide, long, uninterested in dramatic peaks. A Time to Live, a Time to Die turns that method on his own childhood, where a grandmother repeatedly announcing she will walk back to the mainland becomes the film's metronome.",
+        "Hou began as a screenwriter and assistant director and started directing in 1980; his first three features were commercial romantic comedies. The Boys from Fengkuei, in 1983, moved to long takes and distant framing, which became his settled method. A Time to Live, a Time to Die draws on his own upbringing in Fengshan.",
       ),
       p(
-        "A City of Sadness was his first direct look at Taiwan's historical wound, and the first Golden Lion for a Chinese-language film. He kept going further out: The Puppetmaster barely explains itself, Flowers of Shanghai unfolds entirely by interior oil lamp, and The Assassin turns wuxia into a film about wind and leaves.",
+        "A City of Sadness, in 1989, dealt with the February 28 incident, the first Taiwanese film to treat it directly after martial law was lifted, and won the Golden Lion at Venice. The Puppetmaster, Flowers of Shanghai and Millennium Mambo followed, and The Assassin took the directing prize at Cannes in 2015. In 2023 his family announced that he had stopped working after a diagnosis of Alzheimer's disease.",
       ),
     ]),
   },
@@ -753,20 +753,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "台湾导演，1947–2007。原学电机与计算机工程，在美国工作数年后返台拍片，为台湾新电影主要导演之一。2000 年以《一一》获戛纳电影节最佳导演奖。共完成长片七部。",
     careerEssay: doc([
       p(
-        "杨德昌在美国读电机、做过电脑工程师，三十出头才回台湾拍片。这段经历留在他的结构里：《恐怖分子》像一道多线并置的方程式，人物彼此不识，命运却互相咬合。",
+        "杨德昌生于上海，幼年随家人迁台，在台湾读电机，赴美取得硕士学位后在西雅图做了七年电脑工程师。1981 年他回到台湾，次年执导四段式影片《光阴的故事》中的一段，该片是台湾新电影的开端之一。",
       ),
       p(
-        "《牯岭街少年杀人事件》是他最庞大的一次演算——近四小时，上百个角色，六十年代台北的眷村、帮派、教室与停电，全部收束到一把刀上。晚年的《一一》则温和下来，用一个小男孩拍别人后脑勺的举动，说尽了人看不见自己的困境。2007 年病逝于洛杉矶。",
+        "他此后拍摄《海滩的一天》《青梅竹马》《恐怖分子》。1991 年的《牯岭街少年杀人事件》长近四小时，取材自 1961 年台北一桩真实凶案。2000 年的《一一》为他赢得戛纳最佳导演奖，也是他最后一部长片。2007 年他因结肠癌病逝于洛杉矶，年五十九。",
       ),
     ]),
     bioEn:
       "Taiwanese director, 1947–2007. He trained in electrical engineering and computing and worked in the United States for several years before returning to Taiwan to make films, becoming one of the principal directors of Taiwan New Cinema. Yi Yi brought him the director's prize at Cannes in 2000. He completed seven features.",
     careerEssayEn: doc([
       p(
-        "Yang studied electrical engineering in the United States and worked as a computer engineer; he was past thirty before he came back to Taiwan to make films. The training stayed in his structures: Terrorizers runs like a simultaneous equation, its characters strangers to each other whose fates nonetheless interlock.",
+        "Yang was born in Shanghai, moved to Taiwan with his family as a child, studied electrical engineering there, took a master's degree in the United States and worked for seven years as a computer engineer in Seattle. He returned to Taiwan in 1981 and the following year directed one of the four segments of In Our Time, among the first films of the Taiwanese New Cinema.",
       ),
       p(
-        "A Brighter Summer Day is his largest computation — nearly four hours, a cast of over a hundred, the military dependents' villages and gangs and classrooms and blackouts of 1960s Taipei all converging on a single knife. The late Yi Yi softens: a small boy photographing the backs of people's heads says everything about our inability to see ourselves. He died in Los Angeles in 2007.",
+        "That Day, on the Beach, Taipei Story and Terrorizers followed. A Brighter Summer Day, in 1991, runs close to four hours and takes its story from a killing in Taipei in 1961. Yi Yi won him the directing prize at Cannes in 2000 and was his last feature. He died of colon cancer in Los Angeles in 2007, aged fifty-nine.",
       ),
     ]),
   },
