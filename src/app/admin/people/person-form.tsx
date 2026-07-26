@@ -90,7 +90,7 @@ export function PersonForm({
         <Textarea id="bio" rows={4} {...register("bio")} className="font-body" />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="editorialNote">编辑札记（选填，至多 120 字）</Label>
+        <Label htmlFor="editorialNote">编辑札记（选填，至多 400 字）</Label>
         <p className="text-ink-muted text-xs">你自己的看法，一两句就够，不填也可以发布。</p>
         <Textarea
           id="editorialNote"

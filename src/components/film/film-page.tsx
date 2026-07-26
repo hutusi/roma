@@ -154,14 +154,15 @@ export function FilmPage({
       )}
 
       {/*
-        The note is short, optional, and in an editor's own voice, so it
-        is set apart rather than run on from the introduction — a marked,
-        occasional remark instead of the page's default texture.
+        Optional, and in an editor's own voice rather than the neutral
+        register of the introduction. Its own heading carries that
+        distinction, so the prose itself is set like body text: at a few
+        hundred characters, italics and a narrow measure fight reading.
       */}
       {editorialNote && (
         <section className="mt-14">
           <TitleCard eyebrow={eyebrow("editorialNote")} title={dict.editorialNote} />
-          <p className="mx-auto mt-8 max-w-[62ch] border-line border-l-2 pl-5 text-[17px] text-ink-muted leading-[1.9] tracking-[0.02em] italic">
+          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
             {editorialNote}
           </p>
         </section>

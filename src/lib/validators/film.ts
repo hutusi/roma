@@ -17,14 +17,18 @@ export const INTRODUCTION_EN_MIN = 120;
 export const INTRODUCTION_EN_MAX = 350;
 
 /**
- * 编辑札记 — a ceiling, and deliberately no floor. The introduction's
- * 200-code-point minimum is what invited prose written to fill a quota,
- * because an editor with one sharp sentence could not satisfy it. A
- * maximum cannot be met by writing more, so the note stays something a
- * person actually writes.
+ * 编辑札记 — a ceiling, and deliberately no floor. The floor is what did
+ * the damage: an editor with one sharp sentence could not satisfy a
+ * 200-code-point minimum, so prose got manufactured to fill it. Nothing
+ * forces a note to be long, and one sentence is a complete note.
+ *
+ * The ceiling is not about policing length. It is what keeps three
+ * fields distinct — introduction states facts, the note states a view,
+ * and `essay` is where length belongs. Without a bound the note and the
+ * essay collapse into the same field.
  */
-export const EDITORIAL_NOTE_MAX = 120;
-export const EDITORIAL_NOTE_EN_MAX = 80;
+export const EDITORIAL_NOTE_MAX = 400;
+export const EDITORIAL_NOTE_EN_MAX = 250;
 
 export const castMemberSchema = z.object({
   name: z.string().min(1, "姓名不能为空"),

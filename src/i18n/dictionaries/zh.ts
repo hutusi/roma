@@ -77,6 +77,7 @@ export const zh = {
     watchDisclaimer: "观看渠道由编辑手工维护，可能随平台下架而失效。",
   },
   person: {
+    editorialNote: "编辑札记",
     career: "创作历程",
     suggestedOrder: "建议观看顺序",
     films: "收录影片",

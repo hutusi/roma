@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import {
   codePointLength,
+  EDITORIAL_NOTE_EN_MAX,
+  EDITORIAL_NOTE_MAX,
   filmFormSchema,
+  INTRODUCTION_MAX,
   parseCountries,
   publishEnProblems,
   publishProblems,
@@ -57,10 +60,15 @@ describe("publishProblems", () => {
     expect(publishProblems({ introduction: zh(300), editorialNote: "", ...base })).toEqual([]);
   });
 
+  // Derived from the constant, not hardcoded: a literal bound here is how
+  // the counters came to describe the wrong field after the split.
   test("accepts a note at the ceiling and rejects one past it", () => {
-    expect(publishProblems({ introduction: zh(300), editorialNote: zh(120), ...base })).toEqual([]);
-    const over = publishProblems({ introduction: zh(300), editorialNote: zh(121), ...base });
-    expect(over.join()).toContain("编辑札记");
+    const at = zh(EDITORIAL_NOTE_MAX);
+    const over = zh(EDITORIAL_NOTE_MAX + 1);
+    expect(publishProblems({ introduction: zh(300), editorialNote: at, ...base })).toEqual([]);
+    expect(
+      publishProblems({ introduction: zh(300), editorialNote: over, ...base }).join(),
+    ).toContain("编辑札记");
   });
 });
 
@@ -90,11 +98,15 @@ describe("publishEnProblems", () => {
     expect(problems.join()).toContain("0 词");
   });
 
-  test("the English note is optional and capped at 80 words", () => {
+  test("the English note is optional and capped at its ceiling", () => {
     const base = { titleEn: "8½", introductionEn: noteEn(150) };
     expect(publishEnProblems(base)).toEqual([]);
-    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(80) })).toEqual([]);
-    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(81) }).join()).toContain("札记");
+    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(EDITORIAL_NOTE_EN_MAX) })).toEqual(
+      [],
+    );
+    expect(
+      publishEnProblems({ ...base, editorialNoteEn: noteEn(EDITORIAL_NOTE_EN_MAX + 1) }).join(),
+    ).toContain("札记");
   });
 });
 
@@ -161,13 +173,12 @@ describe("filmFormSchema", () => {
     );
   });
 
-  test("caps the editorial note at its own, much lower ceiling", () => {
-    expect(filmFormSchema.safeParse({ ...valid, editorialNote: "短".repeat(120) }).success).toBe(
-      true,
-    );
-    expect(filmFormSchema.safeParse({ ...valid, editorialNote: "长".repeat(121) }).success).toBe(
-      false,
-    );
+  test("caps the editorial note at its own, lower ceiling", () => {
+    const at = "短".repeat(EDITORIAL_NOTE_MAX);
+    const over = "长".repeat(EDITORIAL_NOTE_MAX + 1);
+    expect(filmFormSchema.safeParse({ ...valid, editorialNote: at }).success).toBe(true);
+    expect(filmFormSchema.safeParse({ ...valid, editorialNote: over }).success).toBe(false);
+    expect(EDITORIAL_NOTE_MAX).toBeLessThan(INTRODUCTION_MAX);
   });
 
   test("external ids accept bare ids, reject URLs and malformed values", () => {

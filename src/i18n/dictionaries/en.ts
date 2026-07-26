@@ -73,6 +73,7 @@ export const en = {
       "Where-to-watch links are maintained by hand and may lapse as platforms change.",
   },
   person: {
+    editorialNote: "Editorial Note",
     career: "Career",
     suggestedOrder: "Suggested Viewing Order",
     films: "Films",

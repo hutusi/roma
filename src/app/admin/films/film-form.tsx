@@ -337,9 +337,9 @@ export function FilmForm({
         {fieldError(errors.introduction?.message)}
       </Section>
 
-      <Section title="编辑札记（选填，至多 120 字）">
+      <Section title="编辑札记（选填，至多 400 字）">
         <p className="text-ink-muted text-xs">
-          你自己的看法，一两句就够，不填也可以发布。这里是全站唯一带立场的地方，短是有意的。
+          你自己的看法，不填也可以发布。这里是全站唯一带立场的地方——介绍只管事实，判断放这儿。写多长由内容定，一句话也算一篇；真要展开成长文，用下面的「长文」。
         </p>
         <Textarea rows={3} {...register("editorialNote")} className="font-body leading-relaxed" />
         <CeilingCounter text={note} />

@@ -57,12 +57,15 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
         </p>
       )}
 
-      {/* Set apart from the introduction: short, optional, and the one
-          place on the page carrying an editor's own view. */}
+      {/* Its own section, matching the film page: the heading marks the
+          shift from the neutral introduction to an editor's own view. */}
       {editorialNote && (
-        <p className="mx-auto mt-8 max-w-[62ch] border-line border-l-2 pl-5 text-[17px] text-ink-muted italic leading-[1.9] tracking-[0.02em]">
-          {editorialNote}
-        </p>
+        <section className="mt-14">
+          <TitleCard eyebrow={en ? undefined : "Editorial Note"} title={dict.editorialNote} />
+          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
+            {editorialNote}
+          </p>
+        </section>
       )}
 
       {careerEssay && (
