@@ -432,20 +432,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "奥地利裔导演，1890–1976。先在德国拍摄《大都会》《M就是凶手》等片，1933 年离开德国，此后在法国短暂停留并转赴好莱坞，在美国工作逾二十年，多拍犯罪与黑色电影。",
     careerEssay: doc([
       p(
-        "朗的世界由几何与阴影构成。《大都会》把阶级压迫铸成宏伟的未来城，《M就是凶手》则让一座城市的光影本身成为追捕的天罗地网。",
+        "朗 1919 年起在德国执导，默片时期完成《马布斯博士》《尼伯龙根》《大都会》等片，剧本多与其时的妻子特娅·冯·哈布合写。1931 年的《M就是凶手》为其第一部有声片。",
       ),
       p(
-        "他毕生着迷于个体如何被命运与体制这台巨大机器碾过。逃离纳粹德国后，他在好莱坞继续用黑色电影追问同样的问题，冷峻的宿命感始终是他的签名。",
+        "1933 年他离开德国，经巴黎于 1934 年抵美，此后在好莱坞工作逾二十年，多拍犯罪与黑色电影，包括《血红街道》《大内幕》。冯·哈布留在德国并加入纳粹党，两人就此分开。1950 年代末他回到德国拍摄最后三部影片。",
       ),
     ]),
     bioEn:
       "Austrian-born director, 1890–1976. He made Metropolis and M in Germany, left the country in 1933, and after a brief period in France worked in Hollywood for more than twenty years, largely on crime pictures and films noir.",
     careerEssayEn: doc([
       p(
-        "Lang built his worlds out of geometry and shadow. In Metropolis he casts class oppression as a magnificent city of the future; in M he turns the light and dark of an entire city into the dragnet that slowly closes around a killer.",
+        "Lang directed in Germany from 1919, completing Dr Mabuse, Die Nibelungen and Metropolis in the silent period, mostly from screenplays written with his then wife Thea von Harbou. M, in 1931, was his first sound film.",
       ),
       p(
-        "All his life he was gripped by a single question: how the individual is ground beneath the vast machine of fate and the system. Fleeing Nazi Germany, he carried that question to Hollywood and went on asking it in film noir, and that austere sense of doom stayed his signature to the end.",
+        "He left Germany in 1933, reached the United States by way of Paris in 1934, and worked in Hollywood for more than twenty years, largely on crime pictures and films noir including Scarlet Street and The Big Heat. Von Harbou remained in Germany and joined the Nazi party; the marriage ended there. He returned to Germany in the late 1950s for his last three films.",
       ),
     ]),
   },
@@ -456,20 +456,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "印度导演，1921–1992。原从事广告设计，1955 年以《大地之歌》转入电影，此后完成《阿普三部曲》。共导演约三十部影片，多以孟加拉语拍摄，并自任编剧与作曲。",
     careerEssay: doc([
       p(
-        "雷伊深受雷诺阿与意大利新现实主义影响，却把这份写实酿成了独属于孟加拉乡村的抒情。《大地之歌》里孩子第一次看见火车穿过芦苇丛的镜头，是电影史上最纯净的惊奇之一。",
+        "雷伊在加尔各答从事广告设计与书籍装帧，1949 年协助让·雷诺阿在当地拍摄《大河》，其后在伦敦看到《偷自行车的人》，决定自行拍片。《大地之歌》断续拍摄约三年，由西孟加拉邦政府出资完成。",
       ),
       p(
-        "《阿普三部曲》跟随一个男孩从乡村走向城市，把成长、离别与贫穷写成了缓缓流动的史诗。他证明了第三世界的日常也能拥有最普世的诗意与尊严。",
+        "此后他完成《阿普三部曲》，并在四十年间导演约三十部影片，多以孟加拉语拍摄，题材涵盖乡村、城市中产与历史。他兼任编剧、作曲与海报设计。1992 年获奥斯卡终身成就奖，同年去世。",
       ),
     ]),
     bioEn:
       "Indian director, 1921–1992. He worked in advertising design before making Pather Panchali in 1955, which he followed with the rest of the Apu Trilogy. He directed some thirty films, most of them in Bengali, and wrote and scored much of his own work.",
     careerEssayEn: doc([
       p(
-        "Ray absorbed Renoir and Italian neorealism and then distilled that plainspoken realism into a lyricism that could belong only to the villages of Bengal. In Pather Panchali, the moment a child first sees a train tearing through the reeds is one of the purest jolts of wonder in all of cinema.",
+        "Ray worked in advertising design and book illustration in Calcutta, assisted Jean Renoir on The River when it was shot there in 1949, and decided to make his own films after seeing Bicycle Thieves in London. Pather Panchali was shot intermittently over about three years and completed with funding from the government of West Bengal.",
       ),
       p(
-        "The Apu Trilogy follows a single boy from village to city, turning growing up, parting, and poverty into a slow, unhurried epic. Ray proved that ordinary life in the Third World could carry the most universal poetry and dignity of all.",
+        "He went on to finish the Apu Trilogy and directed some thirty films across four decades, most of them in Bengali, ranging over village life, the urban middle class and historical subjects. He also wrote, scored and designed posters for his own work. He received an honorary Academy Award in 1992, the year of his death.",
       ),
     ]),
   },
@@ -480,20 +480,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "德国导演，1888–1931。默片时期作品包括《诺斯费拉图》《最卑贱的人》，1926 年赴美，为福斯拍摄《日出》。1931 年在加州死于车祸，时年四十二岁。",
     careerEssay: doc([
       p(
-        "茂瑙相信电影可以完全靠画面说话。《诺斯费拉图》让吸血鬼的阴影爬上楼梯，把恐惧变成纯粹的光学事件；《最卑贱的人》几乎不用字幕，只凭移动的摄影机就讲完了一个人的尊严崩塌。",
+        "茂瑙 1919 年起在德国执导，早期作品多已散佚。1922 年的《诺斯费拉图》因未获授权改编《德古拉》遭诉讼，法院判决销毁拷贝。1924 年的《最卑贱的人》几乎不用字幕卡，以移动摄影承担叙事。",
       ),
       p(
-        "赴美后拍的《日出》把这份视觉诗学推向顶峰：城市与乡村、堕落与救赎，全在流动的镜头里交融。他英年早逝，却为默片留下了最接近纯电影的遗产。",
+        "1926 年他赴美，为福斯拍摄《日出》，该片在首届奥斯卡获三项奖。此后两部好莱坞作品受制片方干预。1931 年他与弗拉哈迪合作的《禁忌》完成后不久，在加州死于车祸，年四十二。",
       ),
     ]),
     bioEn:
       "German director, 1888–1931. His silent work includes Nosferatu and The Last Laugh. He moved to the United States in 1926 and made Sunrise for Fox. He died in a car accident in California in 1931, aged forty-two.",
     careerEssayEn: doc([
       p(
-        "Murnau believed a film could speak entirely through its images. In Nosferatu he sends the vampire's shadow climbing a staircase and turns dread into a purely optical event; in The Last Laugh he does away with intertitles almost completely and lets a moving camera alone tell the whole story of a man's dignity coming apart.",
+        "Murnau directed in Germany from 1919; most of his earliest films are lost. Nosferatu, in 1922, was an unauthorised adaptation of Dracula and the subject of a lawsuit that ended in an order to destroy the prints. The Last Laugh, in 1924, used almost no intertitles, carrying the story instead through camera movement.",
       ),
       p(
-        "Sunrise, made once he had crossed to America, carries that visual poetry to its summit: city and country, temptation and redemption, all dissolving into one another within the drift of the frame. He died young, but he left silent cinema its closest approach to pure film.",
+        "He moved to the United States in 1926 and made Sunrise for Fox, which took three awards at the first Academy ceremony. The two Hollywood films that followed were subject to studio interference. He died in a car accident in California in 1931, aged forty-two, shortly after completing Tabu with Robert Flaherty.",
       ),
     ]),
   },
@@ -504,20 +504,20 @@ export const seedDirectors: SeedDirector[] = [
     bio: "英国导演、演员，1889–1977。以流浪汉一角成名，自编自导自演并为多部影片配乐，1919 年参与创办联美公司。1952 年赴英期间被美国吊销再入境许可，此后长居瑞士。",
     careerEssay: doc([
       p(
-        "卓别林的“流浪汉”是电影史上最著名的形象：礼帽、手杖、外八字，永远被世界踢来踢去，却永远保有尊严。笑与泪在他这里从来是一体两面。",
+        "卓别林生于伦敦，童年家境贫困，母亲长期患病，他曾入济贫院。早年随剧团赴美巡演，1914 年进入电影业，翌年即已成名，流浪汉一角自此确立。1919 年与格里菲斯等人创办联美公司，取得自主发行权。",
       ),
       p(
-        "有声时代来临，他固执地为默片辩护，《城市之光》与《摩登时代》几乎不靠台词就道尽了机器时代里小人物的心碎与倔强。喜剧于他不是逃避现实，而是直面现实最温柔也最有力的方式。",
+        "有声片普及后，他仍以默片形式拍摄《城市之光》与《摩登时代》，并自任配乐。1940 年的《大独裁者》为其第一部有声长片。1947 年后因政治立场受美国当局调查，1952 年赴英期间再入境许可被吊销，此后定居瑞士，1972 年方短暂返美领取奥斯卡荣誉奖。",
       ),
     ]),
     bioEn:
       "British director and actor, 1889–1977. He became known for the character of the Tramp, and wrote, directed, starred in and scored much of his own work. He was among the founders of United Artists in 1919. His re-entry permit to the United States was revoked while he was travelling to Britain in 1952, and he settled in Switzerland.",
     careerEssayEn: doc([
       p(
-        "Chaplin's Tramp is the most famous figure in all of cinema: the bowler hat, the cane, the splayed-out walk, a little man forever kicked around by the world and yet forever holding on to his dignity. With Chaplin, laughter and tears were never opposites but the same gesture seen from two sides.",
+        "Chaplin was born in London to a poor family; his mother was often ill and he spent time in the workhouse. He toured to the United States with a theatre company, entered films in 1914 and was well known within a year, establishing the character of the Tramp. In 1919 he founded United Artists with Griffith and others, gaining control of his own distribution.",
       ),
       p(
-        "When sound arrived, he dug in his heels and kept faith with the silent image; City Lights and Modern Times say almost everything there is to say about the heartbreak and stubborn pride of the small man in the age of the machine, and they say it with hardly a word of dialogue. Comedy, for him, was never a way of escaping reality — it was the tenderest and most powerful way of looking it straight in the eye.",
+        "He continued to make silent films after sound arrived, scoring City Lights and Modern Times himself. The Great Dictator, in 1940, was his first with dialogue. From 1947 his politics drew the attention of the American authorities, and in 1952 his re-entry permit was revoked while he was travelling to Britain. He settled in Switzerland and returned to the United States only briefly, in 1972, to accept an honorary Academy Award.",
       ),
     ]),
   },
