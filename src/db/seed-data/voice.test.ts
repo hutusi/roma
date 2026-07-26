@@ -106,6 +106,24 @@ describe("addresses-the-reader", () => {
       "addresses-the-reader",
     );
   });
+
+  // Cast credits and film titles capitalise mid-sentence; an address to the
+  // reader does not. Without this, three correct career essays were flagged
+  // for "In Our Time", "In Which We Serve" and "The Children Are Watching Us".
+  test("does not mistake a capitalised title or name for an address", () => {
+    const titles = unit(
+      "person.careerEssay",
+      "en",
+      "He directed a segment of In Our Time, having co-directed In Which We Serve and written The Children Are Watching Us. You An-shun appears in the cast.",
+    );
+    expect(rulesHit(titles)).not.toContain("addresses-the-reader");
+  });
+
+  test("still catches an address that opens a sentence", () => {
+    expect(
+      rulesHit(unit("film.introduction", "en", `${fillerEn(130)}. We are shown the ending first.`)),
+    ).toContain("addresses-the-reader");
+  });
 });
 
 describe("en-em-dash", () => {

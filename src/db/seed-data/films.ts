@@ -51,16 +51,20 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("困境如何成为形式"),
       p(
-        "传统电影把混乱整理成情节，《八部半》却让混乱本身成为结构。它不解决主角的危机，而是邀请你住进这份危机，直到你发现自己也在其中。",
+        "影片由詹尼·迪韦南佐摄影，尼诺·罗塔配乐，布景在罗马电影城搭建，其中包括片中那座始终未曾使用的发射台。拍摄期间费里尼在摄影机上贴过一张字条，写着“记住这是一部喜剧”。",
       ),
-      quote("接受生活的全部，才谈得上开始拍电影。"),
+      quote(
+        "本片为当年意大利报送奥斯卡的作品，同年并在莫斯科国际电影节获大奖，评审结果当时曾引起争议。马斯楚安尼在片中的深色西装、帽子与黑框眼镜参照费里尼本人的装束。",
+      ),
     ]),
     essayEn: doc([
       h2("How Crisis Becomes Form"),
       p(
-        "Conventional films tidy chaos into plot; 8½ makes chaos itself the structure. It does not resolve its hero's crisis so much as invite you to move into it, until you notice you have been living there all along.",
+        "Gianni Di Venanzo photographed the film and Nino Rota wrote the score. The sets were built at Cinecittà in Rome, among them the launch gantry that is never used. During the shoot Fellini kept a note taped to the camera reminding himself that this was a comedy.",
       ),
-      quote("Only by accepting the whole of life can you begin to make a film."),
+      quote(
+        "It was Italy's submission to the Academy Awards and took the grand prize at the Moscow film festival the same year, a decision that caused some argument at the time. Mastroianni's dark suit, hat and heavy glasses were modelled on Fellini's own.",
+      ),
     ]),
     cast: [
       {
@@ -168,17 +172,19 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("与沉默对弈"),
       p(
-        "骑士要的不是长生，而是一个答案。伯格曼的残酷与温柔在于：他既不许诺上帝存在，也不忍心让善良彻底落空。",
+        "伯格曼前作《夏夜的微笑》1956 年在戛纳获奖，制片方随即批准本片开拍。全片以约三十五天拍成，预算有限，摄影为贡纳尔·菲舍尔。结尾死神领众人在山脊上远去的一场是在光线将尽时匆促拍成，画面中有几个身影由现场工作人员充任。",
       ),
-      quote("信仰是一种折磨，像爱一个躲在黑暗里、始终不肯现身的人。"),
+      quote(
+        "影片获 1957 年戛纳电影节评审团特别奖。海边对弈与山脊列队这两个画面此后被大量引用与戏仿。",
+      ),
     ]),
     essayEn: doc([
       h2("Playing Against the Silence"),
       p(
-        "The knight is not playing for more life but for an answer. Bergman's cruelty and his tenderness are the same gesture: he will neither promise that God exists nor allow goodness to come to nothing.",
+        "Smiles of a Summer Night had been well received at Cannes in 1956, and the studio approved this film soon afterwards. It was shot in about thirty-five days on a limited budget, photographed by Gunnar Fischer. The closing shot of Death leading a line of figures along a ridge was made quickly as the light went, with crew members standing in for some of the cast.",
       ),
       quote(
-        "Faith is a torment, like loving someone who hides in the dark and will not show himself.",
+        "The film took the special jury prize at Cannes in 1957. The chess game on the beach and the line of figures on the ridge have been quoted and parodied many times since.",
       ),
     ]),
     cast: [
@@ -289,13 +295,13 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("运动即叙事"),
       p(
-        "黑泽明用长焦、多机位与突然的静止，让每一次冲锋都有重量。观众不是在看故事，而是被卷进故事的物理之中。",
+        "拍摄历时约一年，远超原定档期，东宝曾两度中止摄制以控制成本。影片在日本首映后出现过删节版本，国外长期流通的拷贝约一百六十分钟，完整版此后才重新发行。本片获 1954 年威尼斯电影节银狮奖；1960 年美国将其改编为西部片《豪勇七蛟龙》。",
       ),
     ]),
     essayEn: doc([
       h2("Movement as Narrative"),
       p(
-        "With telephoto lenses, several cameras running at once, and sudden stillness, Kurosawa gives every charge its weight. You are not so much watching a story as being swept into its physics.",
+        "The shoot ran about a year, far beyond its schedule, and Toho halted production twice to control the cost. Cut versions circulated after the Japanese premiere, and for many years the print seen abroad ran about a hundred and sixty minutes; the full version was reissued later. The film took the Silver Lion at Venice in 1954, and was remade in the United States as the western The Magnificent Seven in 1960.",
       ),
     ]),
     cast: [
@@ -445,13 +451,13 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("低处的凝视"),
       p(
-        "小津把摄影机放在跪坐者的视线高度，几乎从不移动。世界因此不再被“表现”，而是被静静地“看着”——像家人围坐时那种不动声色的注视。",
+        "剧本由小津与野田高梧合写，两人依惯例在茅崎的旅馆闭门完成。松竹当时认为影片过于日本化，未安排出口；1958 年它在伦敦获萨瑟兰奖，此后才逐步在海外放映。2012 年《视与听》的导演票选中本片列第一。",
       ),
     ]),
     essayEn: doc([
       h2("The Gaze from Below"),
       p(
-        "Ozu sets the camera at the eye level of someone kneeling on a tatami mat, and almost never moves it. The world is no longer presented so much as quietly watched — the way family members regard one another across a low table, saying nothing.",
+        "Ozu wrote the script with Kōgo Noda, working as they usually did in seclusion at an inn in Chigasaki. Shochiku considered the film too Japanese to export; it won the Sutherland Trophy in London in 1958 and only then began to be shown abroad. In the 2012 Sight and Sound poll of directors it placed first.",
       ),
     ]),
     cast: [
@@ -725,13 +731,13 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("跳接作为宣言"),
       p(
-        "跳接不是失误，而是态度：戈达尔剪掉了让叙事“顺滑”的那几帧，好让你时刻记得，你在看的是电影，而电影可以为所欲为。",
+        "影片于 1959 年八九月间以约四周拍成，成本低廉。摄影拉乌尔·库塔尔常坐在推动的轮椅上手持拍摄，并使用为静照生产的高感光胶片接成长卷，以便在自然光下工作；戈达尔每天上午写当日的对白。片头字幕将影片献给美国的小制片厂 Monogram Pictures。",
       ),
     ]),
     essayEn: doc([
       h2("The Jump Cut as Manifesto"),
       p(
-        "The jump cut is not a blunder but an attitude: Godard snips out the few frames that would let the story flow, so that you never forget you are watching a film — and that a film can do exactly as it likes.",
+        "The film was shot in about four weeks in August and September 1959 on a very small budget. Raoul Coutard often worked handheld from a wheelchair pushed along the street, and used high-speed stock manufactured for stills photography, spliced into long rolls, so that he could work in available light. Godard wrote each day's dialogue that morning. The opening credits dedicate the film to Monogram Pictures.",
       ),
     ]),
     cast: [
@@ -874,13 +880,13 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("深焦里的权力"),
       p(
-        "威尔斯让前景与背景同样清晰，人物于是被困在自己搭建的巨大空间里。景深不只是技法，它就是这部电影的主题：凯恩拥有整个画面，却填不满其中的空。",
+        "威尔斯与雷电华的合约给予他终剪权，这对首次执导长片者极为罕见。剧本署名由他与赫尔曼·曼凯维奇共有，两人各自的贡献长期存在争议。赫斯特旗下报纸拒登本片广告，米高梅曾出资试图促使雷电华销毁底片；影片发行范围有限，未能收回成本，五十年代在欧洲重映后评价才逐步上升。",
       ),
     ]),
     essayEn: doc([
       h2("Power in Deep Focus"),
       p(
-        "Welles keeps foreground and background equally sharp, trapping his characters inside the vast spaces they have built. Deep focus is not merely technique here; it is the subject: Kane owns the whole frame and cannot fill the emptiness inside it.",
+        "Welles's contract with RKO gave him final cut, which was almost unheard of for a first feature. The screenplay credit is shared with Herman J. Mankiewicz, and the division of the writing has been disputed ever since. Hearst's papers refused advertising for the film, and MGM offered RKO money to destroy the negative. It was given a limited release and did not recover its cost; its standing rose only after European reissues in the 1950s.",
       ),
     ]),
     cast: [
@@ -1541,23 +1547,25 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("停在门槛上的电影"),
       p(
-        "《小城之春》的全部张力都建立在没有发生的事情上。志忱来了，玉纹去了他的房间，门开着，两人隔着一张桌子说了几句无关的话——费穆没有给任何一个可以让观众松一口气的时刻，也没有给任何一个可以让人指责的时刻。",
+        "影片由文华影业以很低的成本拍成，宅院与残破的城墙均为搭建的布景。李天济的剧本经费穆大幅改动，人物由原稿的多人减为五人。",
       ),
       p(
-        "这种克制不是道德保守，而是形式上的自觉。他知道一旦拍出越轨，电影就变成了事件；而只要不拍，它就一直是状态。八十年后我们仍在为这个选择震动。",
+        "1948 年公映后，影片在左翼刊物上受到批评，指其回避当时的社会情势。1949 年后费穆离沪赴港，本片未再安排放映，拷贝在很长时间里只存于资料馆。",
       ),
-      quote("发乎情，止乎礼——这句老话，费穆把它拍成了摄影机的运动。"),
+      quote(
+        "2002 年田壮壮重拍此片。2005 年香港电影金像奖为纪念中国电影百年举办的评选中，本片列于首位。",
+      ),
     ]),
     essayEn: doc([
       h2("A Film That Stops at the Threshold"),
       p(
-        "The whole tension of Spring in a Small Town rests on what does not happen. Zhichen arrives, Yuwen goes to his room, the door stays open, and the two of them exchange a few irrelevant sentences across a table. Fei Mu grants no moment where the audience can exhale, and none where it can accuse.",
+        "Wenhua produced the film on a very small budget; the courtyard house and the broken town wall were both built as sets. Fei Mu reworked Li Tianji's screenplay heavily, cutting the cast down to five.",
       ),
       p(
-        "That restraint is not moral conservatism but formal self-awareness. He understood that the moment transgression is filmed the picture becomes an event, and that so long as it is withheld the picture remains a condition. Eighty years on, the choice still stuns.",
+        "After its release in 1948 the film was criticised in left-wing journals for standing aside from the political situation. Fei Mu left Shanghai for Hong Kong the following year, no further screenings were arranged, and for a long time the film survived only in archive prints.",
       ),
       quote(
-        "Feeling may begin, but it stops at propriety — an old maxim that Fei Mu turned into camera movement.",
+        "Tian Zhuangzhuang remade it in 2002. In the poll held by the Hong Kong Film Awards in 2005 to mark a century of Chinese cinema, it was placed first.",
       ),
     ]),
     cast: [
@@ -1601,19 +1609,19 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("克制作为一种纪律"),
       p(
-        "王家卫没有完整剧本，成片的优雅其实是大量删减之后的残余——据说关于那场婚外情本身，他拍下的素材远多于留在片中的。留下来的，是一套关于「差一点」的结构。",
+        "影片原为一部关于食物的三段式作品，拍摄期间改变方向，前后历时约十五个月。部分场景在曼谷取景以替代六十年代的香港，结尾一段摄于柬埔寨吴哥。全片没有完成剧本，杜可风中途离组，摄影由李屏宾接手完成。",
       ),
       p(
-        "重复本身就是论证。同一条走廊、同一个面摊、同一场雨：电影很少敢于只靠复现让观众感到时间流逝，而这部片子证明了它可以。",
+        "除梁朝伟的表演奖外，本片在同届戛纳另获最高技术委员会大奖。2022 年《视与听》影评人票选中列第五。",
       ),
     ]),
     essayEn: doc([
       h2("The Discipline of Withholding"),
       p(
-        "Wong shot without a finished script, and the film's famous elegance is the residue of enormous subtraction — reportedly far more footage of the affair was shot than survives. What remains is a structure of near-misses.",
+        "The film began as one of three stories about food, changed direction during production, and took some fifteen months to complete. Parts of it were shot in Bangkok, standing in for Hong Kong in the 1960s, and the closing sequence at Angkor in Cambodia. There was no finished script; Christopher Doyle left partway through and Mark Lee Ping-bing completed the photography.",
       ),
       p(
-        "The repetition is the argument. The same corridor, the same noodle stall, the same rain: cinema rarely trusts an audience to feel time passing through recurrence alone, and this is the film that proves it can.",
+        "Besides Tony Leung's acting award, the film took the Grand Prize of the Technical Commission at the same Cannes festival. It placed fifth in the 2022 Sight and Sound critics' poll.",
       ),
     ]),
     cast: [
@@ -1658,17 +1666,17 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("电路图"),
       p(
-        "杨德昌读的是电机工程，这不是花边，是理解他的钥匙。片中上百个角色彼此不识，却通过父亲的职务、帮派的地盘、一把手电筒的归属互相咬合，任何一个节点松动，整条线路都会改变电流的方向。",
+        "演员多为非职业，其中张震拍摄时十四岁，其父张国柱在片中饰演他的父亲。英文片名出自猫王《Are You Lonesome Tonight?》中的一句歌词，片中少年将其听作 a brighter summer day。",
       ),
-      p("所以结尾的那一刀既是意外，也是必然。小四不是坏孩子，他只是那个电路里电压最集中的位置。"),
+      p("影片公映后长期无法看到完整版本，2009 年经世界电影基金会修复，此后在各地重映并发行影碟。"),
     ]),
     essayEn: doc([
       h2("The Circuit Diagram"),
       p(
-        "Yang trained in electrical engineering, which is not trivia but the key to reading him. The film's hundred-odd characters do not know one another, yet they interlock through a father's job, a gang's turf, the ownership of a single flashlight; loosen any node and the current changes direction everywhere.",
+        "Most of the cast were non-professionals. Chang Chen was fourteen during the shoot, and his own father, Chang Kuo-chu, plays his father in the film. The English title comes from a line in Elvis Presley's Are You Lonesome Tonight, which the boys in the film mishear as a brighter summer day.",
       ),
       p(
-        "Which is why the knife at the end is at once an accident and an inevitability. Xiao Si'r is not a bad boy. He is simply the point in the circuit where the voltage concentrates.",
+        "The full version was unavailable for many years after release. It was restored by the World Cinema Foundation in 2009 and has since been reissued in cinemas and on disc.",
       ),
     ]),
     cast: [
@@ -1707,17 +1715,19 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("平视的高度"),
       p(
-        "默片时代拍妓女，通常有两条路：控诉社会，或者渲染堕落。吴永刚两条都没走。他把机位放平，让观众和她坐在同一条板凳上，于是道德判断变成了多余的东西。",
+        "影片摄于中国电影由无声转向有声的过渡阶段，联华当时仍以默片为主。全片没有明确交代主人公的姓名，字幕卡也不对其职业作道德评断。",
       ),
-      p("这一选择在 1934 年是激进的，今天依然是。很多当代电影仍在俯拍它们的主人公。"),
+      p(
+        "阮玲玉于 1935 年 3 月自杀，此前数月其私生活为上海报刊连续报道；出殡当日沿途有大批市民送行，此事为海外媒体所报道。2014 年中国电影资料馆完成本片修复，并配以新写的乐谱作现场演奏放映。",
+      ),
     ]),
     essayEn: doc([
       h2("The Height of the Eye"),
       p(
-        "Silent cinema had two standard routes for filming a prostitute: indict society, or luxuriate in the fall. Wu Yonggang took neither. He levelled the camera and sat the audience on the same bench as his heroine, at which point moral judgment simply became surplus to requirements.",
+        "The film was made while Chinese studios were moving from silent production to sound, and Lianhua was still working mainly in silent film. The woman is never named, and the intertitles pass no judgement on her work.",
       ),
       p(
-        "That was a radical choice in 1934 and it remains one now. A great many contemporary films still shoot down at the people they are about.",
+        "Ruan Lingyu killed herself in March 1935, after months in which the Shanghai press had reported on her private life. Large crowds lined the route of her funeral, which was covered abroad. The China Film Archive completed a restoration in 2014, screened with a newly written score performed live.",
       ),
     ]),
     cast: [
@@ -1846,19 +1856,19 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("从武打到顿悟"),
       p(
-        "胡金铨受过京剧训练，他的动作场面从不追求真实的搏斗感，而是追求锣鼓点般的节奏：起势、停顿、爆发。人物在竹林中的腾跃并不合乎物理，却完全合乎音乐。",
+        "胡金铨在台湾搭起驿站布景后停工一年，任草木生长以做出荒废之感，全片前后拍摄约三年。影片在台湾分上下集公映时票房不佳，出品方联邦影业其后结束营业。",
       ),
       p(
-        "而当影片进入后段，这套节奏被推到了它的尽头——打斗不再解决任何问题，于是电影只好换一种方式收场。那个流着金血的和尚，是类型片史上最大胆的一次越界。",
+        "1975 年在戛纳获奖后，本片重新受到注意。2015 年台湾电影资料馆完成数字修复，同年在戛纳经典单元放映。",
       ),
     ]),
     essayEn: doc([
       h2("From Combat to Enlightenment"),
       p(
-        "King Hu trained in Peking opera, and his action was never after the feel of a real fight; it was after the beat of drum and gong — gather, hold, burst. The leaps through the bamboo obey no physics whatever and obey music completely.",
+        "King Hu had the garrison set built in Taiwan and then left it standing for a year, letting plants grow over it to age it; the shoot itself ran about three years. Released in Taiwan in two parts, the film did poor business, and Union Film went out of business not long after.",
       ),
       p(
-        "When the film enters its final movement that rhythm is pushed to its limit: fighting no longer settles anything, so the picture has to find another way to end. The monk bleeding gold is the boldest transgression in the history of the genre.",
+        "The award at Cannes in 1975 brought it renewed attention. The Taiwan Film Institute completed a digital restoration in 2015, shown that year in the Cannes Classics programme.",
       ),
     ]),
     cast: [
@@ -1900,19 +1910,19 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("让观众成为同谋"),
       p(
-        "影片中段希区柯克做了一个惊人的决定：他提前告诉观众真相，而主角还蒙在鼓里。悬念因此从「会发生什么」变成了「他什么时候会知道」——痛苦被拉长了。",
+        "原定的女主角为薇拉·迈尔斯，因怀孕退出，改由金·诺瓦克出演。影片 1958 年公映时评价不一，票房平常。",
       ),
       p(
-        "更狠的是那场改造戏。我们本该为这个女人难过，却在绿光里等着她走出来变成朱迪。希区柯克没有指责任何人，他只是安排我们坐在了那个位置上。",
+        "1973 年希区柯克将本片连同另外四部作品撤出发行，此后十年无法看到，1983 年重新公映，1996 年完成修复。2012 年《视与听》影评人票选中，本片取代《公民凯恩》列于首位。",
       ),
     ]),
     essayEn: doc([
       h2("Making the Audience Complicit"),
       p(
-        "Midway through, Hitchcock makes an astonishing decision: he tells the audience the truth while leaving his protagonist in the dark. Suspense shifts from what will happen to when he will find out — and the suffering is stretched out accordingly.",
+        "Vera Miles had been cast in the leading role and withdrew when she became pregnant; Kim Novak replaced her. Reviews were mixed on release in 1958 and business was moderate.",
       ),
       p(
-        "Crueller still is the makeover scene. We ought to grieve for this woman, and instead we wait in the green light for her to walk out transformed. Hitchcock accuses no one. He simply arranged for us to be sitting where we are sitting.",
+        "In 1973 Hitchcock withdrew the film from distribution along with four others, and it could not be seen for a decade. It was reissued in 1983 and restored in 1996. In the 2012 Sight and Sound critics' poll it displaced Citizen Kane at the top of the list.",
       ),
     ]),
     cast: [
@@ -1951,19 +1961,19 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("收回来的信任"),
       p(
-        "早年的黑泽明相信集体：七个武士守住一个村子，一个公务员用一座公园赎回一生。《乱》里没有这样的出口，秀虎的疯癫不是个人悲剧，而是整个秩序崩塌后剩下的声音。",
+        "黑泽明在日本未能筹得资金，影片最终由法国制片人塞尔日·西尔贝曼投资，成本约一千一百万美元，为当时最昂贵的日本影片。第三城的布景建于富士山麓，焚烧时为实景燃烧，仲代达矢在燃烧中拍摄。",
       ),
       p(
-        "最能说明问题的是那场攻城戏：黑泽明抽掉了全部现场音，只留下音乐。当暴力大到某个程度，写实反而失效，只剩下仪式。",
+        "拍摄期间黑泽明的妻子矢口阳子去世。本片由和田惠美获奥斯卡最佳服装设计奖，黑泽明本人获最佳导演提名；日本未以本片报送该届最佳外语片，此事当时引起议论。",
       ),
     ]),
     essayEn: doc([
       h2("Trust, Withdrawn"),
       p(
-        "The early Kurosawa believed in the collective: seven samurai hold a village, a dying clerk redeems a life with one park. Ran offers no such exit. Hidetora's madness is not a personal tragedy but the sound left over after an entire order has collapsed.",
+        "Kurosawa could not raise the money in Japan, and the film was financed by the French producer Serge Silberman at a cost of about eleven million dollars, the most expensive Japanese production of its day. The Third Castle was built on the slopes of Mount Fuji and burned for real, with Tatsuya Nakadai filmed inside it.",
       ),
       p(
-        "The siege makes the case. Kurosawa strips out every trace of location sound and leaves only music. Past a certain magnitude of violence realism stops working, and all that remains is ritual.",
+        "Kurosawa's wife, Yōko Yaguchi, died during the shoot. Emi Wada won the Academy Award for costume design and Kurosawa was nominated for direction, but Japan did not submit the film for the foreign-language award, which drew comment at the time.",
       ),
     ]),
     cast: [
@@ -2007,19 +2017,19 @@ export const seedFilms: SeedFilm[] = [
     essay: doc([
       h2("不解释的电影"),
       p(
-        "库布里克拒绝为结尾提供答案，这不是故弄玄虚。他相信电影可以像音乐一样直接作用于人，而一旦给出解释，作品就退化成了一道有标准答案的谜题。",
+        "影片以克拉克 1948 年的短篇《哨兵》为出发点，在英国的埃尔斯特里与谢珀顿片场拍摄，前后历时约四年。片中飞船内部的旋转布景为专门建造的离心机。",
       ),
       p(
-        "所以片中最动人的死亡属于 HAL——一台电脑在被拔掉记忆板时唱起儿歌。人类角色面无表情地执行任务，机器却在恐惧。这个反转就是全片的论点。",
+        "1968 年 4 月首映后评价两极，库布里克随即剪去约十九分钟。影片其后在长线放映中收回成本，成为米高梅当年收益最高的作品。",
       ),
     ]),
     essayEn: doc([
       h2("A Film That Refuses to Explain"),
       p(
-        "Kubrick declined to supply an answer for the ending, and this is not mystification. He believed film could act on a person directly, the way music does, and that an explanation would demote the work to a riddle with a correct solution.",
+        "The film started from Clarke's 1948 short story The Sentinel and was shot at Elstree and Shepperton in England over some four years. The rotating interior of the spacecraft was a purpose-built centrifuge.",
       ),
       p(
-        "Which is why the most affecting death in the picture belongs to HAL — a computer singing a children's song as its memory is pulled. The human characters carry out their tasks expressionlessly while the machine is afraid. That inversion is the whole argument.",
+        "Reviews were divided after the premiere in April 1968, and Kubrick cut about nineteen minutes immediately afterwards. The film recovered its cost over a long run and became MGM's highest-earning release of the year.",
       ),
     ]),
     cast: [

@@ -66,9 +66,14 @@ const NEUTRAL: Family[] = [
   "list.theme",
   "list.intro",
   "list.reasoning",
+  // The long forms are the body to the introduction's lead, not a licence
+  // to editorialise at length: they carry production history, sourcing and
+  // reception that will not fit the introduction's 500-code-point band.
+  "film.essay",
+  "person.careerEssay",
 ];
 const VOICED: Family[] = ["film.note", "person.note"];
-const ALL_FAMILIES: Family[] = [...NEUTRAL, ...VOICED, "film.essay", "person.careerEssay"];
+const ALL_FAMILIES: Family[] = [...NEUTRAL, ...VOICED];
 
 export type ProseUnit = {
   id: string;
@@ -189,13 +194,15 @@ const EN_UNBOUNDED =
 
 /** Reference prose does not address the reader or tell them what to do. */
 const ZH_SECOND_PERSON = /(^|[，。；：])(你|您|我们|咱们)|不妨|请务必|值得你|如果你/g;
-// The pronoun list must not swallow proper names: "You An-shun as the
-// teenage Ah-ha" is a cast credit, not an address to the reader. A capital
-// followed by another capitalised word is a name, so it is excluded. Same
-// class of false positive as the case-sensitive director check in
-// verify-facts — a rule that cries wolf on correct prose gets ignored.
+// The pronoun list must not swallow proper nouns. "You An-shun" is a cast
+// credit; "In Our Time", "In Which We Serve" and "The Children Are Watching
+// Us" are titles. All of them capitalise mid-sentence, and a real address to
+// the reader does not, so only lowercase pronouns match — plus the
+// capitalised forms where a sentence actually starts. Same class of false
+// positive as the case-sensitive director check in verify-facts: a rule that
+// cries wolf on correct prose gets ignored.
 const EN_SECOND_PERSON =
-  /\b(?!You\s+[A-Z])(you|your|we|us|our)\b|\b(watch|see|note|imagine|consider) (it|this|the film)\b/gi;
+  /\b(you|your|we|us|our)\b|(?<=^|[.!?]\s)(?!(?:You|Your|We|Us|Our)\s+[A-Z])(You|Your|We|Us|Our)\b|\b([Ww]atch|[Ss]ee|[Nn]ote|[Ii]magine|[Cc]onsider) (it|this|the film)\b/g;
 
 export const RULES: Rule[] = [
   {
