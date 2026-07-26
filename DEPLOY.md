@@ -93,9 +93,17 @@ bun --env-file=.env.production.local --conditions=react-server run src/db/seed-c
 set -a; source .env.production.local; set +a
 psql "$DATABASE_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
 
-# 5. Changes to an existing row that are NOT tags — a corrected note, a list's sortOrder —
-#    still need their own step, because everything else is onConflictDoNothing:
-#      prose    → bun run src/db/resync-content.ts --films=… --apply
+# 5. Changes to an existing row that are NOT tags — a corrected introduction, a list's
+#    sortOrder — still need their own step, because everything else is onConflictDoNothing:
+#      prose    → bun run src/db/resync-content.ts --films=… --people=… --lists=… --apply
+#                 (covers introductions, editorial notes, essays, bios, career essays, and
+#                 list theme/intro plus each 入选理由. --people= spans directors AND actors;
+#                 --lists= also walks that list's items. A slug in no seed file is an error
+#                 and exits 1 — it used to warn and exit 0, which is how actors stayed
+#                 quietly unreachable. Dry-run first: omit --apply, add --diff to see the
+#                 text. --all sweeps everything and must be spelled out; a field seed-data
+#                 does not define is left alone rather than nulled, and --clear=<slug>:<field>
+#                 is the only way to actually mean null.)
 #      lists    → /admin (moving the featured list, sortOrder 0)
 #      metadata → bun run src/db/backfill-metadata.ts (--films=… | --all) --apply
 #                 (external ids, isSilent, restoration notes — ADR 0016. Dry-run first:
