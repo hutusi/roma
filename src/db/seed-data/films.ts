@@ -283,9 +283,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1295399",
     wikidataId: "Q189540",
     introduction:
-      "战国乱世，一座饱受山贼劫掠的村庄，请来七个走投无路的浪人守护稻谷与性命。黑泽明用三个多小时建起一整座关于勇气、阶级与徒劳的史诗：招募、备战、决战，节奏如鼓点般层层推进，泥泞中的雨战至今仍是动作场面的标尺。但它真正动人的，是武士与农民之间那道无法弥合的裂缝——胜利属于活下来的农民，而武士只留下几座土坟。“这一仗我们又输了。”志村乔的这句叹息，把英雄主义拉回了历史的尘土。此后无数关于“乌合之众集结成队”的电影，都欠它一份师承。",
+      "《七武士》是黑泽明执导的 1954 年日本电影，东宝出品，志村乔饰演领头的浪人勘兵卫，三船敏郎饰演冒充武士的农家子菊千代。故事设在战国时期：一座每逢收成便遭山贼劫掠的村庄，以粮食为酬雇来七名浪人协助防守。影片分招募、备战、决战三段推进，结尾的战斗在雨中泥地里拍摄，多台摄影机同时开机并使用长焦镜头，这套做法此后为大量动作片沿用。片长约二百零七分钟，是当时日本成本最高的影片。七人中四人战死，幸存者留在村外，村民回到田里插秧。",
     introductionEn:
-      "In the warring-states era a village plundered by bandits hires seven desperate, masterless samurai to guard its rice and its lives. Across more than three hours Kurosawa raises a whole epic out of courage, class, and futility — recruitment, preparation, the final battle building like a drumbeat — and the muddy climactic fight in the rain remains the benchmark every action film is still measured against. What truly moves, though, is the rift that never closes between the samurai and the farmers they defend: the victory belongs to the peasants who survive to plant again, while the warriors are left with a handful of earthen graves. “In the end, we lost this battle too,” the leader sighs, pulling heroism back down into the dust of history. Every later film about a ragtag band assembled for one desperate stand owes this one a debt.",
+      "Seven Samurai is a 1954 Japanese film directed by Akira Kurosawa, produced by Toho, with Toshiro Mifune and Takashi Shimura among the leads. Set during the warring-states period, it follows a farming village that hires seven masterless samurai, paying them in rice, to defend it against bandits who return after each harvest. The film moves through recruitment, preparation and the final battle, which was shot in rain and mud with several cameras running at once and long lenses, a method widely adopted by action films afterwards. It runs about two hundred and seven minutes and was the most expensive Japanese production made to that date. Four of the seven are killed; the survivors are left standing outside the village while the farmers return to planting.",
     essay: doc([
       h2("运动即叙事"),
       p(
@@ -339,9 +339,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1291879",
     wikidataId: "Q135465",
     introduction:
-      "一桩树林里的凶案，四个当事人给出四套彼此矛盾的证词，包括借巫女之口开口的死者。黑泽明由此把一个简单的谋杀，拍成了关于真相是否存在的哲学迷宫。摄影机第一次大胆地对着太阳穿行于密林，光影斑驳，如同人心的暧昧。每个人的叙述都在维护自己的体面，真相反而在自利的雾中永远退场。“罗生门”从此成为一个世界通用的词，指代那种各执一词、无从裁断的困境。而结尾樵夫收养弃婴的微光，又为这份对人性的怀疑留了一线不肯熄灭的信任。它让世界第一次看见了日本电影。",
+      "《罗生门》是黑泽明执导的 1950 年日本电影，大映出品，三船敏郎与京町子主演，取材自芥川龙之介的短篇《竹林中》与《罗生门》。影片围绕树林中的一桩凶案展开，由强盗、妻子、借巫女之口开口的死者与樵夫分别讲述经过，四套说法互相矛盾，影片自始至终不作裁定。外框故事设在破败的罗生门下，三人避雨议论此事；结尾樵夫抱走一名弃婴。摄影上多次将镜头直接对准穿过树冠的阳光，这在当时并不常见。本片获威尼斯电影节金狮奖，并获奥斯卡荣誉奖。",
     introductionEn:
-      "A murder in a grove, and four irreconcilable accounts of it — including the dead man's own, spoken through a medium. From this simple crime Kurosawa builds a philosophical labyrinth about whether truth can be known at all. For the first time a camera points boldly up through the forest canopy at the sun, the dappled light standing in for the ambiguity of the human heart. Each witness tells the version that guards his own dignity, and the truth recedes forever into the fog of self-interest. “Rashomon” has since become a word the whole world uses for exactly this predicament, in which everyone speaks and no one can be judged. Yet the closing image — a woodcutter taking an abandoned infant into his arms — leaves this doubt about human nature one small, stubborn thread of trust. It was the film that first made the world look at Japanese cinema.",
+      "Rashomon is a 1950 Japanese film directed by Akira Kurosawa, produced by Daiei, starring Toshiro Mifune and Machiko Kyō, and drawn from two short stories by Ryūnosuke Akutagawa, In a Grove and Rashōmon. A killing in a forest is recounted in turn by the bandit, the wife, the dead man speaking through a medium, and a woodcutter. The four accounts contradict one another and the film does not adjudicate between them. A framing story places three men sheltering from rain beneath the ruined Rashōmon gate as they discuss the case, and it ends with the woodcutter carrying away an abandoned infant. The camera is repeatedly pointed directly at the sun through the forest canopy, which was uncommon practice at the time. The film received the Golden Lion at Venice and an Academy Honorary Award.",
     cast: [
       {
         name: "Toshiro Mifune",
@@ -371,9 +371,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1293847",
     wikidataId: "Q152105",
     introduction:
-      "一个庸碌了三十年、只会盖章的市政科长，被诊断出胃癌只剩数月可活。在纵酒与彷徨之后，他决定用最后的时间，顶着官僚系统的层层推诿，把一片臭水沟建成一座小公园。黑泽明用近乎残酷的诚实拷问：人怎样才算真正活过？影片后半程干脆跳到主人公的葬礼，让同事们在酒后争论他究竟做了什么——记忆与推诿之间，一个人的意义被反复称量。志村乔在雪夜的秋千上轻声哼唱的一幕，是电影史上最动人的死亡与新生。它提醒每一个在体制中麻木的人：意义不在别处，只在你肯不肯为一件小事燃尽自己。",
+      "《生之欲》是黑泽明执导的 1952 年日本电影，东宝出品，志村乔主演。市政科长渡边勘治在同一个岗位上盖了三十年公章，查出胃癌后被告知只剩数月。他先是酗酒、四处游荡，随后转而推动一件具体的事：把一片积水的洼地改建成儿童公园，为此在互相推诿的各科室之间反复奔走。影片后半段跳至他的守灵夜，同事们在酒后争论他究竟起了多大作用，此前的经过以回忆插叙补足。他坐在雪夜的秋千上低声哼唱的一场戏，是全片最常被提及的段落。",
     introductionEn:
-      "A municipal section chief who has done nothing for thirty years but stamp documents learns he has stomach cancer and a few months to live. After a bout of drinking and aimless wandering, he resolves to spend what time is left forcing a fetid drainage ditch, against every layer of bureaucratic evasion, into a small neighborhood park. Kurosawa asks with almost cruel honesty what it means to have truly lived. The second half leaps ahead to the man's wake, where his colleagues, drunk, argue over what exactly he accomplished — his significance weighed back and forth between memory and self-serving denial. The image of Takashi Shimura softly singing on a swing in the falling snow is one of the most moving deaths, and rebirths, in all of cinema. It reminds everyone numbed by the machinery of their days that meaning lies nowhere but in whether you are willing to burn yourself down for one small thing.",
+      "Ikiru is a 1952 Japanese film directed by Akira Kurosawa, produced by Toho, starring Takashi Shimura. Kanji Watanabe has spent thirty years stamping documents in the same municipal office when he is found to have stomach cancer and told he has months left. After a period of drinking and aimless wandering he settles on one concrete task: turning a waterlogged patch of ground into a children's playground, which means working his way repeatedly through the departments that keep passing it along. The second half moves forward to his wake, where his colleagues drink and argue over how much he actually achieved, and the intervening events are filled in by flashback. The scene in which he sits on a swing in falling snow, singing quietly, is the passage most often cited.",
     cast: [
       {
         name: "Takashi Shimura",
@@ -402,9 +402,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1292515",
     wikidataId: "Q20475",
     introduction:
-      "一个无名浪人踱进一座被两帮恶势力撕扯的小镇，索性把自己卖给双方，坐看他们自相残杀。黑泽明把西部片的骨架移植到幕末的日本，又用三船敏郎耸肩、抓痒、痞气十足的表演，造出了一个全新的反英雄。风卷尘沙的空镜、干脆利落的杀阵，把冷峻与黑色幽默调成一味。这部电影反过来又催生了莱昂内的《荒野大镖客》，一个形象就此在东西方之间来回投胎，成就了“独行客涤荡罪恶小镇”的永恒母题。冷峻的幽默之下，是黑泽明对暴力与贪婪毫不留情的嘲讽。它证明娱乐性与作者性从来不必二选一。",
+      "《用心棒》是黑泽明执导的 1961 年日本电影，东宝出品，三船敏郎饰演一名不报姓名的浪人。故事设在幕末：小镇被两帮势力分据，浪人先后受雇于双方，从中挑动，使其火并。影片在结构上借用了美国西部片，室外街道搭景拍摄，多用风沙与空镜过场，杀阵短促，配乐由佐藤胜创作。塞尔吉奥·莱昂内 1964 年的《荒野大镖客》未经授权改编自本片，东宝提起诉讼并获胜，取得该片部分收益与亚洲发行权。三船敏郎次年在续作《椿三十郎》中再演同一角色。",
     introductionEn:
-      "A nameless ronin ambles into a town being torn apart by two rival gangs and calmly hires himself out to both, the better to watch them annihilate each other. Kurosawa transplants the skeleton of the American Western into the last days of the shogunate, and out of Mifune's shoulder-shrugging, itch-scratching, thoroughly disreputable performance he conjures an entirely new kind of anti-hero. Dust blows through empty streets, the swordplay is crisp and sudden, and cool detachment is cut with pitch-black comedy. This film would in turn father Leone's A Fistful of Dollars, sending a single figure to be reincarnated back and forth between East and West and founding the deathless motif of the lone stranger who cleanses a wicked town. Under the cool jokes lies Kurosawa's merciless contempt for violence and greed. It proves once and for all that mass entertainment and personal authorship were never an either/or.",
+      "Yojimbo is a 1961 Japanese film directed by Akira Kurosawa, produced by Toho, with Toshiro Mifune as a ronin who never gives his name. It is set in the closing years of the shogunate, in a town divided between two criminal factions; the ronin takes employment from each in turn and manoeuvres them into destroying one another. The film borrows its structure from the American Western, was shot on a purpose-built exterior street, and uses blowing dust and empty frames between scenes; the fights are brief, and Masaru Satō wrote the score. Sergio Leone's A Fistful of Dollars, made in 1964, was an unauthorised adaptation; Toho sued, won, and took a share of the receipts along with Asian distribution rights. Mifune played the character again the following year in Sanjuro.",
     cast: [
       {
         name: "Toshiro Mifune",
@@ -1945,9 +1945,9 @@ export const seedFilms: SeedFilm[] = [
     doubanId: "1296196",
     wikidataId: "Q565231",
     introduction:
-      "黑泽明七十五岁时拍的《李尔王》，也是他一生最悲观的一部。老领主把领地分给三个儿子，随后被一一背弃，在焦土上疯掉。与早年那些相信人可以互相拯救的作品不同，这里没有救赎：城池焚毁的长镜头里没有一句台词，只有配乐，仿佛神明厌倦了往下看。色彩在这里是叙事本身——三个儿子各着一色，红黄蓝的军队在山野间移动，像棋子，也像血。他为这部片子准备了十年，画了几百张分镜彩图。如果说《七武士》是他对人的信任，《乱》就是他收回这份信任之后的账单。",
+      "《乱》是黑泽明执导的 1985 年日本、法国合拍电影，仲代达矢饰演老领主一文字秀虎，原田美枝子饰演枫夫人。影片以莎士比亚《李尔王》为骨架，移入战国时期：秀虎将领地分与三个儿子，随即遭长子与次子背弃，最终在焦土上失常。三个儿子的军队分别着黄、红、蓝三色，色彩用于区分阵营与走位。第三城陷落焚毁的一场戏取消全部同期声，只留武满彻的配乐。黑泽明筹备本片约十年，其间绘制了数百张彩色分镜。本片获奥斯卡最佳服装设计奖。",
     introductionEn:
-      "Kurosawa made his King Lear at seventy-five, and it is the most pessimistic film of his life. An old warlord divides his domain among three sons, is betrayed by them in turn, and goes mad on scorched ground. Unlike the earlier work, which believed people could save one another, there is no redemption available here: the long sequence of the burning castle carries no dialogue at all, only score, as though the gods had grown tired of looking down. Color is the storytelling — each son wears his own, and the red, yellow and blue armies move across the hills like chess pieces and like blood. He prepared the film for ten years and painted hundreds of storyboards in full color while waiting for the money. If Seven Samurai is Kurosawa's trust in human beings, Ran is the invoice that arrived after he withdrew it.",
+      "Ran is a 1985 Japanese and French co-production directed by Akira Kurosawa, with Tatsuya Nakadai as the ageing warlord Hidetora Ichimonji and Mieko Harada as Lady Kaede. It takes the structure of Shakespeare's King Lear and moves it into the warring-states period: Hidetora divides his domain among three sons, is betrayed by the elder two, and loses his reason on scorched ground. The three armies are dressed in yellow, red and blue, and colour is used to hold the factions and their movements apart. The sequence in which the Third Castle falls and burns drops the location sound entirely and carries only Toru Takemitsu's score. Kurosawa spent about ten years preparing the film and painted several hundred storyboards in colour. It received the Academy Award for Best Costume Design.",
     essay: doc([
       h2("收回来的信任"),
       p(
