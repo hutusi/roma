@@ -46,8 +46,15 @@ import { seedLists } from "./seed-data/lists";
 
 const argv = process.argv.slice(2);
 const APPLY = argv.includes("--apply");
-const DIFF = argv.includes("--diff");
 const ALL = argv.includes("--all");
+const DIFF = argv.includes("--diff") || argv.includes("--diff=full");
+/**
+ * Clipping the preview is fine for spotting drift and actively misleading
+ * for judging it. A clipped diff on marcel-carne looked like an
+ * improvement; the full paragraph showed the DB sentence repeating a
+ * phrase from the sentence before it. Decide with --diff=full.
+ */
+const DIFF_FULL = argv.includes("--diff=full");
 
 const listArg = (name: string): string[] => {
   const p = argv.find((a) => a.startsWith(`--${name}=`));
@@ -138,7 +145,7 @@ function preview(v: unknown): string {
   walk(v);
   return parts.join(" ") || "(empty doc)";
 }
-const clip = (s: string, n = 110) => (s.length > n ? `${s.slice(0, n)}…` : s);
+const clip = (s: string, n = 110) => (DIFF_FULL || s.length <= n ? s : `${s.slice(0, n)}…`);
 const len = (v: unknown) => (v == null ? 0 : Array.from(preview(v)).length);
 
 type Plan = {
