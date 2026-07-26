@@ -270,7 +270,11 @@ export const RULES: Rule[] = [
     families: ALL_FAMILIES,
     langs: ["en"],
     check: (u) => {
-      const n = hits(u.text, /—|–/g).length;
+      // An en dash between digits is a numeric range (1920–1993), which is
+      // correct typography and not the rhetorical dash §14 is about. Without
+      // this exclusion the rule fires on every bio's date span and reports
+      // nothing but noise, which is how it hid real findings for two batches.
+      const n = hits(u.text, /—|–(?!\d)|(?<!\d)–/g).length;
       return n ? `${n} em/en dash(es); English prose carries none` : null;
     },
   },

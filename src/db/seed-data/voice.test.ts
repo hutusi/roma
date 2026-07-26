@@ -111,11 +111,25 @@ describe("addresses-the-reader", () => {
 describe("en-em-dash", () => {
   // humanizer §14, as modified by its own Voice Calibration clause: a
   // writing sample outranks the rule and one exists for Chinese only.
-  test("bans em and en dashes in English, at any length", () => {
+  test("bans the rhetorical dash in English, at any length", () => {
     expect(rulesHit(unit("film.note", "en", "Wilder is cruel — and tender."))).toContain(
       "en-em-dash",
     );
-    expect(rulesHit(unit("film.essay", "en", "A range of 1950–1960."))).toContain("en-em-dash");
+    expect(rulesHit(unit("film.essay", "en", "A dash used as a pause – like this."))).toContain(
+      "en-em-dash",
+    );
+  });
+
+  // A numeric range is typography, not rhetoric. This exclusion was missing
+  // at first, so every bio's date span fired and the noise hid real findings
+  // across two batches of rewriting.
+  test("allows an en dash between digits", () => {
+    expect(
+      rulesHit(unit("person.introduction", "en", "Italian director, 1920–1993.")),
+    ).not.toContain("en-em-dash");
+    expect(rulesHit(unit("film.essay", "en", "Shot over 1950–1952 in Rome."))).not.toContain(
+      "en-em-dash",
+    );
   });
 
   test("leaves Chinese alone, where the sample permits them", () => {

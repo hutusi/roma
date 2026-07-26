@@ -775,7 +775,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Wong Kar-wai",
     nameZh: "王家卫",
     tmdbPersonId: 12453,
-    bio: "香港导演，1958 年生。没有剧本，只有钟表：他的电影反复丈量错过的几分钟，把都市里的擦肩而过拍成了唯一的史诗。",
+    bio: "香港导演，1958 年生。多不使用完整剧本，边拍边写，成片时长与结构常与开拍时设想不同。长期与摄影师杜可风、美术兼剪辑张叔平合作。2000 年以《花样年华》获戛纳最佳男演员等奖项，1997 年以《春光乍泄》获戛纳最佳导演奖。",
     careerEssay: doc([
       p(
         "王家卫从编剧起家，成名后却几乎不写完整剧本，靠现场与演员一起长出电影。《阿飞正传》里“一分钟的朋友”和无脚鸟，已经定下他一生的主题：时间、错过、无法着陆。",
@@ -785,7 +785,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Hong Kong director, born 1958. No screenplay, only clocks: his films keep measuring the few minutes by which people miss each other, turning a brush past a stranger into the only epic worth having.",
+      "Hong Kong director, born 1958. He generally works without a finished screenplay, writing as he shoots, so that the length and structure of a film often differ from what was planned. He has worked over many years with the cinematographer Christopher Doyle and with William Chang as production designer and editor. Happy Together brought him the director's prize at Cannes in 1997.",
     careerEssayEn: doc([
       p(
         "Wong started as a screenwriter and then, once established, largely stopped writing finished scripts, growing his films on set with his actors instead. Days of Being Wild — the one-minute friend, the bird with no feet — already fixes the themes of his whole career: time, missed chances, the inability to land.",
@@ -800,7 +800,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "King Hu",
     nameZh: "胡金铨",
     tmdbPersonId: 83698,
-    bio: "华语导演，1932–1997。把京剧的锣鼓点变成剪辑的节奏，让武侠从打斗升格为一种关于气韵与空的电影。",
+    bio: "华语导演，1932–1997。生于北京，1949 年后在香港入行，先在邵氏任美术与演员，1960 年代转入导演，其后赴台湾拍片。作品多为明代背景的武侠片，动作段落以短镜头剪接完成。1975 年《侠女》在戛纳电影节获最高技术委员会大奖。",
     careerEssay: doc([
       p(
         "胡金铨生于北平，做过演员与美术，对明代掌故、京剧与佛理都下过功夫。《大醉侠》《龙门客栈》先后确立了他的招牌：客栈里的对峙、一触即发的静默，以及从戏曲借来的锣鼓节奏。",
@@ -810,7 +810,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Chinese-language director, 1932–1997. He turned the drum-and-gong beat of Peking opera into a rhythm of cutting, lifting wuxia out of fighting and into a cinema of breath and emptiness.",
+      "Chinese-language director, 1932–1997. Born in Beijing, he entered the industry in Hong Kong after 1949, working at Shaw Brothers in art departments and as an actor before turning to directing in the 1960s, and later worked in Taiwan. His films are largely wuxia set in the Ming dynasty, with action built from short takes. A Touch of Zen received the Grand Prize of the Technical Commission at Cannes in 1975.",
     careerEssayEn: doc([
       p(
         "Born in Beijing, King Hu worked as an actor and a designer and read seriously in Ming history, Peking opera, and Buddhism. Come Drink with Me and Dragon Inn established his signatures in turn: the standoff inside an inn, the silence a hair before violence, and a cutting rhythm borrowed from the opera percussion.",
@@ -827,7 +827,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Roberto Rossellini",
     nameZh: "罗伯托·罗西里尼",
     tmdbPersonId: 4410,
-    bio: "意大利导演，1906–1977。新现实主义的开山者：战争还没结束就扛着摄影机上街，用剩胶片拍下了一座城市的真实体温。",
+    bio: "意大利导演，1906–1977。1945 年在德军撤离后不久拍摄《罗马，不设防的城市》，与其后的《战火》《德意志零年》合称战争三部曲。1950 年代与英格丽·褒曼合作数部影片，后期主要为电视拍摄历史题材。",
     careerEssay: doc([
       p(
         "《罗马，不设防的城市》几乎是在废墟里抢拍出来的——胶片是零星凑来的，街道是真的街道，群众演员刚刚经历过片中的事。它一举确立了新现实主义：不要摄影棚，不要明星，不要圆满。",
@@ -837,7 +837,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Italian director, 1906–1977. The founder of neorealism, who took a camera into the street before the war had even finished and shot a city's real body temperature on scavenged stock.",
+      "Italian director, 1906–1977. He shot Rome, Open City shortly after the German withdrawal in 1945, and followed it with Paisan and Germany Year Zero, the three usually grouped together. He made several films with Ingrid Bergman in the 1950s and worked mainly on historical subjects for television in his later years.",
     careerEssayEn: doc([
       p(
         "Rome, Open City was very nearly stolen out of the rubble — the film stock was scraped together in short ends, the streets were real streets, and the extras had lived through what the picture depicts. It established neorealism at a stroke: no studio, no stars, no resolution.",
@@ -852,7 +852,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Masaki Kobayashi",
     nameZh: "小林正树",
     tmdbPersonId: 76978,
-    bio: "日本导演，1916–1996。战时拒绝晋升、被派往满洲的士兵，一生的电影都在做同一件事：让个人站出来，指着制度说不。",
+    bio: "日本导演，1916–1996。战时应征入伍，拒绝晋升，被派往满洲，其后在冲绳被俘。1950 年代起在松竹拍片，代表作有九个半小时的《人间的条件》三部曲与《切腹》。作品多涉个人与体制的冲突。",
     careerEssay: doc([
       p(
         "小林正树本人当过兵，且刻意拒绝升迁以示抗议，这份经历烧进了他所有作品。长达九小时的《人间的条件》几乎是他的自传，一个善良的人如何被战争一层层剥掉，直到只剩下不肯低头这一件事。",
@@ -862,7 +862,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Japanese director, 1916–1996. A conscript who refused promotion in protest and was sent to Manchuria, he spent his career doing one thing: putting an individual on his feet to say no to a system.",
+      "Japanese director, 1916–1996. Conscripted during the war, he refused promotion, was sent to Manchuria and was later held as a prisoner in Okinawa. He worked at Shochiku from the 1950s; his best-known films are the nine-and-a-half-hour trilogy The Human Condition and Harakiri. Conflict between an individual and an institution recurs throughout his work.",
     careerEssayEn: doc([
       p(
         "Kobayashi served, and deliberately refused promotion as a protest, and that experience is burned into everything he made. The nine-hour Human Condition is close to autobiography: a decent man stripped layer by layer by war until nothing is left but his refusal to bow.",
@@ -877,7 +877,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Mikio Naruse",
     nameZh: "成濑巳喜男",
     tmdbPersonId: 125690,
-    bio: "日本导演，1905–1969。小津与沟口之外的第三条路：拍女人如何在没有出口的日常里继续走下去，不给救赎，也不给控诉。",
+    bio: "日本导演，1905–1969。自默片时期起从业，共导演约八十九部影片，现存约六十部。作品多以女性的经济处境为中心，题材集中于家庭、旅舍与小本生意。多次改编林芙美子的小说。",
     careerEssay: doc([
       p(
         "成濑一生拍了八十多部片子，主角几乎都是女人——酒吧女招待、寡妇、被丈夫拖累的妻子。他不像沟口那样把她们写成受难者，也不像小津那样让她们体面地退场，而是让她们在账本、房租和一次次算计里熬下去。",
@@ -887,7 +887,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "Japanese director, 1905–1969. The third path beside Ozu and Mizoguchi: films about how women keep walking through a daily life with no exit, offered neither redemption nor indictment.",
+      "Japanese director, 1905–1969. He worked from the silent period onwards and directed some eighty-nine films, of which about sixty survive. His work centres largely on the economic circumstances of women, set among families, lodging houses and small businesses. He adapted the novels of Fumiko Hayashi several times.",
     careerEssayEn: doc([
       p(
         "Naruse made more than eighty films and the protagonist is almost always a woman — a bar hostess, a widow, a wife dragged down by her husband. He does not write them as martyrs the way Mizoguchi does, nor let them exit with dignity the way Ozu does; he makes them endure, through account books and rent and one calculation after another.",
@@ -902,7 +902,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Jacques Tati",
     nameZh: "雅克·塔蒂",
     tmdbPersonId: 5763,
-    bio: "法国导演、演员，1907–1982。用身体、声音与建筑做喜剧，几乎不用台词；他镜头里的现代世界光洁、便利，而且完全不适合人类居住。",
+    bio: "法国导演、演员，1907–1982。原为音乐厅哑剧演员，1949 年起自编自导自演，共完成长片六部，多由其饰演的于洛先生串联。对白极少，笑料多依靠声音设计与场面调度。《游戏时间》票房失利使其破产。",
     careerEssay: doc([
       p(
         "塔蒂出身默剧，于洛先生这个角色——高个子、雨衣、烟斗、永远迈错一步——是他对现代生活的固定测量仪。《于洛先生的假期》里，他让海滨旅馆的每一个声音都成为笑点，而不是靠一句台词。",
@@ -912,7 +912,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "French director and actor, 1907–1982. He built comedy out of bodies, sound, and architecture with almost no dialogue; the modern world in his films is sleek, convenient, and entirely unfit for humans to live in.",
+      "French director and actor, 1907–1982. He came from music-hall mime and from 1949 wrote, directed and starred in his own films, completing six features, most of them built around the character of Monsieur Hulot. Dialogue is minimal, and the comedy depends largely on sound design and staging. The commercial failure of Playtime bankrupted him.",
     careerEssayEn: doc([
       p(
         "Tati came out of mime, and Monsieur Hulot — tall, raincoated, pipe in mouth, forever half a step wrong — is his fixed instrument for measuring modern life. In Monsieur Hulot's Holiday he turns every sound in a seaside hotel into a joke, without recourse to a single line.",
@@ -927,7 +927,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Stanley Kubrick",
     nameZh: "斯坦利·库布里克",
     tmdbPersonId: 240,
-    bio: "美国导演，1928–1999。摄影记者出身，把每一种类型都拍了一遍，又把每一种都拍成了别的东西：冷、对称、精确到偏执，却始终在问人究竟是不是野兽。",
+    bio: "美国导演，1928–1999。少年时任《展望》杂志摄影记者，1950 年代转入电影，共完成长片十三部。1960 年代起长住英国，几乎所有作品均在当地拍摄。题材横跨战争、科幻、恐怖与历史片，每部筹备期均长。",
     careerEssay: doc([
       p(
         "库布里克的每部片子几乎都换一个类型——战争、黑色喜剧、科幻、恐怖、古装——但方法从不变：对称构图、缓慢推进的镜头、把人放在巨大结构的正中央，然后看着他缩小。",
@@ -937,7 +937,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "American director, 1928–1999. A former photojournalist who worked through every genre and turned each one into something else: cold, symmetrical, precise to the point of obsession, and always asking whether the human animal is an animal.",
+      "American director, 1928–1999. He worked as a staff photographer for Look magazine in his teens and moved into film in the 1950s, completing thirteen features. From the 1960s he lived in England and shot almost everything there. He worked across war, science fiction, horror and period subjects, spending long periods in preparation on each.",
     careerEssayEn: doc([
       p(
         "Kubrick changed genre with nearly every film — war, black comedy, science fiction, horror, costume drama — but never changed method: symmetrical framing, the slow advancing camera, a man placed dead centre of an enormous structure and then watched as he shrinks.",
@@ -952,7 +952,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Michael Powell",
     nameZh: "迈克尔·鲍威尔",
     tmdbPersonId: 68424,
-    bio: "英国导演，1905–1990。与普雷斯伯格合组“射箭者”，在一个崇尚写实的国度里坚持拍浓烈的色彩、歌剧式的激情与近乎危险的美。",
+    bio: "英国导演，1905–1990。1939 年起与编剧埃默里克·普雷斯伯格合作，两人以「射箭者」名义联合署名编导制片，作品包括《红菱艳》《百战将军》。1960 年《偷窥狂》公映后遭猛烈抨击，其导演生涯此后大幅萎缩。",
     careerEssay: doc([
       p(
         "鲍威尔与普雷斯伯格以“射箭者”的名义联合署名，编剧与导演共享一个头衔，这在电影史上几乎绝无仅有。在崇尚纪录式冷静的英国影坛，他们偏要拍浓得化不开的特艺七彩情节剧——《黑水仙》《平步青云》《红菱艳》。",
@@ -962,7 +962,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "British director, 1905–1990. With Pressburger he formed The Archers and, in a country that prized realism, insisted on saturated color, operatic passion, and a beauty verging on dangerous.",
+      "British director, 1905–1990. From 1939 he worked with the writer Emeric Pressburger, the two taking joint credit as writers, producers and directors under the name The Archers, on films including The Red Shoes and The Life and Death of Colonel Blimp. His career contracted sharply after the hostile reception of Peeping Tom in 1960.",
     careerEssayEn: doc([
       p(
         "Powell and Emeric Pressburger signed their films jointly as The Archers, an almost unheard-of arrangement in which writer and director shared a single credit. Against a British film culture that prized documentary sobriety, they made Technicolor melodramas of overwhelming intensity — Black Narcissus, A Matter of Life and Death, The Red Shoes.",
@@ -977,16 +977,16 @@ export const seedDirectors: SeedDirector[] = [
     name: "Emeric Pressburger",
     nameZh: "埃默里克·普雷斯伯格",
     tmdbPersonId: 37846,
-    bio: "匈牙利裔英国编剧、导演，1902–1988。从纳粹德国逃出的流亡者，为英国电影写出了最不英国的故事：狂热、异色、执着于牺牲。",
+    bio: "匈牙利裔英国编剧、导演，1902–1988。先后在德国与法国的电影业工作，因纳粹上台流亡英国。1939 年起与迈克尔·鲍威尔合作，两人以「射箭者」名义联合署名，共完成影片约二十部。",
     bioEn:
-      "Hungarian-born British writer and director, 1902–1988. An exile who fled Nazi Germany and then wrote the least English stories in English cinema: feverish, exotic, and fixated on sacrifice.",
+      "Hungarian-born British writer and director, 1902–1988. He worked in the German and then the French film industries before the rise of the Nazis drove him to Britain. From 1939 he worked with Michael Powell, the two taking joint credit under the name The Archers, on some twenty films.",
   },
   {
     slug: "david-lean",
     name: "David Lean",
     nameZh: "大卫·里恩",
     tmdbPersonId: 12238,
-    bio: "英国导演，1908–1991。剪辑师出身，先拍出英国最细腻的室内片，再转身把沙漠、铁路与雪原拍成了后世衡量史诗的尺子。",
+    bio: "英国导演，1908–1991。剪辑师出身，1940 年代先拍摄《相见恨晚》《远大前程》等中小型影片，1950 年代后转向大制作，包括《桂河大桥》《阿拉伯的劳伦斯》《日瓦戈医生》。两度获奥斯卡最佳导演奖。",
     careerEssay: doc([
       p(
         "很多人只记得后期的里恩，但他真正的功底在早年：《相见恨晚》全片发生在一个车站茶室，两个中年人克制的告别，是英国电影最精确的一次情感手术。",
@@ -996,7 +996,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "British director, 1908–1991. An editor by training who first made the most delicate interiors in British cinema, then turned around and made deserts, railways, and snowfields into the standard by which epics are measured.",
+      "British director, 1908–1991. He trained as an editor and made modestly scaled films in the 1940s, among them Brief Encounter and Great Expectations, before turning to large productions from the 1950s onwards, including The Bridge on the River Kwai, Lawrence of Arabia and Doctor Zhivago. He received the Academy Award for Best Director twice.",
     careerEssayEn: doc([
       p(
         "Lean is remembered for the late films, but the craft was laid down early: Brief Encounter takes place almost entirely in a station tea room, and the restrained parting of two middle-aged people is the most precise piece of emotional surgery in British cinema.",
@@ -1011,7 +1011,7 @@ export const seedDirectors: SeedDirector[] = [
     name: "Francis Ford Coppola",
     nameZh: "弗朗西斯·福特·科波拉",
     tmdbPersonId: 1776,
-    bio: "美国导演，1939 年生。新好莱坞最敢赌的人：把黑帮片拍成家族悲剧，又把战争片拍成一场几乎毁掉自己的溯河之旅。",
+    bio: "美国导演，1939 年生。1970 年代拍摄《教父》《教父 2》与《对话》，1969 年创办美国活动影像公司。《现代启示录》在菲律宾拍摄逾一年，超支部分由其个人担保，此后长期负债。五度获奥斯卡奖。",
     careerEssay: doc([
       p(
         "七十年代属于科波拉。《教父》两部把类型片提升为美国资本与家族的史诗，《对话》则安静得像一部欧洲电影——同一个人在同一个十年里做到了这两件事。",
@@ -1021,7 +1021,7 @@ export const seedDirectors: SeedDirector[] = [
       ),
     ]),
     bioEn:
-      "American director, born 1939. The biggest gambler of the New Hollywood: he made a gangster picture into a family tragedy, then made a war picture into a journey upriver that nearly destroyed him.",
+      "American director, born 1939. He made The Godfather, The Godfather Part II and The Conversation in the 1970s, and founded the studio American Zoetrope in 1969. Apocalypse Now took more than a year to shoot in the Philippines, with the overruns guaranteed against his own property, leaving him in debt for years afterwards. He has received five Academy Awards.",
     careerEssayEn: doc([
       p(
         "The seventies belonged to Coppola. The two Godfather films lifted genre into an epic of American capital and family, while The Conversation is as quiet as a European art film — the same man did both inside the same decade.",
