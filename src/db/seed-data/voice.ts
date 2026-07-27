@@ -125,6 +125,15 @@ function differsByOne(a: string, b: string): boolean {
   return diff === 1;
 }
 
+/**
+ * A match must begin where a name could begin. Without this the rule reports
+ * 奥古斯特·雷诺阿 — Auguste Renoir, the painter, correctly named in his son's
+ * bio — because its tail 特·雷诺阿 sits one character from 让·雷诺阿. The
+ * window is only a name if what precedes it is not itself part of one.
+ */
+const NAME_CHAR = /[\p{Script=Han}\p{Letter}·]/u;
+const startsAName = (text: string, at: number) => at === 0 || !NAME_CHAR.test(text[at - 1]);
+
 export type ProseUnit = {
   id: string;
   family: Family;
@@ -356,6 +365,7 @@ export const RULES: Rule[] = [
       for (const canonical of canonicalNames(u.lang)) {
         if (u.text.includes(canonical)) continue;
         for (let i = 0; i + canonical.length <= u.text.length; i++) {
+          if (!startsAName(u.text, i)) continue;
           const window = u.text.slice(i, i + canonical.length);
           if (differsByOne(window, canonical)) {
             found.push(`${window} → ${canonical}`);

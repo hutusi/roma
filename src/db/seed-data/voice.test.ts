@@ -177,6 +177,32 @@ describe("name-near-miss", () => {
     const u = unit("list.reasoning", "zh", "1948 年德西卡作品，摄影卡洛·蒙托里。");
     expect(rulesHit(u)).not.toContain("name-near-miss");
   });
+
+  // Renoir's own bio carries this and would have been reported: 奥古斯特·雷诺阿
+  // ends in 特·雷诺阿, one character from 让·雷诺阿. A longer name that happens
+  // to end near a catalogued one is not a misspelling of it.
+  test("does not mistake a longer name for a misspelling of a shorter one", () => {
+    const u = unit("list.reasoning", "zh", "画家奥古斯特·雷诺阿之子，1930 年代拍片。");
+    expect(rulesHit(u)).not.toContain("name-near-miss");
+  });
+
+  /**
+   * The cost of that guard, stated rather than discovered later. Chinese has
+   * no word boundaries, so "the tail of a longer name" and "a name welded to
+   * the word before it" are the same string shape, and no boundary test can
+   * separate 奥古斯特·雷诺阿 from 导演认·雷诺阿. The guard therefore trades a
+   * false negative for a false positive, which is the right way round for a
+   * blocking rule: a missed typo leaves things as they were, while a rejected
+   * correct sentence teaches everyone to stop reading the output. Both real
+   * defects it was built for sat after punctuation, where it does fire.
+   */
+  test("misses a misspelling welded to the preceding word — a known limit", () => {
+    const welded = unit("list.reasoning", "zh", "画家之子，导演认·雷诺阿于 1930 年代拍片。");
+    expect(rulesHit(welded)).not.toContain("name-near-miss");
+
+    const afterPunctuation = unit("list.reasoning", "zh", "画家之子，认·雷诺阿于 1930 年代拍片。");
+    expect(rulesHit(afterPunctuation)).toContain("name-near-miss");
+  });
 });
 
 describe("title-outside-catalogue", () => {
