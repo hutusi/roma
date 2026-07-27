@@ -232,7 +232,43 @@ describe("note-ceiling", () => {
 });
 
 describe("the seeded corpus", () => {
-  const findings = blocking(runVoiceChecks(proseUnits()));
+  const units = proseUnits();
+  const findings = blocking(runVoiceChecks(units));
+
+  /**
+   * The sweep below asserts an empty list, which an empty corpus satisfies
+   * just as well as a clean one. So prove there is something to check first:
+   * if `proseUnits` stopped flattening a field — a renamed key, a seed file
+   * that failed to export — the corpus test would go green while checking
+   * nothing at all. Per family rather than a total, because a whole family
+   * dropping out is the interesting failure and a count would hide it behind
+   * the other 500.
+   */
+  test("there is a corpus to check", () => {
+    const counted = new Map<string, number>();
+    for (const u of units) {
+      for (const k of [u.family, `${u.family}|${u.lang}`]) {
+        counted.set(k, (counted.get(k) ?? 0) + 1);
+      }
+    }
+    const families: Family[] = [
+      "film.introduction",
+      "person.introduction",
+      "list.theme",
+      "list.intro",
+      "list.reasoning",
+      "film.essay",
+      "person.careerEssay",
+      "film.note",
+    ];
+    const empty = families.flatMap((f) =>
+      (["zh", "en"] as const)
+        .filter((lang) => !counted.get(`${f}|${lang}`))
+        .map((lang) => `${f} (${lang})`),
+    );
+    expect(empty).toEqual([]);
+    expect(units.length).toBeGreaterThan(400);
+  });
 
   // Live since the register pass finished (ADR 0017). It was `todo` while
   // the corpus was half-rewritten, because a test that fails on prose known
