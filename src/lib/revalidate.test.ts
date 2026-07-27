@@ -1,4 +1,7 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
+// Hoisted above the mock.module calls below, so this namespace is the real
+// module — which is what makes the restore in afterAll possible.
+import * as realIndexNow from "@/lib/indexnow";
 
 // Capture what the revalidate helpers hand to next/cache without touching
 // the real cache. Registered before the dynamic import below so the module
@@ -14,6 +17,20 @@ const pinged: string[][] = [];
 mock.module("@/lib/indexnow", () => ({
   pingIndexNow: (p: string[]) => pinged.push(p),
 }));
+
+/**
+ * mock.module is process-global and has no unmock, so this stub outlives
+ * the file. On Linux the registry keys by resolved path, which means
+ * indexnow.test.ts's `import("./indexnow")` resolved to this same entry and
+ * got the stub — its `pingIndexNow` records a call and never reaches
+ * `after()` or `fetch`, so every assertion there saw zero calls. macOS keyed
+ * the two specifiers apart and the suite stayed green, so this only ever
+ * failed in CI, and only once a new test file shifted the discovery order
+ * enough to put revalidate.test.ts first.
+ */
+afterAll(() => {
+  mock.module("@/lib/indexnow", () => realIndexNow);
+});
 
 const { revalidateFilm, revalidateList, revalidateMedia, revalidatePerson } = await import(
   "./revalidate"

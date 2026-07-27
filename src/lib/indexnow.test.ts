@@ -32,6 +32,16 @@ afterEach(() => {
 });
 
 describe("pingIndexNow", () => {
+  // Guard, not a behaviour test. revalidate.test.ts replaces this module
+  // wholesale, mock.module is process-global with no unmock, and on Linux the
+  // registry keys by resolved path — so "@/lib/indexnow" and "./indexnow" are
+  // one entry and the stub leaks in whenever that file runs first. When that
+  // happened the assertions below just saw zero calls, which reads as a broken
+  // implementation rather than a poisoned import. This says which it is.
+  test("is testing the real module, not a stub left behind by another file", () => {
+    expect(pingIndexNow.toString()).toContain("INDEXNOW_KEY");
+  });
+
   test("no-op when INDEXNOW_KEY is unset", () => {
     pingIndexNow(["/film/solaris"]);
     expect(deferred).toBeUndefined();
