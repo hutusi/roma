@@ -23,6 +23,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
   const displayName = en ? person.name : (person.nameZh ?? person.name);
   const subName = en ? person.nameZh : person.name;
   const bio = en ? person.bioEn : person.bio;
+  const editorialNote = en ? person.editorialNoteEn : person.editorialNote;
   const careerEssay = en ? person.careerEssayEn : person.careerEssay;
 
   return (
@@ -54,6 +55,17 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
         <p className="mx-auto mt-10 max-w-[70ch] text-[17px] text-ink-muted leading-[1.9] tracking-[0.02em]">
           {bio}
         </p>
+      )}
+
+      {/* Its own section, matching the film page: the heading marks the
+          shift from the neutral introduction to an editor's own view. */}
+      {editorialNote && (
+        <section className="mt-14">
+          <TitleCard eyebrow={en ? undefined : "Editorial Note"} title={dict.editorialNote} />
+          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
+            {editorialNote}
+          </p>
+        </section>
       )}
 
       {careerEssay && (

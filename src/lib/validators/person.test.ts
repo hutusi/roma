@@ -8,36 +8,47 @@ import { personFormSchema, publishEnProblems, publishProblems } from "./person";
  */
 
 describe("publishProblems", () => {
-  test("accepts a bio alone", () => {
-    expect(publishProblems({ bio: "意大利导演。", careerEssay: null })).toEqual([]);
+  test("accepts a bio", () => {
+    expect(publishProblems({ bio: "意大利导演。" })).toEqual([]);
   });
 
-  test("accepts a career essay alone — the bio stays optional", () => {
-    const essay = {
-      type: "doc",
-      content: [{ type: "paragraph", content: [{ type: "text", text: "意大利导演。" }] }],
-    };
-    expect(publishProblems({ bio: null, careerEssay: essay })).toEqual([]);
+  test("rejects a missing bio", () => {
+    expect(publishProblems({ bio: null })).toHaveLength(1);
   });
 
-  test("rejects both empty", () => {
-    expect(publishProblems({ bio: null, careerEssay: null })).toHaveLength(1);
-  });
-
-  test("rejects a careerEssay that renders nothing — an empty doc is not content", () => {
-    // Used to pass: a truthy object satisfied the old `|| careerEssay`.
-    expect(publishProblems({ bio: null, careerEssay: { type: "doc" } })).toHaveLength(1);
-    expect(publishProblems({ bio: null, careerEssay: { type: "doc", content: [] } })).toHaveLength(
-      1,
-    );
+  // This used to pass: the gate was bio OR 创作历程, so a person could go live
+  // with no 人物介绍 at all. That field is the card blurb on every listing and
+  // the meta description (sliced to 160), so the page looked fine while the
+  // listings showed a blank card — and publishEnProblems below already
+  // required bioEn, leaving zh the laxer of the two (ADR 0017).
+  test("rejects a person carrying only a 创作历程, however long", () => {
+    expect(publishProblems({ bio: null, editorialNote: "一段札记。" })).toHaveLength(1);
   });
 
   test("rejects a whitespace-only bio, which is not a bio", () => {
-    expect(publishProblems({ bio: "   ", careerEssay: null })).toHaveLength(1);
+    expect(publishProblems({ bio: "   " })).toHaveLength(1);
+  });
+
+  test("holds the note to its ceiling, and does not require one", () => {
+    expect(publishProblems({ bio: "意大利导演。", editorialNote: null })).toEqual([]);
+    expect(publishProblems({ bio: "意大利导演。", editorialNote: "字".repeat(401) })).toHaveLength(
+      1,
+    );
   });
 });
 
 describe("publishEnProblems", () => {
+  // Films have checked editorialNoteEn here since the split; people did not,
+  // so an over-long English note was caught by the form schema alone and rode
+  // through seed and resync untouched.
+  test("holds the English note to its ceiling", () => {
+    const long = Array.from({ length: 251 }, () => "word").join(" ");
+    expect(publishEnProblems({ bioEn: "Italian director.", editorialNoteEn: long })).toHaveLength(
+      1,
+    );
+    expect(publishEnProblems({ bioEn: "Italian director.", editorialNoteEn: null })).toEqual([]);
+  });
+
   test("accepts an English bio", () => {
     expect(publishEnProblems({ bioEn: "Italian director." })).toEqual([]);
   });

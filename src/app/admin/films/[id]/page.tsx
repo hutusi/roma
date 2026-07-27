@@ -122,9 +122,11 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             wikidataId: film.wikidataId ?? "",
             restorationNote: film.restorationNote ?? "",
             restorationNoteEn: film.restorationNoteEn ?? "",
+            introduction: film.introduction ?? "",
+            introductionEn: film.introductionEn ?? "",
             editorialNote: film.editorialNote ?? "",
-            essay: film.essay ?? null,
             editorialNoteEn: film.editorialNoteEn ?? "",
+            essay: film.essay ?? null,
             essayEn: film.essayEn ?? null,
             cast: film.cast.map((m) => ({
               name: m.name,

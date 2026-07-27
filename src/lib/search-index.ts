@@ -23,8 +23,8 @@ export type SearchFilmRow = {
   titleOriginal: string;
   titleEn: string | null;
   year: number;
-  editorialNote: string | null;
-  editorialNoteEn: string | null;
+  introduction: string | null;
+  introductionEn: string | null;
   filmDirectors: { director: { name: string; nameZh: string | null } }[];
   cast: { name: string; nameZh: string | null }[];
   filmTags: { tag: { slug: string; nameZh: string; nameEn: string } }[];
@@ -77,7 +77,7 @@ export function buildSearchDocs(locale: Locale, corpus: SearchCorpus): SearchDoc
       String(film.year),
       directorsLabel || null,
     ].filter(Boolean);
-    const prose = en ? film.editorialNoteEn : film.editorialNote;
+    const prose = en ? film.introductionEn : film.introduction;
     docs.push({
       type: "film",
       href: localePath(locale, `/film/${film.slug}`),

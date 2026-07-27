@@ -115,7 +115,7 @@ test("concurrent film save and publish never leave invalid published content", a
   );
   if (!director) throw new Error("director fixture missing");
   await queryOne(
-    "insert into films (id, slug, title_zh, title_original, year, countries, is_black_and_white, editorial_note, status, status_en, created_at, updated_at) values ($1, $2, '并发影片', 'Concurrent Film', 1964, '{}', true, $3, 'draft', 'draft', now(), now()) returning id",
+    "insert into films (id, slug, title_zh, title_original, year, countries, is_black_and_white, introduction, status, status_en, created_at, updated_at) values ($1, $2, '并发影片', 'Concurrent Film', 1964, '{}', true, $3, 'draft', 'draft', now(), now()) returning id",
     [id, `concurrent-film-${id}`, NOTE],
   );
   await queryOne(
@@ -127,7 +127,11 @@ test("concurrent film save and publish never leave invalid published content", a
   const savePage = await context.newPage();
   const publishPage = await context.newPage();
   await Promise.all([savePage.goto(`/admin/films/${id}`), publishPage.goto(`/admin/films/${id}`)]);
-  await savePage.locator('textarea[name="editorialNote"]').fill("太短");
+  // Must be the field the publish gate reads. Pointed at editorialNote this
+  // test passed while exercising nothing: with introduction NULL the film
+  // could never publish, so "status stayed draft" was true by construction
+  // and the save-versus-publish race never ran.
+  await savePage.locator('textarea[name="introduction"]').fill("太短");
 
   const release = await holdDatabaseLock("select id from films where id = $1 for update", [id]);
   try {
@@ -142,13 +146,13 @@ test("concurrent film save and publish never leave invalid published content", a
 
   await expect
     .poll(async () =>
-      queryOne<{ status: string; editorial_note: string }>(
-        "select status, editorial_note from films where id = $1",
+      queryOne<{ status: string; introduction: string }>(
+        "select status, introduction from films where id = $1",
         [id],
       ).then(
         (row) =>
           row?.status === "draft" ||
-          (row?.status === "published" && row.editorial_note.length >= 200),
+          (row?.status === "published" && row.introduction.length >= 200),
       ),
     )
     .toBe(true);

@@ -9,11 +9,26 @@ export const codePointLength = (s: string) => Array.from(s).length;
 /** English prose measures in words, not code points. */
 export const wordCount = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
-export const EDITORIAL_NOTE_MIN = 200;
-export const EDITORIAL_NOTE_MAX = 500;
+/** 影片介绍 — the encyclopedic field, and the one that gates publishing. */
+export const INTRODUCTION_MIN = 200;
+export const INTRODUCTION_MAX = 500;
 /** ≈ the zh 200–500 code-point band, converted to English words. */
-export const EDITORIAL_NOTE_EN_MIN = 120;
-export const EDITORIAL_NOTE_EN_MAX = 350;
+export const INTRODUCTION_EN_MIN = 120;
+export const INTRODUCTION_EN_MAX = 350;
+
+/**
+ * 编辑札记 — a ceiling, and deliberately no floor. The floor is what did
+ * the damage: an editor with one sharp sentence could not satisfy a
+ * 200-code-point minimum, so prose got manufactured to fill it. Nothing
+ * forces a note to be long, and one sentence is a complete note.
+ *
+ * The ceiling is not about policing length. It is what keeps three
+ * fields distinct — introduction states facts, the note states a view,
+ * and `essay` is where length belongs. Without a bound the note and the
+ * essay collapse into the same field.
+ */
+export const EDITORIAL_NOTE_MAX = 400;
+export const EDITORIAL_NOTE_EN_MAX = 250;
 
 export const castMemberSchema = z.object({
   name: z.string().min(1, "姓名不能为空"),
@@ -81,6 +96,20 @@ export const filmFormSchema = z.object({
     .refine((s) => !s || /^[Qq]\d+$/.test(s.trim()), "Wikidata ID 形如 Q550027"),
   restorationNote: z.string().optional(),
   restorationNoteEn: z.string().optional(),
+  introduction: z
+    .string()
+    .optional()
+    .refine(
+      (s) => !s || codePointLength(s) <= INTRODUCTION_MAX,
+      `影片介绍不能超过 ${INTRODUCTION_MAX} 字`,
+    ),
+  introductionEn: z
+    .string()
+    .optional()
+    .refine(
+      (s) => !s || wordCount(s) <= INTRODUCTION_EN_MAX,
+      `英文介绍不能超过 ${INTRODUCTION_EN_MAX} 词`,
+    ),
   editorialNote: z
     .string()
     .optional()
@@ -88,7 +117,6 @@ export const filmFormSchema = z.object({
       (s) => !s || codePointLength(s) <= EDITORIAL_NOTE_MAX,
       `编辑札记不能超过 ${EDITORIAL_NOTE_MAX} 字`,
     ),
-  essay: tiptapDocSchema,
   editorialNoteEn: z
     .string()
     .optional()
@@ -96,6 +124,7 @@ export const filmFormSchema = z.object({
       (s) => !s || wordCount(s) <= EDITORIAL_NOTE_EN_MAX,
       `英文札记不能超过 ${EDITORIAL_NOTE_EN_MAX} 词`,
     ),
+  essay: tiptapDocSchema,
   essayEn: tiptapDocSchema,
   cast: z.array(castMemberSchema),
   watchLinks: z.array(watchLinkSchema),
@@ -109,18 +138,27 @@ export const filmFormSchema = z.object({
 
 export type FilmFormValues = z.infer<typeof filmFormSchema>;
 
-/** Publishing is stricter than saving a draft. */
+/**
+ * Publishing is stricter than saving a draft. The introduction is what
+ * gates it; 编辑札记 is optional, so a film publishes on its
+ * introduction alone and the corpus is never blocked on writing notes.
+ */
 export function publishProblems(film: {
-  editorialNote: string | null;
+  introduction: string | null;
+  editorialNote?: string | null;
   directorCount: number;
 }): string[] {
   const problems: string[] = [];
   // Trim first: 200 spaces used to pass the raw code-point gate while
   // rendering as nothing.
-  const note = (film.editorialNote ?? "").trim();
-  const len = codePointLength(note);
-  if (len < EDITORIAL_NOTE_MIN || len > EDITORIAL_NOTE_MAX) {
-    problems.push(`编辑札记需 ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX} 字（当前 ${len} 字）`);
+  const intro = (film.introduction ?? "").trim();
+  const len = codePointLength(intro);
+  if (len < INTRODUCTION_MIN || len > INTRODUCTION_MAX) {
+    problems.push(`影片介绍需 ${INTRODUCTION_MIN}–${INTRODUCTION_MAX} 字（当前 ${len} 字）`);
+  }
+  const noteLen = codePointLength((film.editorialNote ?? "").trim());
+  if (noteLen > EDITORIAL_NOTE_MAX) {
+    problems.push(`编辑札记不能超过 ${EDITORIAL_NOTE_MAX} 字（当前 ${noteLen} 字）`);
   }
   if (film.directorCount === 0) problems.push("至少关联一位导演");
   return problems;
@@ -133,15 +171,20 @@ export function publishProblems(film: {
  */
 export function publishEnProblems(film: {
   titleEn: string | null;
-  editorialNoteEn: string | null;
+  introductionEn: string | null;
+  editorialNoteEn?: string | null;
 }): string[] {
   const problems: string[] = [];
   if (!film.titleEn?.trim()) problems.push("缺少英文片名（titleEn）");
-  const words = wordCount(film.editorialNoteEn ?? "");
-  if (words < EDITORIAL_NOTE_EN_MIN || words > EDITORIAL_NOTE_EN_MAX) {
+  const words = wordCount(film.introductionEn ?? "");
+  if (words < INTRODUCTION_EN_MIN || words > INTRODUCTION_EN_MAX) {
     problems.push(
-      `英文札记需 ${EDITORIAL_NOTE_EN_MIN}–${EDITORIAL_NOTE_EN_MAX} 词（当前 ${words} 词）`,
+      `英文介绍需 ${INTRODUCTION_EN_MIN}–${INTRODUCTION_EN_MAX} 词（当前 ${words} 词）`,
     );
+  }
+  const noteWords = wordCount(film.editorialNoteEn ?? "");
+  if (noteWords > EDITORIAL_NOTE_EN_MAX) {
+    problems.push(`英文札记不能超过 ${EDITORIAL_NOTE_EN_MAX} 词（当前 ${noteWords} 词）`);
   }
   return problems;
 }

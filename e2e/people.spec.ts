@@ -4,7 +4,8 @@ import { queryOne } from "./utils/db";
 // maxRedirects: 0 so we assert the 308 hop itself, not the destination.
 const hop = { maxRedirects: 0 } as const;
 
-const NOTE_200 = "字".repeat(220);
+/** Clears the introduction's 200-code-point publish floor. */
+const INTRO_200 = "字".repeat(220);
 
 test("actor page renders bio and acted-in filmography with characters", async ({ page }) => {
   await page.goto("/zh/actor/giulietta-masina");
@@ -113,7 +114,7 @@ test.describe("admin cast round-trip", () => {
     await page.fill("#slug", "cast-roundtrip-film");
     await page.fill("#year", "1957");
     await page.getByLabel("费德里科·费里尼").check();
-    await page.locator('textarea[name="editorialNote"]').fill(NOTE_200);
+    await page.locator('textarea[name="introduction"]').fill(INTRO_200);
 
     await page.getByRole("button", { name: "添加演员" }).click();
     await page.locator('input[name="cast.0.name"]').fill("Giulietta Masina");

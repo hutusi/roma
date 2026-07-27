@@ -10,12 +10,24 @@ export const people = pgTable("people", {
   /** Latin/original name, e.g. "Federico Fellini". */
   name: text().notNull(),
   nameZh: text(),
-  /** Short plain-text bio for cards and metadata. */
+  /**
+   * 人物介绍 — short plain-text introduction, neutral and encyclopedic.
+   * Doubles as the card blurb and the meta description (sliced to 160),
+   * which is why it stays short rather than growing into the body text;
+   * 创作历程 is where length belongs.
+   */
   bio: text(),
   /** 创作历程 — long-form essay (Tiptap JSON). */
   careerEssay: jsonb().$type<TiptapDoc>(),
   bioEn: text(),
   careerEssayEn: jsonb().$type<TiptapDoc>(),
+  /**
+   * 编辑札记 — the editorial position in an editor's own voice, optional
+   * and capped rather than floored, exactly as on films. A person
+   * publishes on their introduction alone.
+   */
+  editorialNote: text(),
+  editorialNoteEn: text(),
   /**
    * Editorial primary role; picks the canonical URL segment
    * (/director vs /actor). Credits, not this flag, decide which

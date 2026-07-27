@@ -55,6 +55,7 @@ export const zh = {
     elsewhere: "外部链接：",
     externalSites: { douban: "豆瓣", imdb: "IMDb" },
     castAs: (character: string) => `饰 ${character}`,
+    introduction: "影片介绍",
     editorialNote: "编辑札记",
     titles: "译名",
     cast: "主演",
@@ -76,6 +77,7 @@ export const zh = {
     watchDisclaimer: "观看渠道由编辑手工维护，可能随平台下架而失效。",
   },
   person: {
+    editorialNote: "编辑札记",
     career: "创作历程",
     suggestedOrder: "建议观看顺序",
     films: "收录影片",

@@ -50,6 +50,7 @@ export const en = {
     elsewhere: "Elsewhere: ",
     externalSites: { douban: "Douban", imdb: "IMDb" },
     castAs: (character: string) => `as ${character}`,
+    introduction: "Introduction",
     editorialNote: "Editorial Note",
     titles: "Titles",
     cast: "Cast",
@@ -72,6 +73,7 @@ export const en = {
       "Where-to-watch links are maintained by hand and may lapse as platforms change.",
   },
   person: {
+    editorialNote: "Editorial Note",
     career: "Career",
     suggestedOrder: "Suggested Viewing Order",
     films: "Films",

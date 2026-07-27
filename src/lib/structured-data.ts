@@ -138,7 +138,7 @@ export function filmJsonLd(film: PublicFilm, locale: Locale = "zh"): JsonLdNode 
   const alternateName = [...new Set([film.titleOriginal, en ? film.titleZh : film.titleEn])].filter(
     (t): t is string => !!t && t !== name,
   );
-  const description = (en ? film.editorialNoteEn : film.editorialNote)?.slice(0, 300);
+  const description = (en ? film.introductionEn : film.introduction)?.slice(0, 300);
   const image = pickImage(film.media);
   // External ids → sameAs, the schema.org hook for entity reconciliation
   // (IMDb / Douban / Wikidata / TMDB URLs, whichever are curated).

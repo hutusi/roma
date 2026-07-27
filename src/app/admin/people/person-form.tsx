@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { savePerson } from "@/actions/people";
-import { type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
+import { CeilingCounter, type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,11 +28,14 @@ export function PersonForm({
     register,
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<PersonFormValues>({
     resolver: zodResolver(personFormSchema),
     defaultValues,
   });
+  const note = watch("editorialNote") ?? "";
+  const noteEn = watch("editorialNoteEn") ?? "";
 
   const onSubmit = handleSubmit(async (values) => {
     setSubmitting(true);
@@ -79,8 +82,26 @@ export function PersonForm({
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="bio">简介（纯文本）</Label>
+        <Label htmlFor="bio">人物介绍（纯文本）</Label>
+        <p className="text-ink-muted text-xs">
+          中性、可查证，一两句为宜。这段同时用作卡片摘要与页面 meta 描述（截取前 160
+          字），所以不要写长——篇幅放在创作历程里。
+        </p>
         <Textarea id="bio" rows={4} {...register("bio")} className="font-body" />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="editorialNote">编辑札记（选填，至多 400 字）</Label>
+        <p className="text-ink-muted text-xs">你自己的看法，一两句就够，不填也可以发布。</p>
+        <Textarea
+          id="editorialNote"
+          rows={3}
+          {...register("editorialNote")}
+          className="font-body"
+        />
+        <CeilingCounter text={note} />
+        {errors.editorialNote?.message && (
+          <p className="text-destructive text-xs">{errors.editorialNote.message}</p>
+        )}
       </div>
       <div className="space-y-1.5">
         <Label>创作历程</Label>
@@ -101,8 +122,16 @@ export function PersonForm({
         <h2 className="font-bold">英文版 · English Edition</h2>
         <p className="text-ink-muted text-xs">发布英文版需要英文简介；英文页只显示英文内容。</p>
         <div className="space-y-1.5">
-          <Label htmlFor="bioEn">英文简介 · Bio</Label>
+          <Label htmlFor="bioEn">英文介绍 · Introduction</Label>
           <Textarea id="bioEn" rows={4} {...register("bioEn")} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="editorialNoteEn">英文札记 · Editorial note（选填）</Label>
+          <Textarea id="editorialNoteEn" rows={3} {...register("editorialNoteEn")} />
+          <CeilingCounter text={noteEn} en />
+          {errors.editorialNoteEn?.message && (
+            <p className="text-destructive text-xs">{errors.editorialNoteEn.message}</p>
+          )}
         </div>
         <div className="space-y-1.5">
           <Label>英文创作历程（可选）· Career essay</Label>

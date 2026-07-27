@@ -35,10 +35,14 @@ export async function savePerson(
     name: v.name,
     nameZh: v.nameZh || null,
     primaryRole: v.primaryRole,
-    bio: v.bio || null,
+    bio: v.bio?.trim() || null,
     careerEssay: (v.careerEssay as TiptapDoc) ?? null,
-    bioEn: v.bioEn || null,
+    bioEn: v.bioEn?.trim() || null,
     careerEssayEn: (v.careerEssayEn as TiptapDoc) ?? null,
+    // Same reason as films.ts: whitespace is truthy and renders an empty
+    // section under a heading.
+    editorialNote: v.editorialNote?.trim() || null,
+    editorialNoteEn: v.editorialNoteEn?.trim() || null,
   };
   try {
     const outcome = await db.transaction(async (tx) => {
@@ -52,7 +56,7 @@ export async function savePerson(
       if (isPublic) {
         const problems = publishProblems({
           bio: v.bio || null,
-          careerEssay: (v.careerEssay as TiptapDoc) ?? null,
+          editorialNote: v.editorialNote || null,
         });
         if (problems.length) {
           return {
@@ -61,7 +65,10 @@ export async function savePerson(
         }
       }
       if (existing?.statusEn === "published") {
-        const problems = publishEnProblems({ bioEn: v.bioEn || null });
+        const problems = publishEnProblems({
+          bioEn: v.bioEn?.trim() || null,
+          editorialNoteEn: v.editorialNoteEn?.trim() || null,
+        });
         if (problems.length) {
           return {
             error: `英文版已发布，不能存为不可发布的状态：${problems.join("；")}`,
@@ -167,7 +174,7 @@ export async function publishPersonEn(id: string): Promise<ActionResult> {
   const outcome = await db.transaction(async (tx) => {
     const person = await lockPerson(tx, id);
     if (!person) return { error: "人物不存在" } as const;
-    const problems = publishEnProblems({ bioEn: person.bioEn });
+    const problems = publishEnProblems(person);
     if (problems.length) return { error: problems.join("；") } as const;
     await tx
       .update(people)

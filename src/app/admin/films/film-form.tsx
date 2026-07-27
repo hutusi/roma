@@ -8,9 +8,10 @@ import { toast } from "sonner";
 import { saveFilm } from "@/actions/films";
 import { importFromTmdb } from "@/actions/tmdb";
 import {
+  CeilingCounter,
+  IntroCounter,
+  IntroCounterEn,
   type MediaOption,
-  NoteCounter,
-  NoteCounterEn,
   TiptapEditor,
 } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
@@ -70,6 +71,8 @@ export function FilmForm({
   });
   const castArray = useFieldArray({ control, name: "cast" });
   const linksArray = useFieldArray({ control, name: "watchLinks" });
+  const intro = watch("introduction") ?? "";
+  const introEn = watch("introductionEn") ?? "";
   const note = watch("editorialNote") ?? "";
   const noteEn = watch("editorialNoteEn") ?? "";
 
@@ -131,13 +134,13 @@ export function FilmForm({
                   personId: "",
                 })),
               });
-              toast.success("已从 TMDB 预填，请核对并补写编辑札记");
+              toast.success("已从 TMDB 预填，请核对并补写影片介绍");
             }}
           >
             从 TMDB 导入元数据
           </Button>
           <span className="ml-3 text-ink-muted text-xs">
-            仅预填资料，不导入图片；札记始终手写。
+            仅预填资料，不导入图片；介绍与札记始终手写。
           </span>
         </div>
       )}
@@ -325,9 +328,33 @@ export function FilmForm({
         </div>
       </Section>
 
-      <Section title="编辑札记（发布需 200–500 字）">
-        <Textarea rows={8} {...register("editorialNote")} className="font-body leading-relaxed" />
-        <NoteCounter text={note} />
+      <Section title="影片介绍（发布需 200–500 字）">
+        <p className="text-ink-muted text-xs">
+          中性、可查证：影片是什么、讲什么、怎么拍的、后来评价如何。不写修辞，也不下无从查证的评判——立场放在下面的编辑札记里。
+        </p>
+        <Textarea
+          id="introduction"
+          aria-label="影片介绍"
+          rows={8}
+          {...register("introduction")}
+          className="font-body leading-relaxed"
+        />
+        <IntroCounter text={intro} />
+        {fieldError(errors.introduction?.message)}
+      </Section>
+
+      <Section title="编辑札记（选填，至多 400 字）">
+        <p className="text-ink-muted text-xs">
+          你自己的看法，不填也可以发布。这里是全站唯一带立场的地方——介绍只管事实，判断放这儿。写多长由内容定，一句话也算一篇；真要展开成长文，用下面的「长文」。
+        </p>
+        <Textarea
+          id="editorialNote"
+          aria-label="编辑札记"
+          rows={3}
+          {...register("editorialNote")}
+          className="font-body leading-relaxed"
+        />
+        <CeilingCounter text={note} />
         {fieldError(errors.editorialNote?.message)}
       </Section>
 
@@ -348,12 +375,20 @@ export function FilmForm({
 
       <Section title="英文版 · English Edition">
         <p className="text-ink-muted text-xs">
-          发布英文版需要英文名与 120–350 词英文札记；英文页只显示英文内容，不回退中文。
+          发布英文版需要英文名与 120–350
+          词英文介绍；英文页只显示英文内容，不回退中文。英文是独立撰写的，不是中文的翻译（ADR
+          0010）。
         </p>
         <div className="space-y-1.5">
-          <Label htmlFor="editorialNoteEn">英文札记 · Editorial note</Label>
-          <Textarea id="editorialNoteEn" rows={8} {...register("editorialNoteEn")} />
-          <NoteCounterEn text={noteEn} />
+          <Label htmlFor="introductionEn">英文介绍 · Introduction</Label>
+          <Textarea id="introductionEn" rows={8} {...register("introductionEn")} />
+          <IntroCounterEn text={introEn} />
+          {fieldError(errors.introductionEn?.message)}
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="editorialNoteEn">英文札记 · Editorial note（选填）</Label>
+          <Textarea id="editorialNoteEn" rows={3} {...register("editorialNoteEn")} />
+          <CeilingCounter text={noteEn} en />
           {fieldError(errors.editorialNoteEn?.message)}
         </div>
         <div className="space-y-1.5">

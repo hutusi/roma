@@ -26,9 +26,11 @@ import { storeImage } from "../lib/storage";
 import {
   codePointLength,
   EDITORIAL_NOTE_EN_MAX,
-  EDITORIAL_NOTE_EN_MIN,
   EDITORIAL_NOTE_MAX,
-  EDITORIAL_NOTE_MIN,
+  INTRODUCTION_EN_MAX,
+  INTRODUCTION_EN_MIN,
+  INTRODUCTION_MAX,
+  INTRODUCTION_MIN,
   wordCount,
 } from "../lib/validators/film";
 import { db } from "./index";
@@ -246,6 +248,8 @@ async function main() {
           careerEssay: d.careerEssay ?? null,
           bioEn: d.bioEn ?? null,
           careerEssayEn: d.careerEssayEn ?? null,
+          editorialNote: d.editorialNote ?? null,
+          editorialNoteEn: d.editorialNoteEn ?? null,
           // A seeded English edition publishes with the zh one.
           statusEn: (d.bioEn ? "published" : "draft") as "published" | "draft",
           status: "published" as const,
@@ -291,16 +295,21 @@ async function main() {
           wikidataId: f.wikidataId ?? null,
           restorationNote: f.restorationNote ?? null,
           restorationNoteEn: f.restorationNoteEn ?? null,
-          editorialNote: f.editorialNote,
-          essay: f.essay ?? null,
+          introduction: f.introduction,
+          introductionEn: f.introductionEn ?? null,
+          editorialNote: f.editorialNote ?? null,
           editorialNoteEn: f.editorialNoteEn ?? null,
+          essay: f.essay ?? null,
           essayEn: f.essayEn ?? null,
           status: "published" as const,
-          statusEn: (f.editorialNoteEn && f.titleEn ? "published" : "draft") as
+          // en-publish keys off the introduction, not the note: the note
+          // is optional, so keying on it would leave translated films
+          // unpublished until someone wrote one.
+          statusEn: (f.introductionEn && f.titleEn ? "published" : "draft") as
             | "published"
             | "draft",
           publishedAt: publishedAtFor(i),
-          publishedEnAt: f.editorialNoteEn && f.titleEn ? publishedAtFor(i) : null,
+          publishedEnAt: f.introductionEn && f.titleEn ? publishedAtFor(i) : null,
         })),
       )
       .onConflictDoNothing({ target: films.slug })
@@ -739,25 +748,72 @@ async function assertPublishable(
   const problems: string[] = [];
 
   for (const f of seedFilms) {
-    const len = codePointLength(f.editorialNote);
-    if (len < EDITORIAL_NOTE_MIN || len > EDITORIAL_NOTE_MAX) {
+    const len = codePointLength(f.introduction);
+    if (len < INTRODUCTION_MIN || len > INTRODUCTION_MAX) {
       problems.push(
-        `film ${f.slug}: editorial note ${len} code points (need ${EDITORIAL_NOTE_MIN}–${EDITORIAL_NOTE_MAX})`,
+        `film ${f.slug}: introduction ${len} code points (need ${INTRODUCTION_MIN}–${INTRODUCTION_MAX})`,
       );
     }
-    if (f.editorialNoteEn) {
-      const words = wordCount(f.editorialNoteEn);
-      if (words < EDITORIAL_NOTE_EN_MIN || words > EDITORIAL_NOTE_EN_MAX) {
+    if (f.introductionEn) {
+      const words = wordCount(f.introductionEn);
+      if (words < INTRODUCTION_EN_MIN || words > INTRODUCTION_EN_MAX) {
         problems.push(
-          `film ${f.slug}: English note ${words} words (need ${EDITORIAL_NOTE_EN_MIN}–${EDITORIAL_NOTE_EN_MAX})`,
+          `film ${f.slug}: English introduction ${words} words (need ${INTRODUCTION_EN_MIN}–${INTRODUCTION_EN_MAX})`,
         );
       }
-      if (!f.titleEn) problems.push(`film ${f.slug}: English note without titleEn`);
+      if (!f.titleEn) problems.push(`film ${f.slug}: English introduction without titleEn`);
+    }
+    // The note is capped, never required — a film publishes on its
+    // introduction alone.
+    const noteLen = codePointLength(f.editorialNote ?? "");
+    if (noteLen > EDITORIAL_NOTE_MAX) {
+      problems.push(
+        `film ${f.slug}: editorial note ${noteLen} code points (max ${EDITORIAL_NOTE_MAX})`,
+      );
+    }
+    const noteEnWords = wordCount(f.editorialNoteEn ?? "");
+    if (noteEnWords > EDITORIAL_NOTE_EN_MAX) {
+      problems.push(
+        `film ${f.slug}: English note ${noteEnWords} words (max ${EDITORIAL_NOTE_EN_MAX})`,
+      );
     }
     // A typo'd tag slug would silently drop the junction row above.
     const knownTags = new Set(seedTags.map((t) => t.slug));
     for (const ts of f.tagSlugs ?? []) {
       if (!knownTags.has(ts)) problems.push(`film ${f.slug}: unknown tag slug "${ts}"`);
+    }
+  }
+
+  // People are inserted `status: "published"` outright, so everything
+  // validators/person.ts demands at publish time has to hold here too. The
+  // checks are restated rather than imported: validators/person.ts pulls in
+  // ./prose, which drags @tiptap/core and the editor extensions along with
+  // it, and the film loop above already restates its own bands the same way.
+  //
+  // Kept in step with publishProblems / publishEnProblems — 人物介绍 required,
+  // the note capped and never required (ADR 0017). Without it /admin refuses
+  // to publish a person the seeder publishes anyway, which is the split
+  // publishProblems was extracted to close.
+  for (const d of seedPeople) {
+    if (!d.bio?.trim()) {
+      problems.push(`person ${d.slug}: 人物介绍 (bio) is required to publish`);
+    }
+    // statusEn is derived from bioEn at insert, so a blank one means the
+    // English edition is a draft rather than a broken published row.
+    if (d.bioEn !== undefined && !d.bioEn?.trim()) {
+      problems.push(`person ${d.slug}: bioEn is present but empty`);
+    }
+    const noteLen = codePointLength(d.editorialNote ?? "");
+    if (noteLen > EDITORIAL_NOTE_MAX) {
+      problems.push(
+        `person ${d.slug}: editorial note ${noteLen} code points (max ${EDITORIAL_NOTE_MAX})`,
+      );
+    }
+    const noteEnWords = wordCount(d.editorialNoteEn ?? "");
+    if (noteEnWords > EDITORIAL_NOTE_EN_MAX) {
+      problems.push(
+        `person ${d.slug}: English note ${noteEnWords} words (max ${EDITORIAL_NOTE_EN_MAX})`,
+      );
     }
   }
 

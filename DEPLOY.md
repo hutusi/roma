@@ -93,9 +93,18 @@ bun --env-file=.env.production.local --conditions=react-server run src/db/seed-c
 set -a; source .env.production.local; set +a
 psql "$DATABASE_URL" -c "select slug, published_at from films order by published_at desc limit 6;"
 
-# 5. Changes to an existing row that are NOT tags — a corrected note, a list's sortOrder —
-#    still need their own step, because everything else is onConflictDoNothing:
-#      prose    → bun run src/db/resync-content.ts --films=… --apply
+# 5. Changes to an existing row that are NOT tags — a corrected introduction, a list's
+#    sortOrder — still need their own step, because everything else is onConflictDoNothing:
+#      prose    → bun run src/db/resync-content.ts --films=… --people=… --lists=… --apply
+#                 (covers introductions, editorial notes, essays, bios, career essays, and
+#                 list theme/intro plus each 入选理由. --people= spans directors AND actors;
+#                 --lists= also walks that list's items. A slug in no seed file is an error
+#                 and exits 1 — it used to warn and exit 0, which is how actors stayed
+#                 quietly unreachable. Dry-run first: omit --apply, add --diff to see the
+#                 text — or --diff=full, since --diff clips each field and a clipped
+#                 prose diff is worse than none for judging a rewrite. --all sweeps everything and must be spelled out; a field seed-data
+#                 does not define is left alone rather than nulled, and --clear=<slug>:<field>
+#                 is the only way to actually mean null.)
 #      lists    → /admin (moving the featured list, sortOrder 0)
 #      metadata → bun run src/db/backfill-metadata.ts (--films=… | --all) --apply
 #                 (external ids, isSilent, restoration notes — ADR 0016. Dry-run first:
@@ -140,3 +149,55 @@ is possible.
 Then run the §7 post-deploy checks, plus: new slugs present in `/sitemap.xml` in both
 locales; `/en/film/<new-slug>` is a real page and not a translation-pending stub;
 `/zh/films?tag=<new-tag>` returns results; `/zh/search-index.json` contains the new titles.
+
+## One-time: the ADR 0017 prose transition
+
+Applies to the release that splits 影片介绍 out of 编辑札记, and to nothing after it.
+
+The migration is additive, so nothing above changes. What is not obvious is that a plain
+`resync-content.ts --all --apply` **leaves 68 films holding their old note**, and the new
+code renders that note in its own section under the new introduction. The prose the release
+exists to replace would come back on the same page, under a heading claiming it is an
+editor's personal voice.
+
+Nothing is broken; the rule is working as designed. `main` defined `editorialNote` for all
+74 films, this release defines 6, and a field seed-data leaves `undefined` is deliberately
+left alone rather than nulled — that is what stops a resync clobbering editor-authored work
+(ADR 0014). Meaning "no note" requires saying so, and `--clear` is how.
+
+```bash
+# The dry run already prints the exact incantation for every field it left alone.
+# Scope the grep to the two note fields: --clear-ing everything unasserted is the
+# silent-clobber shape this design exists to avoid.
+CLEAR=$(bun --env-file=.env.production.local run src/db/resync-content.ts --all --diff \
+  | grep -oE '\-\-clear=[a-z0-9-]+:(editorialNote|editorialNoteEn)' \
+  | sed 's/--clear=//' | paste -sd, -)
+echo "$CLEAR" | tr ',' '\n' | wc -l        # expect 136 (68 films × 2). Read them.
+
+bun --env-file=.env.production.local run src/db/resync-content.ts --all --clear="$CLEAR" --apply
+```
+
+Verify before deploying the code, not after:
+
+```bash
+set -a; source .env.production.local; set +a
+psql "$DATABASE_URL" -c "select count(*) from films where editorial_note is not null;"   # exactly 6
+psql "$DATABASE_URL" -c "select count(*) from films where introduction is null;"         # 0
+```
+
+**Order, which is the whole trick.** Migrate → back up the prose columns → resync with
+`--clear` → *then* merge. The build is what publishes the change: existing film pages are
+prerendered and served frozen until the next one, and these scripts run outside Next and
+cannot call `revalidate.ts`, so the database can be reshaped underneath the live site with
+no visible intermediate state. Merging first inverts that and fails outright — the preview
+build for PR #28 died on `column ... introduction does not exist`, because preview builds
+read the production database too.
+
+**Do steps 4 and 5 back to back, with no editing in between.** `CLEAR` is computed by one
+process and applied by another, so a note an editor writes in the gap is on the list to be
+erased — and `--clear` is the one operation here that cannot be undone. `resync` takes row
+locks while it applies, which protects the write itself and does nothing about the window
+before it. If the two commands cannot run together, regenerate `CLEAR` immediately before
+applying rather than reusing an older one.
+
+Clearing the notes is the first irreversible step. The backup is the only copy.

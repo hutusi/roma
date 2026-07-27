@@ -16,8 +16,8 @@ export type FeedFilm = {
   titleZh: string;
   titleEn: string | null;
   titleOriginal: string;
-  editorialNote: string | null;
-  editorialNoteEn: string | null;
+  introduction: string | null;
+  introductionEn: string | null;
   publishedAt: Date | null;
   publishedEnAt: Date | null;
 };
@@ -60,7 +60,7 @@ export function renderFilmsFeed(locale: Locale, films: FeedFilm[]): string {
     .map((film) => {
       const title = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
       const link = `${SITE_URL}${localePath(locale, `/film/${film.slug}`)}`;
-      const description = (en ? film.editorialNoteEn : film.editorialNote) ?? film.titleOriginal;
+      const description = (en ? film.introductionEn : film.introduction) ?? film.titleOriginal;
       const published = en ? film.publishedEnAt : film.publishedAt;
       return [
         "    <item>",

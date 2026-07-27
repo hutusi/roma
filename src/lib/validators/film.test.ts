@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import {
   codePointLength,
+  EDITORIAL_NOTE_EN_MAX,
+  EDITORIAL_NOTE_MAX,
   filmFormSchema,
+  INTRODUCTION_MAX,
   parseCountries,
   publishEnProblems,
   publishProblems,
@@ -24,29 +27,48 @@ describe("codePointLength", () => {
 });
 
 describe("publishProblems", () => {
-  const note = (n: number) => "字".repeat(n);
+  const zh = (n: number) => "字".repeat(n);
   const base = { directorCount: 1 };
 
   test("rejects 199, accepts 200 and 500, rejects 501 code points", () => {
-    expect(publishProblems({ editorialNote: note(199), ...base })).not.toEqual([]);
-    expect(publishProblems({ editorialNote: note(200), ...base })).toEqual([]);
-    expect(publishProblems({ editorialNote: note(500), ...base })).toEqual([]);
-    expect(publishProblems({ editorialNote: note(501), ...base })).not.toEqual([]);
+    expect(publishProblems({ introduction: zh(199), ...base })).not.toEqual([]);
+    expect(publishProblems({ introduction: zh(200), ...base })).toEqual([]);
+    expect(publishProblems({ introduction: zh(500), ...base })).toEqual([]);
+    expect(publishProblems({ introduction: zh(501), ...base })).not.toEqual([]);
   });
 
-  test("rejects a missing note and reports the current count", () => {
-    const problems = publishProblems({ editorialNote: null, ...base });
+  test("rejects a missing introduction and reports the current count", () => {
+    const problems = publishProblems({ introduction: null, ...base });
     expect(problems.join()).toContain("0 字");
   });
 
-  test("rejects a whitespace-only note — 200 spaces render as nothing", () => {
-    const problems = publishProblems({ editorialNote: " ".repeat(200), ...base });
+  test("rejects a whitespace-only introduction — 200 spaces render as nothing", () => {
+    const problems = publishProblems({ introduction: " ".repeat(200), ...base });
     expect(problems.join()).toContain("0 字");
   });
 
   test("requires at least one director", () => {
-    const problems = publishProblems({ editorialNote: note(300), directorCount: 0 });
+    const problems = publishProblems({ introduction: zh(300), directorCount: 0 });
     expect(problems.join()).toContain("导演");
+  });
+
+  // The note is capped and optional — the inverse of the introduction's
+  // floor. Absent must publish; over-long must not.
+  test("publishes without an editorial note", () => {
+    expect(publishProblems({ introduction: zh(300), ...base })).toEqual([]);
+    expect(publishProblems({ introduction: zh(300), editorialNote: null, ...base })).toEqual([]);
+    expect(publishProblems({ introduction: zh(300), editorialNote: "", ...base })).toEqual([]);
+  });
+
+  // Derived from the constant, not hardcoded: a literal bound here is how
+  // the counters came to describe the wrong field after the split.
+  test("accepts a note at the ceiling and rejects one past it", () => {
+    const at = zh(EDITORIAL_NOTE_MAX);
+    const over = zh(EDITORIAL_NOTE_MAX + 1);
+    expect(publishProblems({ introduction: zh(300), editorialNote: at, ...base })).toEqual([]);
+    expect(
+      publishProblems({ introduction: zh(300), editorialNote: over, ...base }).join(),
+    ).toContain("编辑札记");
   });
 });
 
@@ -64,16 +86,27 @@ describe("publishEnProblems", () => {
 
   test("rejects 119, accepts 120 and 350, rejects 351 words", () => {
     const base = { titleEn: "8½" };
-    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(119) })).not.toEqual([]);
-    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(120) })).toEqual([]);
-    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(350) })).toEqual([]);
-    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(351) })).not.toEqual([]);
+    expect(publishEnProblems({ ...base, introductionEn: noteEn(119) })).not.toEqual([]);
+    expect(publishEnProblems({ ...base, introductionEn: noteEn(120) })).toEqual([]);
+    expect(publishEnProblems({ ...base, introductionEn: noteEn(350) })).toEqual([]);
+    expect(publishEnProblems({ ...base, introductionEn: noteEn(351) })).not.toEqual([]);
   });
 
   test("requires an English title and reports the current word count", () => {
-    const problems = publishEnProblems({ titleEn: "  ", editorialNoteEn: null });
+    const problems = publishEnProblems({ titleEn: "  ", introductionEn: null });
     expect(problems.join()).toContain("titleEn");
     expect(problems.join()).toContain("0 词");
+  });
+
+  test("the English note is optional and capped at its ceiling", () => {
+    const base = { titleEn: "8½", introductionEn: noteEn(150) };
+    expect(publishEnProblems(base)).toEqual([]);
+    expect(publishEnProblems({ ...base, editorialNoteEn: noteEn(EDITORIAL_NOTE_EN_MAX) })).toEqual(
+      [],
+    );
+    expect(
+      publishEnProblems({ ...base, editorialNoteEn: noteEn(EDITORIAL_NOTE_EN_MAX + 1) }).join(),
+    ).toContain("札记");
   });
 });
 
@@ -131,13 +164,21 @@ describe("filmFormSchema", () => {
     );
   });
 
-  test("caps the editorial note at 500 code points but allows drafts below 200", () => {
-    expect(filmFormSchema.safeParse({ ...valid, editorialNote: "短".repeat(50) }).success).toBe(
+  test("caps the introduction at 500 code points but allows drafts below 200", () => {
+    expect(filmFormSchema.safeParse({ ...valid, introduction: "短".repeat(50) }).success).toBe(
       true,
     );
-    expect(filmFormSchema.safeParse({ ...valid, editorialNote: "长".repeat(501) }).success).toBe(
+    expect(filmFormSchema.safeParse({ ...valid, introduction: "长".repeat(501) }).success).toBe(
       false,
     );
+  });
+
+  test("caps the editorial note at its own, lower ceiling", () => {
+    const at = "短".repeat(EDITORIAL_NOTE_MAX);
+    const over = "长".repeat(EDITORIAL_NOTE_MAX + 1);
+    expect(filmFormSchema.safeParse({ ...valid, editorialNote: at }).success).toBe(true);
+    expect(filmFormSchema.safeParse({ ...valid, editorialNote: over }).success).toBe(false);
+    expect(EDITORIAL_NOTE_MAX).toBeLessThan(INTRODUCTION_MAX);
   });
 
   test("external ids accept bare ids, reject URLs and malformed values", () => {

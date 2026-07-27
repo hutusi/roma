@@ -12,6 +12,7 @@ import { personPath } from "@/lib/routes";
 
 /** Latin eyebrows are locale-neutral; zh pairs them with a zh title, en drops them. */
 const EYEBROWS = {
+  introduction: "Introduction",
   editorialNote: "Editorial Note",
   titles: "Titles",
   cast: "Cast",
@@ -42,6 +43,7 @@ export function FilmPage({
   const hero = heroOf(film.media);
   const displayTitle = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
   const subtitle = film.titleOriginal !== displayTitle ? film.titleOriginal : null;
+  const introduction = en ? film.introductionEn : film.introduction;
   const editorialNote = en ? film.editorialNoteEn : film.editorialNote;
   const essay = en ? film.essayEn : film.essay;
 
@@ -142,6 +144,21 @@ export function FilmPage({
         {actions && <div className="mt-5 flex justify-center">{actions}</div>}
       </header>
 
+      {introduction && (
+        <section className="mt-14">
+          <TitleCard eyebrow={eyebrow("introduction")} title={dict.introduction} />
+          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
+            {introduction}
+          </p>
+        </section>
+      )}
+
+      {/*
+        Optional, and in an editor's own voice rather than the neutral
+        register of the introduction. Its own heading carries that
+        distinction, so the prose itself is set like body text: at a few
+        hundred characters, italics and a narrow measure fight reading.
+      */}
       {editorialNote && (
         <section className="mt-14">
           <TitleCard eyebrow={eyebrow("editorialNote")} title={dict.editorialNote} />

@@ -16,13 +16,16 @@ export type SeedDirector = {
    * "director" for the original corpus.
    */
   primaryRole?: "director" | "actor";
-  /** Short plain-text bio (cards + metadata). */
+  /** 人物介绍 — short plain text; also the card blurb and meta description. */
   bio: string;
   /** 创作历程 — long-form essay. */
   careerEssay?: TiptapDoc;
   /** English edition; a seeded bioEn marks the person en-published. */
   bioEn?: string;
   careerEssayEn?: TiptapDoc;
+  /** 编辑札记 — optional and capped, as on films. */
+  editorialNote?: string;
+  editorialNoteEn?: string;
   /** Optional explicit TMDB person id; otherwise resolved by name search. */
   tmdbPersonId?: number;
 };
@@ -80,14 +83,23 @@ export type SeedFilm = {
   /** 修复版本 — e.g. "2019 年 4K 修复，博洛尼亚电影资料馆". */
   restorationNote?: string;
   restorationNoteEn?: string;
-  /** 编辑札记 — plain text, must be 200–500 code points to publish. */
-  editorialNote: string;
-  essay?: TiptapDoc;
   /**
-   * English edition — 120–350 words to publish; a seeded editorialNoteEn
+   * 影片介绍 — plain text, neutral and encyclopedic. 200–500 code points
+   * to publish.
+   */
+  introduction: string;
+  /**
+   * English edition — 120–350 words to publish; a seeded introductionEn
    * (with titleEn) marks the film en-published.
    */
+  introductionEn?: string;
+  /**
+   * 编辑札记 — optional, and capped rather than floored (see
+   * EDITORIAL_NOTE_MAX). Written by an editor, not drafted at length.
+   */
+  editorialNote?: string;
   editorialNoteEn?: string;
+  essay?: TiptapDoc;
   essayEn?: TiptapDoc;
   cast?: SeedCastMember[];
   /** Director slugs, ordered (co-directors keep their order). */

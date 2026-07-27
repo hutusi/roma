@@ -51,8 +51,8 @@ export async function generateMetadata({
       ? `${film.titleEn ?? film.titleOriginal} (${film.year})`
       : `${film.titleZh}（${film.year}）`,
     description: en
-      ? (film.editorialNoteEn?.slice(0, 160) ?? film.titleOriginal)
-      : (film.editorialNote?.slice(0, 120) ?? film.titleOriginal),
+      ? (film.introductionEn?.slice(0, 160) ?? film.titleOriginal)
+      : (film.introduction?.slice(0, 120) ?? film.titleOriginal),
     ...seoMetadata(locale, `/film/${slug}`, {
       en: en || film.statusEn === "published",
       ogType: "video.movie",

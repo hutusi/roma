@@ -11,17 +11,17 @@ export const seedLists: SeedList[] = [
   {
     slug: "chinese-canon",
     title: "华语经典",
-    theme: "从费穆到王家卫，八部撑起华语电影的作品",
+    theme: "从 1934 年的上海到 2000 年的香港，八部华语影片",
     titleEn: "The Chinese-Language Canon",
-    themeEn: "From Fei Mu to Wong Kar-wai — eight films that hold up Chinese-language cinema",
+    themeEn: "Eight Chinese-language films, from Shanghai in 1934 to Hong Kong in 2000",
     intro: doc([
       p(
-        "华语电影不是世界影史的一个地方分支，它有自己的源头、自己的高峰，以及自己被中断过两次的谱系。这份片单从 1934 年的上海一直走到 2000 年的香港：默片末期的阮玲玉，战后废墟上的一段私情，被封存三十年的杰作，台北眷村里的一把刀，竹林中的一次顿悟。它不追求覆盖，只想说明一件事——这些电影放在任何一个国家的影史里，都站得住。",
+        "本片单收录八部华语影片，年代自 1934 年至 2000 年。其中四部摄于 1949 年以前的上海，三部出自台湾，一部为香港作品。排列不依年代先后：以 1948 年的《小城之春》起始，1934 年的《神女》次之，末为 2000 年的《花样年华》。",
       ),
     ]),
     introEn: doc([
       p(
-        "Chinese-language cinema is not a regional branch of world film history. It has its own headwaters, its own summits, and its own lineage — one that has been severed twice. This list runs from Shanghai in 1934 to Hong Kong in 2000: Ruan Lingyu at the close of the silent era, a private affair among postwar ruins, a masterpiece shelved for thirty years, a knife in a Taipei military village, a moment of enlightenment in a bamboo grove. It does not attempt coverage. It means to establish one thing — that these films would stand up in the film history of any country on earth.",
+        "This list gathers eight Chinese-language films made between 1934 and 2000. Four were produced in Shanghai before 1949, three in Taiwan and one in Hong Kong. They are not arranged by date: the list opens with Spring in a Small Town from 1948, follows it with The Goddess from 1934, and closes with In the Mood for Love from 2000.",
       ),
     ]),
     sortOrder: 0,
@@ -33,12 +33,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "spring-in-a-small-town",
         reasoning: doc([
           p(
-            "从顶点开始。如果只能用一部电影证明华语电影的高度，是这一部：五个人，一座废园，全部欲望停在门槛前。",
+            "1948 年文华影业出品，全片五个角色，场景限于一座宅院与一段残破的城墙。1980 年代重新流通后，多次在华语影史评选中列于首位。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Begin at the summit. If one film had to establish how high Chinese-language cinema reaches, it is this one: five people, a ruined garden, and every desire stopped at the threshold.",
+            "Produced by Wenhua in 1948, with five characters and its action confined to one courtyard house and a stretch of ruined town wall. Since returning to circulation in the 1980s it has placed first in several polls of Chinese-language cinema.",
           ),
         ]),
       },
@@ -46,23 +46,25 @@ export const seedLists: SeedList[] = [
         filmSlug: "the-goddess",
         reasoning: doc([
           p(
-            "再回到源头。1934 年，中国默片在这里达到顶点——而它最了不起的地方，是把摄影机放在与主人公平视的高度。",
+            "1934 年联华影业出品，为名单中年代最早的一部，也是唯一的无声片。主演阮玲玉于次年去世，年二十四。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Now back to the source. In 1934 Chinese silent cinema reached its summit here — and what is most remarkable about it is simply that the camera sits level with its heroine.",
+            "Produced by Lianhua in 1934, the earliest film here and the only silent one. Ruan Lingyu, who plays the lead, died the following year at twenty-four.",
           ),
         ]),
       },
       {
         filmSlug: "street-angel",
         reasoning: doc([
-          p("上海左翼电影最好的一面：先让你笑，再让你明白笑的是什么。周璇的歌至今还在被传唱。"),
+          p(
+            "1937 年明星影片公司出品，袁牧之编导，周璇与赵丹主演。片中《四季歌》与《天涯歌女》两首插曲由田汉作词、贺绿汀配乐，至今仍在传唱。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "The Shanghai left-wing cinema at its best: it gets you laughing first and only then lets you work out what you were laughing at. Zhou Xuan's songs are still sung today.",
+            "Produced by Mingxing in 1937, written and directed by Yuan Muzhi, with Zhou Xuan and Zhao Dan. Its two songs, with lyrics by Tian Han and music arranged by He Luting, are still widely sung.",
           ),
         ]),
       },
@@ -70,12 +72,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "the-spring-river-flows-east",
         reasoning: doc([
           p(
-            "华语通俗剧的巅峰。三个多小时把抗战八年压进一个家庭，1947 年的观众在影院里哭成一片——那份煽情是有出处的。",
+            "1947 年昆仑影业出品，蔡楚生与郑君里合导，分上下两集，全长约三小时，在上海连映三个多月。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "The summit of Chinese melodrama. Three hours compress eight years of war into one family, and audiences in 1947 wept in the aisles — the sentiment had somewhere to come from.",
+            "Produced by Kunlun in 1947 and directed by Cai Chusheng with Zheng Junli. Released in two parts running about three hours in total, it played in Shanghai for more than three months.",
           ),
         ]),
       },
@@ -83,23 +85,25 @@ export const seedLists: SeedList[] = [
         filmSlug: "a-touch-of-zen",
         reasoning: doc([
           p(
-            "类型片也可以是艺术。竹林一战养活了此后所有华语动作片，而它真正的野心在后半段：厮杀让位于禅。",
+            "1971 年台港合拍，胡金铨编导，为名单中唯一的类型片。1975 年它在戛纳获奖，是华语电影首次在该影展获得奖项。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Genre can be art. The bamboo-forest duel fed every Chinese-language action film that followed, but the real ambition arrives in the second half, where combat gives way to Zen.",
+            "A 1971 Taiwan and Hong Kong co-production written and directed by King Hu, and the only genre film here. Its award at Cannes in 1975 was the first taken at that festival by a Chinese-language film.",
           ),
         ]),
       },
       {
         filmSlug: "a-time-to-live-a-time-to-die",
         reasoning: doc([
-          p("台湾新电影的方法在这里成型：镜头放远、放定，不追高潮，让时间自己把一个家庭走完。"),
+          p(
+            "1985 年侯孝贤作品，取材自他在凤山的成长经历，多用固定长镜头，属台湾新电影时期的代表作之一。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Here the method of Taiwan New Cinema takes shape: set the camera far back, lock it down, refuse the dramatic peak, and let time walk a family to its end by itself.",
+            "Hou Hsiao-hsien's 1985 film, drawn from his own upbringing in Fengshan and built largely from fixed long takes. It is one of the principal works of the Taiwan New Cinema period.",
           ),
         ]),
       },
@@ -107,25 +111,23 @@ export const seedLists: SeedList[] = [
         filmSlug: "a-brighter-summer-day",
         reasoning: doc([
           p(
-            "四小时的代价换来一整个社会的横截面。看完你会明白，那一刀不是意外，而是整张电路图算出来的结果。",
+            "1991 年杨德昌作品，为名单中篇幅最长的一部。演员多为非职业，张震拍摄时十四岁，其父张国柱在片中饰演他的父亲。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Four hours buys you the cross-section of an entire society. By the end you understand that the knife is not an accident but the figure the whole circuit was computing.",
+            "Edward Yang's 1991 film and the longest here. Most of the cast were non-professionals; Chang Chen was fourteen during the shoot, and his own father plays his father in the film.",
           ),
         ]),
       },
       {
         filmSlug: "in-the-mood-for-love",
         reasoning: doc([
-          p(
-            "以最近也最广为人知的一部收尾。前面七部让你看见谱系，这一部让你看见它长成了什么——关于错过的极致。",
-          ),
+          p("2000 年王家卫作品，为名单中年代最晚的一部；梁朝伟凭本片获该届戛纳最佳男演员奖。"),
         ]),
         reasoningEn: doc([
           p(
-            "End on the most recent and most widely known. The seven films before it show you the lineage; this one shows you what the lineage grew into — the last word on missed chances.",
+            "Wong Kar-wai's film from 2000, the most recent on the list, and the one for which Tony Leung took the acting award at Cannes that year.",
           ),
         ]),
       },
@@ -134,45 +136,41 @@ export const seedLists: SeedList[] = [
   {
     slug: "into-black-and-white",
     title: "黑白影像入门",
-    theme: "如果你想从黑白电影开始，先看这八部",
+    theme: "八部黑白影片，年代自 1928 年至 1960 年",
     titleEn: "A Black-and-White Primer",
-    themeEn: "If black-and-white cinema is where you want to begin, start with these eight",
+    themeEn: "Eight black-and-white films, made between 1928 and 1960",
     introEn: doc([
       p(
-        'Black and white was never merely "before color arrived" — it is an active choice, one that hands the whole burden of storytelling over to light and shadow. This list gathers eight masterpieces, wildly different in style, spanning silent film to the New Wave and Europe to Asia, as the first door into a vast treasury. You need not watch them in order, but any one of them is enough to convince you: strip away the color, and cinema somehow comes into sharper focus.',
+        "Eight black-and-white films made between 1928 and 1960, from France, Italy, the United States, Japan and Sweden. The earliest is a silent. Colour processes were available when the other seven were made; black and white nonetheless remained standard practice in each of these industries, largely on grounds of cost.",
       ),
     ]),
     sortOrder: 1,
     coverFilmSlug: "seven-samurai",
     intro: doc([
       p(
-        "黑白不是“还没有彩色”，而是一种主动的选择——让光与影承担全部的叙事。这份片单挑出八部风格迥异的杰作，跨越默片到新浪潮、欧洲到亚洲，作为进入这座宝库的第一道门。不必按顺序看，但每一部都足以让你相信：少了颜色，电影反而看得更清楚。",
+        "本片单收录八部黑白影片，年代自 1928 年至 1960 年，出自法国、意大利、美国、日本与瑞典。其中最早的一部为默片。其余七部摄制时彩色工艺均已可用，而各国的常规产品仍以黑白为主，成本是主要原因。",
       ),
     ]),
     items: [
       {
         filmSlug: "bicycle-thieves",
         reasoning: doc([
-          p(
-            "从最朴素的一部开始。没有技巧的炫耀，只有一对父子和一辆丢失的自行车，却让你第一次明白电影可以如此贴近生活的疼痛。",
-          ),
+          p("1948 年德西卡作品，摄影卡洛·蒙托里，全片在罗马街头以自然光拍摄，未使用摄影棚。"),
         ]),
         reasoningEn: doc([
           p(
-            "Begin with the plainest of them all. No showmanship, just a father, a son, and a stolen bicycle — and yet it is here that you first understand how closely cinema can press against the ache of ordinary life.",
+            "De Sica's 1948 film, photographed by Carlo Montuori entirely on the streets of Rome in available light, with no studio work.",
           ),
         ]),
       },
       {
         filmSlug: "tokyo-story",
         reasoning: doc([
-          p(
-            "学会在“什么都没发生”里看见一切。小津固定的低机位，教你把注意力从情节转向人与人之间那些欲言又止的沉默。",
-          ),
+          p("1953 年小津安二郎作品，摄影厚田雄春。室内多用均匀的散射光，很少制造强烈的明暗对比。"),
         ]),
         reasoningEn: doc([
           p(
-            "Learn to see everything in a film where nothing seems to happen. Ozu's fixed, low camera teaches you to move your attention off the plot and onto the unspoken silences that pass between people.",
+            "Ozu's 1953 film, photographed by Yūharu Atsuta. Interiors are lit evenly and diffusely, with little strong contrast between light and shadow.",
           ),
         ]),
       },
@@ -180,25 +178,23 @@ export const seedLists: SeedList[] = [
         filmSlug: "seven-samurai",
         reasoning: doc([
           p(
-            "再感受黑白如何迸发力量。雨中的决战证明，没有色彩，动作、天气与群像反而更有雕塑般的重量。",
+            "1954 年黑泽明作品，摄影中井朝一，全片以阴天的自然光为主，结尾的战斗在泥地与人工降雨中完成。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Then feel how black and white can erupt into sheer force. The final battle in the rain proves that without color, action, weather, and the massed faces take on a sculptural weight all their own.",
+            "Kurosawa's 1954 film, photographed by Asakazu Nakai largely in the flat light of overcast weather. Its final battle was staged in mud under artificial rain.",
           ),
         ]),
       },
       {
         filmSlug: "the-seventh-seal",
         reasoning: doc([
-          p(
-            "当你准备好面对更大的问题——死亡与信仰。伯格曼把最沉重的追问，拍成了一则你会记住一辈子的画面。",
-          ),
+          p("1957 年伯格曼作品，以约三十五天拍成，摄影为贡纳尔·菲舍尔，获同年戛纳评审团特别奖。"),
         ]),
         reasoningEn: doc([
           p(
-            "When you are ready for the larger questions — death, and faith. Bergman turns the heaviest inquiry of all into an image you will carry with you for the rest of your life.",
+            "Bergman's 1957 film, shot in about thirty-five days and photographed by Gunnar Fischer. It took the special jury prize at Cannes that year.",
           ),
         ]),
       },
@@ -206,12 +202,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "citizen-kane",
         reasoning: doc([
           p(
-            "看一次“电影语言”本身。深焦、闪回、碎片叙事，二十五岁的威尔斯几乎一次性重写了电影能做什么。",
+            "1941 年威尔斯首部长片，摄影格雷格·托兰主动要求参与，片尾字幕将他与导演并列于同一张卡片上，这在当时极少见。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Watch the language of cinema itself, laid bare. Deep focus, flashback, a story told in shards — at twenty-five, Welles all but rewrote what a film could do in a single stroke.",
+            "Welles's first feature, from 1941. Gregg Toland asked to shoot it, and the closing credits put his name on a single card with the director's, which was almost unheard of.",
           ),
         ]),
       },
@@ -219,23 +215,25 @@ export const seedLists: SeedList[] = [
         filmSlug: "breathless",
         reasoning: doc([
           p(
-            "然后看规则如何被打破。戈达尔的跳接砸碎了古典剪辑，让你意识到你熟悉的“顺畅”原来只是一种约定。",
+            "摄影拉乌尔·库塔尔为戈达尔这部 1960 年的首作使用了为静照生产的高感光胶片，接成长卷，以便在自然光下于巴黎街头拍摄。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Then watch the rules get broken. Godard's jump cuts shatter classical editing and make you realize that the smoothness you always took for granted was only ever a convention.",
+            "Raoul Coutard shot Godard's 1960 debut on high-speed stock made for stills photography, spliced into long rolls, so that the Paris streets could be filmed in available light.",
           ),
         ]),
       },
       {
         filmSlug: "la-strada",
         reasoning: doc([
-          p("回到情感的原点。费里尼与马西纳提醒你，再前卫的形式，最终都是为了盛放一颗会痛的心。"),
+          p(
+            "1954 年费里尼作品，奥特罗·马泰利摄影，外景多在意大利中部的冬季拍摄，荒地与阴天构成全片的基调。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Return to where feeling begins. Fellini and Masina remind you that even the most avant-garde form exists, in the end, only to hold a heart that can break.",
+            "Fellini's 1954 film, photographed by Otello Martelli, its exteriors shot in central Italy in winter; waste ground and overcast light set the tone throughout.",
           ),
         ]),
       },
@@ -243,12 +241,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "the-passion-of-joan-of-arc",
         reasoning: doc([
           p(
-            "最后，直视一张脸。近百年前的默片，用连绵的特写证明：一张受难的脸，就足以成为整个宇宙。",
+            "1928 年德莱叶作品，摄影鲁道夫·马泰，全片以大量特写构成。演员一律不施粉黛，在当时是罕见的做法。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Finally, look straight into a face. A silent film nearly a century old, built from unbroken close-ups, proves that a single suffering face is enough to become an entire universe.",
+            "Dreyer's 1928 film, photographed by Rudolph Maté and built largely from close-ups. The cast wore no makeup, which was unusual at the time.",
           ),
         ]),
       },
@@ -257,19 +255,19 @@ export const seedLists: SeedList[] = [
   {
     slug: "fellini-primer",
     title: "费里尼入门",
-    theme: "从马戏团到罗马：一位导演如何长出翅膀",
+    theme: "三部影片，1954 至 1963 年的费里尼",
     titleEn: "A Fellini Primer",
-    themeEn: "From the circus to Rome: how a director grew wings",
+    themeEn: "Three films, Fellini from 1954 to 1963",
     introEn: doc([
       p(
-        "Fellini's films are one dream that keeps getting bigger. Watched in this order, they show him setting out from the streets of neorealism and flying, step by step, toward the circus-ring confession that belongs to him alone. Three are enough — after that you will want the rest on your own.",
+        "Three Fellini films, made between 1954 and 1963 and arranged by date. La Strada and Nights of Cabiria both star his wife Giulietta Masina, and those two films and 8½ each received the Academy Award for Best Foreign Language Film; Fellini won it four times in all.",
       ),
     ]),
     sortOrder: 2,
     coverFilmSlug: "otto-e-mezzo",
     intro: doc([
       p(
-        "费里尼的电影像一场越做越大的梦。按这个顺序看，你会看到他如何从新现实主义的街道出发，一步步飞向只属于他自己的马戏团式的自白。三部足矣，之后你会自己想看完全部。",
+        "本片单收录费里尼的三部影片，摄于 1954 至 1963 年，依年代排列。《大路》与《卡比利亚之夜》的主演均为其妻朱丽叶塔·马西纳，两片与《八部半》先后获奥斯卡最佳外语片；费里尼一生四次获得该奖。",
       ),
     ]),
     items: [
@@ -277,12 +275,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "la-strada",
         reasoning: doc([
           p(
-            "从这里开始：费里尼尚未离开新现实主义，却已长出翅膀。一个傻姑娘与一个粗汉，是他日后所有梦境的种子。",
+            "1954 年作品，费里尼由新现实主义转向的开始，也是他与作曲家尼诺·罗塔长期合作中的早期一部。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Start here: Fellini has not yet left neorealism, but the wings are already growing. A simple girl and a brute — the seed of every dream he would film later.",
+            "From 1954, the start of Fellini's move away from neorealism, and an early film in his long working relationship with the composer Nino Rota.",
           ),
         ]),
       },
@@ -290,12 +288,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "le-notti-di-cabiria",
         reasoning: doc([
           p(
-            "再看他如何在苦难里种下希望。卡比利亚破碎又倔强的微笑，是费里尼对人类韧性的第一次礼赞。",
+            "1957 年作品，马西纳凭此片获戛纳最佳女演员奖。这是费里尼最后一部以罗马底层为题材的影片。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Then watch him plant hope inside hardship. Cabiria's broken, stubborn smile is Fellini's first tribute to human resilience.",
+            "From 1957, and the film for which Masina took the acting award at Cannes. It is the last of Fellini's films set among the poor of Rome.",
           ),
         ]),
       },
@@ -303,12 +301,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "otto-e-mezzo",
         reasoning: doc([
           p(
-            "终点也是顶点。当他终于敢把“拍不出电影”的困境本身拍成电影，梦境与现实再无边界，翅膀彻底张开。",
+            "1963 年作品，马斯楚安尼饰演的圭多是一名导演，为费里尼首次以拍电影本身为题材，此后的《朱丽叶与魔鬼》《罗马风情画》延续这一倾向。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "The end point is also the summit. When he finally dared to film the impossibility of making a film, dream and reality lost their border — and the wings opened all the way.",
+            "From 1963, and the first time Fellini took film-making itself as his subject, with Mastroianni as a director named Guido. Juliet of the Spirits and Roma continue in the same direction.",
           ),
         ]),
       },
@@ -317,19 +315,19 @@ export const seedLists: SeedList[] = [
   {
     slug: "italian-neorealism",
     title: "意大利新现实主义",
-    theme: "把摄影机搬到街上，让真实自己发声",
+    theme: "三部影片，战后意大利的实景与非职业演员",
     titleEn: "Italian Neorealism",
-    themeEn: "Carry the camera into the streets and let the truth speak for itself",
+    themeEn: "Three films from postwar Italy, shot on location with non-professionals",
     introEn: doc([
       p(
-        "On the rubble of the Second World War, a handful of Italians shouldered their cameras into the streets and, with non-professional actors and real poverty, filmed the struggle and the dignity of ordinary people. The movement was brief but its reach was immense — it very nearly reset the moral coordinates of postwar cinema the world over.",
+        "Italian neorealism refers to a body of films made in Italy from about 1945 into the early 1950s, generally shot on location, often with non-professional actors, and concerned with poverty and unemployment after the war. Two of the three films here are by Fellini and mark the turn toward more personal subjects.",
       ),
     ]),
     sortOrder: 3,
     coverFilmSlug: "bicycle-thieves",
     intro: doc([
       p(
-        "二战废墟之上，一群意大利人扛起摄影机走上街头，用非职业演员与真实的贫困，拍下了普通人的挣扎与尊严。这场运动短暂却影响深远，几乎为战后世界电影重设了良心的坐标。",
+        "意大利新现实主义指 1945 年前后至 1950 年代初的一批意大利影片，多在实景拍摄，常用非职业演员，题材集中于战后的贫困与失业。本片单收录三部，其中两部为费里尼作品，标志这一路数向个人题材的转向。",
       ),
     ]),
     items: [
@@ -337,12 +335,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "bicycle-thieves",
         reasoning: doc([
           p(
-            "运动的旗帜。德西卡用一辆丢失的自行车，把“没有故事的故事”拍成了最催泪的杰作，也定义了什么叫新现实主义。",
+            "1948 年德西卡作品，主演兰贝托·马乔拉尼原为工人，此前没有表演经验，全片在罗马实景拍摄。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "The movement's banner. De Sica took a single stolen bicycle — a story with no story — and turned it into the most tear-stained of masterpieces, defining in one stroke what neorealism could be.",
+            "De Sica's 1948 film. Lamberto Maggiorani, its lead, was a factory worker with no previous acting experience, and the film was shot on location in Rome.",
           ),
         ]),
       },
@@ -350,12 +348,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "la-strada",
         reasoning: doc([
           p(
-            "运动的转身。费里尼在写实的尘土里注入寓言与诗意，预告了新现实主义如何向更私人的方向生长。",
+            "1954 年费里尼作品，仍在实景拍摄，但转向寓言式的人物关系，当时曾被部分左翼评论视为背离这一路数。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "The movement's pivot. Fellini stirred fable and poetry into the realist dust, foreshadowing how neorealism would grow toward something far more personal.",
+            "Fellini's 1954 film, still shot on location but turning toward a fable-like relationship between its characters. Some left-wing critics of the day treated it as a departure.",
           ),
         ]),
       },
@@ -363,12 +361,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "le-notti-di-cabiria",
         reasoning: doc([
           p(
-            "运动的余晖。街头妓女的一夜，既是社会底层的写照，也已迈向费里尼式的马戏团梦境——写实与幻想在此交棒。",
+            "1957 年费里尼作品，外景在罗马郊外实地拍摄，片中的棚户区与卡比利亚的住处均为实景，工作方式仍是这一路数的。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "The movement's afterglow. A streetwalker's single night is at once a portrait of life at the bottom and already a step toward Fellini's circus-ring dream — realism and fantasy trading the baton within one film.",
+            "Fellini's 1957 film, shot on location on the outskirts of Rome, where the shanty settlement and Cabiria's own house are real places. The working method is still the movement's.",
           ),
         ]),
       },
@@ -377,19 +375,19 @@ export const seedLists: SeedList[] = [
   {
     slug: "french-new-wave",
     title: "法国新浪潮",
-    theme: "一群影评人拿起摄影机，重新发明电影",
+    theme: "三部影片，1959 至 1962 年的法国",
     titleEn: "The French New Wave",
-    themeEn: "A band of critics picked up cameras and reinvented cinema",
+    themeEn: "Three films from France, 1959 to 1962",
     introEn: doc([
       p(
-        "In the late 1950s, a clutch of young critics at Cahiers du Cinéma grew tired of the polished conventions of France's \"tradition of quality\" and simply stepped behind the camera themselves. Shooting handheld, on real streets, improvising as they went, they hauled cinema out of the studio and into the open air. They weren't only making films; they were using films to argue about what a film should be.",
+        "The French New Wave refers to a body of films made in France from the late 1950s. Most of the directors had written criticism first, many of them at Cahiers du Cinéma, and their films were commonly made cheaply, on location and with handheld cameras. One of the three here is by Truffaut and two are by Godard.",
       ),
     ]),
     sortOrder: 4,
     coverFilmSlug: "breathless",
     intro: doc([
       p(
-        "五十年代末，一群《电影手册》的年轻影评人厌倦了“优质电影”的陈规，索性自己上阵，用手持摄影、实景与即兴，把电影从摄影棚里解放出来。他们不只拍电影，更在用电影争论电影该是什么样子。",
+        "法国新浪潮指 1950 年代末起的一批法国影片。多数导演此前为影评人，其中不少出自《电影手册》；作品以低成本、实景与手持摄影为常见做法。本片单收录三部，一部为特吕弗作品，两部为戈达尔作品。",
       ),
     ]),
     items: [
@@ -397,25 +395,23 @@ export const seedLists: SeedList[] = [
         filmSlug: "the-400-blows",
         reasoning: doc([
           p(
-            "从最温柔的一部进入。特吕弗把自己的童年拍成新浪潮的开山之作，那个奔向大海的少年，是整场运动的心跳。",
+            "1959 年特吕弗首部长片，让-皮埃尔·雷奥主演，取材自导演本人的少年经历，获该届戛纳最佳导演奖。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Start with the gentlest of them. Truffaut turned his own childhood into the film that opened the movement, and that boy running toward the sea is the heartbeat of the whole New Wave.",
+            "Truffaut's first feature, from 1959, starring Jean-Pierre Léaud and drawn from the director's own adolescence. It won the directing prize at Cannes that year.",
           ),
         ]),
       },
       {
         filmSlug: "breathless",
         reasoning: doc([
-          p(
-            "再感受最激进的一击。戈达尔用满不在乎的跳接，宣告电影可以像生活一样任性、鲜活、随时脱轨。",
-          ),
+          p("1960 年戈达尔首部长片，故事大纲由特吕弗提供，获柏林电影节最佳导演银熊奖。"),
         ]),
         reasoningEn: doc([
           p(
-            "Then take the most radical blow. Godard's devil-may-care jump cuts announce that a film can be as willful, as alive, as ready to jump the rails as life itself.",
+            "Godard's first feature, from 1960, worked up from an outline by Truffaut. It took the Silver Bear for direction at Berlin.",
           ),
         ]),
       },
@@ -423,12 +419,12 @@ export const seedLists: SeedList[] = [
         filmSlug: "vivre-sa-vie",
         reasoning: doc([
           p(
-            "最后走向它思辨的深处。戈达尔用十二个段落解剖一个女人的堕落，让你看清新浪潮如何把电影变成一种思考方式。",
+            "1962 年戈达尔作品，安娜·卡里娜主演，全片分十二段，每段前加字幕，获威尼斯电影节评审团特别奖。",
           ),
         ]),
         reasoningEn: doc([
           p(
-            "Finally, follow it into its thinking. Across twelve chapters Godard anatomizes one woman's slide into ruin, and you see exactly how the New Wave turned cinema into a way of thinking.",
+            "Godard's 1962 film, with Anna Karina, divided into twelve sections each introduced by a title card. It received the special jury prize at Venice.",
           ),
         ]),
       },
@@ -437,85 +433,87 @@ export const seedLists: SeedList[] = [
   {
     slug: "japanese-golden-age",
     title: "日本电影的黄金时代",
-    theme: "五十年代，一个国度同时拥有黑泽明、小津与沟口",
+    theme: "六部影片，1950 至 1954 年的日本",
     titleEn: "The Golden Age of Japanese Cinema",
-    themeEn: "The decade a single nation held Kurosawa, Ozu, and Mizoguchi all at once",
+    themeEn: "Six films from Japan, 1950 to 1954",
     introEn: doc([
       p(
-        "In the 1950s the Japanese screen blazed with talent all at once: Kurosawa's force, Ozu's restraint, Mizoguchi's sorrowful beauty, each reaching its own summit within the same decade. These films fused an Eastern aesthetic with the most universal of human truths, and let the world see for the first time just how deep Japanese cinema truly ran.",
+        "Six Japanese films made between 1950 and 1954, by Kurosawa, Ozu and Mizoguchi. Japanese cinema began taking prizes at European festivals in these years: Rashomon won the Golden Lion at Venice in 1951, and Ugetsu and Sansho the Bailiff took Silver Lions there in 1953 and 1954.",
       ),
     ]),
     sortOrder: 5,
     coverFilmSlug: "tokyo-story",
     intro: doc([
       p(
-        "上世纪五十年代的日本影坛群星璀璨：黑泽明的力度、小津的克制、沟口的凄美，同时抵达各自的巅峰。它们把东方的美学与最普世的人性熔于一炉，让世界第一次看清了日本电影的深度。",
+        "本片单收录六部日本影片，摄于 1950 至 1954 年，出自黑泽明、小津安二郎与沟口健二三人。日本影片自这一时期起在欧洲影展获奖：《罗生门》获 1951 年威尼斯金狮奖，《雨月物语》与《山椒大夫》分获 1953 与 1954 年威尼斯银狮奖。",
       ),
     ]),
     items: [
       {
         filmSlug: "rashomon",
         reasoning: doc([
-          p("从这里叩开世界之门。黑泽明用一桩各执一词的凶案，把日本电影第一次推上国际舞台。"),
+          p(
+            "1950 年黑泽明作品，改编自芥川龙之介的两则短篇，获 1951 年威尼斯金狮奖与次年奥斯卡荣誉奖。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Start here, at the door onto the wider world. From a single killing recounted in flatly irreconcilable versions, Kurosawa lifted Japanese cinema onto the international stage for the very first time.",
+            "Kurosawa's 1950 film, adapted from two stories by Ryūnosuke Akutagawa. It won the Golden Lion at Venice in 1951 and an honorary Academy Award the following year.",
           ),
         ]),
       },
       {
         filmSlug: "tokyo-story",
         reasoning: doc([
-          p("再沉入最静默的深处。小津用一对老夫妻的东京之行，道尽了亲情随时间稀释的残忍。"),
+          p("1953 年小津作品，剧本与野田高梧合写。名单六部中只有本片与《生之欲》以当代为背景。"),
         ]),
         reasoningEn: doc([
           p(
-            "Then sink into its quietest depths. Through one aging couple's visit to Tokyo, Ozu says everything there is to say about the quiet cruelty of family affection thinning out over time.",
+            "Ozu's 1953 film, written with Kōgo Noda. It and Ikiru are the only two of these six set in the present day.",
           ),
         ]),
       },
       {
         filmSlug: "ugetsu",
         reasoning: doc([
-          p("感受沟口如水墨般流动的镜头，如何把民间怪谈拍成关于欲望与代价的凄美卷轴。"),
+          p("1953 年沟口健二作品，改编自上田秋成的同名小说集，摄影宫川一夫，获该届威尼斯银狮奖。"),
         ]),
         reasoningEn: doc([
           p(
-            "Feel how Mizoguchi's camera, gliding like ink across paper, turns a folk ghost tale into a mournful scroll about desire and the price it demands.",
+            "Mizoguchi's 1953 film, adapted from Ueda Akinari's collection of the same name and photographed by Kazuo Miyagawa. It took a Silver Lion at Venice that year.",
           ),
         ]),
       },
       {
         filmSlug: "sansho-the-bailiff",
         reasoning: doc([
-          p("在沟口的另一则古老传说里，称量仁慈能否在残酷世间存续——姐姐投水的涟漪，久久不散。"),
+          p(
+            "1954 年沟口健二作品，取材自森鸥外的同名小说。连同前两年的《西鹤一代女》与《雨月物语》，沟口连续三年在威尼斯获奖。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "In another of Mizoguchi's ancient legends, the film weighs whether mercy can survive in a merciless world, and the ripples from the sister's walk into the water never quite settle.",
+            "Mizoguchi's 1954 film, taken from Mori Ōgai's story of the same title. With The Life of Oharu and Ugetsu in the two preceding years, it gave him prizes at Venice three years running.",
           ),
         ]),
       },
       {
         filmSlug: "seven-samurai",
         reasoning: doc([
-          p("回到黑泽明最恢弘的战场。三个多小时的史诗，把勇气、阶级与徒劳一并托起。"),
+          p("1954 年黑泽明作品，东宝出品，片长约二百零七分钟，与《山椒大夫》同届在威尼斯获奖。"),
         ]),
         reasoningEn: doc([
           p(
-            "Return to Kurosawa's grandest battlefield. Across more than three hours, the epic holds up courage, class, and futility all in the same hand.",
+            "Kurosawa's 1954 film for Toho, running about two hundred and seven minutes. It was honoured at the same Venice festival as Sansho the Bailiff.",
           ),
         ]),
       },
       {
         filmSlug: "ikiru",
-        reasoning: doc([
-          p("以最温柔的一部收束。一个将死的公务员在雪夜的秋千上，找到了活过一场的意义。"),
-        ]),
+        reasoning: doc([p("1952 年黑泽明作品，志村乔主演，获 1954 年柏林电影节特别奖。")]),
         reasoningEn: doc([
           p(
-            "Close on the gentlest film of all. A dying civil servant, on a swing in the falling snow, at last finds the meaning of having lived at all.",
+            "Kurosawa's 1952 film, with Takashi Shimura in the lead. It received a special prize at the Berlin festival in 1954.",
           ),
         ]),
       },
@@ -524,83 +522,93 @@ export const seedLists: SeedList[] = [
   {
     slug: "silent-cinemas-last-light",
     title: "默片的最后光芒",
-    theme: "在声音到来之前，电影已学会用光影歌唱",
+    theme: "六部默片，1922 至 1931 年",
     titleEn: "Silent Cinema's Last Light",
-    themeEn: "Before sound arrived, film had already learned to sing in light and shadow",
+    themeEn: "Six silent films, 1922 to 1931",
     introEn: doc([
       p(
-        "The coming of sound cut the silent film off at the very moment of its maturity. Yet it was precisely that last decade in which silent cinema pushed purely visual storytelling to heights it would rarely reach again. These six films are the proof: without a single line of dialogue, the movies can say everything there is to say about fear, revolution, love, and redemption.",
+        "Six silent films made between 1922 and 1931, from Germany, the Soviet Union, France and the United States. Sound was introduced commercially in the United States from 1927, and silent production fell away quickly over the next few years. The latest film here, City Lights, was made after sound had become standard and was released without dialogue, carrying only a recorded score and effects.",
       ),
     ]),
     sortOrder: 6,
     coverFilmSlug: "sunrise",
     intro: doc([
       p(
-        "有声电影的到来，让默片在最成熟的一刻戛然而止。但正是这最后的十年，默片把纯视觉的表达推向了此后再难企及的高度。这六部作品证明：不靠一句台词，电影也能讲尽恐惧、革命、爱与救赎。",
+        "本片单收录六部默片，年代自 1922 年至 1931 年，出自德国、苏联、法国与美国。有声片自 1927 年起在美国推广，此后数年各国默片产量迅速下降。名单中年代最晚的《城市之光》摄于有声片已成主流之后，仍以默片形式拍摄，只配音乐与音效。",
       ),
     ]),
     items: [
       {
         filmSlug: "battleship-potemkin",
         reasoning: doc([
-          p("先上一堂剪辑课。爱森斯坦的敖德萨阶梯，让你亲眼看见镜头的碰撞如何迸出思想。"),
+          p(
+            "1925 年爱森斯坦作品，摄影爱德华·蒂塞。影片在多国长期遭禁，英国的审查机构至 1954 年才准其公映。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Begin with a lesson in editing. On Eisenstein's Odessa Steps you watch, with your own eyes, how the collision of one shot against another strikes an idea into being.",
+            "Eisenstein's 1925 film, photographed by Eduard Tisse. It was banned in a number of countries for years; the British censors refused it a certificate until 1954.",
           ),
         ]),
       },
       {
         filmSlug: "metropolis",
         reasoning: doc([
-          p("再仰望默片最宏伟的奇观。弗里茨·朗的未来之城，奠定了此后一切科幻的视觉母题。"),
+          p("1927 年弗里茨·朗作品，为当时成本最高的德国影片，乌发公司因其开销陷入财务困境。"),
         ]),
         reasoningEn: doc([
           p(
-            "Then look up at silent cinema's grandest spectacle. Fritz Lang's city of the future set down the visual vocabulary that every science fiction since has drawn upon.",
+            "Fritz Lang's 1927 film and the most expensive German production of its day; its cost pushed the UFA studio into financial difficulty.",
           ),
         ]),
       },
       {
         filmSlug: "nosferatu",
         reasoning: doc([
-          p("走进它最幽暗的角落。茂瑙让吸血鬼的影子爬上楼梯，把恐惧凝成纯粹的光学事件。"),
+          p(
+            "1922 年茂瑙作品，因未获授权改编《德古拉》遭诉讼，法院判决销毁拷贝，影片赖此前已流出的拷贝存世。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Step into its darkest corner. Murnau sends the vampire's shadow creeping up the staircase, distilling fear into a purely optical event.",
+            "Murnau's 1922 film, an unauthorised adaptation of Dracula. The resulting lawsuit ended in an order to destroy the prints; it survives through copies that had already circulated.",
           ),
         ]),
       },
       {
         filmSlug: "the-passion-of-joan-of-arc",
-        reasoning: doc([p("直面它最纯粹的强度。德莱叶连绵的特写，用一张受难的脸撑起整部电影。")]),
+        reasoning: doc([
+          p(
+            "1928 年德莱叶作品，台词取自 1431 年的审判记录，以字幕卡呈现。原始底片佚失，1981 年在奥斯陆一家精神病院寻得一份完整拷贝。",
+          ),
+        ]),
         reasoningEn: doc([
           p(
-            "Face its purest intensity. Dreyer's unbroken procession of close-ups carries an entire film on a single suffering face.",
+            "Dreyer's 1928 film, its words taken from the trial records of 1431 and carried on intertitles. The original negative was lost; a complete print was found in an Oslo psychiatric hospital in 1981.",
           ),
         ]),
       },
       {
         filmSlug: "sunrise",
         reasoning: doc([
-          p("感受它抒情的顶峰。茂瑙赴美后用流动的镜头，几乎不靠字幕就唱完了一支沉沦与救赎之歌。"),
+          p(
+            "1927 年茂瑙赴美后为福斯拍摄的第一部影片，在首届奥斯卡获三项奖，其中一项为仅设一届的艺术质量最佳作品奖。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Feel it reach its lyrical summit. Working in America, Murnau's gliding camera sings a whole song of ruin and redemption with scarcely an intertitle to lean on.",
+            "The first film Murnau made for Fox after moving to the United States, in 1927. It took three awards at the first Academy ceremony, one of them for unique and artistic picture, a category awarded only that year.",
           ),
         ]),
       },
       {
         filmSlug: "city-lights",
         reasoning: doc([
-          p("以一个微笑作别。有声时代已至，卓别林却固执地证明：默片的深情，从未过时。"),
+          p("1931 年卓别林作品，有声片当时已成主流，本片仍以默片拍摄，配乐由卓别林本人所作。"),
         ]),
         reasoningEn: doc([
           p(
-            "Take your leave on a smile. The sound era had already arrived, and still Chaplin stubbornly proved that the tenderness of the silent film would never go out of date.",
+            "Chaplin's 1931 film, made silent after sound had become standard, with a score he wrote himself.",
           ),
         ]),
       },
@@ -609,63 +617,69 @@ export const seedLists: SeedList[] = [
   {
     slug: "film-noir",
     title: "黑色电影",
-    theme: "百叶窗的阴影里，宿命正在收紧",
+    theme: "四部影片，1931 至 1958 年",
     titleEn: "Film Noir",
-    themeEn: "In the shadow of the venetian blinds, fate tightens its grip",
+    themeEn: "Four films, 1931 to 1958",
     introEn: doc([
       p(
-        "Femmes fatales, cynical voiceover, frames sliced apart by shadow, and a fate that draws tighter with every step — film noir poured postwar America's anxiety and desire into a style at once icy and lavish. This list runs from the genre's German roots all the way to its most gorgeous elegy.",
+        "Film noir is a category applied after the fact to a body of films, most of them made in Hollywood in the 1940s and 1950s, dealing with crime, shot in high contrast, and often using voiceover and flashback. French critics gave it the name in 1946. The earliest film here was made in Germany and is usually counted among the sources.",
       ),
     ]),
     sortOrder: 7,
     coverFilmSlug: "sunset-boulevard",
     intro: doc([
       p(
-        "蛇蝎美人、犬儒的旁白、被阴影切割的画面，还有一步步收紧的宿命——黑色电影把战后美国的焦虑与欲望，浇筑成一种冷冽而华丽的风格。这份片单从它的德国源头一路走到最华美的挽歌。",
+        "黑色电影是评论界事后归纳的一类影片，多摄于 1940 至 1950 年代的好莱坞，题材涉及犯罪，画面对比强烈，常用画外叙述与倒叙。这一名称由法国影评人于 1946 年提出。本片单收录四部，其中年代最早的一部摄于德国，通常被列为这一路数的来源之一。",
       ),
     ]),
     items: [
       {
         filmSlug: "m",
         reasoning: doc([
-          p("从源头开始。弗里茨·朗把倾斜的阴影与追捕的天罗地网带出德国，成了黑色电影的祖父。"),
+          p("1931 年弗里茨·朗的第一部有声片，彼得·洛主演，取材自当时德国关于连环杀人案的报道。"),
         ]),
         reasoningEn: doc([
           p(
-            "Start at the source. Fritz Lang carried the canted shadows and the closing dragnet of the manhunt out of Germany, and in doing so became the grandfather of noir.",
+            "Fritz Lang's first sound film, from 1931, with Peter Lorre, drawing on German press reports of serial killings.",
           ),
         ]),
       },
       {
         filmSlug: "double-indemnity",
         reasoning: doc([
-          p("看这一类型如何定型。怀尔德与钱德勒的剧本，几乎逐条写下了黑色电影的语法。"),
+          p(
+            "1944 年比利·怀尔德作品，雷蒙德·钱德勒此前未写过剧本，两人合作过程并不融洽。影片获七项奥斯卡提名，一项未得。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Watch the genre lock into its definitive shape. Wilder and Chandler's screenplay all but sets down, clause by clause, the grammar of film noir.",
+            "Billy Wilder's 1944 film. Raymond Chandler had never written a screenplay before, and the collaboration went badly. It took seven Academy Award nominations and won none.",
           ),
         ]),
       },
       {
         filmSlug: "touch-of-evil",
         reasoning: doc([
-          p("再看它华丽的堕落。威尔斯把腐败与边境的泥沼，拍成了黑色电影最邪魅的一次调度。"),
+          p(
+            "1958 年奥逊·威尔斯作品，环球在他离开后重剪，1998 年另有一版依威尔斯当年的备忘录重新剪辑发行。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Then watch that style rot in the most gorgeous way possible. Welles turned corruption and the mire of the border into noir's most wickedly seductive feat of staging.",
+            "Orson Welles's 1958 film. Universal recut it after he left the production, and a version following his written memo was assembled and released in 1998.",
           ),
         ]),
       },
       {
         filmSlug: "sunset-boulevard",
         reasoning: doc([
-          p("以最凄美的挽歌收场。当好莱坞亲手解剖自己，宿命的阴影终于漫过了造梦的殿堂。"),
+          p(
+            "1950 年比利·怀尔德作品，葛洛丽亚·斯旺森与埃里希·冯·施特罗海姆主演，二人均为默片时期的从业者；本片获奥斯卡最佳故事与剧本奖。",
+          ),
         ]),
         reasoningEn: doc([
           p(
-            "Close on the most hauntingly beautiful elegy of them all. When Hollywood takes a scalpel to itself, the shadow of fate finally floods the palace where dreams are made.",
+            "Billy Wilder's 1950 film, with Gloria Swanson and Erich von Stroheim, both of whom had worked in the silent period. It received the Academy Award for best story and screenplay.",
           ),
         ]),
       },

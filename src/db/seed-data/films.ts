@@ -2,10 +2,15 @@ import { doc, h2, p, quote } from "./tiptap";
 import type { SeedFilm } from "./types";
 
 /**
- * The seeded canon — classics in the Criterion/MUBI spirit. Every
- * `editorialNote` is original prose, 200–500 code points (the publish
- * gate). `directorSlugs` reference `directors.ts`; images and
- * `publishedAt` are wired by `seed-content.ts`.
+ * The seeded canon — classics in the Criterion/MUBI spirit, though the
+ * curation is what carries that spirit, not the prose. Every
+ * `introduction` is neutral and encyclopedic, 200–500 code points (the
+ * publish gate): what the film is, what happens, how it was made and
+ * received, and nothing a source could not support. `editorialNote` is
+ * where an editor's own view goes — optional, capped rather than
+ * floored, and written by hand rather than drafted at length (ADR 0017).
+ * `directorSlugs` reference `directors.ts`; images and `publishedAt` are
+ * wired by `seed-content.ts`.
  *
  * The catalogue's boundary is classic cinema, not black-and-white and not
  * pre-1967 (ADR 0015). B&W is a house preference, stated per film via
@@ -35,23 +40,31 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0056801",
     doubanId: "1361276",
     wikidataId: "Q12018",
+    introduction:
+      "《八部半》是费德里科·费里尼执导的 1963 年意大利电影，马塞洛·马斯楚安尼饰演片中导演圭多。影片讲述圭多在筹拍新片期间陷入创作停滞，与制片方、妻子、情人的往来和童年记忆交替出现，最终以一场马戏团式的圆舞收束。费里尼开拍时已确定档期与预算，题材尚未确定，遂将这一处境写入剧本。影片在同一镜头内不加提示地切换梦境、回忆与当下，此种处理在当时尚不常见，后为许多影片沿用。片名来自费里尼对自己此前导演作品的计数方式，其中合导作品与短片段不计整部，合计八部半。本片获第三十六届奥斯卡最佳外语片与最佳黑白片服装设计两项奖。",
+    introductionEn:
+      "8½ is a 1963 Italian film directed by Federico Fellini, with Marcello Mastroianni as Guido, a film director. Guido has a production scheduled and cannot settle on what to make; the film alternates between his dealings with his producer, his wife and his mistress, his childhood recollections, and sequences that are explicitly dreamed, closing on a dance in a circus ring. Fellini had a start date and a budget in place before he had a subject, and wrote that situation into the screenplay. Dream, memory and present action change places within single shots without transitional cues, a treatment that was uncommon at the time and was widely adopted afterwards. The title comes from Fellini's own count of the films he had directed to that point, in which co-directed work and omnibus episodes are counted as fractions rather than whole films. At the 36th Academy Awards the film received the awards for Best Foreign Language Film and for Best Costume Design in black and white.",
     editorialNote:
-      "费里尼把创作的困境本身拍成了电影：一个拍不出电影的导演，被记忆、欲望与负疚缠绕，最终在马戏团式的圆圈舞里与自己的人生和解。它是关于艺术家中年危机最诚实的自白，也是电影语言的一次彻底解放——梦境、回忆与现实在同一个镜头里自由换场，不需要任何过渡的借口。黑白摄影在这里不是怀旧，而是让光成为叙事者：吉迪的白衬衫、修女的黑袍、浴场的蒸汽，都是心理的直接显影。半个多世纪过去，几乎所有关于创作者自我怀疑的电影都活在它的阴影里。如果你只看一部费里尼，看这一部。",
+      "费里尼开拍的时候，合同签了，档期定了，题材没有。他干脆把这个处境写成了剧本。片子里的圭多也是个导演，布景搭好了，剧本迟迟不来，记忆、欲望和负疚就趁虚而入。1963 年这么剪是新鲜的，如今看已经稀松平常：梦境、回忆、当下在一个镜头里换来换去，不作交代，也不提醒你。摄影上是让光来讲故事，圭多的白衬衫、修女的黑袍、浴场蒸汽里过曝的那一片，看的其实都是情绪。马斯楚安尼这个角色大半靠听戏完成，比看上去难演。结尾那场马戏团式的圆圈舞，圭多算是跟「拍不出电影」这件事和解了，比他想要的那种和解小得多，不过大概也只能拿到这个。后来拍创作者自我怀疑的电影不少。我看过的那些，坦白程度好像都还差着点。",
     editorialNoteEn:
-      "Fellini turned the crisis of making a film into the film itself: a director who cannot make his movie, besieged by memory, desire, and guilt, until a circus-ring dance reconciles him with everything his life has been. It remains the most honest confession of an artist's midlife doubt ever put on screen, and a wholesale liberation of film language \u2014 dream, memory, and the present tense trade places within a single shot and never ask permission. The black-and-white photography here is not nostalgia; it makes light itself the narrator: Guido's white shirt, the nuns' black habits, the steam of the spa are psychology made directly visible. More than half a century on, nearly every film about a creator's self-doubt still lives in its shadow. If you watch only one Fellini, watch this one; if you have watched them all, watch this one again.",
+      "Fellini began with a contract, a start date and no subject, and wrote that condition into the screenplay. Guido is a director with a set already built and a script that never arrives; memory, desire and guilt move into the vacancy. What was new in 1963 and is ordinary now is the cutting: dream, recollection and the present tense change places inside a single shot, with no announcement and no transitional cue. Light does the narrating: Guido's white shirt, the black habits of the nuns, a blown-out patch of steam at the spa all read as emotional states rather than as rendered rooms. Marcello Mastroianni plays the part largely by listening, which is harder than it looks and is what holds the picture together. The circus-ring dance at the end reconciles Guido with his inability to film his life, which is a smaller peace than the one he set out for, though probably the only one available. Plenty of films about blocked artists have come along since. On honesty about the condition I am not sure any of them got much further.",
     essay: doc([
       h2("困境如何成为形式"),
       p(
-        "传统电影把混乱整理成情节，《八部半》却让混乱本身成为结构。它不解决主角的危机，而是邀请你住进这份危机，直到你发现自己也在其中。",
+        "影片由詹尼·迪韦南佐摄影，尼诺·罗塔配乐，布景在罗马电影城搭建，其中包括片中那座始终未曾使用的发射台。拍摄期间费里尼在摄影机上贴过一张字条，写着“记住这是一部喜剧”。",
       ),
-      quote("接受生活的全部，才谈得上开始拍电影。"),
+      quote(
+        "本片为当年意大利报送奥斯卡的作品，同年并在莫斯科国际电影节获大奖，评审结果当时曾引起争议。马斯楚安尼在片中的深色西装、帽子与黑框眼镜参照费里尼本人的装束。",
+      ),
     ]),
     essayEn: doc([
       h2("How Crisis Becomes Form"),
       p(
-        "Conventional films tidy chaos into plot; 8½ makes chaos itself the structure. It does not resolve its hero's crisis so much as invite you to move into it, until you notice you have been living there all along.",
+        "Gianni Di Venanzo photographed the film and Nino Rota wrote the score. The sets were built at Cinecittà in Rome, among them the launch gantry that is never used. During the shoot Fellini kept a note taped to the camera reminding himself that this was a comedy.",
       ),
-      quote("Only by accepting the whole of life can you begin to make a film."),
+      quote(
+        "It was Italy's submission to the Academy Awards and took the grand prize at the Moscow film festival the same year, a decision that caused some argument at the time. Mastroianni's dark suit, hat and heavy glasses were modelled on Fellini's own.",
+      ),
     ]),
     cast: [
       {
@@ -88,10 +101,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0047528",
     doubanId: "1292719",
     wikidataId: "Q18402",
-    editorialNote:
-      "费里尼尚未离开新现实主义，却已长出翅膀。《大路》讲一个被卖给流浪艺人的傻姑娘杰索米娜，跟着粗暴的赞巴诺卖艺为生，直到死亡才让这个铁石心肠的男人明白自己失去了什么。朱丽叶塔·马西纳用小丑般的脸演出了近乎圣愚的天真，让最卑微的生命也闪着神性的光。这不是一部愤怒控诉社会的电影，而是一则关于爱与孤独的寓言：我们常常在失去之后，才认得出曾拥有的东西。结尾赞巴诺在海边的恸哭，是电影史上最沉重的一次迟到的觉悟。",
-    editorialNoteEn:
-      "Fellini had not yet left neorealism, but the wings were already growing. La strada follows Gelsomina, a simple-hearted girl sold to the traveling strongman Zampano, who bullies her across the roads of postwar Italy until death finally teaches this stone of a man what he has lost. Giulietta Masina plays her with a clown's face and a holy fool's innocence, letting the humblest of lives shine with something close to grace. This is not a film of social protest; it is a parable about love and loneliness \u2014 we tend to recognize what we had only after it is gone. Zampano's sobbing collapse on the beach in the final scene is one of cinema's heaviest arrivals of understanding, and it arrives, as understanding usually does, too late.",
+    introduction:
+      "《大路》是费德里科·费里尼执导的 1954 年意大利电影，朱丽叶塔·马西纳与安东尼·奎因主演。影片讲述贫家女杰索米娜被母亲卖给流浪艺人赞巴诺，随他辗转各地卖艺，长期受其粗暴对待；两人分开多年后，赞巴诺得知她已去世，在海边失声痛哭。影片保留了新现实主义的实景拍摄与街头取材，叙事重心却从社会境况转到两个人物的关系上，费里尼此后的创作由此展开。马西纳的表演大量借用默剧与小丑的手法，很少依赖台词。本片获第二十九届奥斯卡最佳外语片奖，该奖项自这一届起设为竞赛单元。",
+    introductionEn:
+      "La strada is a 1954 Italian film directed by Federico Fellini, starring Giulietta Masina and Anthony Quinn. Gelsomina, a young woman from a poor family, is sold by her mother to Zampan\u00f2, an itinerant strongman, and travels with him performing at fairs and in village squares while he treats her harshly. Years after the two part, Zampan\u00f2 learns that she has died and breaks down on a beach. The film retains the location shooting and street casting of neorealism, but moves its weight from social circumstance to the relationship between two people, and Fellini's later work proceeds from that shift. Masina built the performance largely out of mime and clowning, with little reliance on dialogue. It received the Academy Award for Best Foreign Language Film at the 29th ceremony, the first at which the category was competitive rather than honorary.",
     cast: [
       {
         name: "Giulietta Masina",
@@ -119,10 +132,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0050783",
     doubanId: "1294781",
     wikidataId: "Q18405",
-    editorialNote:
-      "一个罗马街头的妓女卡比利亚，一次次被欺骗、被抢劫、被抛弃，却一次次重新相信爱情。费里尼与马西纳这对夫妻，把一个最容易被写成悲剧的题材，拍成了对人类韧性的礼赞。影片最后那个著名的长镜头——卡比利亚刚被未婚夫骗走全部积蓄，眼含泪水走在路上，一群年轻人载歌载舞地经过，她抬起头，对着镜头几乎是对着我们，露出一个破碎又倔强的微笑。那一刻，绝望与希望同时在场。马西纳凭这个角色摘得戛纳影后，她那张仿佛不谙世事的脸，把苦难与天真同时写尽。这是电影送给所有跌倒又爬起的人的一封情书。",
-    editorialNoteEn:
-      "A Roman streetwalker named Cabiria is cheated, robbed, and abandoned, over and over \u2014 and over and over she decides to believe in love again. Fellini and Masina, husband and wife, took a subject that invites easy tragedy and made a tribute to human resilience instead. In the famous final shot, Cabiria \u2014 freshly swindled out of her savings by the fiance she trusted \u2014 walks down a road with tears in her eyes as a band of young revelers passes around her; she lifts her head and gives the camera, gives us, a broken and stubborn smile. Despair and hope stand in the same frame. Masina won Best Actress at Cannes for the role; her seemingly guileless face carries suffering and innocence in a single expression. This is cinema's love letter to everyone who has fallen down and gotten up again.",
+    introduction:
+      "《卡比利亚之夜》是费德里科·费里尼执导的 1957 年意大利电影，朱丽叶塔·马西纳主演。影片讲述在罗马街头接客的卡比利亚，接连被交往的男人欺骗、抢劫，仍愿意相信下一段感情；结尾她被订婚对象骗走全部积蓄，独自走在路上，遇见一群唱歌跳舞的年轻人，抬头望向摄影机，露出笑容。全片由若干段落串联，没有贯穿始终的情节线。皮埃尔·保罗·帕索里尼参与了对白写作，主要负责罗马方言部分。马西纳凭本片获戛纳电影节最佳女演员奖，影片获奥斯卡最佳外语片奖。",
+    introductionEn:
+      "Nights of Cabiria is a 1957 Italian film directed by Federico Fellini, starring Giulietta Masina. Cabiria works the streets of Rome and is repeatedly deceived and robbed by the men she attaches herself to, and each time resolves to trust the next one. In the closing sequence she is swindled out of her savings by the man she has agreed to marry, and walks alone along a road until she meets a group of young people singing and dancing, at which point she looks up into the camera and smiles. The film is assembled from loosely connected episodes rather than a continuous plot. Pier Paolo Pasolini worked on the dialogue, chiefly the passages in Roman dialect. Masina received the award for Best Actress at the Cannes Film Festival, and the film won the Academy Award for Best Foreign Language Film.",
     cast: [
       {
         name: "Giulietta Masina",
@@ -152,24 +165,26 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0050976",
     doubanId: "1293234",
     wikidataId: "Q217189",
-    editorialNote:
-      "一个从十字军东征归来的骑士，在黑死病肆虐的中世纪与死神下起一盘棋，只为在死前弄清上帝是否存在。伯格曼把最古老的恐惧——死亡与神的沉默——拍成了一则既凝重又意外幽默的寓言。海边棋局、教堂告解、火刑柱上的女巫，一幕幕逼问着信仰的意义；而那对天真的杂耍夫妻，则是黑暗中留下的微光。影片以死神领着众人在山脊上跳起“死亡之舞”收尾，成为电影史上最著名的画面之一。它诞生于二战的余悸与核阴影之下，至今仍是每个在信与不信之间挣扎者的镜子。",
-    editorialNoteEn:
-      "A knight home from the Crusades finds medieval Sweden in the grip of the plague and challenges Death to a game of chess, stalling for the time to learn whether God exists. Bergman takes the oldest fears — death, and the silence of God — and makes of them a parable that is grave and, without warning, funny. A seaside chess match, a confession overheard, a girl burning at the stake: each scene interrogates what faith is for, while a pair of innocent traveling players keeps one small light burning in the dark. The film closes with Death leading his captives in a dance along the ridge, among the most famous images cinema has produced. Made in the long shadow of the war and the bomb, it remains a mirror for everyone caught between belief and disbelief — and it refuses to tell them which way to fall.",
+    introduction:
+      "《第七封印》是英格玛·伯格曼执导的 1957 年瑞典电影，马克斯·冯·叙多夫饰演骑士安东尼乌斯·布洛克，本格特·埃克罗特饰演死神。影片背景设在黑死病流行的中世纪：布洛克自十字军东征归来，在海边与死神对弈以拖延时间，试图在死前弄清上帝是否存在。旅途中他遇见一对流浪杂耍艺人夫妇、一支鞭笞派的游行队伍，以及一名被指为女巫、即将处以火刑的少女。全片以死神牵引众人在山脊上列队远去的一场戏收束，这一画面此后被反复引用。伯格曼此前曾把同一题材写成独幕剧《木刻画》。",
+    introductionEn:
+      "The Seventh Seal is a 1957 Swedish film directed by Ingmar Bergman, with Max von Sydow as the knight Antonius Block and Bengt Ekerot as Death. Returning from the Crusades to a country in the grip of plague, Block plays a game of chess against Death on a beach, using the delay to press for an answer about whether God exists. Gunnar Björnstrand plays his squire Jöns, who travels with him and argues the sceptical case throughout. On the road they encounter a married pair of travelling performers, a procession of flagellants, and a girl condemned to burn as a witch. The film closes with Death leading a line of figures away along a ridge, an image quoted repeatedly since. Bergman had written the same material earlier as a one-act play, Wood Painting.",
     essay: doc([
       h2("与沉默对弈"),
       p(
-        "骑士要的不是长生，而是一个答案。伯格曼的残酷与温柔在于：他既不许诺上帝存在，也不忍心让善良彻底落空。",
+        "伯格曼前作《夏夜的微笑》1956 年在戛纳获奖，制片方随即批准本片开拍。全片以约三十五天拍成，预算有限，摄影为贡纳尔·菲舍尔。结尾死神领众人在山脊上远去的一场是在光线将尽时匆促拍成，画面中有几个身影由现场工作人员充任。",
       ),
-      quote("信仰是一种折磨，像爱一个躲在黑暗里、始终不肯现身的人。"),
+      quote(
+        "影片获 1957 年戛纳电影节评审团特别奖。海边对弈与山脊列队这两个画面此后被大量引用与戏仿。",
+      ),
     ]),
     essayEn: doc([
       h2("Playing Against the Silence"),
       p(
-        "The knight is not playing for more life but for an answer. Bergman's cruelty and his tenderness are the same gesture: he will neither promise that God exists nor allow goodness to come to nothing.",
+        "Smiles of a Summer Night had been well received at Cannes in 1956, and the studio approved this film soon afterwards. It was shot in about thirty-five days on a limited budget, photographed by Gunnar Fischer. The closing shot of Death leading a line of figures along a ridge was made quickly as the light went, with crew members standing in for some of the cast.",
       ),
       quote(
-        "Faith is a torment, like loving someone who hides in the dark and will not show himself.",
+        "The film took the special jury prize at Cannes in 1957. The chess game on the beach and the line of figures on the ridge have been quoted and parodied many times since.",
       ),
     ]),
     cast: [
@@ -199,10 +214,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0050986",
     doubanId: "1293071",
     wikidataId: "Q239756",
-    editorialNote:
-      "一位年迈的医学教授驱车前往领取荣誉学位，一路上却被梦境、回忆与懊悔层层拦截。伯格曼让老人重返童年采野草莓的夏日、重历爱情的失落，在时间的褶皱里审判自己一生的冷漠。由默片大师维克多·舍斯特勒姆亲自出演，那张苍老的脸承载了整个二十世纪对孤独的理解。这是一部关于和解的电影：不是与他人，而是与那个逐渐变得铁石心肠的自己。当老人在片尾终于梦见父母在河边向他招手，冰封的心在一瞬间融化——衰老原来也可以是一次迟来的温柔的醒悟。",
-    editorialNoteEn:
-      "An elderly medical professor drives across Sweden to receive an honorary degree and is ambushed along the way by dreams, memories, and regret. Bergman sends the old man back to the childhood summers where wild strawberries grew and forward through the loves he let slip, putting a lifetime of coldness on trial within the folds of a single day. Victor Sjöström — himself a master of the silent era — wears that weathered face like the whole twentieth century's understanding of loneliness. This is a film about reconciliation, not with others but with the guarded, stony man one has slowly become. When the professor at last dreams of his parents waving to him from across a summer river and his frozen heart thaws in an instant, the film proposes something rare: that old age, too, can be a late and tender awakening.",
+    introduction:
+      "《野草莓》是英格玛·伯格曼执导的 1957 年瑞典电影，由默片时期的导演维克多·舍斯特勒姆饰演老年医学教授伊萨克·博里，毕比·安德松饰演萨拉。影片记录博里驱车前往隆德接受荣誉学位的一天：途中所见不断牵出他的梦境与回忆——童年采野草莓的夏天、被兄弟娶走的未婚妻、行医多年间对身边人的疏远。梦境与当下之间直接切换，不作提示，这一手法在当时并不常见。结尾他梦见父母在水边向他挥手。本片获柏林电影节金熊奖，也是舍斯特勒姆最后一次出演电影。",
+    introductionEn:
+      "Wild Strawberries is a 1957 Swedish film directed by Ingmar Bergman. Victor Sjöström, a leading director of the silent period, plays Isak Borg, an elderly medical professor; Bibi Andersson plays Sara. The film covers a single day, as Borg drives to Lund to receive an honorary degree and what he passes on the way draws out dreams and recollections: the childhood summers spent at a wild strawberry patch, the fiancée who married his brother, and a long career conducted at a distance from the people in it. Dream and present action are cut directly against one another without signalling, a treatment that was uncommon at the time. It closes on a dream of his parents waving to him from across the water. The film received the Golden Bear at the Berlin International Film Festival.",
     cast: [
       { name: "Victor Sjöström", zhName: "维克多·舍斯特勒姆", character: "Isak Borg" },
       { name: "Bibi Andersson", zhName: "毕比·安德松", character: "Sara" },
@@ -226,10 +241,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0060827",
     doubanId: "1294438",
     wikidataId: "Q695255",
-    editorialNote:
-      "一个突然拒绝说话的女演员，与照顾她的护士在海边独处，两个女人的身份逐渐渗透、交换、直至难分彼此。伯格曼在这里抛弃了一切故事的安全感，让胶片自燃、让银幕断裂，把电影本身的虚构性推到台前。这是他最难解也最大胆的作品：关于身份、沉默与我们戴给世界的那副面具。丽芙·乌曼与毕比·安德松两张脸在著名的叠印镜头里合为一张，成为二十世纪现代主义电影最令人不安的图像。它拒绝被讲清楚，却在每一次重看时都逼你面对：所谓“自我”，是否只是一场无人拆穿的表演。",
-    editorialNoteEn:
-      "An actress abruptly stops speaking, and the nurse assigned to care for her withdraws with her to a house by the sea, where the two women's identities begin to seep into each other, trade places, and finally blur past telling apart. Bergman strips away every narrative comfort — the film seems to catch fire, the image tears, the machinery of cinema is dragged into view — in his most difficult and most daring work. It is a film about identity, silence, and the mask each of us holds up to the world. The celebrated shot in which Liv Ullmann's and Bibi Andersson's faces fuse into a single face is among the most unsettling images modernist cinema ever made. Persona refuses to be explained, and that refusal is its power: on every viewing it presses the same question, whether the thing we call a self is anything more than a performance no one has yet caught out.",
+    introduction:
+      "《假面》是英格玛·伯格曼执导的 1966 年瑞典电影，丽芙·乌曼饰演突然停止说话的舞台演员伊丽莎白·沃格勒，毕比·安德松饰演护理她的护士阿尔玛。两人被安排到海边的一处住所独处，阿尔玛不断说话，伊丽莎白始终不答，两人的界限逐渐模糊。影片以一段与情节无关的影像开场，中途又出现胶片烧毁、画面断裂的处理，把放映这件事本身摆到观众面前。片中一场戏将两位演员的半张脸叠为一张，此后被广泛引用。全片八十余分钟，主要人物只有四个。",
+    introductionEn:
+      "Persona is a 1966 Swedish film directed by Ingmar Bergman. Liv Ullmann plays Elisabet Vogler, a stage actress who abruptly stops speaking, and Bibi Andersson plays Alma, the nurse assigned to her. The two are sent to a house by the sea, where Alma talks continuously and Elisabet does not answer, and the boundary between them gradually dissolves. The film opens with a montage unconnected to the story, and partway through the film stock appears to burn and the image breaks, placing the act of projection in front of the audience. One shot joins half of each actress's face into a single composite, and has been quoted widely since. It runs a little over eighty minutes and has four significant characters.",
     directorSlugs: ["ingmar-bergman"],
   },
   {
@@ -248,10 +263,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0053976",
     doubanId: "1293156",
     wikidataId: "Q753141",
-    editorialNote:
-      "中世纪的瑞典，一个虔诚人家的少女在去教堂途中被牧羊人奸杀，凶手却阴差阳错借宿到死者父亲的家中。当真相败露，父亲手刃仇人，随即在女儿倒下之处涌出一眼清泉。伯格曼借一则古老民谣，逼问最尖锐的神义论问题：全能的上帝为何容许无辜者受难。父亲在泉边跪地立誓建起教堂的一幕，既是忏悔也是与沉默之神的艰难和解。冷峻的黑白影像与几乎残酷的克制，让暴力与神迹并置，毫不煽情却直抵灵魂。这部为伯格曼赢得奥斯卡的作品，是他信仰追问的一次凛冽结晶。",
-    editorialNoteEn:
-      "In medieval Sweden the daughter of a devout family is raped and murdered by herdsmen on her way to church, and by a cruel turn of chance the killers take shelter that night in the dead girl's own father's house. When the truth comes out the father slaughters them — and a clear spring wells up from the ground where his daughter fell. Working from an old ballad, Bergman presses the sharpest question theodicy can ask: why does an all-powerful God permit the innocent to suffer? The image of the father kneeling by the spring, vowing to raise a church on that spot, is at once penance and a hard-won reconciliation with a silent God. The austere black-and-white photography and near-merciless restraint set violence and miracle side by side, unsentimental yet aimed straight at the soul. The film that won Bergman an Oscar is a stark crystallization of his lifelong interrogation of faith.",
+    introduction:
+      "《处女泉》是英格玛·伯格曼执导的 1960 年瑞典电影，剧本由乌拉·伊萨克松根据一首中世纪瑞典民谣改编，马克斯·冯·叙多夫饰演父亲托雷。片中一户虔诚人家的少女在前往教堂途中被几名牧羊人奸杀，凶手当晚又恰好投宿到死者父亲家中；真相败露后，父亲将他们杀死，随后在女儿倒下的位置涌出一眼泉水。影片以黑白摄影拍成，摄影为斯文·尼克维斯特，暴力场面处理得直接而不加渲染，父亲在泉边立誓建造教堂的一场戏收束全片。本片获奥斯卡最佳外语片奖。",
+    introductionEn:
+      "The Virgin Spring is a 1960 Swedish film directed by Ingmar Bergman, from a screenplay by Ulla Isaksson adapted from a medieval Swedish ballad, with Max von Sydow as the father, Töre. The daughter of a devout family is raped and killed by herdsmen on her way to church, and the men take shelter that same night in her father's house without knowing whose it is. When the father learns what they have done he kills them, and a spring rises from the ground where his daughter died. The film is shot in black and white by Sven Nykvist, and stages its violence directly and without embellishment. It ends with the father vowing at the spring to build a church on the site. It received the Academy Award for Best Foreign Language Film.",
     directorSlugs: ["ingmar-bergman"],
   },
 
@@ -273,20 +288,20 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0047478",
     doubanId: "1295399",
     wikidataId: "Q189540",
-    editorialNote:
-      "战国乱世，一座饱受山贼劫掠的村庄，请来七个走投无路的浪人守护稻谷与性命。黑泽明用三个多小时建起一整座关于勇气、阶级与徒劳的史诗：招募、备战、决战，节奏如鼓点般层层推进，泥泞中的雨战至今仍是动作场面的标尺。但它真正动人的，是武士与农民之间那道无法弥合的裂缝——胜利属于活下来的农民，而武士只留下几座土坟。“这一仗我们又输了。”志村乔的这句叹息，把英雄主义拉回了历史的尘土。此后无数关于“乌合之众集结成队”的电影，都欠它一份师承。",
-    editorialNoteEn:
-      "In the warring-states era a village plundered by bandits hires seven desperate, masterless samurai to guard its rice and its lives. Across more than three hours Kurosawa raises a whole epic out of courage, class, and futility — recruitment, preparation, the final battle building like a drumbeat — and the muddy climactic fight in the rain remains the benchmark every action film is still measured against. What truly moves, though, is the rift that never closes between the samurai and the farmers they defend: the victory belongs to the peasants who survive to plant again, while the warriors are left with a handful of earthen graves. “In the end, we lost this battle too,” the leader sighs, pulling heroism back down into the dust of history. Every later film about a ragtag band assembled for one desperate stand owes this one a debt.",
+    introduction:
+      "《七武士》是黑泽明执导的 1954 年日本电影，东宝出品，志村乔饰演领头的浪人勘兵卫，三船敏郎饰演冒充武士的农家子菊千代。故事设在战国时期：一座每逢收成便遭山贼劫掠的村庄，以粮食为酬雇来七名浪人协助防守。影片分招募、备战、决战三段推进，结尾的战斗在雨中泥地里拍摄，多台摄影机同时开机并使用长焦镜头，这套做法此后为大量动作片沿用。片长约二百零七分钟，是当时日本成本最高的影片。七人中四人战死，幸存者留在村外，村民回到田里插秧。",
+    introductionEn:
+      "Seven Samurai is a 1954 Japanese film directed by Akira Kurosawa, produced by Toho, with Toshiro Mifune and Takashi Shimura among the leads. Set during the warring-states period, it follows a farming village that hires seven masterless samurai, paying them in rice, to defend it against bandits who return after each harvest. The film moves through recruitment, preparation and the final battle, which was shot in rain and mud with several cameras running at once and long lenses, a method widely adopted by action films afterwards. It runs about two hundred and seven minutes and was the most expensive Japanese production made to that date. Four of the seven are killed; the survivors are left standing outside the village while the farmers return to planting.",
     essay: doc([
       h2("运动即叙事"),
       p(
-        "黑泽明用长焦、多机位与突然的静止，让每一次冲锋都有重量。观众不是在看故事，而是被卷进故事的物理之中。",
+        "拍摄历时约一年，远超原定档期，东宝曾两度中止摄制以控制成本。影片在日本首映后出现过删节版本，国外长期流通的拷贝约一百六十分钟，完整版此后才重新发行。本片获 1954 年威尼斯电影节银狮奖；1960 年美国将其改编为西部片《豪勇七蛟龙》。",
       ),
     ]),
     essayEn: doc([
       h2("Movement as Narrative"),
       p(
-        "With telephoto lenses, several cameras running at once, and sudden stillness, Kurosawa gives every charge its weight. You are not so much watching a story as being swept into its physics.",
+        "The shoot ran about a year, far beyond its schedule, and Toho halted production twice to control the cost. Cut versions circulated after the Japanese premiere, and for many years the print seen abroad ran about a hundred and sixty minutes; the full version was reissued later. The film took the Silver Lion at Venice in 1954, and was remade in the United States as the western The Magnificent Seven in 1960.",
       ),
     ]),
     cast: [
@@ -329,10 +344,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0042876",
     doubanId: "1291879",
     wikidataId: "Q135465",
-    editorialNote:
-      "一桩树林里的凶案，四个当事人给出四套彼此矛盾的证词，包括借巫女之口开口的死者。黑泽明由此把一个简单的谋杀，拍成了关于真相是否存在的哲学迷宫。摄影机第一次大胆地对着太阳穿行于密林，光影斑驳，如同人心的暧昧。每个人的叙述都在维护自己的体面，真相反而在自利的雾中永远退场。“罗生门”从此成为一个世界通用的词，指代那种各执一词、无从裁断的困境。而结尾樵夫收养弃婴的微光，又为这份对人性的怀疑留了一线不肯熄灭的信任。它让世界第一次看见了日本电影。",
-    editorialNoteEn:
-      "A murder in a grove, and four irreconcilable accounts of it — including the dead man's own, spoken through a medium. From this simple crime Kurosawa builds a philosophical labyrinth about whether truth can be known at all. For the first time a camera points boldly up through the forest canopy at the sun, the dappled light standing in for the ambiguity of the human heart. Each witness tells the version that guards his own dignity, and the truth recedes forever into the fog of self-interest. “Rashomon” has since become a word the whole world uses for exactly this predicament, in which everyone speaks and no one can be judged. Yet the closing image — a woodcutter taking an abandoned infant into his arms — leaves this doubt about human nature one small, stubborn thread of trust. It was the film that first made the world look at Japanese cinema.",
+    introduction:
+      "《罗生门》是黑泽明执导的 1950 年日本电影，大映出品，三船敏郎与京町子主演，取材自芥川龙之介的短篇《竹林中》与《罗生门》。影片围绕树林中的一桩凶案展开，由强盗、妻子、借巫女之口开口的死者与樵夫分别讲述经过，四套说法互相矛盾，影片自始至终不作裁定。外框故事设在破败的罗生门下，三人避雨议论此事；结尾樵夫抱走一名弃婴。摄影上多次将镜头直接对准穿过树冠的阳光，这在当时并不常见。本片获威尼斯电影节金狮奖，并获奥斯卡荣誉奖。",
+    introductionEn:
+      "Rashomon is a 1950 Japanese film directed by Akira Kurosawa, produced by Daiei, starring Toshiro Mifune and Machiko Kyō, and drawn from two short stories by Ryūnosuke Akutagawa, In a Grove and Rashōmon. A killing in a forest is recounted in turn by the bandit, the wife, the dead man speaking through a medium, and a woodcutter. The four accounts contradict one another and the film does not adjudicate between them. A framing story places three men sheltering from rain beneath the ruined Rashōmon gate as they discuss the case, and it ends with the woodcutter carrying away an abandoned infant. The camera is repeatedly pointed directly at the sun through the forest canopy, which was uncommon practice at the time. The film received the Golden Lion at Venice and an Academy Honorary Award.",
     cast: [
       {
         name: "Toshiro Mifune",
@@ -361,10 +376,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0044741",
     doubanId: "1293847",
     wikidataId: "Q152105",
-    editorialNote:
-      "一个庸碌了三十年、只会盖章的市政科长，被诊断出胃癌只剩数月可活。在纵酒与彷徨之后，他决定用最后的时间，顶着官僚系统的层层推诿，把一片臭水沟建成一座小公园。黑泽明用近乎残酷的诚实拷问：人怎样才算真正活过？影片后半程干脆跳到主人公的葬礼，让同事们在酒后争论他究竟做了什么——记忆与推诿之间，一个人的意义被反复称量。志村乔在雪夜的秋千上轻声哼唱的一幕，是电影史上最动人的死亡与新生。它提醒每一个在体制中麻木的人：意义不在别处，只在你肯不肯为一件小事燃尽自己。",
-    editorialNoteEn:
-      "A municipal section chief who has done nothing for thirty years but stamp documents learns he has stomach cancer and a few months to live. After a bout of drinking and aimless wandering, he resolves to spend what time is left forcing a fetid drainage ditch, against every layer of bureaucratic evasion, into a small neighborhood park. Kurosawa asks with almost cruel honesty what it means to have truly lived. The second half leaps ahead to the man's wake, where his colleagues, drunk, argue over what exactly he accomplished — his significance weighed back and forth between memory and self-serving denial. The image of Takashi Shimura softly singing on a swing in the falling snow is one of the most moving deaths, and rebirths, in all of cinema. It reminds everyone numbed by the machinery of their days that meaning lies nowhere but in whether you are willing to burn yourself down for one small thing.",
+    introduction:
+      "《生之欲》是黑泽明执导的 1952 年日本电影，东宝出品，志村乔主演。市政科长渡边勘治在同一个岗位上盖了三十年公章，查出胃癌后被告知只剩数月。他先是酗酒、四处游荡，随后转而推动一件具体的事：把一片积水的洼地改建成儿童公园，为此在互相推诿的各科室之间反复奔走。影片后半段跳至他的守灵夜，同事们在酒后争论他究竟起了多大作用，此前的经过以回忆插叙补足。他坐在雪夜的秋千上低声哼唱的一场戏，是全片最常被提及的段落。",
+    introductionEn:
+      "Ikiru is a 1952 Japanese film directed by Akira Kurosawa, produced by Toho, starring Takashi Shimura. Kanji Watanabe has spent thirty years stamping documents in the same municipal office when he is found to have stomach cancer and told he has months left. After a period of drinking and aimless wandering he settles on one concrete task: turning a waterlogged patch of ground into a children's playground, which means working his way repeatedly through the departments that keep passing it along. The second half moves forward to his wake, where his colleagues drink and argue over how much he actually achieved, and the intervening events are filled in by flashback. The scene in which he sits on a swing in falling snow, singing quietly, is the passage most often cited.",
     cast: [
       {
         name: "Takashi Shimura",
@@ -392,10 +407,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0055630",
     doubanId: "1292515",
     wikidataId: "Q20475",
-    editorialNote:
-      "一个无名浪人踱进一座被两帮恶势力撕扯的小镇，索性把自己卖给双方，坐看他们自相残杀。黑泽明把西部片的骨架移植到幕末的日本，又用三船敏郎耸肩、抓痒、痞气十足的表演，造出了一个全新的反英雄。风卷尘沙的空镜、干脆利落的杀阵，把冷峻与黑色幽默调成一味。这部电影反过来又催生了莱昂内的《荒野大镖客》，一个形象就此在东西方之间来回投胎，成就了“独行客涤荡罪恶小镇”的永恒母题。冷峻的幽默之下，是黑泽明对暴力与贪婪毫不留情的嘲讽。它证明娱乐性与作者性从来不必二选一。",
-    editorialNoteEn:
-      "A nameless ronin ambles into a town being torn apart by two rival gangs and calmly hires himself out to both, the better to watch them annihilate each other. Kurosawa transplants the skeleton of the American Western into the last days of the shogunate, and out of Mifune's shoulder-shrugging, itch-scratching, thoroughly disreputable performance he conjures an entirely new kind of anti-hero. Dust blows through empty streets, the swordplay is crisp and sudden, and cool detachment is cut with pitch-black comedy. This film would in turn father Leone's A Fistful of Dollars, sending a single figure to be reincarnated back and forth between East and West and founding the deathless motif of the lone stranger who cleanses a wicked town. Under the cool jokes lies Kurosawa's merciless contempt for violence and greed. It proves once and for all that mass entertainment and personal authorship were never an either/or.",
+    introduction:
+      "《用心棒》是黑泽明执导的 1961 年日本电影，东宝出品，三船敏郎饰演一名不报姓名的浪人。故事设在幕末：小镇被两帮势力分据，浪人先后受雇于双方，从中挑动，使其火并。影片在结构上借用了美国西部片，室外街道搭景拍摄，多用风沙与空镜过场，杀阵短促，配乐由佐藤胜创作。塞尔吉奥·莱昂内 1964 年的《荒野大镖客》未经授权改编自本片，东宝提起诉讼并获胜，取得该片部分收益与亚洲发行权。三船敏郎次年在续作《椿三十郎》中再演同一角色。",
+    introductionEn:
+      "Yojimbo is a 1961 Japanese film directed by Akira Kurosawa, produced by Toho, with Toshiro Mifune as a ronin who never gives his name. It is set in the closing years of the shogunate, in a town divided between two criminal factions; the ronin takes employment from each in turn and manoeuvres them into destroying one another. The film borrows its structure from the American Western, was shot on a purpose-built exterior street, and uses blowing dust and empty frames between scenes; the fights are brief, and Masaru Satō wrote the score. Sergio Leone's A Fistful of Dollars, made in 1964, was an unauthorised adaptation; Toho sued, won, and took a share of the receipts along with Asian distribution rights. Mifune played the character again the following year in Sanjuro.",
     cast: [
       {
         name: "Toshiro Mifune",
@@ -425,20 +440,24 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0046438",
     doubanId: "1291568",
     wikidataId: "Q26060",
+    introduction:
+      "《东京物语》是小津安二郎执导的 1953 年日本电影，笠智众与原节子主演，松竹出品。影片讲述平山周吉与妻子富子从尾道前往东京探望成年子女，子女各自忙于生计，无暇接待，转由战死次子的遗孀纪子陪同游览；夫妇返回尾道后不久，富子病逝。全片以低机位固定镜头为主，摄影机极少移动，较少使用近景与正反打，人物间的疏离通过日常对话与场面调度呈现，未作戏剧化外化。影片在日本公映时反响平常，1960 年代经海外影展与影评推介后评价上升，此后多次在国际影史评选中位列前茅。",
+    introductionEn:
+      "Tokyo Story is a 1953 Japanese film directed by Yasujirō Ozu, produced by Shochiku and starring Chishū Ryū and Setsuko Hara. Shukichi and Tomi Hirayama travel from Onomichi to Tokyo to visit their adult children, who are occupied with their own work and have little time for them; the couple are passed between households and are eventually shown the city by Noriko, the widow of a son killed in the war. Tomi falls ill on the return journey and dies shortly after reaching home. The camera is placed low, at roughly the eye level of a person seated on a tatami mat, and rarely moves; close-ups and shot-reverse-shot are used sparingly, and the distance between the family members is conveyed through ordinary conversation and staging rather than through dramatic incident. The film drew a modest response on release in Japan. It circulated internationally from the 1960s and has since placed near the top of a number of critics' and directors' polls.",
     editorialNote:
-      "一对老夫妻从乡下到东京探望儿女，却发现忙于生计的孩子们把他们当成负担，唯有战死儿子的遗孀待他们最好。小津用他标志性的低机位与几乎静止的镜头，拍下家庭最平常也最残忍的真相：亲情会随距离与时间悄然稀释，而我们总要到来不及时才懂得。没有争吵，没有戏剧化的转折，只有茶杯、火车与欲言又止的沉默。母亲归乡后骤然离世，留下父亲独对空荡的房子——那份克制到极点的哀伤，比任何嚎哭都更叫人心碎。这是电影献给“子欲养而亲不待”的一首挽歌，也是很多人到了一定年纪才敢重看的作品。",
+      "平山老两口从尾道到东京看儿女，住了几天，被这家推到那家，最后是战死的儿子的遗孀纪子腾出时间陪他们。小津的机位放在跪坐的高度，很少移动，近景也少。全片没有争吵。怠慢的事一句都没点破，全在客客气气的对话里完成了，扎人也扎在这儿。母亲回乡后不久去世，父亲一个人留在空屋里，说了句今天又要热了。小津没把话说出来，但意思在那儿：儿女并不是坏人，他们只是忙，忙起来的人对父母的耐心会一点点变少，等察觉的时候通常已经晚了。纪子是唯一的例外，原节子演得很好。不过她自己也想往前走，影片让她把这话说出口，然后就到此为止了。",
     editorialNoteEn:
-      "An elderly couple travel from their country town to Tokyo to visit their grown children, only to find that the children, consumed by their own busy lives, treat them as a burden; the one person who is kind to them is the widow of a son killed in the war. With his signature low camera and near-motionless framing, Ozu records the most ordinary and most cruel of family truths — that affection thins with distance and time, and that we tend to grasp this only once it is too late. There are no quarrels here and no dramatic reversals, only teacups, passing trains, and silences full of things left unsaid. When the mother dies soon after returning home, leaving the father alone in the emptied house, the grief is restrained to such an extreme that it cuts deeper than any weeping could. This is cinema's elegy for the child who would care and the parent already gone — a film many of us only dare to watch again once we have reached a certain age.",
+      "Ozu keeps the camera at the height of someone kneeling on a tatami mat and moves it almost never. Within that constraint an elderly couple travel from Onomichi to Tokyo, are shunted between their grown children's households, and end up in the care of Noriko, the widow of the son who died in the war. Nobody quarrels, the neglect is never named aloud, and the whole of it is transacted in courteous conversation, which is what makes it land. Tomi dies shortly after the return home, and Shukichi, left alone in the emptied house, remarks that it is going to be another hot day; the film's judgement about families sits inside that flatness, which is to say that affection thins across distance and time and that the people it happens to tend to notice only once nothing can be done about it. Setsuko Hara's Noriko is the exception, and her kindness costs her something the film is careful not to resolve on her behalf.",
     essay: doc([
       h2("低处的凝视"),
       p(
-        "小津把摄影机放在跪坐者的视线高度，几乎从不移动。世界因此不再被“表现”，而是被静静地“看着”——像家人围坐时那种不动声色的注视。",
+        "剧本由小津与野田高梧合写，两人依惯例在茅崎的旅馆闭门完成。松竹当时认为影片过于日本化，未安排出口；1958 年它在伦敦获萨瑟兰奖，此后才逐步在海外放映。2012 年《视与听》的导演票选中本片列第一。",
       ),
     ]),
     essayEn: doc([
       h2("The Gaze from Below"),
       p(
-        "Ozu sets the camera at the eye level of someone kneeling on a tatami mat, and almost never moves it. The world is no longer presented so much as quietly watched — the way family members regard one another across a low table, saying nothing.",
+        "Ozu wrote the script with Kōgo Noda, working as they usually did in seclusion at an inn in Chigasaki. Shochiku considered the film too Japanese to export; it won the Sutherland Trophy in London in 1958 and only then began to be shown abroad. In the 2012 Sight and Sound poll of directors it placed first.",
       ),
     ]),
     cast: [
@@ -464,10 +483,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0041154",
     doubanId: "1307265",
     wikidataId: "Q743203",
-    editorialNote:
-      "一个与父亲相依为命的女儿，因不愿离开而迟迟不肯出嫁，父亲便谎称自己要再娶，好逼她走进属于自己的人生。小津把一桩再寻常不过的婚事，拍成了关于付出与放手的深潭。原节子的笑容明亮得近乎透明，笑意底下却涌动着不舍与体谅。片尾父亲独自削着苹果，果皮断落，房间空了——那一刻，成全孩子的孤独具象成了一个简单的动作。没有一句台词点破，却道尽了为人父母的甘苦。这是小津“嫁女”母题的起点，也是他最温柔的一次心碎。原节子与笠智众的这次合作，就此开启了小津战后最动人的一系列家庭电影。",
-    editorialNoteEn:
-      "A daughter who keeps house for her widowed father keeps putting off marriage because she cannot bear to leave him — so he tells a lie, claiming that he means to remarry, in order to push her toward a life of her own. Ozu turns the most ordinary of arranged matches into a deep pool about giving and letting go. Setsuko Hara's smile is bright almost to the point of transparency, and beneath it move reluctance and understanding at once. In the final scene the father sits alone, peeling an apple; the peel drops away unbroken, the room has emptied — and the loneliness of setting one's child free condenses into a single small gesture. Not a line of dialogue names it, yet it carries the whole bittersweet burden of being a parent. Here Ozu's great theme of the daughter's marriage begins, and his most tender heartbreak; the pairing of Hara and Chishu Ryu opens the most moving run of family films he would ever make.",
+    introduction:
+      "《晚春》是小津安二郎执导的 1949 年日本电影，松竹出品，笠智众与原节子主演。影片讲述与丧偶父亲同住的女儿纪子迟迟不肯出嫁，父亲谎称自己有意再娶，以此促使她接受婚事。婚礼场面自始至终没有出现，整桩婚事都在对话与筹备中完成。小津在本片确立了此后沿用的形式：摄影机固定在接近榻榻米坐姿的低机位，极少移动，段落之间插入没有人物的空镜。结尾父亲独自在家削苹果，果皮落下。原节子在小津作品中三次饰演名为纪子的角色，本片是第一次。",
+    introductionEn:
+      "Late Spring is a 1949 Japanese film directed by Yasujirō Ozu, produced by Shochiku, starring Chishū Ryū and Setsuko Hara. Noriko keeps house for her widowed father and puts off marrying; he tells her, untruthfully, that he intends to remarry, so that she will accept a match. The wedding itself is never shown, and the marriage is carried entirely in conversation and preparation. The film settles the form Ozu used for the rest of his career: a camera fixed low, at roughly the height of a person seated on a tatami mat, moving almost never, with shots of empty rooms and streets placed between scenes. It ends with the father alone at home, peeling an apple. This is the first of three Ozu films in which Hara plays a character named Noriko.",
     cast: [
       { name: "Chishū Ryū", zhName: "笠智众", characterZh: "曾宫周吉", personSlug: "chishu-ryu" },
       {
@@ -496,10 +515,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0043313",
     doubanId: "1401842",
     wikidataId: "Q1761192",
-    editorialNote:
-      "一个到了适婚年龄的女儿，在家人为她张罗体面婚事时，却出人意料地选择嫁给邻家带着孩子的丧偶医生。小津把镜头对准三代同堂的大家庭，看它如何在一桩婚事中不动声色地走向解体。他不评判任何人的选择，只是让生活像麦子成熟那样自然发生。餐桌、走廊、海边沙丘上的空镜，把聚散离合酿成了淡淡的、带着咸味的诗。结尾老夫妇望着熟透的麦田感叹“我们已经很幸福了”，是小津对无常人生最豁达的注解：家终会散，而正因为会散，此刻的团圆才值得珍重。",
-    editorialNoteEn:
-      "A daughter of marriageable age, while her family busily arranges a respectable match for her, startles everyone by choosing instead to marry the widowed doctor next door, a man with a young child. Ozu turns his camera on a three-generation household and watches, without ever raising his voice, how a single marriage nudges it toward quiet dissolution. He passes judgment on no one's choice; he simply lets life unfold as naturally as wheat coming ripe. Empty frames of the dining table, the hallway, the dunes by the sea distill all this gathering and parting into a faint, salt-tinged poem. When the old couple, gazing out at the ripened fields, murmur that they have already been very happy, it becomes Ozu's most generous word on impermanence: the family will scatter, and it is precisely because it must scatter that this hour of being together is worth holding close.",
+    introduction:
+      "《麦秋》是小津安二郎执导的 1951 年日本电影，原节子饰演二十八岁仍未出嫁的间宫纪子。影片以镰仓一户三代同堂的人家为中心：家人正张罗着为纪子说一门体面的亲事，她却自行决定嫁给带着幼女的邻居医生谦吉。婚事既定，一家人随即分散，祖父母迁回乡下。全片依靠日常起居与对话推进，冲突不作正面处理。小津全程使用固定低机位，段落之间插入空镜，人物常在同一固定构图中进出画面。片中有一场戏拍麦田在风中起伏。这是原节子三个「纪子」角色中的第二个。",
+    introductionEn:
+      "Early Summer is a 1951 Japanese film directed by Yasujirō Ozu, with Setsuko Hara as Noriko Mamiya, unmarried at twenty-eight. It centres on a three-generation household in Kamakura: the family is arranging a suitable match for Noriko when she settles on her own to marry Kenkichi, a neighbouring doctor with a small daughter. Once that is decided the household breaks up and the grandparents move to the countryside. The film proceeds through domestic routine and conversation and does not stage its conflicts directly. Ozu works throughout from a fixed low camera, placing shots of empty space between scenes and letting characters enter and leave a held frame. A late sequence shows a field of barley moving in the wind. This is the second of Hara's three Noriko roles.",
     cast: [
       {
         name: "Setsuko Hara",
@@ -528,10 +547,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0060107",
     doubanId: "1298248",
     wikidataId: "Q503046",
-    editorialNote:
-      "以十五世纪圣像画家卢布廖夫为轴，塔可夫斯基拍下了一个艺术家如何在鞑靼铁蹄、饥荒与暴力中丧失又重拾信仰的漫长历程。影片由八个篇章缀成，气象恢弘却又粗粝真实，把中世纪罗斯的泥泞、苦难与偶尔迸发的神性一并托起。最著名的“铸钟”一段，一个少年在毫无把握中赌上性命铸出巨钟，钟声轰然响起的那一刻，几乎是对一切创造行为的献词。黑白的苦难在结尾骤然转为卢布廖夫真迹的彩色特写——艺术终于从血与土里升起。这是关于信仰、暴力与创作代价的沉思，也是塔可夫斯基“雕刻时光”的第一座丰碑。",
-    editorialNoteEn:
-      "Around the fifteenth-century icon painter Andrei Rublev, Tarkovsky films the long ordeal of an artist who loses and then recovers his faith amid Tatar raids, famine, and violence. Assembled from eight chapters, the film is vast in scope yet raw and physical, carrying the mud, the suffering, and the sudden flashes of the divine in medieval Russia. In the celebrated bell-casting episode, a boy gambles his life on founding a great bell with no idea whether he can, and the moment it finally sounds becomes a hymn to every act of creation. The suffering, filmed in black and white, gives way at the end to color close-ups of Rublev's actual icons — art rising at last out of blood and earth. This is a meditation on faith, on violence, and on the price of making anything, and the first monument in Tarkovsky's lifelong project of sculpting in time.",
+    introduction:
+      "《安德烈·卢布廖夫》是安德烈·塔可夫斯基执导的 1966 年苏联电影，莫斯科电影制片厂出品，以十五世纪圣像画家安德烈·卢布廖夫为中心。影片分为八个段落，跨越约二十五年，穿插鞑靼人劫掠弗拉基米尔、饥荒、异教仪式与卢布廖夫长期封笔不画等情节。末段讲一名少年在父亲死后独力承担铸钟，声称掌握配方，实则并不知晓。全片以黑白拍摄，结尾转为彩色，以特写呈现卢布廖夫存世的圣像作品。影片完成后在苏联国内多年未获正式公映，先在国外放映。",
+    introductionEn:
+      "Andrei Rublev is a 1966 Soviet film directed by Andrei Tarkovsky, produced by Mosfilm, centred on the fifteenth-century icon painter of that name. It is built as eight episodes spanning roughly twenty-five years, taking in the Tatar sack of Vladimir, famine, a pagan rite, and a long period during which Rublev gives up painting and keeps silent. The final episode follows a boy who takes charge of casting a great bell after his father's death, claiming to know the secret of the alloy when he does not. The film is shot in black and white and shifts to colour at the end for close-ups of Rublev's surviving icons. It went unreleased in the Soviet Union for several years after completion and was screened abroad first.",
     directorSlugs: ["andrei-tarkovsky"],
   },
   {
@@ -550,10 +569,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0056111",
     doubanId: "1294421",
     wikidataId: "Q147878",
-    editorialNote:
-      "十二岁的伊万在战争中失去全家，成了红军的侦察兵，穿行于生死之间的前线沼泽。塔可夫斯基的处女作就已显露天才：他让梦境与战争交替浮现，明亮的童年闪回与阴冷的现实互为伤口。倒映的白桦、滴水的地窖、被炮火犁过的荒原，都被拍出了一种令人窒息的诗意。伊万把整个童年献给了复仇，也因此被战争彻底吞噬。影片没有一处正面歌颂英勇，只是静静记录一个孩子如何被时代碾碎。它一举拿下威尼斯金狮，宣告了一位把苦难拍成挽歌的诗人导演的诞生。",
-    editorialNoteEn:
-      "Twelve-year-old Ivan loses his entire family in the war and becomes a scout for the Red Army, slipping through the deadly marshes of the front. Tarkovsky's first feature already shows the genius to come: dreams and war alternate, so that the bright flashbacks of childhood and the cold present keep reopening each other's wounds. Reflected birches, a dripping cellar, a wasteland plowed by shellfire are all shot with a poetry close to suffocating. Ivan gives his whole childhood over to revenge, and for that the war devours him whole. Not one scene celebrates courage; the film simply records, quietly, how a child is ground down by history. It took the Golden Lion at Venice and announced the arrival of a poet among directors — one who films suffering as elegy.",
+    introduction:
+      "《伊万的童年》是安德烈·塔可夫斯基执导的 1962 年苏联电影，莫斯科电影制片厂出品，是他的第一部长片，改编自弗拉基米尔·博戈莫洛夫的短篇《伊万》。故事设在东线：十二岁的伊万全家死于战争，此后为红军担任侦察员，往返穿越前线的沼泽地带传递情报。军官几次试图送他去后方读书，他都拒绝。影片将战场场景与几段童年梦境交替剪接，梦境以过曝的白桦林、井水与海滩为主要意象。结尾以战后缴获的德军档案交代伊万的下落。本片获威尼斯电影节金狮奖。",
+    introductionEn:
+      "Ivan's Childhood is a 1962 Soviet film directed by Andrei Tarkovsky, produced by Mosfilm. It was his first feature, adapted from Vladimir Bogomolov's short story Ivan. Twelve-year-old Ivan has lost his family in the war and works as a scout for the Red Army, crossing the marshes at the front to carry back intelligence. The officers around him repeatedly try to send him to school behind the lines and he refuses. Scenes at the front are intercut with several dream sequences of his childhood, built around overexposed birch woods, a well, and a beach. His fate is established at the close through German records captured after the war. Vadim Yusov photographed it, working in high contrast with the water, mud and bare trees of the marsh. The film received the Golden Lion at Venice.",
     directorSlugs: ["andrei-tarkovsky"],
   },
 
@@ -574,10 +593,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0053168",
     doubanId: "1303559",
     wikidataId: "Q664726",
-    editorialNote:
-      "一个自视甚高的青年沉迷于扒窃，把偷盗当作对平庸世界的智力反叛，直到爱与被捕才让他真正低头。布列松剥去一切表演的痕迹，让手指、目光与物件的运动承担全部叙事。地铁站、火车里那几段扒窃的“手部芭蕾”，被剪辑得如同一场精密的仪式，紧张却毫不煽情。这是他“恩典”主题最凝练的一次表达：救赎不来自主人公的悔悟，而来自监狱铁窗前那一句“我走了多么远的路才到你身边”。全片仅七十余分钟，却把犯罪、骄傲与爱写得像一则冷峻的祈祷。理解布列松，不妨从这里开始。",
-    editorialNoteEn:
-      "A young man who thinks highly of himself grows addicted to picking pockets, treating theft as an intellectual revolt against a mediocre world — until love and arrest finally bring him low. Bresson strips away every trace of acting and lets fingers, glances, and objects carry the whole story. The pickpocketing sequences in the Métro and on the train, a ballet of hands, are cut like a precise ritual, taut yet utterly unsentimental. It is the most distilled statement of his theme of grace: redemption arrives not through the hero's remorse but in a few words spoken across the prison bars — what a strange, long road he had to travel to reach her. In just over seventy minutes the film writes crime, pride, and love as a cold and steady prayer. If you want to understand Bresson, this is the place to begin.",
+    introduction:
+      "《扒手》是罗贝尔·布列松执导的 1959 年法国电影，马丁·拉萨勒饰演米歇尔。影片讲述一名生活拮据的青年在巴黎学习扒窃，先后与两名同伙在赛马场、地铁与火车站作案，其间警长几次找他谈话，母亲病故，邻居让娜始终试图劝阻。他最终在赛马场被捕入狱，让娜前往探视。布列松使用非职业演员，要求他们平读台词、不作表演，多用手部与物件的特写，扒窃段落以近景剪接完成，全片几乎不用配乐。片长约七十五分钟。故事结构参照陀思妥耶夫斯基的《罪与罚》。",
+    introductionEn:
+      "Pickpocket is a 1959 French film directed by Robert Bresson, with Martin LaSalle as Michel. A young man living in poverty in Paris teaches himself to steal from pockets and works with two accomplices at the racecourse, in the Métro and at the Gare de Lyon. A police inspector interviews him several times, his mother dies, and a neighbour named Jeanne repeatedly tries to turn him from it. He is arrested at the racecourse and imprisoned, and Jeanne comes to visit him. Bresson cast non-professionals and directed them to speak flatly and without performance; the film relies heavily on close shots of hands and objects, builds the thefts entirely through close cutting, and uses almost no score. It runs about seventy-five minutes, and its structure follows Dostoevsky's Crime and Punishment.",
     directorSlugs: ["robert-bresson"],
   },
   {
@@ -597,10 +616,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0060138",
     doubanId: "1401619",
     wikidataId: "Q228937",
-    editorialNote:
-      "一头名叫巴特萨的驴子，从一个主人辗转到另一个主人，默默承受人间的爱抚、鞭打、利用与遗弃，最终死在羊群之中。布列松借这头驴的一生，写下了一部关于圣徒、苦难与人类残忍的寓言。驴子从不表演情绪，正因如此，它那双温顺的眼睛成了一面镜子，照出周遭每一个人的贪婪与软弱。结尾它中弹后缓缓卧倒在阳光下的草坡上，羊群围拢过来——那是电影史上最接近“殉道”的死亡。没有一句说教，却让戈达尔感叹“这就是整个世界”。它要求的不是理解，而是凝视与谦卑。",
-    editorialNoteEn:
-      "A donkey named Balthazar passes from one owner to the next, silently bearing caresses and beatings, use and abandonment, until it dies among a flock of sheep. Through this animal's life Bresson writes a parable of sainthood, suffering, and human cruelty. The donkey never performs an emotion, and so its gentle eyes become a mirror that reflects the greed and weakness of everyone around it. At the end, shot and bleeding, it sinks slowly onto a sunlit slope while the sheep gather in — the closest thing to a martyrdom that cinema has ever filmed. There is not a sermon anywhere in it, and yet Godard could only sigh that here was the whole world. The film asks not to be understood but to be watched, and watched with humility.",
+    introduction:
+      "《驴子巴特萨》是罗贝尔·布列松执导的 1966 年法国、瑞典合拍电影，安妮·维亚泽姆斯基饰演玛丽。影片以一头名为巴特萨的驴子为线索：它先由农家孩子饲养，此后数度易主，先后落到面包店伙计热拉尔、酒鬼阿尔诺与一名商人手中，被驮货、鞭打、用于马戏表演，最后在越境走私途中中弹，卧倒于羊群之间死去。与之平行的是玛丽的遭遇，她受制于热拉尔并逐步失去一切。布列松使用非职业演员，镜头多为中近景，驴的反应始终不作拟人化处理。影片在威尼斯电影节首映。",
+    introductionEn:
+      "Au Hasard Balthazar is a 1966 French and Swedish co-production directed by Robert Bresson, with Anne Wiazemsky as Marie. The film follows a donkey named Balthazar, first kept by farm children and afterwards passed between several owners: Gérard, who works at a bakery, a drunkard named Arnold, and a merchant. He is used to carry loads, beaten, put to work in a circus, and finally shot while being driven across a border with smuggled goods, dying among a flock of sheep. Marie's story runs alongside his; she becomes bound to Gérard and loses everything in turn. Bresson worked with non-professional performers, shot largely in medium and close range, and never has the donkey react in a way that reads as human. The film premiered at Venice.",
     directorSlugs: ["robert-bresson"],
   },
 
@@ -622,10 +641,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0053619",
     doubanId: "1389923",
     wikidataId: "Q514531",
-    editorialNote:
-      "一群富人乘游艇出海，一个女人在荒岛上离奇失踪，然而电影很快放弃了寻找，转而凝视她的情人与好友如何在寻人途中彼此吸引。安东尼奥尼故意抽掉悬疑的答案，把注意力交给现代人之间无法填补的空洞。人物常被压到画面一角，让岩石、建筑与空旷的街道占据中心，仿佛环境本身就在制造疏离。这份“反情节”曾在戛纳招致嘘声，却很快被奉为现代主义电影的里程碑。它不提供故事的满足，只留下一种挥之不去的怅惘：我们如此靠近，却谁也无法真正抵达谁。看它，需要放下对答案的执念。",
-    editorialNoteEn:
-      "A party of wealthy friends sails to a barren island, where one woman vanishes without explanation — and the film promptly abandons the search, turning instead to watch her lover and her closest friend drift toward each other in the very act of looking for her. Antonioni withholds the mystery's solution on purpose and gives his attention instead to the void between modern people that nothing can fill. His figures are often pressed into a corner of the frame while rock faces, buildings, and empty streets take the center, as though the environment itself were manufacturing estrangement. This refusal of plot was jeered at Cannes and then, almost at once, canonized as a landmark of modernist cinema. It offers none of the satisfactions of story, only a melancholy that will not lift: we come so close and still cannot reach one another. To watch it, you have to set down the craving for an answer.",
+    introduction:
+      "《奇遇》是米开朗基罗·安东尼奥尼执导的 1960 年意大利、法国合拍电影，莫尼卡·维蒂与加布里埃莱·费泽蒂主演。一群人乘游艇出海，在西西里北面的一座火山岩小岛上，女子安娜失踪；搜寻无果，影片此后跟随她的男友桑德罗与好友克劳迪娅继续在西西里各地寻人，两人途中发展出关系。安娜的下落自始至终没有交代。影片大量使用长镜头，人物常被置于画面边缘，由岩石、建筑与空旷街道占据构图中心。本片在戛纳电影节首映时观众中出现嘘声，其后获评审团奖。片长约一百四十五分钟。",
+    introductionEn:
+      "L'Avventura is a 1960 Italian and French co-production directed by Michelangelo Antonioni, starring Monica Vitti and Gabriele Ferzetti. A yachting party puts in at a volcanic islet north of Sicily, where a woman named Anna disappears. The search finds nothing, and the film then follows her lover Sandro and her friend Claudia as they continue looking for her across Sicily and become involved with each other. What became of Anna is never established. The film works largely in long takes, with the figures frequently placed at the edge of the frame while rock, architecture and empty streets occupy the centre. It was jeered by part of the audience at its Cannes premiere and went on to take the Jury Prize there. It runs about a hundred and forty-five minutes.",
     directorSlugs: ["michelangelo-antonioni"],
   },
   {
@@ -644,10 +663,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0054130",
     doubanId: "1361252",
     wikidataId: "Q1215047",
-    editorialNote:
-      "一对婚姻走到尽头的夫妻，用一整夜的时间——探望病危的友人、参加喧闹的派对、在清晨的高尔夫球场上摊牌——确认爱情已经死去。安东尼奥尼让米兰的现代建筑成为冷漠的共谋，玻璃幕墙映出的是无处安放的空虚。让娜·莫罗独自穿行城市的长段落，几乎没有对白，却把一个女人的幻灭写得淋漓尽致。片尾妻子读起丈夫多年前写给她的情书，丈夫却记不得那是自己所写——最痛的不是背叛，而是激情如何在日常里悄无声息地蒸发。这是“疏离三部曲”中最冷静的一部，献给所有在长久关系里感到彼此陌生的人。",
-    editorialNoteEn:
-      "A husband and wife whose marriage has quietly ended spend one night — visiting a dying friend, drifting through a loud party, having it out at dawn on a golf course — confirming that the love between them is gone. Antonioni makes the modern architecture of Milan a cold accomplice, its glass curtain walls reflecting an emptiness with nowhere to settle. Jeanne Moreau's long, near-wordless walk through the city writes a woman's disenchantment in full. At the end his wife reads aloud a love letter he wrote her years earlier, and he cannot recall that he was the one who wrote it — because the sharpest wound is not betrayal but the way passion evaporates, without a sound, inside daily life. This is the most glacial film in the alienation trilogy, and it belongs to everyone who has felt like a stranger inside a long relationship.",
+    introduction:
+      "《夜》是米开朗基罗·安东尼奥尼执导的 1961 年意大利、法国合拍电影，马塞洛·马斯楚安尼与让娜·莫罗饰演作家乔瓦尼与其妻莉迪亚，莫尼卡·维蒂饰演瓦伦蒂娜。影片时间跨度为一昼夜：夫妇二人先探望住院的友人托马索，随后各自游荡于米兰，夜里出席一场工业家宅邸的派对，天亮时在别墅外的草地上谈及婚姻。莉迪亚在其中读出一封旧信，乔瓦尼未认出那是自己所写。全片以米兰战后新建的玻璃与混凝土建筑为主要外景，人物常被墙面与柱列分隔在构图两侧。本片获柏林电影节金熊奖。",
+    introductionEn:
+      "La Notte is a 1961 Italian and French co-production directed by Michelangelo Antonioni, with Marcello Mastroianni and Jeanne Moreau as the writer Giovanni and his wife Lidia, and Monica Vitti as Valentina. The action covers a single day and night. The couple visit their friend Tommaso in hospital, then drift separately through Milan, attend a party at an industrialist's villa in the evening, and talk about their marriage on the grounds at dawn. Lidia reads an old letter aloud there, and Giovanni does not recognise it as his own. The exteriors are largely the glass and concrete Milan built after the war, and the two are often divided to opposite sides of the frame by walls and colonnades. The film received the Golden Bear at Berlin.",
     cast: [
       {
         name: "Jeanne Moreau",
@@ -680,10 +699,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0056736",
     doubanId: "1293105",
     wikidataId: "Q1468980",
-    editorialNote:
-      "一个刚结束一段感情的女子，与在证券交易所里追逐金钱的年轻经纪人短暂相恋，却始终无法真正投入。安东尼奥尼“疏离三部曲”的终章，把现代情感的虚无推向极致。喧嚣的股市与空荡的街角形成刺目的对照，爱情像日食一样，明明发生过，却迅速被阴影吞没。影片最惊人的是结尾：两人约好再见，镜头却在约定的街角空等了七分钟，只有路灯、水桶、陌生人的脸，恋人始终没有出现。这段“无人的蒙太奇”宣告了现代人情感的彻底缺席，也把电影语言推到了抽象的边缘。它冷峻得近乎残酷，却精准得令人心悸。",
-    editorialNoteEn:
-      "A woman just out of one affair drifts into another with a young stockbroker chasing money on the exchange floor, yet can never truly give herself to it. The finale of Antonioni's alienation trilogy carries modern emotional emptiness to its limit. The roar of the trading floor and the desolation of a bare street corner strike a glaring contrast, and love here is like an eclipse — clearly it happened, and just as clearly the shadow swallows it. The most astonishing stroke is the close: the two arrange to meet again, but the camera keeps the appointment at the agreed corner for seven minutes with only streetlamps, a water barrel, and the faces of strangers — the lovers never come. This montage of no one announces the total absence of modern feeling and pushes film language to the edge of abstraction. It is cold nearly to the point of cruelty, and precise enough to make the heart stop.",
+    introduction:
+      "《蚀》是米开朗基罗·安东尼奥尼执导的 1962 年意大利、法国合拍电影，莫尼卡·维蒂饰演翻译维多利亚，阿兰·德龙饰演证券经纪人皮耶罗。影片开场，维多利亚结束一段长期关系；她随后在罗马证券交易所遇到皮耶罗，两人交往一段时间，其间经历一次股市暴跌。二人约定在某个街角再见，影片最后数分钟只拍这个街角及周边：路灯亮起、水从桶中漏出、行人经过，两人都未出现。外景多取自罗马新建的 EUR 区。本片获戛纳电影节评审团特别奖。",
+    introductionEn:
+      "L'Eclisse is a 1962 Italian and French co-production directed by Michelangelo Antonioni, with Monica Vitti as Vittoria, a translator, and Alain Delon as Piero, a stockbroker. The film opens as Vittoria ends a long relationship. She meets Piero at the Rome stock exchange, where her mother speculates, and the two see each other over a period that includes a market crash. They agree to meet at a particular street corner, and the last several minutes of the film show only that corner and its surroundings: the streetlamps coming on, water running from a barrel, passers-by. Neither of them arrives. Much of the location work was done in the newly built EUR district of Rome. The film received the Special Jury Prize at Cannes.",
     directorSlugs: ["michelangelo-antonioni"],
   },
 
@@ -705,20 +724,20 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0053472",
     doubanId: "1353745",
     wikidataId: "Q86427",
-    editorialNote:
-      "一个崇拜好莱坞硬汉的小混混偷车杀警，拉着美国女友在巴黎街头亡命，最终被她出卖。戈达尔的处女作用满不在乎的跳接，砸碎了古典剪辑的连贯，宣告一种全新的电影语法就此诞生。手持摄影、实景街拍、直视镜头的挑衅，把即兴与随性变成了美学。贝尔蒙多叼着烟摸嘴唇的痞气、塞贝格在香榭丽舍卖报的侧脸，成了新浪潮永恒的图腾。它不在乎故事是否严密，只在乎电影能否像生活一样任性、鲜活、随时脱轨。六十年后再看，那股横冲直撞的青春气息依旧扑面而来。这是现代电影的一声发令枪。",
-    editorialNoteEn:
-      "A small-time crook besotted with Hollywood tough guys steals a car, kills a policeman, and drags his American girlfriend on the run through Paris, only to be betrayed by her in the end. Godard's first feature smashes classical continuity with careless jump cuts and, in doing so, announces a whole new grammar for film. Handheld camerawork, real streets, and the provocation of looking straight into the lens turn improvisation and nonchalance into an aesthetic. Belmondo rubbing his lip with a cigarette, Seberg's profile as she hawks newspapers along the Champs-Élysées: these became eternal totems of the New Wave. The film does not care whether its story is airtight, only whether cinema can be as willful, as alive, and as ready to derail as life itself. Sixty years on, that reckless burst of youth still hits you square in the face. It is the starting gun of modern cinema.",
+    introduction:
+      "《精疲力尽》是让-吕克·戈达尔执导的 1960 年法国电影，是他的第一部长片，让-保罗·贝尔蒙多饰演米歇尔，简·茜宝饰演帕特里夏。故事大纲由弗朗索瓦·特吕弗提供，让-皮埃尔·梅尔维尔在片中出演一名作家。米歇尔在马赛偷车，途中开枪打死一名追截的警察，逃至巴黎投奔美国留学生帕特里夏，设法筹钱出境，帕特里夏最终向警方告发他。影片以手持摄影在巴黎街头实拍，成片时长超出预定，戈达尔以直接剪去镜头中段的方式压缩，形成大量跳接。本片获柏林电影节最佳导演银熊奖。",
+    introductionEn:
+      "Breathless is a 1960 French film directed by Jean-Luc Godard, his first feature, with Jean-Paul Belmondo as Michel and Jean Seberg as Patricia. The outline came from François Truffaut, and Jean-Pierre Melville appears in the film as a novelist. Michel steals a car in Marseille, shoots a policeman who pursues him, and reaches Paris, where he stays with Patricia, an American student, while trying to collect money owed him and leave the country; she eventually reports him to the police. The film was shot handheld on Paris streets. It ran long when assembled, and Godard shortened it by cutting sections out of the middle of shots, which produced the jump cuts throughout. He received the Silver Bear for Best Director at Berlin.",
     essay: doc([
       h2("跳接作为宣言"),
       p(
-        "跳接不是失误，而是态度：戈达尔剪掉了让叙事“顺滑”的那几帧，好让你时刻记得，你在看的是电影，而电影可以为所欲为。",
+        "影片于 1959 年八九月间以约四周拍成，成本低廉。摄影拉乌尔·库塔尔常坐在推动的轮椅上手持拍摄，并使用为静照生产的高感光胶片接成长卷，以便在自然光下工作；戈达尔每天上午写当日的对白。片头字幕将影片献给美国的小制片厂 Monogram Pictures。",
       ),
     ]),
     essayEn: doc([
       h2("The Jump Cut as Manifesto"),
       p(
-        "The jump cut is not a blunder but an attitude: Godard snips out the few frames that would let the story flow, so that you never forget you are watching a film — and that a film can do exactly as it likes.",
+        "The film was shot in about four weeks in August and September 1959 on a very small budget. Raoul Coutard often worked handheld from a wheelchair pushed along the street, and used high-speed stock manufactured for stills photography, spliced into long rolls, so that he could work in available light. Godard wrote each day's dialogue that morning. The opening credits dedicate the film to Monogram Pictures.",
       ),
     ]),
     cast: [
@@ -744,10 +763,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0056663",
     doubanId: "1296757",
     wikidataId: "Q1148491",
-    editorialNote:
-      "一个想当演员的年轻女子娜娜，一步步沦为妓女，最终死于一场荒谬的交易。戈达尔用十二个带标题的段落，像论文又像素描地拆解一个女人的堕落与尊严。安娜·卡里娜的脸在片中被反复凝视——她在影院里对着德莱叶的《圣女贞德》落泪的一幕，把两个受难的女性隔着三十年重叠在一起。影片穿插哲学对话、街头实录与直视镜头的独白，冷静得近乎残酷，却又饱含爱意。它既是新浪潮对类型的又一次解构，也是戈达尔写给卡里娜的一封情书。自由与被出卖，在这里只有一线之隔。",
-    editorialNoteEn:
-      "A young woman who dreams of acting, Nana, slides step by step into prostitution and dies at last in an absurd transaction. In twelve titled chapters — part essay, part sketch — Godard dissects a woman's fall and her dignity at once. Anna Karina's face is gazed at again and again; the scene of her weeping in a cinema before Dreyer's Joan of Arc lays two suffering women over each other across thirty years. The film interleaves philosophical dialogue, street documentary, and monologue delivered straight to the camera, cool nearly to the point of cruelty and yet brimming with love. It is at once another New Wave dismantling of genre and Godard's love letter to Karina. Here freedom and being sold off are separated by only the thinnest of lines.",
+    introduction:
+      "《随心所欲》是让-吕克·戈达尔执导的 1962 年法国电影，安娜·卡里娜饰演娜娜。影片分十二个段落，每段前有小标题：娜娜离开丈夫与孩子，在唱片店工作，想做演员而不得，逐步以卖淫为生，受一名皮条客控制，最后死于两伙人的一场交易。片中有一段拍她在影院观看德莱叶《圣女贞德蒙难记》并落泪，另有一段是她与哲学家布里斯·帕兰关于语言的即席对话，对方以本人身份出镜。摄影为拉乌尔·库塔尔，多用实景与长镜头。本片获威尼斯电影节评审团大奖。",
+    introductionEn:
+      "Vivre sa Vie is a 1962 French film directed by Jean-Luc Godard, with Anna Karina as Nana. It is divided into twelve numbered parts, each introduced by a title card: Nana leaves her husband and child, works in a record shop, fails to find acting work, turns to prostitution, comes under the control of a pimp, and is killed in a transaction between two groups of men. One section shows her in a cinema watching Dreyer's The Passion of Joan of Arc and weeping; another is an unscripted conversation about language with the philosopher Brice Parain, appearing as himself. Raoul Coutard photographed it, working on location and in long takes, and Michel Legrand wrote the short piece of music that recurs through it. The film received the Special Jury Prize at Venice.",
     cast: [
       { name: "Anna Karina", zhName: "安娜·卡里娜", character: "Nana", personSlug: "anna-karina" },
     ],
@@ -772,10 +791,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0053198",
     doubanId: "1300056",
     wikidataId: "Q162331",
-    editorialNote:
-      "十三岁的安托万被冷漠的父母、刻板的学校与不被理解的世界一步步推向街头与教养院。特吕弗把自己的童年拍成了新浪潮的开山之作，镜头始终与少年平视，从不居高临下地评判。逃学、偷打字机、被审讯——每一次“胡闹”背后，都是一个渴望被爱却屡屡碰壁的灵魂。影片以一个长镜头收尾：安托万从教养院逃出，一路奔向从未见过的大海，在浪花前停下，回头望向镜头，画面定格。那个既自由又茫然的眼神，成了电影史上最动人的结尾之一。它温柔地告诉每个曾是“问题少年”的人：你并不孤单。",
-    editorialNoteEn:
-      "Thirteen-year-old Antoine is pushed step by step toward the streets and the reformatory by cold parents, a rigid school, and a world that will not try to understand him. Truffaut films his own childhood as the opening work of the New Wave, keeping the camera at the boy's eye level and never once judging him from above. Skipping school, stealing a typewriter, being interrogated — behind every bit of mischief is a soul that longs to be loved and keeps meeting walls. The film ends on a single long take: Antoine escapes the reformatory and runs toward a sea he has never seen, stops at the surf, and turns back to the camera as the frame freezes. That look, at once free and lost, is one of the most moving endings in all of cinema. Gently, it tells everyone who was ever called a problem child that they are not alone.",
+    introduction:
+      "《四百击》是弗朗索瓦·特吕弗执导的 1959 年法国电影，是他的第一部长片，让-皮埃尔·利奥饰演十三岁的安托万·杜瓦内尔。影片讲述安托万在巴黎与母亲及继父同住，在学校屡受责罚，逃学后谎称母亲去世，其后与同学从继父办公处偷走一台打字机，未能卖出，归还时被抓，先关入警局，再送往海边的少年管教所。片尾他从管教所跑出，一路奔至海边，转身面向摄影机，画面定格。特吕弗此前是《电影手册》影评人，本片取材自他本人的少年经历。他凭本片获戛纳电影节最佳导演奖。",
+    introductionEn:
+      "The 400 Blows is a 1959 French film directed by François Truffaut, his first feature, with Jean-Pierre Léaud as thirteen-year-old Antoine Doinel. Antoine lives in Paris with his mother and stepfather, is punished repeatedly at school, and after skipping a day claims his mother has died. He and a schoolfriend later take a typewriter from the stepfather's office; unable to sell it, they are caught returning it, and Antoine is held at a police station and then sent to an observation centre for delinquent boys near the sea. In the closing sequence he runs from the centre to the shore, turns towards the camera, and the frame freezes. Truffaut had been a critic at Cahiers du Cinéma, and drew on his own adolescence. He received the award for Best Director at Cannes.",
     cast: [{ name: "Jean-Pierre Léaud", zhName: "让-皮埃尔·利奥", character: "Antoine Doinel" }],
     directorSlugs: ["francois-truffaut"],
   },
@@ -798,10 +817,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0054215",
     doubanId: "1293181",
     wikidataId: "Q163038",
-    editorialNote:
-      "一个卷款潜逃的女秘书，在荒僻的汽车旅馆遇上腼腆的老板诺曼·贝茨，随即在浴室里被刺身亡——而这仅仅是电影的前半段。希区柯克用这场石破天惊的“中途弑主角”，彻底颠覆了观众对安全感的一切预期。淋浴谋杀那七十余个镜头的凌厉剪辑与伯纳德·赫尔曼尖啸的弦乐，成为影史最著名的段落。他把恐怖从哥特城堡搬进了寻常的汽车旅馆，暗示真正的怪物就藏在最普通的人心里。这部低成本黑白片重新定义了惊悚片的尺度与伦理，也让一代观众从此不敢安心洗澡。悬念大师最锋利的一击。",
-    editorialNoteEn:
-      "A secretary who has just absconded with a wad of cash stops at a remote motel, meets its shy proprietor Norman Bates, and is stabbed to death in the shower — and this is only the first half of the film. With that earth-shattering murder of his own protagonist halfway through, Hitchcock overturns every expectation of safety the audience has brought with them. The knife-sharp cutting of the shower scene's seventy-odd shots, set to Bernard Herrmann's shrieking strings, is among the most famous passages ever filmed. He drags horror out of the gothic castle and into an ordinary roadside motel, suggesting the real monster hides inside the most ordinary human heart. This low-budget black-and-white picture redefined both the reach and the ethics of the thriller — and left a whole generation unable to shower in peace. The master of suspense's sharpest strike.",
+    introduction:
+      "《惊魂记》是阿尔弗雷德·希区柯克执导的 1960 年美国电影，派拉蒙出品，珍妮特·利饰演卷走公司款项潜逃的秘书玛丽昂·克莱恩，安东尼·博金斯饰演汽车旅馆老板诺曼·贝茨。玛丽昂在旅馆过夜，于淋浴时被刺死，此时影片刚过三分之一，其后转由她的姐姐与一名私家侦探追查线索。淋浴一场由数十个镜头剪成，配乐由伯纳德·赫尔曼创作，全片弦乐编制。影片以黑白拍摄，由希区柯克的电视剧组承制，成本较其同期作品低。剧本改编自罗伯特·布洛克的同名小说。",
+    introductionEn:
+      "Psycho is a 1960 American film directed by Alfred Hitchcock, produced by Paramount, with Janet Leigh as Marion Crane, a secretary who absconds with money from her employer, and Anthony Perkins as Norman Bates, who runs a roadside motel. Marion stops there for the night and is stabbed to death in the shower roughly a third of the way through the film; the remainder follows her sister and a private investigator retracing her movements. The shower sequence is assembled from several dozen shots, and Bernard Herrmann's score is written for strings alone. The film was shot in black and white by Hitchcock's television crew and cost considerably less than his other work of the period. The screenplay is adapted from the novel by Robert Bloch.",
     cast: [
       {
         name: "Anthony Perkins",
@@ -829,10 +848,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0036342",
     doubanId: "1293817",
     wikidataId: "Q465979",
-    editorialNote:
-      "小镇少女查理满心欢喜地迎来同名的舅舅来访，却渐渐察觉这位迷人的长辈很可能是连环杀害寡妇的凶手。希区柯克本人最钟爱的作品之一，把恐怖悄悄植入最安稳的美国小镇与最亲密的家庭内部。他让甥舅二人如镜像般彼此映照，善与恶的界线因血缘而愈发暧昧不安。餐桌上舅舅那段厌世的独白，冷不防撕开了体面生活的假面。没有异国城堡，只有白栅栏后的日常，危险却因此更贴近骨髓。这是希区柯克对“恶就住在隔壁”这一命题最优雅也最阴冷的演绎。",
-    editorialNoteEn:
-      "A small-town girl, delighted, welcomes the visit of her charming uncle and namesake — and slowly comes to sense that this beloved relative may be the man strangling wealthy widows across the country. One of Hitchcock's own favorites among his films, it plants horror inside the most secure of American small towns and the most intimate of families. He makes niece and uncle mirror each other, so that the line between good and evil grows only more uneasy for being drawn in blood. The uncle's misanthropic monologue at the dinner table tears the mask off respectable life without warning. There is no exotic castle here, only ordinary days behind a white picket fence — and the danger is closer to the bone for it. This is Hitchcock's most elegant, and most chilling, treatment of the idea that evil lives right next door.",
+    introduction:
+      "《辣手摧花》是阿尔弗雷德·希区柯克执导的 1943 年美国电影，环球出品，特雷莎·赖特饰演加州小镇少女查莉，约瑟夫·科顿饰演与她同名的舅舅查理。舅舅从东部前来投亲，颇受全家欢迎；查莉逐步从报纸剪报与他的言行中察觉，警方正在通缉的「快乐寡妇凶手」可能就是他。舅舅意识到她已起疑后，数次设法致其于死地。影片在加州圣罗莎实地拍摄，当地居民参与了部分群众场面，剧本由桑顿·怀尔德等人执笔。希区柯克本人多次表示这是他自己偏爱的一部作品。",
+    introductionEn:
+      "Shadow of a Doubt is a 1943 American film directed by Alfred Hitchcock, produced by Universal, with Teresa Wright as Charlie, a young woman in a small California town, and Joseph Cotten as her uncle and namesake. The uncle arrives from the east and is welcomed by the whole household. From newspaper cuttings and his own behaviour, his niece gradually works out that he may be the man the police are hunting as the Merry Widow Murderer, and once he realises she suspects him he makes several attempts on her life. The film was shot on location in Santa Rosa, California, and Thornton Wilder was among the writers of the screenplay. Hitchcock said on a number of occasions that it was the film of his own that he liked best.",
     directorSlugs: ["alfred-hitchcock"],
   },
 
@@ -854,20 +873,20 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0033467",
     doubanId: "1292288",
     wikidataId: "Q24815",
-    editorialNote:
-      "报业大亨凯恩临终吐出的一个词“玫瑰花蕾”，牵出记者对他一生的层层追查，也拼出一幅关于权力、孤独与美国梦幻灭的碎片肖像。年仅二十五岁的威尔斯集编导演于一身，用深焦摄影、天花板入镜、时间跳跃的叙事，几乎一次性刷新了电影语言的边界。凯恩从理想主义的青年一路膨胀为众叛亲离的孤家寡人，那座塞满收藏却空无一人的庄园，是二十世纪对成功最尖锐的反讽。“玫瑰花蕾”的谜底，最终指向的是被金钱买不回的童年。它常年高居影史最伟大作品之列，至今仍是每个学电影者绕不开的起点。",
-    editorialNoteEn:
-      "The newspaper magnate Kane dies with a single word on his lips — “Rosebud” — and a reporter's search for its meaning pieces together a fragmentary portrait of power, loneliness, and the American Dream turned to ash. Just twenty-five, Welles wrote, directed, and starred, and with deep focus, ceilings brought into the frame, and a narrative that leaps through time, he reset the boundaries of film language almost in a single stroke. Kane swells from an idealistic young man into a friendless recluse abandoned by everyone, and his mansion, stuffed with treasures and empty of people, is the sharpest irony the twentieth century ever aimed at success. The riddle of Rosebud points, in the end, to a childhood no fortune could buy back. Perennially near the top of every list of the greatest films ever made, it remains the starting point no student of cinema can go around.",
+    introduction:
+      "《公民凯恩》是奥逊·威尔斯执导的 1941 年美国电影，雷电华出品，威尔斯自任导演、制片、编剧之一并饰演报业经营者查尔斯·福斯特·凯恩。影片自凯恩去世讲起：一名记者受命查明他临终所说的一个词的含义，走访其监护人、经理、旧友与第二任妻子，各人回忆构成若干互不重合的段落，时序不按先后。摄影为格雷格·托兰，大量使用深焦与仰角，多处布景搭出天花板。凯恩其人参照了报业经营者威廉·伦道夫·赫斯特，赫斯特旗下报纸曾抵制本片。影片获奥斯卡最佳原创剧本奖。",
+    introductionEn:
+      "Citizen Kane is a 1941 American film directed by Orson Welles, produced by RKO, with Welles as producer, co-writer and star in the role of the newspaper proprietor Charles Foster Kane. It opens with Kane's death, and follows a reporter assigned to establish what the word he spoke at the end referred to. The reporter interviews Kane's former guardian, his business manager, an old friend and his second wife, and their recollections form separate sections that overlap and are not arranged in sequence. Gregg Toland photographed it, using deep focus and low angles throughout, with ceilings built into many of the sets. Kane was modelled in part on the newspaper proprietor William Randolph Hearst, whose papers campaigned against the film. It received the Academy Award for Best Original Screenplay.",
     essay: doc([
       h2("深焦里的权力"),
       p(
-        "威尔斯让前景与背景同样清晰，人物于是被困在自己搭建的巨大空间里。景深不只是技法，它就是这部电影的主题：凯恩拥有整个画面，却填不满其中的空。",
+        "威尔斯与雷电华的合约给予他终剪权，这对首次执导长片者极为罕见。剧本署名由他与赫尔曼·曼凯维奇共有，两人各自的贡献长期存在争议。赫斯特旗下报纸拒登本片广告，米高梅曾出资试图促使雷电华销毁底片；影片发行范围有限，未能收回成本，五十年代在欧洲重映后评价才逐步上升。",
       ),
     ]),
     essayEn: doc([
       h2("Power in Deep Focus"),
       p(
-        "Welles keeps foreground and background equally sharp, trapping his characters inside the vast spaces they have built. Deep focus is not merely technique here; it is the subject: Kane owns the whole frame and cannot fill the emptiness inside it.",
+        "Welles's contract with RKO gave him final cut, which was almost unheard of for a first feature. The screenplay credit is shared with Herman J. Mankiewicz, and the division of the writing has been disputed ever since. Hearst's papers refused advertising for the film, and MGM offered RKO money to destroy the negative. It was given a limited release and did not recover its cost; its standing rose only after European reissues in the 1950s.",
       ),
     ]),
     cast: [
@@ -897,10 +916,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0052311",
     doubanId: "1294756",
     wikidataId: "Q778161",
-    editorialNote:
-      "美墨边境小镇发生汽车爆炸案，一个墨西哥缉毒官与一个腐败臃肿的美国警长就此展开较量。威尔斯自导自演那个道德溃烂的警长，把黑色电影的堕落美学推向巅峰。影片开场那个长达三分多钟、跨越街区与国界的著名长镜头，从装置炸弹一直跟到它爆炸，堪称调度史上的奇迹。倾斜的构图、逼仄的阴影与霓虹，把边境拍成了善恶难辨的泥沼。“他是个烂人，可他有直觉。”这句盖棺定论，道尽了威尔斯对人性含混的迷恋。作为经典黑色电影的一记华丽终章，它的邪魅至今无人能及。",
-    editorialNoteEn:
-      "A car bombing in a town on the U.S.–Mexico border sets a Mexican narcotics officer against a corrupt, bloated American police captain. Welles both directs and plays that morally rotted lawman, pushing the decadent aesthetic of film noir to its summit. The famous opening — a single take of more than three minutes that crosses blocks and the border itself, following a planted bomb until it detonates — is a miracle of staging. Canted frames, cramped shadows, and neon turn the border into a moral swamp where good and evil blur past telling apart. “He was some kind of a man,” runs the film's epitaph, and it says everything about Welles's fascination with human ambiguity. As the gorgeous last chapter of classic noir, its dark magic has never been matched.",
+    introduction:
+      "《历劫佳人》是奥逊·威尔斯执导的 1958 年美国电影，环球出品，查尔顿·赫斯顿饰演墨西哥缉毒官巴尔加斯，威尔斯本人饰演美国警长汉克·昆兰。故事发生在美墨边境小镇：一枚定时炸弹在越境的汽车上爆炸，两国警方各自介入，巴尔加斯发现昆兰长期以伪造证据的方式办案。影片开场是一个约三分钟的连续镜头，从有人在车上安放炸弹开始，跟随该车穿过街区与边检站，至爆炸为止。环球在威尔斯交片后另行剪辑并补拍，1998 年依据他当时所写的备忘录重新剪成一版。",
+    introductionEn:
+      "Touch of Evil is a 1958 American film directed by Orson Welles, produced by Universal, with Charlton Heston as Ramon Vargas, a Mexican narcotics official, and Welles as Hank Quinlan, an American police captain. A timed device detonates in a car as it crosses the border into a small town, and the police forces of both countries become involved; Vargas establishes that Quinlan has been securing convictions by planting evidence. The film opens with a continuous shot of about three minutes that begins as the device is placed in the car and follows it through the streets and the border checkpoint until it explodes. Universal recut the film after delivery and shot additional material; a version following the memorandum Welles wrote at the time was assembled in 1998.",
     cast: [
       { name: "Charlton Heston", zhName: "查尔顿·赫斯顿", character: "Ramon Vargas" },
       {
@@ -932,10 +951,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0019254",
     doubanId: "1293783",
     wikidataId: "Q51520",
-    editorialNote:
-      "德莱叶依据真实审判记录，重现贞德受审、受辱直至火刑的最后时日。他几乎全程使用特写，让镜头贴近一张张脸——审判者的傲慢、贞德的泪水与信仰，在毫无修饰的皮肤纹理间纤毫毕现。法尔康内蒂奉献了电影史上最震撼的表演之一，据说她的泪水是真实痛苦的结晶。没有华丽布景，没有配乐（默片），只有面孔与信念的正面交锋，把一场宗教审判拍成了灵魂的酷刑。当火焰终于升起，殉道与救赎合为一体。这部近百年前的默片，至今仍是“电影能否承载超验之物”这一问题最有力的回答。",
-    editorialNoteEn:
-      "Dreyer built the film from the actual transcripts of Joan's trial, then threw away everything a period drama is supposed to offer — the lavish sets, the pageantry, the safe middle distance. What remains is the face. In close-up after close-up he presses the camera against skin, so that the judges' cold arrogance and Joan's tears and faith register in every unretouched pore. Falconetti gives one of the most shattering performances the medium has ever held; it is said her tears were wrung from real suffering, and you believe it. There is no music — this is silent cinema — no ornament, nothing to hide behind, only faces and conviction meeting head-on, until an ecclesiastical trial becomes a torture of the soul. When the flames at last rise, martyrdom and redemption fuse into a single image. Nearly a century old, this silent film remains the most persuasive answer anyone has given to a stubborn question: whether cinema can carry the transcendent. Watch it in silence, and let one human face do what spectacle never could.",
+    introduction:
+      "《圣女贞德蒙难记》是卡尔·西奥多·德莱叶执导的 1928 年法国无声电影，玛丽亚·法尔康内蒂饰演贞德。剧本依据 1431 年鲁昂审判的存世记录编写，情节压缩为一天，涵盖多次讯问、签署悔过书、随后翻供，直至处以火刑。全片以特写为主，人物多为无妆或极淡的妆面，背景常留白，摄影机时常从下方仰拍审判者。法尔康内蒂此前主要在舞台演出，这是她唯一的重要银幕角色。影片原始底片在实验室火灾中损毁，1981 年在奥斯陆一家精神病院的储藏室内发现一份完整拷贝，现存版本据此修复。",
+    introductionEn:
+      "The Passion of Joan of Arc is a 1928 French silent film directed by Carl Theodor Dreyer, with Maria Falconetti as Joan. The screenplay was written from the surviving records of the 1431 trial at Rouen, and compresses the proceedings into a single day: repeated interrogations, a signed recantation, its withdrawal, and the execution by burning. The film is built predominantly from close-ups, with the performers wearing little or no makeup, backgrounds often left blank, and the judges frequently shot from below. Falconetti had worked mainly in the theatre, and this was her only significant screen role. The original negative was destroyed in a laboratory fire; a complete print was found in 1981 in a storage room at a psychiatric hospital in Oslo, and current versions derive from it.",
     directorSlugs: ["carl-theodor-dreyer"],
   },
   {
@@ -954,10 +973,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0048452",
     doubanId: "1303566",
     wikidataId: "Q2352630",
-    editorialNote:
-      "丹麦乡间一个笃信上帝的农家，因信仰的分歧、疯癫的次子与一场难产的死亡而陷入危机，直到影片结尾迎来一场令人屏息的复活。德莱叶用极其克制、缓慢横移的长镜头，把日常的厨房与病榻拍出了祭坛般的庄严。他不解释、不煽情，只是耐心地让怀疑与信念在白墙之间交锋。当自称是基督的次子握住死者的手，奇迹真的发生——那一刻，最理性的观众也被逼到神迹的门前。这是电影史上少有的、敢于正面呈现“复活”而毫不滑向廉价的作品。它要求的不是相信，而是屏住呼吸的敬畏。",
-    editorialNoteEn:
-      "On a devout Danish farm, faith itself splits a family — one son gone mad believing he is Christ, a rift over faith, and a beloved daughter-in-law dying in childbirth — until the film closes on a resurrection that stops the breath. Dreyer films the ordinary kitchen and the sickbed with the gravity of an altar, his camera gliding in long, glacially patient lateral takes that turn white walls into a chamber where doubt and belief are made to face each other. He refuses to explain and refuses to manipulate; he simply waits, letting the argument between reason and grace play out in real time. Then the mad son, the one who says he is Christ, takes the dead woman's hand, and the miracle actually happens — and in that instant even the most skeptical viewer is pushed to the very threshold of the sacred. This is one of the few films in all of cinema that dares to stage a literal resurrection and never once slides into the cheap. It asks of you not belief, but a held-breath awe you did not know you still had.",
+    introduction:
+      "《词语》是卡尔·西奥多·德莱叶执导的 1955 年丹麦电影，改编自剧作家、牧师凯伊·蒙克的同名戏剧。故事设在 1925 年前后的日德兰乡间：老农博尔延三个儿子中，长子米克尔不信教，次子约翰内斯因研读神学而精神失常，自称基督，幼子安德斯欲娶邻家女儿，两家因教派不同而结怨。米克尔之妻英格尔难产去世，葬礼上约翰内斯当众为其祈祷。全片长镜头极多，摄影机以缓慢横移跟随人物，室内多为白墙与自然光。本片获威尼斯电影节金狮奖。",
+    introductionEn:
+      "Ordet is a 1955 Danish film directed by Carl Theodor Dreyer, adapted from the play of the same name by the dramatist and pastor Kaj Munk. It is set on a Jutland farm in the mid-1920s. Of old Borgen's three sons, Mikkel has no faith, Johannes has lost his reason studying theology and declares himself Christ, and Anders wishes to marry a girl from a neighbouring family with whom the Borgens are at odds over doctrine. Mikkel's wife Inger dies in childbirth, and at the funeral Johannes prays over her before the assembled household. The film is composed largely in long takes, the camera tracking slowly sideways with the figures, the interiors white-walled and lit naturally. It received the Golden Lion at Venice.",
     directorSlugs: ["carl-theodor-dreyer"],
   },
 
@@ -979,10 +998,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0046478",
     doubanId: "1303577",
     wikidataId: "Q1076605",
-    editorialNote:
-      "战乱年代，两个贪图富贵与虚名的农夫抛下妻子外出闯荡，一个迷失在女鬼的温柔乡里，一个荒唐地做起了武士，最终都在幻梦破灭后尝到苦果。沟口健二用如水墨般流动的长镜头，把民间怪谈拍成了关于欲望与代价的凄美卷轴。雾中泛舟、幽宅夜宴的段落，虚实交融，美得令人心惊。当陶匠归家，亡妻的鬼魂已在灶前默默为他备好晚饭——那份跨越生死的温柔，比任何控诉都更叫人痛惜。影片对战争中被牺牲的女性寄予了最深的悲悯。它是日本电影黄金时代最精致的鬼故事，也是一则关于男人虚荣的永恒寓言。",
-    editorialNoteEn:
-      "In an age of civil war, two peasants abandon their wives to chase wealth and glory: a potter who loses himself in the tender embrace of a ghost, and a would-be samurai whose ambition curdles into farce. Both taste the bitterness of the dream once it dissolves. Mizoguchi films their folly in long takes that flow like ink washed across silk, turning a folk ghost story into a hauntingly beautiful scroll about desire and the price it exacts. The boat gliding through the mist, the nocturnal banquet in the phantom manor — these passages fuse the real and the unreal until the beauty itself becomes frightening. And when the potter finally returns home, his dead wife's spirit has already laid out his supper by the hearth in silence; that tenderness reaching across the border of life and death wounds more deeply than any spoken reproach. Beneath the ghost tale lies Mizoguchi's profound compassion for the women whom war leaves behind and sacrifices. This is the most exquisite ghost story of Japanese cinema's golden age, and an eternal parable of male vanity — watch it for its beauty, and stay for its grief.",
+    introduction:
+      "《雨月物语》是沟口健二执导的 1953 年日本电影，取材自上田秋成同名小说集中的两则故事。影片设在十六世纪战乱中的近江：陶匠源十郎带着瓷器进城谋利，被女子若狭引入宅邸，日久方知对方是鬼；其妹夫藤兵卫一心想当武士，用买来的盔甲冒功，得势后发现妻子已沦为娼妓。源十郎归家时见亡妻在灶前，次日方知她早已死于乱兵。全片多用长镜头与移动摄影，雾中泛舟一段以水面上的调度完成时空转换，摄影由宫川一夫担任。本片获威尼斯电影节银狮奖。",
+    introductionEn:
+      "Ugetsu is a 1953 Japanese film directed by Kenji Mizoguchi, drawn from two stories in Ueda Akinari's collection of the same name. It is set in Ōmi during the civil wars of the sixteenth century. Genjūrō, a potter, takes his wares to town to profit from the fighting and is drawn into the household of a woman named Wakasa, whom he only later understands to be a ghost. His brother-in-law Tōbei buys armour and passes off a stolen trophy to be made a samurai, and finds on his rise that his wife has been forced into prostitution. Genjūrō returns home to find his wife at the hearth, and learns the next morning that she was killed by soldiers some time before. The film works largely in long takes and moving camera; a passage across a misted lake carries a change of place and time entirely through staging on the water. It received the Silver Lion at Venice.",
     directorSlugs: ["kenji-mizoguchi"],
   },
   {
@@ -1002,10 +1021,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0047445",
     doubanId: "1303573",
     wikidataId: "Q2633405",
-    editorialNote:
-      "平安时代，一对姐弟因父亲仗义执言而家破人亡，被拐卖为奴，在残暴的庄头山椒大夫手下受尽折磨。沟口健二把这则古老传说，拍成了关于仁慈能否在残酷世间存续的沉思。姐姐安寿为掩护弟弟逃走而从容投水的一幕，湖面只余一圈涟漪，克制得令人肝肠寸断。多年后弟弟秉承父训释放奴隶、寻回失明的老母，却已物是人非。沟口的镜头始终保持着悲悯的距离，让苦难在优雅的构图中显得愈发沉重。“人若没有慈悲，便不算人。”父亲的教诲贯穿全片。这是对权力之恶与人性之善最庄重的一次称量。",
-    editorialNoteEn:
-      "Mizoguchi took an ancient Heian-era legend — a family destroyed because a father dared to speak for justice, its children abducted and sold into slavery under the brutal bailiff Sansho — and turned it into a grave meditation on whether mercy can survive in a merciless world. The father's teaching, that a man without compassion is not truly a man, runs through everything the children endure and everything the son, Zushio, eventually chooses. Mizoguchi's camera keeps its compassionate distance, holding suffering inside compositions so serene that the cruelty lands harder for the beauty around it. The moment Anju walks into the lake to cover her brother's escape — the water closing over her, a single spreading ripple the only trace she leaves — is among the most restrained and devastating deaths in cinema; it breaks you because it refuses to weep. Years later the son honors his father's word, frees the enslaved, and finds his blind old mother, only to find the world he longed to return to irrevocably changed. This is filmmaking as a solemn weighing of power's cruelty against the human capacity for goodness, and it comes down, quietly, on the side of the latter. Watch it when you need reminding that tenderness can be resistance, and that a film can grieve without ever raising its voice.",
+    introduction:
+      "《山椒大夫》是沟口健二执导的 1954 年日本电影，取材自森鸥外的同名小说，故事源出中世纪说唱文学。影片设在平安时代末期：地方官因体恤农民被贬，其妻与一双儿女在寻亲途中遭人贩拐卖，母亲被卖往佐渡，姐弟安寿与厨子王则落入庄头山椒大夫手下为奴。安寿投水自尽以掩护弟弟逃走，厨子王后来官至丹后国守，废除辖内奴隶制，其后辞官寻母，在佐渡海边找到已失明的母亲。全片多用长镜头与远景，苦难场面不作近距离处理。本片获威尼斯电影节银狮奖。",
+    introductionEn:
+      "Sansho the Bailiff is a 1954 Japanese film directed by Kenji Mizoguchi, adapted from a story by Ōgai Mori that derives in turn from a medieval oral tale. It is set in the late Heian period. A provincial governor is exiled for protecting the peasants under him; his wife and two children are seized by traffickers on the road to join him, the mother sold to Sado and the children, Anju and Zushiō, sold into forced labour under the bailiff Sansho. Anju drowns herself to cover her brother's escape. Zushiō later becomes governor of Tango, abolishes slavery in the province, resigns his post to search for his mother, and finds her blind on the shore at Sado. The film works largely in long takes and distant framings, keeping its scenes of suffering away from close-up. It received the Silver Lion at Venice.",
     directorSlugs: ["kenji-mizoguchi"],
   },
 
@@ -1026,10 +1045,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0042804",
     doubanId: "1303579",
     wikidataId: "Q572522",
-    editorialNote:
-      "墨西哥城的贫民窟里，一群无人照管的少年在暴力与饥饿中彼此伤害，走向注定的毁灭。布努埃尔把超现实主义的锋利，狠狠扎进了最残酷的社会现实。他拒绝廉价的同情，既不美化穷人也不宽恕他们，只是冷静地展示贫困如何制造出恶。片中那段少年梦见母亲递来血淋淋生肉的超现实梦境，把弗洛伊德式的欲望与匮乏一并揭开。结尾少年的尸体被驮上毛驴、抛入垃圾遍地的山沟，是对“被遗忘者”命运最刺骨的注脚。它一举让布努埃尔在墨西哥东山再起，也证明超现实主义可以是最尖锐的现实批判。",
-    editorialNoteEn:
-      "Buñuel drove the scalpel of surrealism straight into the cruelest of social realities: the slums of Mexico City, where a pack of unwatched, uncared-for boys wound one another amid hunger and violence and drift toward a ruin that feels foreordained. What makes the film so bracing is its refusal of cheap pity. He neither romanticizes the poor nor absolves them; he simply watches, coolly, as poverty manufactures cruelty, as need curdles into harm. The famous dream — a boy sees his mother glide toward him bearing a slab of raw, bloody meat — pries open Freudian appetite and Freudian lack in a single image, desire and deprivation revealed as the same wound. And the ending, the boy's body slung over a donkey and tipped down a garbage-strewn ravine like refuse, is the most piercing footnote imaginable to the fate of the forgotten: society disposing of what it never bothered to see. This is the film that resurrected Buñuel's career in Mexico, and it remains his hardest proof that surrealism, far from an escape into dream, can be the sharpest possible instrument of social critique.",
+    introduction:
+      "《被遗忘的人们》是路易斯·布努埃尔执导的 1950 年墨西哥电影。影片以墨西哥城边缘的贫民区为背景，跟随一群无人看管的少年：刚从感化院出来的哈伊博纠集同伴行窃并打死一名旧识，少年佩德罗目睹全过程，此后母亲不肯收留他，他被送进农场学校，出来后仍被哈伊博缠上，两人先后死于非命。片中有一段佩德罗的梦境，采用慢动作与逆向摄影。布努埃尔此前在流亡中多年未拍成片，本片使他重新获得国际关注，并在戛纳电影节获最佳导演奖。全片实景拍摄，多用非职业演员。",
+    introductionEn:
+      "Los Olvidados is a 1950 Mexican film directed by Luis Buñuel. It is set on the outskirts of Mexico City and follows a group of boys living without supervision. Jaibo, newly out of a reformatory, gathers the others to rob and beats a former associate to death; Pedro witnesses it. Pedro's mother will not keep him at home, and he is sent to a farm school, but Jaibo finds him again after his release and both are dead by the end. One sequence presents a dream of Pedro's, shot in slow motion and with reversed motion. Buñuel had gone several years in exile without completing a film, and this one returned him to international attention; he received the award for Best Director at Cannes. It was shot on location, largely with non-professional performers.",
     directorSlugs: ["luis-bunuel"],
   },
   {
@@ -1048,10 +1067,10 @@ export const seedFilms: SeedFilm[] = [
     tmdbId: 626,
     imdbId: "tt0020530",
     wikidataId: "Q190575",
-    editorialNote:
-      "布努埃尔与画家达利联手炮制的这部十余分钟的默片，以一记割裂眼球的镜头开场，宣告了超现实主义电影的诞生。手掌里爬出蚂蚁、钢琴上拖着腐驴与神父、时间字幕胡乱跳跃——它拒绝一切逻辑与解释，只忠实于梦与潜意识的自由联想。两位作者立下规矩：任何能被理性说通的画面一律删去。正因如此，它至今仍保有令人不安的原始冲击力，像一场无法被驯服的噩梦。作为电影先锋派最著名的一次爆破，它不是用来“看懂”的，而是用来经受的。近百年过去，那把划过眼球的剃刀依旧让人本能地闭眼。",
-    editorialNoteEn:
-      "Buñuel conspired with the painter Salvador Dalí on this silent film of barely twenty minutes, and opened it with a razor slicing an eyeball — a gesture that announced the birth of surrealist cinema. Ants pour from a hole in a palm; a man drags two grand pianos loaded with rotting donkeys and priests; the intertitles leap through time with cheerful disregard for it. The film refuses logic and explanation, staying faithful only to the free association of dream and the unconscious. Its two authors set themselves a single rule: any image that could be explained by reason had to go. That is exactly why it keeps its raw, disquieting force nearly a century on — an untamable nightmare that no reading has ever domesticated. As the most notorious detonation of the cinematic avant-garde, it was never made to be understood; it was made to be endured. Don't watch it for meaning. Watch it to be unsettled, and notice that even now, forewarned, you flinch and shut your own eyes the instant that razor moves.",
+    introduction:
+      "《一条安达鲁狗》是路易斯·布努埃尔执导的 1929 年法国无声短片，与画家萨尔瓦多·达利合作编剧，片长约十六至二十一分钟，视版本而定。影片没有连贯情节，由一系列不相衔接的场面构成：开场是一段割裂眼球的镜头，其后有手掌中爬出蚂蚁、拖曳钢琴与死驴、字幕标出互相矛盾的时间等段落。两位作者称，凡能作出合理解释的构思一律弃用。影片在巴黎首映，此后成为超现实主义电影中流传最广的一部。布努埃尔本人在片中出演开场一角。",
+    introductionEn:
+      "Un Chien Andalou is a 1929 French silent short directed by Luis Buñuel and written with the painter Salvador Dalí. It runs between sixteen and twenty-one minutes depending on the print. There is no continuous story; the film is a succession of unconnected scenes, opening with a shot of an eye being cut and going on to ants emerging from a hole in a hand, a man hauling pianos loaded with dead donkeys, and intertitles that give times contradicting one another. The two writers stated that they discarded any idea that admitted a rational explanation, and that they had built the film from two dreams they described to each other. It premiered in Paris and became the most widely circulated of the surrealist films. Buñuel himself appears in the opening scene.",
     directorSlugs: ["luis-bunuel"],
   },
 
@@ -1073,10 +1092,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0031885",
     doubanId: "1401261",
     wikidataId: "Q748599",
-    editorialNote:
-      "一群贵族与仆人齐聚乡间庄园狩猎作乐，情欲、谎言与阶级的游戏在楼上楼下同时上演，最终以一场荒唐的误杀收场。雷诺阿用流动的场面调度与纵深构图，让主仆、宾客在同一空间里进进出出，织成一幅战前法国社会的群像。他不审判任何人，因为“每个人都有他的理由”。狩猎场上兔子成片倒下的段落，冷不防预言了即将到来的战争屠戮。影片公映时惨遭嘘骂与删剪，二战后才被重新发现，如今稳居影史殿堂。它是喜剧也是挽歌，笑着送别一个行将崩塌的旧世界，优雅之下藏着刺骨的悲凉。",
-    editorialNoteEn:
-      "Renoir gathers a houseful of aristocrats and their servants at a country estate for a weekend of hunting and diversion, and lets the games of desire, deceit, and class play out upstairs and down at once, until the whole comedy of manners collapses into an absurd, accidental killing. With his restless, gliding camera and deep-focus staging, he keeps masters, guests, and servants passing through the same rooms and doorways, weaving a group portrait of a prewar French society. He indicts no one — because, as the film insists, everyone has his reasons — and that generosity is exactly what makes the sorrow underneath so piercing. The notorious hunting sequence, rabbits cut down in rows, quietly prophesies the slaughter Europe was about to inflict on itself. Booed and butchered on release in 1939, nearly lost, and only rediscovered after the war, it now sits unshakably among the greatest films ever made. It is at once a farce and an elegy, laughing as it waves goodbye to a doomed old world, and beneath all that elegance it aches. Watch it for the pleasure; stay for the chill.",
+    introduction:
+      "《游戏规则》是让·雷诺阿执导的 1939 年法国电影，雷诺阿本人饰演其中的奥克塔夫一角。一群上流社会人物与随行仆役到索洛涅的乡间庄园度周末，男女主客与楼下仆人各自的私情同时展开，安排、误会与顶替层层交错，最终一名飞行员在庭院中被守林人误认而遭枪杀。影片大量使用景深镜头与连续调度，人物在同一画面的前后景中进出。中段有一场猎兔与猎雉的实拍段落。本片 1939 年公映时反响不佳，随即遭删剪，原始底片在战时损毁，现行版本据 1959 年的修复重建。",
+    introductionEn:
+      "The Rules of the Game is a 1939 French film directed by Jean Renoir, who also plays the part of Octave. A group from Parisian society travels with its servants to a country estate in Sologne for a weekend. The romantic entanglements of the guests and those of the staff proceed in parallel, with arrangements, misunderstandings and substitutions running between the two, and the weekend ends when a gamekeeper shoots an aviator he has mistaken for another man. The film is staged in depth and in long continuous movements, with figures passing through the foreground and background of the same shot. A sequence in the middle shows a rabbit and pheasant shoot. It was poorly received on release, cut soon afterwards, and its original negative was destroyed during the war; current versions derive from a reconstruction completed in 1959.",
     directorSlugs: ["jean-renoir"],
   },
   {
@@ -1096,10 +1115,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0028950",
     doubanId: "1294808",
     wikidataId: "Q470336",
-    editorialNote:
-      "一战期间，几个法国军官沦为德军战俘，在一次次越狱中，雷诺阿让我们看到：真正的界线不在国与国之间，而在阶级与阶级之间。贵族出身的法国上尉与德国典狱长惺惺相惜，跨越敌意；平民战俘则彼此扶持，跨越出身。影片几乎没有一个正面的战斗场面，却把战争的荒谬与人性的高贵拍得动人至深。德国军官放走两名越狱者、望着他们消失在中立国雪原的一幕，是对“敌人”这个概念最温柔的消解。“大幻影”既指人们以为这是最后一场战争的天真，也指所有终将被战争碾碎的美好。这是一部伟大的反战宣言。",
-    editorialNoteEn:
-      "During the First World War, a handful of French officers become prisoners in German camps, and across a series of escape attempts Renoir shows you where the real borders lie: not between nations, but between classes. The aristocratic French captain and the German commandant recognize each other instantly, two gentlemen of a dying caste whose bond leaps clean over the enmity of their countries, while the common prisoners — soldier, worker, Jew — sustain one another across every difference of birth. There is scarcely a battle in the whole film, and yet no film has caught the absurdity of war, or the stubborn nobility of the people caught inside it, more tenderly. When the German officer lets two escapees go and watches them dwindle into the snow of a neutral country, the very idea of an enemy quietly dissolves before your eyes. The title cuts two ways: the naive illusion that this would be the last war of all, and the larger illusion of every fragile, decent thing that war is bound to crush. It is one of the cinema's great pacifist statements — a work that argues, without a single raised voice, for our common humanity, and breaks your heart proving it.",
+    introduction:
+      "《大幻影》是让·雷诺阿执导的 1937 年法国电影，让·迦本饰演平民出身的马雷夏尔，皮埃尔·弗雷奈饰演贵族出身的博尔迪厄，埃里希·冯·施特罗海姆饰演德军战俘营指挥官劳芬斯坦。故事设在一战期间：两名法军飞行员被击落后辗转多处战俘营，最后被关入劳芬斯坦管辖的山堡。博尔迪厄与劳芬斯坦同属旧贵族，彼此以身份相待；博尔迪厄制造骚动掩护另外两人越狱，中弹身亡。全片没有正面战斗场面。影片在德国、意大利遭禁映，底片一度被认为已毁，1990 年代在莫斯科寻回。",
+    introductionEn:
+      "Grand Illusion is a 1937 French film directed by Jean Renoir, with Jean Gabin as Maréchal, of working-class background, Pierre Fresnay as the aristocratic Boëldieu, and Erich von Stroheim as Rauffenstein, the German officer commanding a prison fortress. Two French airmen are shot down during the First World War and moved through a succession of camps before arriving at the fortress Rauffenstein commands. He and Boëldieu belong to the same declining nobility and deal with each other on those terms; Boëldieu creates a disturbance to cover the escape of the other two and is shot doing it. The film contains no battle scenes. It was banned in Germany and Italy, and its negative was long believed destroyed before being recovered in Moscow in the 1990s.",
     directorSlugs: ["jean-renoir"],
   },
 
@@ -1121,10 +1140,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0040522",
     doubanId: "1295873",
     wikidataId: "Q172837",
-    editorialNote:
-      "战后罗马，一个失业已久的男人好不容易找到贴海报的工作，赖以谋生的自行车却在第一天被偷。他带着年幼的儿子走遍全城寻找，最终在绝望中自己也伸手去偷，当场被擒，尊严碎在儿子眼前。德西卡用非职业演员、真实街道与几近纪录的镜头，把新现实主义推向顶峰。没有反派，没有奇迹，只有贫穷如何一点点逼一个老实人走投无路。结尾父子俩手牵手消失在人群中，父亲流泪，儿子紧握他的手——那份沉默的原谅，比任何台词都更沉重。它是电影同情心的标尺，也是对普通人尊严最深的凝视。",
-    editorialNoteEn:
-      "In postwar Rome, a man who has been out of work for too long finally lands a job pasting up posters — only for the bicycle he needs to keep it to be stolen on his very first morning. With his small son at his side, he combs the whole city for it, and in the end, cornered by despair, reaches out to steal a bicycle himself, is seized on the spot, and watches his dignity shatter before the boy's eyes. Working with non-professional actors, real streets, and a camera that comes close to documentary, De Sica pushed neorealism to its summit. There is no villain here and no miracle — only the slow arithmetic of poverty backing an honest man into a corner from which there is no honest way out. In the last shot, father and son vanish hand in hand into the crowd; the father weeps, the boy tightens his grip, and that wordless forgiveness lands heavier than any line of dialogue could. It is the measuring stick for how much compassion a film can hold, and cinema's deepest, steadiest gaze at the dignity of ordinary people.",
+    introduction:
+      "《偷自行车的人》是维托里奥·德西卡执导的 1948 年意大利电影，兰贝托·马乔拉尼饰演安东尼奥·里奇，恩佐·斯泰奥拉饰演其子布鲁诺，改编自路易吉·巴托里尼的小说。战后罗马失业严重，安东尼奥好不容易谋得张贴海报的差事，需自备自行车；上工首日车被偷走，他带着儿子在城中各处、旧货市场与警局之间寻找无果，最后自己动手偷车被当场抓住，在儿子面前被围住。两名主演均非职业演员，马乔拉尼当时在工厂做工。全片在罗马街头实景拍摄。影片获奥斯卡荣誉奖，该奖项数年后正式设为最佳外语片。",
+    introductionEn:
+      "Bicycle Thieves is a 1948 Italian film directed by Vittorio De Sica, with Lamberto Maggiorani as Antonio Ricci and Enzo Staiola as his son Bruno, adapted from a novel by Luigi Bartolini. Work is scarce in postwar Rome, and the job Antonio obtains, pasting up posters, requires him to supply a bicycle. It is stolen on his first morning, and he and Bruno spend the day searching the city, the flea markets and a police station without result. He finally attempts to steal a bicycle himself, is caught, and is surrounded in front of his son. Neither lead was a professional actor; Maggiorani was working in a factory at the time. The film was shot on location in Rome. It received an Academy Honorary Award, some years before that category became a competitive one for foreign films.",
     cast: [{ name: "Lamberto Maggiorani", zhName: "兰贝托·马乔拉尼", character: "Antonio Ricci" }],
     directorSlugs: ["vittorio-de-sica"],
   },
@@ -1147,10 +1166,14 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0043014",
     doubanId: "1298733",
     wikidataId: "Q193570",
+    introduction:
+      "《日落大道》是比利·怀尔德执导的 1950 年美国电影，葛洛丽亚·斯旺森与威廉·霍尔登主演，派拉蒙出品。影片以编剧乔·吉利斯的身后旁白展开：他为躲避收车人驶入默片女星诺玛·戴斯蒙德的宅邸，受雇修改其复出剧本，并与其同居，最终被诺玛射杀，尸体浮于泳池。片中诺玛由默片时期演员斯旺森出演，管家马克斯由默片导演埃里希·冯·施特罗海姆出演，角色设定为诺玛的前任导演兼前夫，负责伪造寄给她的影迷来信。片中多处援引好莱坞实况，包括塞西尔·B·戴米尔与几位默片演员本人出镜。本片在 1951 年第二十三届奥斯卡获最佳原著与剧本、最佳黑白片艺术指导、最佳剧情或喜剧片配乐三项奖。",
+    introductionEn:
+      "Sunset Boulevard is a 1950 American film directed by Billy Wilder, produced by Paramount and starring Gloria Swanson and William Holden. It is narrated after his death by Joe Gillis, a screenwriter who turns into the driveway of the silent-film actress Norma Desmond while evading men sent to repossess his car. He is hired to revise the script intended for her return to the screen, becomes her lover, and is shot by her; his body is found in her swimming pool. Swanson, herself a leading actress of the silent period, plays Norma. Erich von Stroheim, a director of the same period, plays her butler Max, written as her former director and first husband, who writes the fan letters she believes she still receives. Cecil B. DeMille and the columnist Hedda Hopper appear as themselves, and Buster Keaton, H. B. Warner and Anna Q. Nilsson appear in cameo roles. At the 23rd Academy Awards in 1951 the film won Best Story and Screenplay, Best Art Direction in black and white, and Best Scoring of a Dramatic or Comedy Picture.",
     editorialNote:
-      "一个潦倒的编剧误入过气默片女星的豪宅，成了她重返银幕幻梦里的囚徒与情人，故事由他漂在泳池里的尸体倒叙讲起。怀尔德让好莱坞亲手解剖自己，写下了一封写给电影工业的黑色情书。葛洛丽亚·斯旺森饰演的诺玛，活在昔日光环里不肯醒来，那句“是电影变小了”的台词，道尽了被时代抛弃者的偏执与悲凉。片尾她踩着幻觉走下楼梯、对着新闻镜头念出“我准备好拍特写了”的一幕，疯狂与凄美交织，成为影史绝唱。它犬儒、尖刻，却对所有被名利吞噬的失败者怀着深深的怜悯。黑色电影里最华丽的一曲挽歌。",
+      "乔·吉利斯是个还不上车贷的编剧，为了躲收车的人，拐进日落大道一栋看着像是废弃的宅子，从此成了默片女星诺玛·戴斯蒙德复出幻梦里的房客、雇员兼情人。讲故事的是他自己，那具泡在游泳池里的尸体。结局开场就给了，剩下一百分钟全在讲怎么走到那一步。怀尔德让好莱坞自己动手解剖自己，连选角都照着这个思路来：真的默片明星葛洛丽亚·斯旺森，演一个过气的默片明星；真的默片导演冯·施特罗海姆，演她的管家。那人当年是她的导演，也做过她的丈夫，如今还在替她伪造粉丝来信。诺玛那句「是电影变小了」，把被时代甩下的人的傲慢和委屈一块儿压进了六个字里。片尾她把记者的镜头当成摄影机，一边下楼一边宣布自己准备好拍特写了。影片到这儿没有嘲笑她，也没打算救她。怀尔德后来被模仿得很多，模仿得像的大都是刻薄那一半。",
     editorialNoteEn:
-      "A down-and-out screenwriter drifts into the mansion of a forgotten silent-screen queen and becomes both prisoner and lover in her dream of a comeback — a story narrated, with magnificent gall, by his own corpse floating face-down in her swimming pool. Billy Wilder hands Hollywood the scalpel and lets it perform its own autopsy, and the result is a black love letter to the industry that made and unmade them both. Gloria Swanson's Norma Desmond lives inside the halo of her vanished stardom and refuses to wake; when she insists it is the pictures that got small, she speaks for everyone the age has left behind, and her delusion curdles into something at once monstrous and unbearably sad. The closing descent of that staircase, her face turned to the newsreel cameras as she murmurs that she is ready for her close-up, fuses madness and beauty into one of the screen's imperishable final images. Wilder is cynical, acid-tongued, merciless — and yet he grieves, tenderly, for every failure the machinery of fame has chewed up and spat out. This is the most gorgeous elegy film noir ever composed.",
+      "The narrator is a corpse. Joe Gillis, a screenwriter behind on his car payments, swings into a driveway on Sunset Boulevard to hide from the men repossessing the car, and tells the rest from face-down in Norma Desmond's swimming pool, so the ending arrives first and the picture becomes a question of how. Wilder had Hollywood dissect itself and cast the operation accordingly: a genuine silent star, Gloria Swanson, as a forgotten silent star; a genuine silent director, Erich von Stroheim, as the butler who was once her director and once her husband, and who still forges the fan mail that keeps her upright. Norma's line about the pictures being the thing that got small carries the arrogance and the injury of being left behind in the same breath. In the last scene she mistakes newsreel cameras for a film crew and comes down the staircase announcing she is ready for her close-up. The film stops short of mocking her, and it has no intention of rescuing her either. Wilder has been imitated a great deal since, and what gets imitated is nearly always the cruelty rather than the pity sitting underneath it.",
     cast: [
       {
         name: "Gloria Swanson",
@@ -1179,10 +1202,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0053291",
     doubanId: "1292574",
     wikidataId: "Q190086",
-    editorialNote:
-      "两个撞见黑帮火并的落魄乐手，为躲追杀乔装成女人混进全女子乐队，一路笑料百出，还各自卷进啼笑皆非的恋情。怀尔德把变装、错认与追逐的喜剧机器开到最欢，节奏行云流水，笑点却始终锋利精准。玛丽莲·梦露演活了天真又落寞的歌女，为影片添了几分甜与愁。最妙的是那个被公认影史最佳的收尾台词——当男人坦白自己是男人，痴情的富翁只耸耸肩：“人无完人。”一句话把所有身份的执念轻轻化解，宽容得叫人拍案。它证明最上乘的喜剧，底子里往往藏着最豁达的人生态度。历久弥新的欢乐经典。",
-    editorialNoteEn:
-      "Two down-on-their-luck musicians witness a gangland massacre and, to save their skins, dress as women and slip into an all-female band — where each promptly tumbles into a romance more absurd than the last. Wilder runs the machinery of drag, mistaken identity, and pursuit at full throttle, and the wonder is how effortless it all feels: the pace flows like water while the jokes stay razor-sharp and perfectly timed. Marilyn Monroe makes her lovelorn singer at once innocent and forlorn, lacing the farce with a thread of sweetness and ache. Best of all is the closing line, widely crowned the finest in movie history: when the man finally confesses that he is a man, the smitten millionaire only shrugs — \"Nobody's perfect.\" With that shrug, every anxiety about who anyone really is simply dissolves, and the generosity of it makes you want to applaud. That is the film's secret: the greatest comedy tends to hide, at its core, the most magnanimous view of how to live. An evergreen delight that only grows more lovable with time.",
+    introduction:
+      "《热情如火》是比利·怀尔德执导的 1959 年美国电影，玛丽莲·梦露饰演歌手糖果，托尼·柯蒂斯与杰克·莱蒙饰演乐手乔与杰瑞。故事设在 1929 年的芝加哥：两人目击一场黑帮枪杀，为躲避追捕改扮女装，加入一支前往佛罗里达演出的女子乐队。途中乔又另扮成一名富家子接近糖果，杰瑞则被真正的富翁奥斯古德看上。全片以黑白拍摄，梦露此时已是彩色片明星，用黑白是为了让两名男演员的妆容在镜头下成立。影片获奥斯卡最佳黑白片服装设计奖。",
+    introductionEn:
+      "Some Like It Hot is a 1959 American film directed by Billy Wilder, with Marilyn Monroe as the singer Sugar Kane and Tony Curtis and Jack Lemmon as the musicians Joe and Jerry. It is set in Chicago in 1929. The two witness a gangland shooting, and to get out of the city they dress as women and join an all-female band travelling to Florida. Joe then adopts a second disguise as a wealthy heir in order to approach Sugar, while Jerry attracts the attention of an actual millionaire, Osgood. The film was shot in black and white although Monroe was by then a colour star; the decision was made because the makeup on the two male leads did not hold up in colour. It received the Academy Award for Best Costume Design in black and white.",
     cast: [
       {
         name: "Marilyn Monroe",
@@ -1211,10 +1234,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0036775",
     doubanId: "1293226",
     wikidataId: "Q478209",
-    editorialNote:
-      "一个精明的保险推销员被蛇蝎美人勾引，合谋杀死她的丈夫骗取双倍理赔，却在完美犯罪的裂缝里一步步走向自毁。怀尔德与钱德勒联手写就的剧本，字字锋利如刀，把宿命的黑色气质浇筑得密不透风。百叶窗切割出的条状阴影、烟雾缭绕的独白、一步步收紧的调查，几乎定义了什么叫“黑色电影”。斯坦威克脚踝上的脚链、麦克默里绝望的忏悔录音，成了这一类型的图腾。最动人的反而是主人公与理赔调查员之间那份别扭的情谊——罪案之外，仍有人惦记着你。作为黑色电影的奠基之作，它的冷峻与精巧至今难以超越。",
-    editorialNoteEn:
-      "A shrewd insurance man is seduced by a femme fatale into murdering her husband for the policy's double payout, only to watch the perfect crime split open at the seams and pull him, step by step, toward his own ruin. Wilder and Raymond Chandler wrote the script together, and every line lands like a blade; the fatalism is poured so tight there is no crack for hope to breathe through. The barred shadows thrown by venetian blinds, the smoke-wreathed confession spoken into a Dictaphone, the investigation quietly tightening its noose — these very nearly define what we mean by film noir. Stanwyck's ankle bracelet, MacMurray's despairing recorded confession, became totems of the whole genre. And yet the most touching thing here is not the crime at all but the prickly, unspoken affection between the doomed salesman and the claims adjuster whose nose for a crooked claim never once turns on his own friend — proof that beyond the murder, someone is still keeping watch over you. As the cornerstone of film noir, its cold precision and elegance have scarcely been bettered in the eight decades since. Watch it, and you watch the genre being invented.",
+    introduction:
+      "《双重赔偿》是比利·怀尔德执导的 1944 年美国电影，派拉蒙出品，弗雷德·麦克默里饰演保险推销员沃尔特·内夫，芭芭拉·斯坦威克饰演菲莉丝·迪特里克森，爱德华·G·罗宾逊饰演理赔调查员凯斯。内夫与菲莉丝合谋杀害其夫，伪造成火车意外以领取保单中的双倍赔偿条款，凯斯随即从事故细节起疑。影片以内夫向凯斯口述录音的方式倒叙，开场即交代他已中枪。剧本由怀尔德与雷蒙德·钱德勒合写，改编自詹姆斯·M·凯恩的小说。室内多用百叶窗投下的条状阴影。",
+    introductionEn:
+      "Double Indemnity is a 1944 American film directed by Billy Wilder, produced by Paramount, with Fred MacMurray as the insurance salesman Walter Neff, Barbara Stanwyck as Phyllis Dietrichson, and Edward G. Robinson as the claims investigator Keyes. Neff and Phyllis arrange the death of her husband and stage it as a fall from a train, so as to trigger the double indemnity clause in his policy. Keyes becomes suspicious of the circumstances almost at once. The film is told in flashback as Neff dictates an account to Keyes on a Dictaphone, having already been shot when it begins. Wilder wrote the screenplay with Raymond Chandler, adapting a novel by James M. Cain. The interiors make heavy use of barred shadows cast by venetian blinds.",
     directorSlugs: ["billy-wilder"],
   },
 
@@ -1237,10 +1260,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0017136",
     doubanId: "1298107",
     wikidataId: "Q151599",
-    editorialNote:
-      "在一座未来都市里，享乐的精英高居云端，成千上万的工人却在地底像齿轮般被驱使，直到一位圣女般的少女与一个机器人点燃了阶级的火药桶。弗里茨·朗以惊人的想象力，建起了电影史上第一座反乌托邦的钢铁之城——摩天楼、地下工厂、发疯的机械人玛丽亚，几乎奠定了此后所有科幻片的视觉母题。表现主义的光影与浩大的群众场面，至今仍震撼人心。“头脑与双手之间，必须有心作中介。”影片这句略显天真的调解，包裹着对工业文明最早的忧惧。作为默片时代最宏伟的奇观之一，它的每一帧都在为未来造梦。",
-    editorialNoteEn:
-      "In a city of the future, a pleasure-seeking elite lounges high in the clouds while thousands of workers are driven like gears in the depths below — until a saintly young woman and a machine set the powder keg of class alight. With astonishing imagination, Fritz Lang built cinema's first dystopia in steel: skyscrapers, subterranean factories, and a robot Maria whipped into a false prophet, laying down visual motifs that nearly every science-fiction film since has borrowed. The expressionist play of light and shadow, and the vast, surging crowds, still overwhelm nearly a century on. \"The mediator between the head and the hands must be the heart\" — the film's reconciliation is a touch naive, but wrapped inside it is one of cinema's earliest anxieties about the machine age and what industrial civilization does to the people who feed it. As one of the grandest spectacles the silent era ever produced, Metropolis dreams the future in every frame. Watch it for the awe — and for how early it feared what the machine age would do to us.",
+    introduction:
+      "《大都会》是弗里茨·朗执导的 1927 年德国无声电影，乌发公司出品，剧本由朗与其时的妻子特娅·冯·哈布合写。故事设在一座分层的未来城市：管理者一族居于地面高层，工人在地下操作机器并居住其间。城主之子弗雷德森目睹地下的状况后，与在工人中传道的玛丽亚接触；发明家罗特旺造出与玛丽亚外形相同的机器人，用以煽动暴乱。影片动用大量群众演员与微缩模型，制作费在当时的德国电影中属最高之列。公映后原始版本遭大幅删剪，2008 年在布宜诺斯艾利斯发现一份接近完整的拷贝，现行修复版据此完成。",
+    introductionEn:
+      "Metropolis is a 1927 German silent film directed by Fritz Lang, produced by UFA, from a screenplay Lang wrote with his then wife Thea von Harbou. It is set in a stratified future city where a managing class lives in the towers above ground and the workers operate and inhabit the machine levels below. Freder, the son of the city's master, sees conditions below and makes contact with Maria, who preaches among the workers; the inventor Rotwang builds a machine in her likeness and uses it to provoke a riot. The production employed very large numbers of extras and extensive miniature work, and was among the most expensive German films of its time. The release version was heavily cut, and a nearly complete print found in Buenos Aires in 2008 forms the basis of the current restoration.",
     directorSlugs: ["fritz-lang"],
   },
   {
@@ -1260,10 +1283,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0022100",
     doubanId: "1293381",
     wikidataId: "Q127021",
-    editorialNote:
-      "一座城市被连环杀害儿童的凶手笼罩在恐惧中，警察与黑帮竟同时展开搜捕，最终由地下世界把凶手押上私刑的审判台。弗里茨·朗的第一部有声片，创造性地用声音编织罗网——凶手吹的那段《培尔·金特》口哨，成了暴露他的致命标记。彼得·洛饰演的杀人犯在片尾那段声嘶力竭的辩白，把一个恶魔还原成了被冲动奴役的病人，逼观众直面“该不该由暴民来定罪”的伦理深渊。倾斜的阴影、空荡的街道，把整座城市拍成了追捕的天罗地网。它既是黑色电影的源头，也是对私刑与集体狂热最早的警醒。声画合谋的开山杰作。",
-    editorialNoteEn:
-      "A city cowers under an unseen predator who lures its children to their deaths, and in the vacuum of terror it is not only the police but the criminal underworld that hunts him — until the thieves and beggars drag their quarry to a kangaroo court of their own. Fritz Lang's first sound film treats the new medium as a snare: the killer's whistled scrap of Grieg's In the Hall of the Mountain King becomes the mark that betrays him, a film in which sound itself does the detective work. Peter Lorre, cornered and pleading, does something no melodrama had dared — he collapses the monster back into a sick man enslaved by a compulsion he loathes, and forces you to weigh whether a mob has any right to pass sentence. Lang films the city as a tightening net of leaning shadows and emptied streets, every frame a trap. M is at once a headwater of film noir and one of cinema's earliest warnings against lynch-law and the ecstasy of the crowd — a founding masterpiece of sound and image conspiring as one. Watch it and feel the whole apparatus of the thriller being invented before your eyes.",
+    introduction:
+      "《M就是凶手》是弗里茨·朗执导的 1931 年德国电影，是他的第一部有声片，彼得·洛饰演连续杀害儿童的汉斯·贝克特。警方为破案大规模盘查，令城中黑帮生意受阻，黑帮遂自行组织人手搜捕，先于警方将贝克特擒获，在一处废弃厂房内对其进行私设的审判。影片以声音承担叙事：贝克特吹奏的一段格里格《培尔·金特》旋律成为辨认他的凭据，多处以画外声连接不同场景。片中警方与黑帮开会的两组镜头交替剪接，结构对称。彼得·洛此前主要在舞台演出，本片是他第一个重要银幕角色。",
+    introductionEn:
+      "M is a 1931 German film directed by Fritz Lang, his first with sound, with Peter Lorre as Hans Beckert, who is killing children in the city. The police response disrupts ordinary criminal business so severely that the underworld organises its own search, finds Beckert before the police do, and puts him before an improvised tribunal in a disused factory. Sound carries much of the storytelling: a phrase from Grieg's Peer Gynt that Beckert whistles becomes the means of identifying him, and dialogue frequently runs across cuts between scenes. Sequences of the police and of the criminals in conference are intercut against each other in parallel. Lorre had worked mainly in the theatre, and this was his first major screen role.",
     cast: [{ name: "Peter Lorre", zhName: "彼得·洛", character: "Hans Beckert" }],
     directorSlugs: ["fritz-lang"],
   },
@@ -1286,10 +1309,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0048473",
     doubanId: "1306019",
     wikidataId: "Q622380",
-    editorialNote:
-      "孟加拉乡村，一个贫苦家庭的男孩阿普与姐姐在饥饿、疾病与四季流转中长大，见证亲人的离去与生活的坚韧。雷伊的处女作，把印度乡村的贫困拍出了近乎透明的诗意。孩子们第一次穿过白茫茫的芦苇丛、看见远处火车轰鸣而过的一幕，是电影史上最纯净的惊奇之一。姐姐病逝、全家在雨季后黯然离乡的段落，哀而不伤，托起了生命本身的重量。西塔琴大师拉维·香卡的配乐如泣如诉，让苦难流淌成歌。作为《阿普三部曲》的开篇，它以最朴素的日常证明：第三世界的角落，也能盛放最普世的诗与尊严。世界电影因它而更辽阔。",
-    editorialNoteEn:
-      "In a Bengal village, a boy named Apu and his older sister come of age amid hunger, sickness, and the turning of the seasons, learning early what it means to lose the people they love and to endure anyway. Satyajit Ray's first feature films the poverty of rural India with an almost transparent poetry — nothing is prettified, yet everything shimmers. When the children run through a vast field of feathery white grass and glimpse, for the first time, a train thundering past on the far horizon, you are watching one of the purest bursts of wonder in all of cinema. And when the sister falls ill and dies, and the family, after the monsoon, quietly leaves the only home they have known, Ray achieves something rarer than tragedy: grief without self-pity, sorrow that carries the full weight of a life rather than crushing it. Ravi Shankar's sitar keens beneath it all, turning hardship into song. As the opening movement of the Apu Trilogy, it proves through the plainest of daily gestures that a forgotten corner of the world can hold the most universal poetry and dignity there is. Cinema grew larger the day this film appeared.",
+    introduction:
+      "《大地之歌》是萨蒂亚吉特·雷伊执导的 1955 年印度电影，是他的第一部作品，改编自比布提布山·班纳吉的孟加拉语小说。影片围绕一户贫苦人家：男孩阿普、姐姐杜尔迦、父母，以及同住的年迈亲戚。父亲外出谋生后久无音信，杜尔迦在雨季染病去世，全家于片末离村而去。雷伊此前从事广告设计，没有执导经验，演员多为非职业者，拍摄断续历时约三年，后由西孟加拉邦政府出资完成。配乐由拉维·香卡创作。本片在戛纳电影节获奖，并获英国电影学院奖最佳影片。",
+    introductionEn:
+      "Pather Panchali is a 1955 Indian film directed by Satyajit Ray, his first, adapted from the Bengali novel by Bibhutibhushan Bandyopadhyay. It follows a poor family in a village: Apu, his older sister Durga, their parents, and an elderly relative who lives with them. The father leaves to look for work and does not send money; Durga falls ill during the monsoon and dies; the family leaves the village at the end. Ray had worked in advertising and had no experience directing; the cast was largely non-professional, shooting took about three years as funds allowed, and the government of West Bengal eventually financed its completion. Ravi Shankar composed the score. The film received a prize at Cannes and the BAFTA award for best film.",
     directorSlugs: ["satyajit-ray"],
   },
 
@@ -1312,10 +1335,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0018455",
     doubanId: "1295753",
     wikidataId: "Q431093",
-    editorialNote:
-      "一个被城里女人蛊惑的农夫，起意淹死自己的妻子，却在下手的一刻幡然悔悟，两人由此在城市里重新坠入爱河，找回了几乎失去的婚姻。茂瑙赴美后的第一部作品，把德国表现主义的流动摄影与好莱坞的抒情熔于一炉，几乎不靠字幕就讲完了一个关于沉沦与救赎的寓言。沼泽夜行、城市游乐场、暴风雨中的失散与重逢，每一个段落都是纯粹的视觉诗。它拿下了第一届奥斯卡的“最佳独特艺术作品”奖——一个再未颁发的奖项，仿佛专为它而设。作为默片艺术的巅峰之一，它证明了电影可以完全用光影来歌唱。",
-    editorialNoteEn:
-      "A farmer, bewitched by a woman from the city, resolves to drown his wife — and then, in the instant the act is upon him, cannot do it; from that reprieve the two of them drift into the city and fall in love all over again, recovering the marriage they had almost thrown away. It was the first film Murnau made after crossing to America, and it fuses the fluid, gliding camera of German Expressionism with the tender lyricism of Hollywood, telling a whole parable of temptation and redemption almost without a single intertitle. The night walk through the marsh, the giddy carnival of the fairground, the storm that separates the lovers and then hands them back to each other — each passage is pure visual poetry, a story told in light rather than words. At the very first Academy Awards it won a prize called Best Unique and Artistic Picture, a category never given again, as though the Academy had invented it for this one film and then quietly retired it. As one of the summits of the silent era, Sunrise proves that a movie can sing with nothing but shadow and light. Watch it and see what the cinema knew how to do before it learned to speak.",
+    introduction:
+      "《日出》是弗里德里希·威廉·茂瑙执导的 1927 年美国电影，福斯出品，乔治·奥布莱恩与珍妮·盖诺饰演一对农家夫妇。一名从城里来的女人怂恿丈夫溺死妻子、变卖田产；他带妻子划船出湖，临事却未能下手。此后两人在城中度过一日，返程途中遇风暴失散。这是茂瑙自德国赴美后的第一部作品，字幕卡极少，叙事主要依靠移动摄影与透视布景，城市段落使用了强迫透视的搭景。在首届奥斯卡颁奖礼上，本片获「最佳艺术品质作品」奖，该奖项此后未再设立，另获最佳摄影奖，盖诺获首届最佳女主角奖，评选依据包括本片在内的数部作品。",
+    introductionEn:
+      "Sunrise is a 1927 American film directed by F. W. Murnau, produced by Fox, with George O'Brien and Janet Gaynor as a farmer and his wife. A woman visiting from the city persuades the man to drown his wife and sell the farm; he takes her out on the lake and cannot go through with it. The couple then spend a day in the city, and are separated in a storm on the way home. It was Murnau's first film after moving from Germany, and it uses very few intertitles, carrying the story through moving camera and constructed perspective, including forced-perspective sets for the city. At the first Academy Awards it received an award for Unique and Artistic Picture, a category not awarded again, along with awards for cinematography and for Gaynor.",
     directorSlugs: ["friedrich-wilhelm-murnau"],
   },
   {
@@ -1336,10 +1359,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0013442",
     doubanId: "1296791",
     wikidataId: "Q151895",
-    editorialNote:
-      "茂瑙未经授权改编《德古拉》，塑造出电影史上第一个真正令人毛骨悚然的吸血鬼——秃头、尖耳、指爪修长的奥洛克伯爵。他不是风度翩翩的贵族，而是携瘟疫而来的死亡本身。影片大量实景拍摄，把喀尔巴阡山的荒凉与港口小城的阴郁拍出了梦魇般的质感。伯爵的影子缓缓爬上楼梯、扼住少女心脏的一幕，把恐惧凝成了纯粹的光学事件，至今仍被无数电影引用致敬。为躲避版权诉讼，本片一度被判销毁，幸有零星拷贝存世。作为德国表现主义与恐怖类型的开山之作，它那具佝偻的身影，早已成为死亡最古老的面孔。",
-    editorialNoteEn:
-      "Murnau adapted Dracula without permission, and out of that theft came the first vampire in movies genuinely built to frighten: Count Orlok, bald, rat-eared, his fingers ending in claws that seem to grow as you watch. He is no silky aristocrat but death itself, arriving with the plague in its baggage. Shooting largely on location, Murnau found in the desolation of the Carpathians and the gloom of a small port town a texture that feels less like a set than like a dream you cannot wake from. The image everyone remembers — Orlok's shadow climbing the stairs, its clawed hand closing over the young woman's heart — distills terror into a pure optical event, and cinema has been quoting it in tribute ever since. Bram Stoker's estate sued, and a court once ordered every print destroyed; the film survives at all only because a few scattered copies outlived the sentence. As the founding gesture of both German Expressionism and the horror film, that hunched, creeping silhouette has become something larger than any one movie: the oldest face we have given to death itself.",
+    introduction:
+      "《诺斯费拉图》是弗里德里希·威廉·茂瑙执导的 1922 年德国无声电影，普拉纳电影公司出品，马克斯·施雷克饰演奥洛克伯爵。影片是对布拉姆·斯托克《德古拉》的未授权改编，人名与地点均作更动；斯托克遗产管理方提起诉讼，普拉纳公司破产，法院判决销毁全部拷贝。影片得以存世，是因为此前已有拷贝流出国外。奥洛克造型为光头、尖耳、指节细长，其到来伴随鼠疫。影片多在喀尔巴阡山区与德国北部城镇实地拍摄，使用了逐格拍摄、负片与影子投射等手法，包括那段爬上楼梯的影子。",
+    introductionEn:
+      "Nosferatu is a 1922 German silent film directed by F. W. Murnau, produced by Prana Film, with Max Schreck as Count Orlok and Gustav von Wangenheim as Hutter, the clerk sent to his castle. It is an unauthorised adaptation of Bram Stoker's Dracula, with the names and the setting changed; Stoker's estate sued, Prana Film went bankrupt, and a court ordered the prints destroyed. The film survives because copies had already been distributed abroad before the judgment. Orlok is played with a shaved head, pointed ears and elongated fingers, and his arrival brings plague with it. Much of the film was shot on location in the Carpathians and in towns in northern Germany, and it uses stop-motion, negative footage and shadow projection, including the shadow that ascends a staircase.",
     directorSlugs: ["friedrich-wilhelm-murnau"],
   },
 
@@ -1362,10 +1385,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0021749",
     doubanId: "1293908",
     wikidataId: "Q238211",
-    editorialNote:
-      "有声时代已经到来，卓别林却固执地为流浪汉夏尔洛拍了一部近乎默片的杰作。他爱上一个卖花的盲女，为筹钱替她治眼，又是拳击又是讨好醉汉富翁，闹出无数笑料，最终自己进了监狱。喜剧的引擎一路轰鸣，却全为那个催泪的结尾蓄力：重见光明的姑娘认不出眼前这个落魄的恩人，直到握住他的手才恍然大悟。“是你吗？”——夏尔洛半是羞涩半是期盼的最后一个笑容，被公认为影史最动人的收场。笑与泪在这里合为一体，把小人物的深情托到了极致。卓别林用它证明：默片的表达力，从未过时。",
-    editorialNoteEn:
-      'Sound had already arrived, and Chaplin, stubborn as ever, answered it by making the Tramp a near-silent masterpiece. Charlie falls for a blind flower girl and sets out to pay for the operation that will restore her sight, submitting to a boxing match, flattering a fickle drunken millionaire, and tumbling from one glorious gag into the next until he lands, penniless, in jail. The comic engine never stops roaring, yet every laugh is quietly storing power for that famously tear-jerking ending. The girl, able to see at last, cannot recognize the shabby stranger who saved her, until her fingers close around his hand and she understands everything at once. "You?" — and the Tramp\'s final smile, half bashful, half hoping against hope, is by common consent the most moving last shot ever filmed. Here laughter and tears stop being opposites and fuse, carrying the tenderness of a nobody to a pitch nothing else in the movies quite reaches. Chaplin made the film to prove a point, and proved it for good: the expressive power of silent cinema has never once gone out of date.',
+    introduction:
+      "《城市之光》是查理·卓别林自编自导自演并配乐的 1931 年美国电影，联美发行，卓别林饰演流浪汉夏尔洛，弗吉尼亚·彻里尔饰演卖花的盲女。夏尔洛被盲女误认作富人，此后为筹钱替她治眼四处设法：做过清洁工，打过一场拳赛，又几番求助于一位只在醉酒时认得他的富翁，最终因被指偷窃而入狱。出狱后他在街头再遇复明的盲女，对方起初并未认出他。有声片当时已经普及，卓别林仍以默片形式拍摄本片，仅配以他自己创作的音乐与音效。",
+    introductionEn:
+      "City Lights is a 1931 American film written, directed by and starring Charlie Chaplin, released through United Artists, with Chaplin as the Tramp and Virginia Cherrill as a blind flower seller. She mistakes him for a wealthy man, and he sets about raising the money for an operation to restore her sight: he takes work as a street cleaner, fights in a boxing match, and repeatedly appeals to a millionaire who recognises him only when drunk. He is imprisoned after being accused of theft, and on his release meets the girl again in the street, her sight restored; she does not at first know him. Sound films were by then established, but Chaplin made this one silent, with a score and effects of his own composition.",
     cast: [
       {
         name: "Charlie Chaplin",
@@ -1394,10 +1417,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0027977",
     doubanId: "1294371",
     wikidataId: "Q45602",
-    editorialNote:
-      "在流水线上拧螺丝拧到精神崩溃的夏尔洛，被卷进机器的齿轮、被当成测试喂食机的小白鼠，又阴差阳错卷入罢工与牢狱，只为在大萧条里挣一口饭吃。卓别林用最欢乐的肢体喜剧，包裹起对工业文明最尖锐的批判：人如何在机械与效率的碾压下沦为零件。喂食机失控、齿轮间穿行的段落，是对异化最生动的漫画。影片结尾，夏尔洛与流浪女孩相互搀扶，走向朝阳下未知的前路——纵然一无所有，也要笑着走下去。作为默片时代的谢幕之作，它把喜剧、抗议与温情熔于一炉，至今仍是小人物对抗时代的一面旗帜。",
-    editorialNoteEn:
-      "Chaplin's Tramp tightens bolts on the assembly line until his body — and then his mind — gives way, and from there the machine simply swallows him: fed into its gears, strapped into an automatic feeding machine as its test subject, then swept by pure mischance into a strike and a jail cell, all for the sake of one square meal in the depths of the Depression. Chaplin wraps the sharpest indictment of industrial civilization inside the most joyous physical comedy ever staged, showing how a man is ground down into a spare part beneath the twin millstones of machinery and efficiency; the runaway feeding machine and his glide through the great cogs remain the most vivid cartoons of alienation the cinema has drawn. And yet the film closes not in despair but in tenderness — the Tramp and the gamine steady each other and walk toward an unknown road under the rising sun, penniless and undefeated, resolved to keep going with a smile. As the silent era's farewell, it fuses comedy, protest, and warmth in a single breath, and remains a banner raised by the small man against the age that would flatten him.",
+    introduction:
+      "《摩登时代》是查理·卓别林自编自导自演的 1936 年美国电影，卓别林饰演一名工厂工人，宝莲·高黛饰演流浪女孩。影片由若干段落构成：工人在流水线上拧螺丝以致失常，被送医；出院后接连卷入一场游行、监狱、船厂与百货公司的夜班，其间数次入狱又出狱，与女孩结伴谋生。片中有自动喂食机试验与工人被卷入齿轮的段落。全片以默片方式拍摄，配有音乐与音效，卓别林在其中一段以无意义音节演唱歌曲，这是他的角色首次在银幕上发声。",
+    introductionEn:
+      "Modern Times is a 1936 American film written, directed by and starring Charlie Chaplin, with Chaplin as a factory worker and Paulette Goddard as a young woman living rough. It is built as a series of episodes: the worker tightens bolts on an assembly line until he breaks down and is hospitalised, and afterwards passes through a demonstration, a prison, a shipyard and a night shift at a department store, going in and out of custody several times and making a living alongside the young woman. Two sequences show a trial of an automatic feeding machine and the worker carried through a set of gears. The film is silent with music and effects; in one sequence Chaplin sings in invented syllables, the first time the character's voice is heard.",
     cast: [
       {
         name: "Charlie Chaplin",
@@ -1428,10 +1451,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0015648",
     doubanId: "1293492",
     wikidataId: "Q152350",
-    editorialNote:
-      "1905年，波将金号战舰上的水兵因不堪腐烂的伙食与欺压而起义，敖德萨市民群起响应，却遭沙皇军队血腥镇压。爱森斯坦以此为素材，把蒙太奇理论付诸最震撼的实践：镜头与镜头的碰撞，迸发出单个画面无法承载的情感与思想。著名的“敖德萨阶梯”段落，婴儿车沿石阶失控滚落、军靴齐步逼近，短短几分钟成为剪辑史上被引用最多的一课。它宣扬革命，却也超越了宣传，把集体的悲怆凝成了永恒的节奏。作为默片时代的巅峰之一，它重新定义了电影“如何思考”。近百年来，凡谈剪辑者，几乎无人能绕过这座阶梯。",
-    editorialNoteEn:
-      "In 1905, the sailors of the Potemkin rise against rotten rations and the officers' contempt; the people of Odessa answer them, and the Tsar's troops answer the people with rifle fire. Out of this raw material Eisenstein forged the most electrifying proof of his own theory — that montage is not decoration but detonation, that the collision of one shot against the next can carry a charge of feeling and thought no single image could ever hold. The famous Odessa Steps sequence, with the baby carriage bouncing loose down the stone tiers and the soldiers' boots descending in pitiless lockstep, remains the most quoted few minutes in the history of editing, a lesson every filmmaker since has had to study whether they know it or not. The film agitates for revolution, yet it outlives its own propaganda, condensing collective grief into a rhythm that feels eternal. As one of the summits of the silent era, it redefined how cinema thinks rather than merely how it shows. Watch it not as a museum piece but as the moment the cut became an argument: for nearly a hundred years, no one who talks seriously about editing has been able to walk around this staircase.",
+    introduction:
+      "《战舰波将金号》是谢尔盖·爱森斯坦执导的 1925 年苏联无声电影，为纪念 1905 年革命二十周年而摄制。影片分五个部分，取材自当年黑海舰队波将金号上的兵变：水兵因伙食腐坏拒食，军官下令处决带头者，卫兵抗命，兵变随之爆发；敖德萨市民前往声援，沙俄军队在通往港口的石阶上开枪镇压。石阶一段以密集剪接完成，包含一辆婴儿车沿阶滚落的镜头。爱森斯坦在本片中实践其关于镜头对列的剪辑主张。影片在多个国家一度遭禁映。",
+    introductionEn:
+      "Battleship Potemkin is a 1925 Soviet silent film directed by Sergei Eisenstein, commissioned for the twentieth anniversary of the 1905 revolution. It is in five parts and draws on the mutiny aboard the Potemkin in the Black Sea Fleet that year: the sailors refuse rations they consider rotten, the officers order the ringleaders shot, the guard detail refuses, and the mutiny follows. The people of Odessa come to the harbour in support, and Tsarist troops fire on them on the steps leading down to it. That sequence is assembled from rapid cutting and includes a pram running loose down the stairs. Eisenstein used the film to put his arguments about the collision of shots into practice. It was banned for a time in several countries.",
     directorSlugs: ["sergei-eisenstein"],
   },
 
@@ -1453,10 +1476,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0037674",
     doubanId: "1300375",
     wikidataId: "Q865580",
-    editorialNote:
-      "十九世纪巴黎的“犯罪大道”上，一个哑剧演员、一个花花公子、一个演员与一个贵族，同时爱上了神秘的女子加朗斯。卡尔内与诗人普莱维在纳粹占领下秘密拍就的这部鸿篇，把剧场、表演与得不到的爱交织成一幅法国电影最华美的画卷。哑剧大师巴洛用无声的身体道尽相思，比任何台词都更催人泪下。近三小时的篇幅里，舞台上下、真情与假意彼此渗透，最终有情人在狂欢的人潮中永远失散。它被许多法国人奉为民族电影的骄傲，是“诗意现实主义”的绝唱。在最黑暗的年代拍出如此绚烂的作品，本身就是一种不屈的宣言。",
-    editorialNoteEn:
-      "On the Boulevard of Crime in nineteenth-century Paris, a mime, a dandy, an actor, and an aristocrat all fall for the same elusive woman, Garance. Marcel Carné and the poet Jacques Prévert shot this vast, glittering thing in secret under the Nazi occupation, and out of theater, performance, and love that can never be held they wove the most sumptuous canvas French cinema has ever produced. Jean-Louis Barrault's mime says everything with a silent body — longing, devotion, heartbreak — and moves you more than any line of dialogue could. Across nearly three hours the film lets stage and street, true feeling and pretense, bleed into one another, until the lovers are swept apart forever in a churning carnival crowd. Many in France still hold it up as the pride of their national cinema, the swan song of poetic realism, and it is hard to argue. That a work this radiant could be conjured in the darkest of years is, in itself, an act of defiance — a declaration that beauty would not surrender. Watch it for the grandeur; stay for the ache of everything the heart reaches toward and cannot keep.",
+    introduction:
+      "《天堂的孩子》是马塞尔·卡尔内执导的 1945 年法国电影，雅克·普莱维编剧，让-路易·巴洛饰演哑剧演员巴蒂斯特，阿尔莱蒂饰演加朗斯。故事设在 1830 年代巴黎的圣殿大道一带，围绕加朗斯与四个男人的关系展开：哑剧演员巴蒂斯特、舞台演员勒梅特、盗贼拉瑟奈尔与蒙特雷伯爵。全片分两部分，共约一百九十分钟，剧场内外的表演与人物自身的处境反复交替，结尾巴蒂斯特在狂欢人群中追赶加朗斯的马车未果。影片在德占期间拍摄，多名参与者为躲避迫害而不具名，1945 年 3 月于巴黎公映。",
+    introductionEn:
+      "Children of Paradise is a 1945 French film directed by Marcel Carné from a screenplay by Jacques Prévert, with Jean-Louis Barrault as the mime Baptiste and Arletty as Garance. It is set around the Boulevard du Temple in Paris in the 1830s and follows Garance's dealings with four men: Baptiste, the stage actor Lemaître, the criminal Lacenaire, and the Comte de Montray. The film is in two parts and runs about a hundred and ninety minutes, moving continually between performances given in the theatres and the circumstances of the performers themselves. It closes with Baptiste losing Garance's carriage in a carnival crowd. Production took place under the German occupation, and several of those who worked on it went uncredited to avoid persecution. It opened in Paris in March 1945.",
     directorSlugs: ["marcel-carne"],
   },
 
@@ -1478,10 +1501,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0047296",
     doubanId: "1292521",
     wikidataId: "Q211372",
-    editorialNote:
-      "一个当过拳击手、如今给码头黑帮跑腿的青年，在良心与义气之间挣扎，最终决定站出来指证盘剥工人的工会恶霸。卡赞调教出的马龙·白兰度，把方法派表演带上了新的高度——那段在出租车里对哥哥说出“我本可以是个人物，本可以是个真正的角色”的独白，成了美国电影史上最著名的时刻之一。粗粝的码头实景、赫尔曼式的配乐、赤裸的道德挣扎，让影片既是社会剧也是灵魂的救赎。有人从中读出卡赞为自己在麦卡锡时代作证的辩护，这层暧昧反而让它更加复杂动人。关于告密、勇气与自我救赎，它给出了灼热的回答。",
-    editorialNoteEn:
-      "A washed-up ex-boxer running errands for the mob that rules the docks, Terry Malloy is caught between the loyalty that has kept him alive and the conscience that will not let him stay silent — until he decides to testify against the union bosses who prey on the very men who work the piers. Under Elia Kazan's direction, Marlon Brando pushed Method acting to a new frontier: the scene in the back of a taxi, where Terry tells his brother that he could have been a contender, could have been somebody, remains one of the most quoted, most heartbreaking moments in all of American cinema. The gritty, real-location grime of the waterfront, a surging orchestral score, and a raw moral reckoning make this at once a social drama and a story of the soul's redemption. Some viewers read Kazan's own defense of his HUAC testimony into Terry's choice to inform — and that ambiguity, far from cheapening the film, only deepens it, turning a labor melodrama into a genuinely troubled meditation on where courage ends and betrayal begins. On snitching, on nerve, on the hard work of redeeming yourself, it offers a searing answer. Watch it for Brando, and stay for the ache of a conscience that will not be bought.",
+    introduction:
+      "《码头风云》是伊利亚·卡赞执导的 1954 年美国电影，哥伦比亚出品，马龙·白兰度饰演退役拳击手、现为码头工人的特里·马洛伊，罗德·斯泰格尔饰演其兄查理，伊娃·玛丽·森特饰演伊迪。故事设在新泽西霍博肯的码头：工会由黑帮把持，出面作证者接连遇害；特里起初替其效力，其后决定在调查委员会前指证。影片在霍博肯实地拍摄，配乐由伦纳德·伯恩斯坦创作，是他唯一一部非改编自舞台作品的电影配乐。卡赞两年前曾在众议院非美活动调查委员会作证并供出他人姓名，此片常被联系到这一背景。本片获包括最佳影片、最佳导演、最佳男主角在内的八项奥斯卡奖。",
+    introductionEn:
+      "On the Waterfront is a 1954 American film directed by Elia Kazan, produced by Columbia, with Marlon Brando as Terry Malloy, a former boxer working on the docks, Rod Steiger as his brother Charley, and Eva Marie Saint as Edie. It is set on the waterfront at Hoboken, New Jersey, where the union is controlled by racketeers and those who testify against them are killed. Terry works for them at the outset and later gives evidence before a crime commission. The film was shot on location in Hoboken. Leonard Bernstein wrote the score, his only one for a film not adapted from a stage work. Kazan had testified before the House Un-American Activities Committee two years earlier and named others, and the film is frequently discussed in that light. It received eight Academy Awards, among them Best Picture, Best Director and Best Actor.",
     cast: [
       {
         name: "Marlon Brando",
@@ -1513,30 +1536,36 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0189219",
     doubanId: "1323746",
     wikidataId: "Q2995574",
+    introduction:
+      "《小城之春》是费穆执导的 1948 年中国电影，李天济编剧，韦伟、李纬、石羽主演，文华影业公司出品。影片以抗战结束后的江南小城为背景：戴礼言因病与妻子周玉纹关系疏离，礼言旧友章志忱来访，章与玉纹为昔日恋人，三人连同礼言之妹戴秀与一名老仆同处宅院数日，章其后离去。全片共五个角色，多用长镜头与缓慢移动，冲突未作外化处理，玉纹在城墙上往返行走的段落反复出现。影片公映时正值时局变动，被部分评论指为回避社会现实，此后长期未再放映；1980 年代重新流通后评价上升，1990 年代以来多次在华语影史评选中位列前茅。",
+    introductionEn:
+      "Spring in a Small Town is a 1948 Chinese film directed by Fei Mu, written by Li Tianji and produced by the Wenhua Film Company, with Wei Wei, Li Wei and Shi Yu in the principal roles. It is set in a small town in the lower Yangtze region shortly after the end of the war with Japan. Dai Liyan is in poor health and estranged from his wife Zhou Yuwen; his former schoolmate Zhang Zhichen arrives for a visit and proves to be the man Yuwen had once expected to marry. The two, together with Liyan's younger sister Dai Xiu and an elderly servant, share the household for several days before Zhichen leaves. The film has five characters, uses long takes and slow camera movement, and keeps its conflicts unspoken; a recurring sequence shows Yuwen walking along the town's ruined wall. It opened during a period of political upheaval and was criticised in some quarters for avoiding social questions, after which it went largely unscreened for decades. It returned to circulation in the 1980s and has since ranked highly in polls of Chinese-language cinema.",
     editorialNote:
-      "五个人，一座炸塌了一半的园子，一段没有发生的私奔。费穆把中国电影史上最危险的题材——已婚妇人重逢旧日情人——拍成了最克制的作品：所有欲望都停在门槛前，所有台词都少说半句。玉纹在残破城墙上来回走的那几个镜头，是华语电影最早也最好的心理空间；摄影机几乎不动，人物却在原地把一生走完了。1948 年上映时正逢天翻地覆，它因「不问世事」被搁置了三十多年；重见天日之后，几乎每一次华语影史评选它都排在第一位。看它需要安静，也需要一点耐心，而那份耐心会被加倍偿还。",
+      "戴家的院子被战火炸塌了一半，礼言病着，妻子玉纹每天上城墙走一趟，名义上是去买药。旧日情人章志忱以礼言同窗的身份登门，住下了。费穆的办法是把所有可能构成事件的时刻一个一个取消掉。出走没有发生，摊牌也没有，唯一一次把话说明白的机会被打断在半句上。人物讲话常常讲一半就停住，摄影机也基本不动。全片最好的几分钟大概在玉纹走城墙的那几组镜头上。还是那段路，走法不一样，得从步速和光线上自己看。全片只有五个人，戴秀的少女心事、老仆的沉默，各自都站得住，没有哪个角色是拿来推情节的。1948 年上映，正赶上时局大变，被批评回避现实，反响冷淡，此后几十年没怎么重映；八十年代重新流通之后，华语影史评选里就一直排在前面。这片子要安静着看。它大部分时间什么也不发生，急着往下看的人容易走神。",
     editorialNoteEn:
-      "Five people, a garden half destroyed by bombing, and an elopement that never happens. Fei Mu took the most dangerous subject available to Chinese cinema — a married woman reunited with the man she once loved — and made from it the most restrained film imaginable: every desire stops at the threshold, every line stops half a sentence short. The shots of Yuwen walking back and forth along the broken city wall are the earliest and still the finest psychological space in Chinese-language film; the camera barely moves, and yet she walks an entire life without going anywhere. Released in 1948 as the country turned over, it was condemned as indifferent to the world and shelved for more than thirty years. Since its rediscovery it has finished first in nearly every poll of Chinese cinema ever conducted. It asks for quiet and a little patience, and it repays that patience several times over. If you watch one film in this collection, watch this one.",
+      "The film opened in 1948, was faulted for looking away from a country in upheaval, and then effectively disappeared for three decades. Since it returned to circulation in the 1980s it has placed at or near the top of most polls of Chinese-language cinema. What it withholds is the reason for both verdicts. Liyan is ill and the family garden is half rubble from the war; his wife Yuwen climbs to the ruined city wall each day on the errand of buying his medicine. Zhichen arrives as Liyan's old schoolmate and moves in, and he is also the man Yuwen was once going to marry. Fei Mu then cancels, one by one, every moment that could constitute an event. Nobody leaves, nothing is confessed, and the single direct declaration is cut off mid-sentence. Characters stop talking halfway through what they mean, and the camera stays largely still. The psychological work falls to a handful of shots of Yuwen walking the same stretch of wall in different states, legible only through her pace and the light. There are five people in the picture and not one of them is functional; the younger sister's crush and the old servant's silences hold on their own terms. Watch it somewhere quiet. Nothing happens for long stretches, and whether you can sit with that seems to vary a good deal from person to person.",
     essay: doc([
       h2("停在门槛上的电影"),
       p(
-        "《小城之春》的全部张力都建立在没有发生的事情上。志忱来了，玉纹去了他的房间，门开着，两人隔着一张桌子说了几句无关的话——费穆没有给任何一个可以让观众松一口气的时刻，也没有给任何一个可以让人指责的时刻。",
+        "影片由文华影业以很低的成本拍成，宅院与残破的城墙均为搭建的布景。李天济的剧本经费穆大幅改动，人物由原稿的多人减为五人。",
       ),
       p(
-        "这种克制不是道德保守，而是形式上的自觉。他知道一旦拍出越轨，电影就变成了事件；而只要不拍，它就一直是状态。八十年后我们仍在为这个选择震动。",
+        "1948 年公映后，影片在左翼刊物上受到批评，指其回避当时的社会情势。1949 年后费穆离沪赴港，本片未再安排放映，拷贝在很长时间里只存于资料馆。",
       ),
-      quote("发乎情，止乎礼——这句老话，费穆把它拍成了摄影机的运动。"),
+      quote(
+        "2002 年田壮壮重拍此片。2005 年香港电影金像奖为纪念中国电影百年举办的评选中，本片列于首位。",
+      ),
     ]),
     essayEn: doc([
       h2("A Film That Stops at the Threshold"),
       p(
-        "The whole tension of Spring in a Small Town rests on what does not happen. Zhichen arrives, Yuwen goes to his room, the door stays open, and the two of them exchange a few irrelevant sentences across a table. Fei Mu grants no moment where the audience can exhale, and none where it can accuse.",
+        "Wenhua produced the film on a very small budget; the courtyard house and the broken town wall were both built as sets. Fei Mu reworked Li Tianji's screenplay heavily, cutting the cast down to five.",
       ),
       p(
-        "That restraint is not moral conservatism but formal self-awareness. He understood that the moment transgression is filmed the picture becomes an event, and that so long as it is withheld the picture remains a condition. Eighty years on, the choice still stuns.",
+        "After its release in 1948 the film was criticised in left-wing journals for standing aside from the political situation. Fei Mu left Shanghai for Hong Kong the following year, no further screenings were arranged, and for a long time the film survived only in archive prints.",
       ),
       quote(
-        "Feeling may begin, but it stops at propriety — an old maxim that Fei Mu turned into camera movement.",
+        "Tian Zhuangzhuang remade it in 2002. In the poll held by the Hong Kong Film Awards in 2005 to mark a century of Chinese cinema, it was placed first.",
       ),
     ]),
     cast: [
@@ -1569,26 +1598,30 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0118694",
     doubanId: "1291557",
     wikidataId: "Q1056853",
+    introduction:
+      "《花样年华》是王家卫执导的 2000 年香港电影，梁朝伟与张曼玉主演。影片以 1962 年的香港为背景，周慕云与苏丽珍分别租住同一栋唐楼，各自察觉配偶与对方配偶有婚外关系，两人在往来中互相扮演各自的配偶，推想事情的经过，其后周慕云赴新加坡工作，两人未再来往。影片未直接呈现两对配偶的婚外情节，两名配偶自始至终未出现正面镜头。配乐反复使用梅林茂原为铃木清顺《梦二》所作的曲目。张曼玉在片中的旗袍造型出自张叔平。梁朝伟凭本片获第五十三届戛纳电影节最佳男演员奖。",
+    introductionEn:
+      "In the Mood for Love is a 2000 Hong Kong film directed by Wong Kar-wai, starring Tony Leung and Maggie Cheung. It is set in Hong Kong in 1962. Chow Mo-wan and Su Li-zhen rent rooms in the same building and each come to realise that their spouses are involved with one another. In the course of their acquaintance they act out their spouses' roles in an attempt to reconstruct how the affair began. Chow later takes work in Singapore and the two do not resume contact. The spouses' affair is never shown and neither spouse is seen face-on at any point in the film. The score returns repeatedly to a theme Shigeru Umebayashi had written for Seijun Suzuki's Yumeji. Maggie Cheung's cheongsam wardrobe was designed by William Chang. Tony Leung received the award for Best Actor at the 53rd Cannes Film Festival for his performance.",
     editorialNote:
-      "两个被各自配偶背叛的人，在同一道楼梯上反复错身，用排练的方式演练一场不敢发生的爱情。王家卫把所有关键情节都拿掉了：出轨没有被拍，告白没有被说出，连那两位配偶的脸都始终不在画面里。剩下的是旗袍、走廊、慢镜里飘散的烟，以及梅林茂那段一响起就让人心口发紧的圆舞曲。张曼玉换了二十多件旗袍，每一件都在替她说她不能说的话；结尾梁朝伟对着吴哥窟的石洞低语，我们一个字也听不见。这是关于「错过」最精致的一部电影，也是最狠的一部。",
+      "苏丽珍和周慕云是邻居，两人的配偶正好搞在一起。他们想弄明白这种事到底是怎么开始的，就用排演的办法，互相扮演那两个人。排着排着，分寸就不好把握了。王家卫把承重的情节全拿掉了：偷情没拍，表白没说出口，那两位配偶的脸从头到尾不在画面里。剩下的是楼梯上的错身，走廊，慢镜里的烟，还有梅林茂那段来来回回的圆舞曲。张曼玉换了二十多件旗袍——具体多少件各处说法不一——反正颜色替她说了她不能说的话。结尾周慕云在吴哥窟对着石缝说了句什么，我们一个字也听不见。把它当成一部赞美克制的电影，是误读。这两个人什么也没做，后半生就那么过去了。",
     editorialNoteEn:
-      "Two people betrayed by their respective spouses keep passing each other on the same staircase, rehearsing an affair neither will allow to happen. Wong Kar-wai removed every plot point that mattered: the adultery is never shown, the declaration is never spoken, and the faces of the two unfaithful spouses never once enter the frame. What is left is cheongsams, corridors, cigarette smoke drifting through slow motion, and Shigeru Umebayashi's waltz, which tightens the chest the instant it starts. Maggie Cheung wears more than twenty dresses and each one says what she is not permitted to say. At the close, Tony Leung murmurs into a hollow in the stone at Angkor Wat and we hear not a single word of it. This is the most exquisite film ever made about missed chances, and also the cruelest — it understands that what haunts people is rarely what they did, and almost always what they were too decent to do.",
+      "Su Li-zhen and Chow Mo-wan are neighbours whose spouses are conducting an affair with each other. To work out how such a thing begins, they rehearse it, each playing the other's husband or wife, and the rehearsal stops being safe. Wong removed every load-bearing plot point: the adultery is not shown, the feeling is never declared, and the two unfaithful spouses never appear on camera. What is left is the near-misses on a staircase, the corridors, the smoke in slow motion, and Shigeru Umebayashi's waltz coming back and coming back. Maggie Cheung wears twenty-odd cheongsams (accounts differ on the exact number), and in any case the colours say what she is not allowed to say. At Angkor Wat, Chow murmurs something into a hollow in the stone and we hear none of it. Reading the film as praise for restraint is a mistake. These two do nothing, and the rest of their lives goes by.",
     essay: doc([
       h2("克制作为一种纪律"),
       p(
-        "王家卫没有完整剧本，成片的优雅其实是大量删减之后的残余——据说关于那场婚外情本身，他拍下的素材远多于留在片中的。留下来的，是一套关于「差一点」的结构。",
+        "影片原为一部关于食物的三段式作品，拍摄期间改变方向，前后历时约十五个月。部分场景在曼谷取景以替代六十年代的香港，结尾一段摄于柬埔寨吴哥。全片没有完成剧本，杜可风中途离组，摄影由李屏宾接手完成。",
       ),
       p(
-        "重复本身就是论证。同一条走廊、同一个面摊、同一场雨：电影很少敢于只靠复现让观众感到时间流逝，而这部片子证明了它可以。",
+        "除梁朝伟的表演奖外，本片在同届戛纳另获最高技术委员会大奖。2022 年《视与听》影评人票选中列第五。",
       ),
     ]),
     essayEn: doc([
       h2("The Discipline of Withholding"),
       p(
-        "Wong shot without a finished script, and the film's famous elegance is the residue of enormous subtraction — reportedly far more footage of the affair was shot than survives. What remains is a structure of near-misses.",
+        "The film began as one of three stories about food, changed direction during production, and took some fifteen months to complete. Parts of it were shot in Bangkok, standing in for Hong Kong in the 1960s, and the closing sequence at Angkor in Cambodia. There was no finished script; Christopher Doyle left partway through and Mark Lee Ping-bing completed the photography.",
       ),
       p(
-        "The repetition is the argument. The same corridor, the same noodle stall, the same rain: cinema rarely trusts an audience to feel time passing through recurrence alone, and this is the film that proves it can.",
+        "Besides Tony Leung's acting award, the film took the Grand Prize of the Technical Commission at the same Cannes festival. It placed fifth in the 2022 Sight and Sound critics' poll.",
       ),
     ]),
     cast: [
@@ -1626,24 +1659,24 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0101985",
     doubanId: "1292329",
     wikidataId: "Q710745",
-    editorialNote:
-      "近四小时，上百个角色，一座 1961 年的台北。杨德昌用工程师般的耐心，把眷村少年的帮派、父亲被带走的白色恐怖审讯、教室的停电与一支手电筒，编进同一张电路图里——你以为在看成长故事，其实在看一整个社会如何一步步把十四岁的小四逼到刀口上。全片大量夜戏，光源常常只有一支手电或一盏昏灯，黑暗不是风格而是处境：那是一代外省家庭悬在半空、随时准备再次搬家的处境。片长会吓退很多人，但这是华语电影里少有的、真正配得上「史诗」二字的作品，也是杨德昌最完整的一次演算。",
-    editorialNoteEn:
-      "Nearly four hours, a cast of more than a hundred, and the city of Taipei in 1961. Edward Yang applies an engineer's patience to wiring a single circuit diagram out of a teenage gang, a father hauled in for interrogation under the White Terror, a classroom blackout, and one flashlight — you think you are watching a coming-of-age story, and you are in fact watching an entire society walk a fourteen-year-old boy step by step onto the point of a knife. Much of the film is shot at night with a torch or a single dim bulb as the only source, and the darkness is not a style but a condition: the condition of a generation of mainlander families suspended in mid-air, always packed to move again. The running time will frighten people off. It should not. This is one of the rare Chinese-language films that genuinely earns the word epic, and it is Yang's most complete piece of reasoning about how a place shapes the people who grow up inside it.",
+    introduction:
+      "《牯岭街少年杀人事件》是杨德昌执导的 1991 年台湾电影，张震饰演初中生小四，杨静怡饰演小明，张国柱饰演其父。故事取材自 1961 年台北一起真实的少年杀人案：小四就读夜间部，周旋于两个帮派之间，与小明往来；同一时期，其父因政治审查被带走问话，返家后处境改变。影片人物众多，涉及外省家庭、学校、帮派与警备系统数条线索。大量场景在夜间拍摄，光源常只有手电筒或单盏灯，画面长时间处于暗部。全片长约二百三十七分钟，原公映版本较短。本片获金马奖最佳剧情片。",
+    introductionEn:
+      "A Brighter Summer Day is a 1991 Taiwanese film directed by Edward Yang, with Chang Chen as Xiao Si'r, a secondary-school student, Lisa Yang as Ming, and Chang Kuo-chu as his father. It draws on a killing carried out by a teenager in Taipei in 1961. Xiao Si'r attends night classes and moves between two gangs while becoming involved with Ming; during the same period his father is taken in for political questioning and returns to reduced circumstances. The film carries a large cast and follows several threads at once: mainlander families, the school, the gangs, and the security apparatus. Much of it was shot at night with a torch or a single lamp as the only light source. It runs about two hundred and thirty-seven minutes, longer than the version originally released. It received the Golden Horse Award for Best Feature Film.",
     essay: doc([
       h2("电路图"),
       p(
-        "杨德昌读的是电机工程，这不是花边，是理解他的钥匙。片中上百个角色彼此不识，却通过父亲的职务、帮派的地盘、一把手电筒的归属互相咬合，任何一个节点松动，整条线路都会改变电流的方向。",
+        "演员多为非职业，其中张震拍摄时十四岁，其父张国柱在片中饰演他的父亲。英文片名出自猫王《Are You Lonesome Tonight?》中的一句歌词，片中少年将其听作 a brighter summer day。",
       ),
-      p("所以结尾的那一刀既是意外，也是必然。小四不是坏孩子，他只是那个电路里电压最集中的位置。"),
+      p("影片公映后长期无法看到完整版本，2009 年经世界电影基金会修复，此后在各地重映并发行影碟。"),
     ]),
     essayEn: doc([
       h2("The Circuit Diagram"),
       p(
-        "Yang trained in electrical engineering, which is not trivia but the key to reading him. The film's hundred-odd characters do not know one another, yet they interlock through a father's job, a gang's turf, the ownership of a single flashlight; loosen any node and the current changes direction everywhere.",
+        "Most of the cast were non-professionals. Chang Chen was fourteen during the shoot, and his own father, Chang Kuo-chu, plays his father in the film. The English title comes from a line in Elvis Presley's Are You Lonesome Tonight, which the boys in the film mishear as a brighter summer day.",
       ),
       p(
-        "Which is why the knife at the end is at once an accident and an inevitability. Xiao Si'r is not a bad boy. He is simply the point in the circuit where the voltage concentrates.",
+        "The full version was unavailable for many years after release. It was restored by the World Cinema Foundation in 2009 and has since been reissued in cinemas and on disc.",
       ),
     ]),
     cast: [
@@ -1671,24 +1704,30 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0195256",
     doubanId: "1302210",
     wikidataId: "Q2057159",
+    introduction:
+      "《神女》是吴永刚编剧并执导的 1934 年中国无声电影，阮玲玉主演，联华影业公司出品，为吴永刚首部导演作品。影片讲述一名女性白天抚养幼子，夜间在街头卖淫，收入被一名流氓占据；她将积蓄藏于墙砖缝中，供孩子入学，事发后失去积蓄，并因伤人入狱。影片机位多与人物齐平，流氓未被处理为受道德谴责的角色，字幕卡数量较同期影片为少。阮玲玉于影片公映次年去世，时年二十四岁。本片现存拷贝经修复后多次公开放映，通常被列为中国无声电影的代表作之一。",
+    introductionEn:
+      "The Goddess is a 1934 Chinese silent film written and directed by Wu Yonggang and produced by the Lianhua Film Company, starring Ruan Lingyu. It was Wu's first film as director. An unnamed woman raises her young son by day and works as a prostitute at night; her earnings are taken by a gangster who attaches himself to her. She hides savings in a gap in a brick wall to pay for the boy's schooling, loses them when the hiding place is discovered, and is imprisoned after attacking the man. The camera is generally placed level with its subject, the gangster is not staged for moral condemnation, and the film uses fewer intertitles than was usual at the time. Ruan Lingyu died the year after its release, aged twenty-four. Surviving prints have been restored and screened publicly on a number of occasions, and the film is commonly listed among the principal works of Chinese silent cinema.",
     editorialNote:
-      "一个母亲白天带孩子，夜里站在街边。吴永刚拍这个题材时只有二十七岁，却做出了整个时代最成熟的选择：不控诉、不怜悯，把摄影机放在与她平视的高度，连盘剥她的流氓也只是环境的一部分，而不是供人唾骂的反派。阮玲玉的表演几乎不需要字幕卡——她把攒下的钱一张张塞进墙砖缝里的那个动作，比任何台词都清楚地说明了什么叫尊严。中国默片在这里到达顶点，而拍完次年，阮玲玉在二十四岁自尽。今天再看，最动人的仍是它对主人公的信任：她不是一个社会问题，她是一个人。",
+      "白天是母亲，夜里站街。吴永刚写这个本子的时候二十七岁，头一回当导演，处理得不太像那个年代的做法：不控诉，也不怜悯，机位跟人物平齐，连勒索她的那个流氓都只当环境的一部分拍，没弄成一个供人痛骂的反派。阮玲玉基本不靠字幕卡。她把攒下的钞票一张一张塞进墙砖缝里，这一下就够了，不用再加台词。中国默片大概就到这儿了。片子拍完的第二年，阮玲玉自杀，二十四岁。今天再看，站得住的还是影片对她的态度：把她当人拍。1934 年前后，愿意这么对待这种处境的女人的电影，我想不出还有第二部。",
     editorialNoteEn:
-      "A mother raises her child by day and stands on the street by night. Wu Yonggang was twenty-seven when he made this, and he made the most mature choice available to his era: no indictment, no pity, the camera set level with her, and even the thug who bleeds her registering as part of the environment rather than a villain to be hissed at. Ruan Lingyu barely needs an intertitle — the way she pushes her saved banknotes one by one into a gap in the brickwork states what dignity is more precisely than any line could. Chinese silent cinema reaches its summit here, and the year after finishing it Ruan took her own life at twenty-four. What still moves most on a fresh viewing is the film's trust in its protagonist. She is not a social problem to be solved or wept over. She is a person, filmed as one, at a moment when almost no cinema anywhere was willing to do that for a woman in her position.",
+      "By day a mother, by night a streetwalker. Wu Yonggang wrote the script at twenty-seven and was directing for the first time, and his handling of the material was uncommon for 1934: no indictment, no pity, the camera set level with its subject. Even the gangster who extorts her is filmed as part of the environment rather than staged as someone to hiss at. Ruan Lingyu works almost without intertitles. She pushes her saved banknotes one at a time into a gap in the brickwork, and that one gesture does the work without a title card. Chinese silent film probably reached its ceiling here. Ruan killed herself the following year, at twenty-four. What holds up on a return visit is the film's posture toward its heroine, which is simply to film her as a person. Around 1934 I cannot think of much else anywhere that was willing to do the same for a woman in her position.",
     essay: doc([
       h2("平视的高度"),
       p(
-        "默片时代拍妓女，通常有两条路：控诉社会，或者渲染堕落。吴永刚两条都没走。他把机位放平，让观众和她坐在同一条板凳上，于是道德判断变成了多余的东西。",
+        "影片摄于中国电影由无声转向有声的过渡阶段，联华当时仍以默片为主。全片没有明确交代主人公的姓名，字幕卡也不对其职业作道德评断。",
       ),
-      p("这一选择在 1934 年是激进的，今天依然是。很多当代电影仍在俯拍它们的主人公。"),
+      p(
+        "阮玲玉于 1935 年 3 月自杀，此前数月其私生活为上海报刊连续报道；出殡当日沿途有大批市民送行，此事为海外媒体所报道。2014 年中国电影资料馆完成本片修复，并配以新写的乐谱作现场演奏放映。",
+      ),
     ]),
     essayEn: doc([
       h2("The Height of the Eye"),
       p(
-        "Silent cinema had two standard routes for filming a prostitute: indict society, or luxuriate in the fall. Wu Yonggang took neither. He levelled the camera and sat the audience on the same bench as his heroine, at which point moral judgment simply became surplus to requirements.",
+        "The film was made while Chinese studios were moving from silent production to sound, and Lianhua was still working mainly in silent film. The woman is never named, and the intertitles pass no judgement on her work.",
       ),
       p(
-        "That was a radical choice in 1934 and it remains one now. A great many contemporary films still shoot down at the people they are about.",
+        "Ruan Lingyu killed herself in March 1935, after months in which the Shanghai press had reported on her private life. Large crowds lined the route of her funeral, which was covered abroad. The China Film Archive completed a restoration in 2014, screened with a newly written score performed live.",
       ),
     ]),
     cast: [
@@ -1720,10 +1759,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0183828",
     doubanId: "1307708",
     wikidataId: "Q5238699",
-    editorialNote:
-      "上海的一条弄堂里，歌女、妓女、吹鼓手和剃头匠挤在一起过日子。袁牧之把好莱坞的喜剧节奏、苏联的剪辑与上海的市井小调焊在一起，做出了一部前所未见的中国电影：前一分钟还在窗对窗地插科打诨，后一分钟就有人被卖掉。周璇唱《四季歌》与《天涯歌女》的段落，是华语电影配乐史的起点之一，那两首歌至今还在被人传唱。笑声底下始终垫着一层薄冰——这正是三十年代上海左翼电影最厉害的地方：它从不说教，只是先让你笑，再让你明白自己笑的究竟是什么。",
-    editorialNoteEn:
-      "In one Shanghai lane a singsong girl, a prostitute, a trumpeter and a barber live crammed together. Yuan Muzhi welded Hollywood comic timing, Soviet cutting, and Shanghai street song into a Chinese film unlike any before it: one minute the neighbours are clowning at each other window to window, the next a young woman has been sold. Zhou Xuan's performances of the Four Seasons Song and The Wandering Songstress are among the founding moments of Chinese film music, and both songs are still sung today. There is always thin ice under the laughter, and that is exactly what made the Shanghai left-wing cinema of the 1930s so formidable — it never lectures. It gets you laughing first, and only then lets you work out what it is you have been laughing at. Made months before the Japanese invasion closed the studios, it is a comedy with a trapdoor under it.",
+    introduction:
+      "《马路天使》是袁牧之编剧并执导的 1937 年中国电影，明星影片公司出品，周璇饰演歌女小红，赵丹饰演吹鼓手陈少平，赵慧深饰演其姐小云。故事发生在上海的一处弄堂：小红姐妹自东北逃难而来，由一对夫妇收养并逼其卖唱与接客，小红与住在对面的陈少平往来，众人设法助她脱身，小云则在冲突中身亡。影片将喜剧段落与底层处境并置，室内多用对窗的构图。周璇在片中演唱两首插曲，由贺绿汀作曲、田汉作词，此后长期流传。本片摄于抗战全面爆发前数月。",
+    introductionEn:
+      "Street Angel is a 1937 Chinese film written and directed by Yuan Muzhi, produced by the Mingxing Film Company, with Zhou Xuan as the singer Xiao Hong, Zhao Dan as Chen Shaoping, a trumpeter, and Zhao Huishen as her sister Xiao Yun. The sisters have fled south from the northeast and been taken in by a couple who force them to sing in a teahouse and to receive men. Xiao Hong becomes friendly with Chen, who lives across the lane, and the neighbours try to help her get away; Xiao Yun is killed in the ensuing struggle. The film sets comic scenes directly against the conditions of the people in them, and stages much of the action between facing windows. Zhou Xuan performs two songs written by He Luting and Tian Han. It was made a few months before the Japanese invasion closed the Shanghai studios.",
     cast: [
       {
         name: "Zhou Xuan",
@@ -1754,10 +1793,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0040009",
     doubanId: "1389915",
     wikidataId: "Q860483",
-    editorialNote:
-      "三个多小时，一个家庭，抗战八年。蔡楚生与郑君里让同一个丈夫在重庆步步高升，让妻子在沦陷的上海一寸寸沉下去，最后在一场宴会上把两条线狠狠撞在一起。这是中国通俗剧的巅峰：结构精确得像一部长篇小说，情感却毫不吝啬。1947 年上映时连映三个多月，观众在影院里哭成一片。它不掩饰自己的煽情，因为那份煽情是有出处的——战争刚刚结束，账还没有算完，而算账的方式就是让所有人看见谁在受难、谁在赴宴。素芬最后望向江水的那个镜头，是一代人的判决书。",
-    editorialNoteEn:
-      "Three hours and more, one family, eight years of war. Cai Chusheng and Zheng Junli let the same husband rise through wartime Chongqing while his wife sinks inch by inch in occupied Shanghai, then slam the two lines together at a banquet. This is the summit of Chinese melodrama: a structure as precise as a long novel, and an emotional register with nothing held back. On release in 1947 it ran for over three months to full houses and audiences wept in the aisles. It makes no apology for its sentiment, because the sentiment had somewhere to come from — the war had only just ended, the accounting was not finished, and the way this film does the accounting is to make everyone see plainly who suffered and who went to the party. Sufen's final look out at the river is a verdict handed down on behalf of a whole generation.",
+    introduction:
+      "《一江春水向东流》是蔡楚生与郑君里共同编导的 1947 年中国电影，白杨饰演素芬，陶金饰演张忠良，舒绣文饰演王丽珍。影片分《八年离乱》与《天亮前后》上下两集，时间跨度自 1931 年至抗战结束后：张忠良离沪赴内地，其后在重庆攀附权贵、另行成家；素芬留在沦陷的上海抚育幼子、奉养婆母，靠做工与领救济度日。抗战结束后两人在一场宴会上重逢，素芬投江自尽。影片 1947 年在上海公映，连映约三个月。全片长约一百九十分钟。",
+    introductionEn:
+      "The Spring River Flows East is a 1947 Chinese film written and directed by Cai Chusheng and Zheng Junli, with Bai Yang as Sufen, Tao Jin as Zhang Zhongliang, and Shu Xiuwen as Wang Lizhen. It is in two parts and covers the years from 1931 to just after the war. Zhang leaves Shanghai for the interior, attaches himself to influential people in Chongqing and starts a second household there, while Sufen remains in the occupied city raising their son and supporting his mother by factory work and relief handouts. The two meet again at a reception after the war, and Sufen drowns herself. It opened in Shanghai in 1947 and ran for about three months. The complete film is roughly a hundred and ninety minutes.",
     cast: [
       { name: "Bai Yang", zhName: "白杨", character: "Sufen", characterZh: "素芬" },
       { name: "Tao Jin", zhName: "陶金", character: "Zhang Zhongliang", characterZh: "张忠良" },
@@ -1782,10 +1821,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0090185",
     doubanId: "1300572",
     wikidataId: "Q697070",
-    editorialNote:
-      "侯孝贤把摄影机架远、架定，让一个家庭的十几年自己走完。父亲死在藤椅上，母亲的病一点点加重，祖母始终念叨着要走路回大陆——这些事大多发生在画面深处或画外，没有配乐提醒你此刻该难过。这正是台湾新电影的方法：不追戏剧高潮，让时间承担全部重量，观众必须自己走进去看。片名直译是「一段活着的时间，一段死去的时间」，看完你会明白那不是文艺腔，而是对这部电影最准确的描述。它也是理解侯孝贤的最好入口：他后来所有的远景与省略，都从这里长出来。适合在一个不赶时间的晚上看，最好是一个人。",
-    editorialNoteEn:
-      "Hou Hsiao-hsien sets the camera far back, locks it down, and lets a decade of one family's life walk itself to the end. The father dies in a rattan chair, the mother's illness deepens by degrees, the grandmother keeps announcing she will walk back to the mainland — and most of this happens deep in the frame or just outside it, with no score to tell you when to grieve. That is the method of Taiwan New Cinema: refuse the dramatic peak, let time carry the weight, and make the viewer come in and look. The Chinese title translates as a time to live and a time to die, and by the end you understand that this is not a literary flourish but the most accurate description of the film available. It is also the best door into Hou: every distant framing and every ellipsis in his later work grows from here. Watch it on an evening when you are not in a hurry, preferably alone.",
+    introduction:
+      "《童年往事》是侯孝贤执导的 1985 年台湾电影，中影出品，游安顺饰演少年阿孝，唐如韫饰演祖母，梅芳饰演母亲。影片取材自侯孝贤本人的成长经历，讲述一户 1940 年代末自广东迁台的家庭在凤山生活的十余年：父亲病故，母亲其后患病去世，祖母始终以为可以走路回大陆，阿孝在此期间由童年进入青年。摄影机多为固定机位与远景，重要事件常发生在画面深处或画外，配乐使用极少。本片获金马奖最佳原著剧本奖，并在柏林电影节获国际影评人奖。",
+    introductionEn:
+      "A Time to Live, a Time to Die is a 1985 Taiwanese film directed by Hou Hsiao-hsien, produced by Central Pictures, with You An-shun as the teenage Ah-ha, Tang Ru-yun as his grandmother and Mei Fang as his mother. It draws on Hou's own upbringing and follows a family that moved from Guangdong to Taiwan in the late 1940s and settled in Fengshan, across more than a decade: the father dies of illness, the mother later falls ill and dies, the grandmother continues to believe she can walk back to the mainland, and Ah-ha passes from childhood into adolescence. The camera is mostly fixed and distant, significant events frequently occur deep in the frame or outside it, and there is very little score. The film received the Golden Horse Award for Best Original Screenplay and the FIPRESCI prize at Berlin.",
     cast: [
       { name: "You An-shun", zhName: "游安顺", character: "Ah-ha (teenage)", characterZh: "阿孝" },
       { name: "Tang Ru-yun", zhName: "唐如韫", character: "Grandmother", characterZh: "祖母" },
@@ -1810,26 +1849,26 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0064451",
     doubanId: "1306490",
     wikidataId: "Q704780",
-    editorialNote:
-      "胡金铨把武侠从打斗提升成了一种关于气与空的电影。竹林里那场埋伏——阳光穿过竹叶，刀光在叶隙间闪现，人在半空中被剪辑托住——是后来所有华语武侠动作的源头，李安在《卧虎藏龙》里几乎照着重拍了一遍。但真正让这部片子伟大的是它的后半段：厮杀忽然让位于禅，血污被日光吞没，一个和尚流出金色的血。它拒绝在类型片该结束的地方结束，而是继续往上走，走到动作片很少抵达的地方。1975 年它在戛纳拿下技术大奖，是华语电影第一次在那里被认真对待。三个多小时，前松后紧，值得那份耐心。",
-    editorialNoteEn:
-      "King Hu lifted wuxia out of fighting and into a cinema of breath and emptiness. The bamboo-forest ambush — sunlight coming through the leaves, blades flashing in the gaps, bodies held in mid-air by the cutting itself — is the headwater of all Chinese-language action that followed, and Ang Lee restaged it almost shot for shot in Crouching Tiger, Hidden Dragon. But what makes the film great is its second half, where combat abruptly gives way to Zen, gore is swallowed by daylight, and a monk bleeds gold. It refuses to end where the genre says it should and instead keeps climbing, into territory action cinema almost never reaches. It took a technical prize at Cannes in 1975, the first time a Chinese-language film was taken seriously there. Three hours and twenty minutes, slow to gather and then relentless — worth the patience it asks for.",
+    introduction:
+      "《侠女》是胡金铨编导的 1971 年台湾、香港合拍电影，联邦影业出品，徐枫饰演杨慧贞，石隽饰演书生顾省斋，乔宏饰演慧圆和尚。故事设在明代：官宦之女杨慧贞因家门遭东厂构陷而逃亡，藏身于顾省斋所居的荒废驿站，东厂番子追踪而至。影片前段以驿站中的埋伏与心理周旋为主，后段转入荒野与山寺，加入僧人一线。竹林中的一场打斗以短镜头剪接与跳跃动作完成，此后为多部影片沿用。全片长约三小时，原分上下两集公映。本片在 1975 年戛纳电影节获最高技术委员会大奖。",
+    introductionEn:
+      "A Touch of Zen is a 1971 Taiwanese and Hong Kong co-production written and directed by King Hu, produced by Union Film, with Hsu Feng as Yang Hui-zhen, Shih Chun as the scholar Gu Sheng-zhai, and Roy Chiao as the monk Hui Yuan. It is set in the Ming dynasty. Yang, the daughter of an official destroyed by the Eastern Depot, is in hiding at the derelict garrison where Gu lives, and the Depot's agents track her there. The first half turns on the ambush and the manoeuvring inside the garrison, and the second moves out to open country and a mountain temple, bringing in the monks. A fight in a bamboo grove is built from short takes and leaping movement, a treatment widely reused since. The film runs about three hours and was originally released in two parts. It received the Grand Prize of the Technical Commission at Cannes in 1975.",
     essay: doc([
       h2("从武打到顿悟"),
       p(
-        "胡金铨受过京剧训练，他的动作场面从不追求真实的搏斗感，而是追求锣鼓点般的节奏：起势、停顿、爆发。人物在竹林中的腾跃并不合乎物理，却完全合乎音乐。",
+        "胡金铨在台湾搭起驿站布景后停工一年，任草木生长以做出荒废之感，全片前后拍摄约三年。影片在台湾分上下集公映时票房不佳，出品方联邦影业其后结束营业。",
       ),
       p(
-        "而当影片进入后段，这套节奏被推到了它的尽头——打斗不再解决任何问题，于是电影只好换一种方式收场。那个流着金血的和尚，是类型片史上最大胆的一次越界。",
+        "1975 年在戛纳获奖后，本片重新受到注意。2015 年台湾电影资料馆完成数字修复，同年在戛纳经典单元放映。",
       ),
     ]),
     essayEn: doc([
       h2("From Combat to Enlightenment"),
       p(
-        "King Hu trained in Peking opera, and his action was never after the feel of a real fight; it was after the beat of drum and gong — gather, hold, burst. The leaps through the bamboo obey no physics whatever and obey music completely.",
+        "King Hu had the garrison set built in Taiwan and then left it standing for a year, letting plants grow over it to age it; the shoot itself ran about three years. Released in Taiwan in two parts, the film did poor business, and Union Film went out of business not long after.",
       ),
       p(
-        "When the film enters its final movement that rhythm is pushed to its limit: fighting no longer settles anything, so the picture has to find another way to end. The monk bleeding gold is the boldest transgression in the history of the genre.",
+        "The award at Cannes in 1975 brought it renewed attention. The Taiwan Film Institute completed a digital restoration in 2015, shown that year in the Cannes Classics programme.",
       ),
     ]),
     cast: [
@@ -1864,26 +1903,26 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0052357",
     doubanId: "1297294",
     wikidataId: "Q202548",
-    editorialNote:
-      "一个恐高的退休警探跟踪一个女人，爱上她，失去她，然后在街上遇见一个长得像她的人——于是他开始改造对方，头发、衣服、口红，一件件逼近那个死去的幻影。希区柯克把悬疑片的外壳套在一个关于痴迷与控制的故事上，而最不安的地方在于：他让观众也成了同谋，因为我们和主角一样想看那个女人变回去。旧金山的绿色雾气、螺旋楼梯、伯纳德·赫尔曼那段永远解决不了的和声，共同做出了电影史上最美也最病态的爱情。詹姆斯·斯图尔特那张一贯可靠的脸，在这里第一次变得可怕。",
-    editorialNoteEn:
-      "A retired detective with a fear of heights follows a woman, falls in love with her, loses her, and then meets someone on the street who resembles her — whereupon he begins remaking her, hair, clothes, lipstick, item by item, toward a dead illusion. Hitchcock wrapped the shell of a suspense picture around a story about obsession and control, and the most disquieting thing about it is that he makes the audience complicit: we want to see her changed back just as badly as he does. San Francisco's green fog, the spiral staircase, and Bernard Herrmann's endlessly unresolving harmony together produce the most beautiful and most pathological love story in cinema. James Stewart's famously trustworthy face becomes frightening here for the first time, and the film never forgives him for it — or us.",
+    introduction:
+      "《迷魂记》是阿尔弗雷德·希区柯克执导的 1958 年美国电影，派拉蒙出品，詹姆斯·斯图尔特饰演因恐高退职的警探斯科蒂，金·诺瓦克一人分饰玛德琳与朱迪。斯科蒂受旧友之托跟踪其妻玛德琳，两人渐生情愫；玛德琳自钟楼坠亡，斯科蒂因恐高未能上楼阻止。其后他在街头遇见与玛德琳相似的朱迪，逐步要求她改换发型、衣着与妆容。影片以旧金山实景拍摄，钟楼场景使用同时推轨与变焦的手法制造眩晕感，此后通称为「眩晕镜头」。配乐为伯纳德·赫尔曼。剧本改编自布瓦洛与纳尔斯雅克的小说。",
+    introductionEn:
+      "Vertigo is a 1958 American film directed by Alfred Hitchcock, produced by Paramount, with James Stewart as Scottie, a detective who has left the force because of his fear of heights, and Kim Novak as both Madeleine and Judy. An old acquaintance hires Scottie to follow his wife Madeleine; the two become attached, and she falls to her death from a bell tower that Scottie cannot climb. He later encounters Judy, who resembles her, and sets about changing her hair, clothing and makeup. The film was shot on location in San Francisco. The tower scenes use a simultaneous track and zoom to produce the sensation of vertigo, a shot since named after the film. Bernard Herrmann wrote the score, and the screenplay is adapted from a novel by Boileau and Narcejac.",
     essay: doc([
       h2("让观众成为同谋"),
       p(
-        "影片中段希区柯克做了一个惊人的决定：他提前告诉观众真相，而主角还蒙在鼓里。悬念因此从「会发生什么」变成了「他什么时候会知道」——痛苦被拉长了。",
+        "原定的女主角为薇拉·迈尔斯，因怀孕退出，改由金·诺瓦克出演。影片 1958 年公映时评价不一，票房平常。",
       ),
       p(
-        "更狠的是那场改造戏。我们本该为这个女人难过，却在绿光里等着她走出来变成朱迪。希区柯克没有指责任何人，他只是安排我们坐在了那个位置上。",
+        "1973 年希区柯克将本片连同另外四部作品撤出发行，此后十年无法看到，1983 年重新公映，1996 年完成修复。2012 年《视与听》影评人票选中，本片取代《公民凯恩》列于首位。",
       ),
     ]),
     essayEn: doc([
       h2("Making the Audience Complicit"),
       p(
-        "Midway through, Hitchcock makes an astonishing decision: he tells the audience the truth while leaving his protagonist in the dark. Suspense shifts from what will happen to when he will find out — and the suffering is stretched out accordingly.",
+        "Vera Miles had been cast in the leading role and withdrew when she became pregnant; Kim Novak replaced her. Reviews were mixed on release in 1958 and business was moderate.",
       ),
       p(
-        "Crueller still is the makeover scene. We ought to grieve for this woman, and instead we wait in the green light for her to walk out transformed. Hitchcock accuses no one. He simply arranged for us to be sitting where we are sitting.",
+        "In 1973 Hitchcock withdrew the film from distribution along with four others, and it could not be seen for a decade. It was reissued in 1983 and restored in 1996. In the 2012 Sight and Sound critics' poll it displaced Citizen Kane at the top of the list.",
       ),
     ]),
     cast: [
@@ -1915,26 +1954,26 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0089881",
     doubanId: "1296196",
     wikidataId: "Q565231",
-    editorialNote:
-      "黑泽明七十五岁时拍的《李尔王》，也是他一生最悲观的一部。老领主把领地分给三个儿子，随后被一一背弃，在焦土上疯掉。与早年那些相信人可以互相拯救的作品不同，这里没有救赎：城池焚毁的长镜头里没有一句台词，只有配乐，仿佛神明厌倦了往下看。色彩在这里是叙事本身——三个儿子各着一色，红黄蓝的军队在山野间移动，像棋子，也像血。他为这部片子准备了十年，画了几百张分镜彩图。如果说《七武士》是他对人的信任，《乱》就是他收回这份信任之后的账单。",
-    editorialNoteEn:
-      "Kurosawa made his King Lear at seventy-five, and it is the most pessimistic film of his life. An old warlord divides his domain among three sons, is betrayed by them in turn, and goes mad on scorched ground. Unlike the earlier work, which believed people could save one another, there is no redemption available here: the long sequence of the burning castle carries no dialogue at all, only score, as though the gods had grown tired of looking down. Color is the storytelling — each son wears his own, and the red, yellow and blue armies move across the hills like chess pieces and like blood. He prepared the film for ten years and painted hundreds of storyboards in full color while waiting for the money. If Seven Samurai is Kurosawa's trust in human beings, Ran is the invoice that arrived after he withdrew it.",
+    introduction:
+      "《乱》是黑泽明执导的 1985 年日本、法国合拍电影，仲代达矢饰演老领主一文字秀虎，原田美枝子饰演枫夫人。影片以莎士比亚《李尔王》为骨架，移入战国时期：秀虎将领地分与三个儿子，随即遭长子与次子背弃，最终在焦土上失常。三个儿子的军队分别着黄、红、蓝三色，色彩用于区分阵营与走位。第三城陷落焚毁的一场戏取消全部同期声，只留武满彻的配乐。黑泽明筹备本片约十年，其间绘制了数百张彩色分镜。本片获奥斯卡最佳服装设计奖。",
+    introductionEn:
+      "Ran is a 1985 Japanese and French co-production directed by Akira Kurosawa, with Tatsuya Nakadai as the ageing warlord Hidetora Ichimonji and Mieko Harada as Lady Kaede. It takes the structure of Shakespeare's King Lear and moves it into the warring-states period: Hidetora divides his domain among three sons, is betrayed by the elder two, and loses his reason on scorched ground. The three armies are dressed in yellow, red and blue, and colour is used to hold the factions and their movements apart. The sequence in which the Third Castle falls and burns drops the location sound entirely and carries only Toru Takemitsu's score. Kurosawa spent about ten years preparing the film and painted several hundred storyboards in colour. It received the Academy Award for Best Costume Design.",
     essay: doc([
       h2("收回来的信任"),
       p(
-        "早年的黑泽明相信集体：七个武士守住一个村子，一个公务员用一座公园赎回一生。《乱》里没有这样的出口，秀虎的疯癫不是个人悲剧，而是整个秩序崩塌后剩下的声音。",
+        "黑泽明在日本未能筹得资金，影片最终由法国制片人塞尔日·西尔贝曼投资，成本约一千一百万美元，为当时最昂贵的日本影片。第三城的布景建于富士山麓，焚烧时为实景燃烧，仲代达矢在燃烧中拍摄。",
       ),
       p(
-        "最能说明问题的是那场攻城戏：黑泽明抽掉了全部现场音，只留下音乐。当暴力大到某个程度，写实反而失效，只剩下仪式。",
+        "拍摄期间黑泽明的妻子矢口阳子去世。本片由和田惠美获奥斯卡最佳服装设计奖，黑泽明本人获最佳导演提名；日本未以本片报送该届最佳外语片，此事当时引起议论。",
       ),
     ]),
     essayEn: doc([
       h2("Trust, Withdrawn"),
       p(
-        "The early Kurosawa believed in the collective: seven samurai hold a village, a dying clerk redeems a life with one park. Ran offers no such exit. Hidetora's madness is not a personal tragedy but the sound left over after an entire order has collapsed.",
+        "Kurosawa could not raise the money in Japan, and the film was financed by the French producer Serge Silberman at a cost of about eleven million dollars, the most expensive Japanese production of its day. The Third Castle was built on the slopes of Mount Fuji and burned for real, with Tatsuya Nakadai filmed inside it.",
       ),
       p(
-        "The siege makes the case. Kurosawa strips out every trace of location sound and leaves only music. Past a certain magnitude of violence realism stops working, and all that remains is ritual.",
+        "Kurosawa's wife, Yōko Yaguchi, died during the shoot. Emi Wada won the Academy Award for costume design and Kurosawa was nominated for direction, but Japan did not submit the film for the foreign-language award, which drew comment at the time.",
       ),
     ]),
     cast: [
@@ -1971,26 +2010,26 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0062622",
     doubanId: "1292226",
     wikidataId: "Q103474",
-    editorialNote:
-      "一根被抛向空中的骨头，切给一艘飞船，四百万年在一个镜头里过去——这大概是电影史上最著名的一次剪辑，也说明了库布里克想干什么：他要拍的不是未来，而是人这个物种。影片几乎没有台词，最有人味的角色是一台电脑，而结尾那段没有解释的光之旅至今仍在被争论。1968 年首映时观众中途离场，评论刻薄；今天它被公认为科幻片的天花板，此后所有太空电影都在向它交学费。请尽可能在最大的银幕上看，并且不要中途查手机——这部电影的节奏本身就是它的论点。",
-    editorialNoteEn:
-      "A bone thrown into the air cuts to a spacecraft and four million years pass inside a single edit — probably the most famous cut in cinema, and a clear statement of what Kubrick was after: not the future, but the species. There is almost no dialogue, the most human character is a computer, and the unexplained corridor of light at the end is still being argued about. Audiences walked out of the 1968 premiere and the reviews were unkind. It is now the ceiling of the genre, and every space film since has been paying it tuition. See it on the largest screen you can find and do not check your phone; the film's tempo is not a delivery mechanism for its argument, it is the argument. Kubrick believed a picture could work on an audience the way music does, without passing through explanation first, and this is where he proved it.",
+    introduction:
+      "《2001太空漫游》是斯坦利·库布里克执导的 1968 年美国、英国合拍电影，米高梅出品，凯尔·杜拉饰演鲍曼，道格拉斯·雷恩为电脑 HAL 9000 配音。剧本由库布里克与科幻作家阿瑟·C·克拉克合写，克拉克同期写出同名小说。影片分四部分：史前人科动物遇上一块黑色石板；月球上掘出同类石板；前往木星的飞船上，HAL 9000 与两名船员发生冲突；鲍曼独自穿过一段抽象影像后进入一间陈设为古典风格的房间。对白很少，多处以古典乐曲代替配乐。特效由库布里克与道格拉斯·特朗布尔等人以模型与前投影完成，本片获奥斯卡最佳视觉效果奖。",
+    introductionEn:
+      "2001: A Space Odyssey is a 1968 American and British co-production directed by Stanley Kubrick, produced by MGM, with Keir Dullea as Bowman and Douglas Rain as the voice of the computer HAL 9000. Kubrick wrote the screenplay with the science-fiction writer Arthur C. Clarke, who produced a novel of the same title alongside it. The film is in four parts: a group of hominids encounters a black monolith; another is excavated on the Moon; aboard a ship bound for Jupiter, HAL 9000 comes into conflict with the two conscious crew members; and Bowman passes through a sequence of abstract imagery into a room furnished in a classical style. There is very little dialogue, and existing classical recordings are used in place of a conventional score. The effects were built with models and front projection. It received the Academy Award for Best Visual Effects.",
     essay: doc([
       h2("不解释的电影"),
       p(
-        "库布里克拒绝为结尾提供答案，这不是故弄玄虚。他相信电影可以像音乐一样直接作用于人，而一旦给出解释，作品就退化成了一道有标准答案的谜题。",
+        "影片以克拉克 1948 年的短篇《哨兵》为出发点，在英国的埃尔斯特里与谢珀顿片场拍摄，前后历时约四年。片中飞船内部的旋转布景为专门建造的离心机。",
       ),
       p(
-        "所以片中最动人的死亡属于 HAL——一台电脑在被拔掉记忆板时唱起儿歌。人类角色面无表情地执行任务，机器却在恐惧。这个反转就是全片的论点。",
+        "1968 年 4 月首映后评价两极，库布里克随即剪去约十九分钟。影片其后在长线放映中收回成本，成为米高梅当年收益最高的作品。",
       ),
     ]),
     essayEn: doc([
       h2("A Film That Refuses to Explain"),
       p(
-        "Kubrick declined to supply an answer for the ending, and this is not mystification. He believed film could act on a person directly, the way music does, and that an explanation would demote the work to a riddle with a correct solution.",
+        "The film started from Clarke's 1948 short story The Sentinel and was shot at Elstree and Shepperton in England over some four years. The rotating interior of the spacecraft was a purpose-built centrifuge.",
       ),
       p(
-        "Which is why the most affecting death in the picture belongs to HAL — a computer singing a children's song as its memory is pulled. The human characters carry out their tasks expressionlessly while the machine is afraid. That inversion is the whole argument.",
+        "Reviews were divided after the premiere in April 1968, and Kubrick cut about nineteen minutes immediately afterwards. The film recovered its cost over a long run and became MGM's highest-earning release of the year.",
       ),
     ]),
     cast: [
@@ -2016,10 +2055,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0053779",
     doubanId: "1293271",
     wikidataId: "Q18407",
-    editorialNote:
-      "一架直升机吊着耶稣像飞过罗马上空，下面泳池边的女人挥手打招呼——开场三分钟，费里尼就把战后意大利的全部处境说完了。影片没有情节，只有七个昼夜、七场派对，一个记者在其中越陷越深。这是费里尼从新现实主义转身的时刻：他不再关心穷人如何活下去，而开始追问富起来之后的人为什么依然空。特莱维喷泉那场戏成了永恒的银幕图像，而片中那个摄影记者的名字 Paparazzo，从此变成了全世界通用的词。结尾海滩上那条怪鱼睁着眼睛，谁也没能给出解释。",
-    editorialNoteEn:
-      "A helicopter carries a statue of Christ over Rome while women beside a rooftop pool wave up at it — three minutes in, Fellini has already stated the entire condition of postwar Italy. There is no plot, only seven days and nights and seven parties, with a journalist sinking further at each one. This is the moment Fellini turns away from neorealism: he stops asking how the poor survive and starts asking why people remain empty after they get rich. The Trevi Fountain sequence became a permanent image, and the name of the film's photographer, Paparazzo, became a word in every language on earth. On the beach at the end a monstrous fish lies staring, and nobody has ever satisfactorily explained it — which is exactly right, because the film is about a society that has run out of things it can explain to itself.",
+    introduction:
+      "《生活的甜蜜》是费德里科·费里尼执导的 1960 年意大利电影，马塞洛·马斯楚安尼、安妮塔·艾克伯格与阿努克·艾梅主演。影片以直升机吊运耶稣像飞越罗马上空开场，随后跟随八卦记者马塞洛在七个昼夜之间辗转于聚会、片场与街头。各段落之间不作因果衔接，全片没有连贯的情节线，片长约三小时。特莱维喷泉的一场戏与结尾海滩上那具巨大鱼形生物的镜头流传最广。片中摄影记者的名字帕帕拉佐（Paparazzo）此后演变为多国通用的名词，指追拍名人的摄影师。本片获戛纳电影节金棕榈奖与奥斯卡最佳黑白片服装设计奖。",
+    introductionEn:
+      "La Dolce Vita is a 1960 Italian film directed by Federico Fellini, starring Marcello Mastroianni, Anita Ekberg and Anouk Aimée. It opens with a helicopter carrying a statue of Christ over Rome, then follows Marcello, a gossip journalist, through seven days and nights of parties, film sets and encounters in the street. The episodes are not causally linked and there is no continuous plot; the film runs close to three hours. The sequence in the Trevi Fountain and the closing shot of a large fish-like creature on a beach are the most widely reproduced images from it. The name of the film's press photographer, Paparazzo, passed into general use in several languages as a term for photographers who pursue celebrities. It received the Palme d'Or at Cannes and the Academy Award for Best Costume Design in black and white.",
     cast: [
       {
         name: "Marcello Mastroianni",
@@ -2049,10 +2088,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0056444",
     doubanId: "1294433",
     wikidataId: "Q1189572",
-    editorialNote:
-      "小津的最后一部电影，也是他唯一一次在彩色里拍完那个讲了一辈子的故事：女儿要出嫁，父亲要独自留下。红色的水壶、蓝色的招牌、走廊尽头的一点橘光——他把颜色当作构图的支点，而不是写实的工具，于是彩色不但没有破坏他的形式，反而让那份克制更清晰。结尾父亲在婚礼后独自回家，哼着军歌，坐在空荡的屋子里，什么也没发生。次年小津去世，享年六十岁，生日与忌日是同一天。看过他其他作品的人会在这里感到某种告别；没看过的人，从这一部开始也完全可以。",
-    editorialNoteEn:
-      "Ozu's final film, and the only time he told his lifelong story in color: a daughter is to be married, and a father will be left alone. A red kettle, a blue shop sign, a patch of orange at the end of a corridor — he treats color as a pivot for composition rather than a tool for realism, so it does not disturb his form at all and instead makes the restraint easier to see. At the end the father comes home from the wedding, hums an old navy song, and sits in an empty house, and nothing happens. Ozu died the following year at sixty, on the same date he had been born. Anyone who knows the rest of his work will feel a farewell in this one. Anyone who does not can begin here with no disadvantage whatsoever.",
+    introduction:
+      "《秋刀鱼之味》是小津安二郎执导的 1962 年日本电影，松竹出品，笠智众饰演平山周平，岩下志麻饰演其女路子。丧偶多年的平山在旧友劝说下着手为女儿安排婚事，婚礼过后独自返家。这是小津最后一部作品，也是他为数不多的彩色片之一：红色水壶、蓝色招牌一类的色块被用作构图上的支点，而非写实需要。固定低机位与段落之间的空镜一如既往。结尾平山在空屋中哼唱旧曲。小津于次年十二月十二日去世，与他的生日同一天，终年六十岁。",
+    introductionEn:
+      "An Autumn Afternoon is a 1962 Japanese film directed by Yasujirō Ozu, produced by Shochiku, with Chishū Ryū as Shūhei Hirayama and Shima Iwashita as his daughter Michiko. Hirayama, long a widower, is urged by old friends to arrange his daughter's marriage, and returns to an empty house once the wedding is over. It was Ozu's last film and one of the few he made in colour, which he used compositionally rather than for realism: a red kettle or a blue shop sign serves as a fixed point in the frame. The low camera and the shots of empty space between scenes are unchanged. It closes with Hirayama humming an old song alone at home. Ozu died on 12 December the following year, his sixtieth birthday.",
     cast: [
       {
         name: "Chishū Ryū",
@@ -2082,10 +2121,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0058003",
     doubanId: "1299261",
     wikidataId: "Q399647",
-    editorialNote:
-      "安东尼奥尼的第一部彩色片，他的做法是把颜色直接刷到现实上：草地喷成灰色，水果摊漆成白色，工厂的管道涂成刺目的黄。这不是布景，是女主角的神经系统——她在工业化的拉文纳走来走去，无法说清自己得了什么病，而整个世界的颜色替她说了。影片几乎没有情节，很多人会觉得闷，但它是电影史上第一次真正把色彩当作心理状态来使用，此后所有关于「现代人异化」的画面都欠它一笔。莫妮卡·维蒂的表演同样反常规：她不演崩溃，只演一个人努力维持正常的那种吃力。适合在心情稳定的时候看，它不安慰人，也不打算安慰人。",
-    editorialNoteEn:
-      "Antonioni's first film in color, and his method was to paint color directly onto reality: grass sprayed gray, a fruit stall painted white, factory pipework in a punishing yellow. This is not set dressing, it is the heroine's nervous system — she moves through industrial Ravenna unable to say what is wrong with her, and the color of the world says it on her behalf. There is almost no plot and plenty of viewers find it inert. It is also the first time cinema used color as a psychological state rather than a description, and every subsequent image of modern alienation is in its debt. Monica Vitti's performance is equally against the grain: she does not play breakdown, she plays the effort of holding normality together. Watch it when you are feeling steady; it offers no comfort and has no intention of offering any.",
+    introduction:
+      "《红色沙漠》是米开朗基罗·安东尼奥尼执导的 1964 年意大利、法国合拍电影，莫尼卡·维蒂饰演朱莉安娜，理查德·哈里斯饰演工程师科拉多。故事设在拉文纳的石化工业区：朱莉安娜在一次车祸后长期情绪失常，丈夫在当地厂区任职，她与来访的科拉多短暂往来。这是安东尼奥尼第一部彩色片，拍摄中对实景直接施色——草地喷灰、街边摊位刷白、厂区管道涂成黄色，用以配合人物状态而非还原环境。影片几乎没有戏剧冲突，多用工厂、雾气与滩涂的远景。本片获威尼斯电影节金狮奖。",
+    introductionEn:
+      "Red Desert is a 1964 Italian and French co-production directed by Michelangelo Antonioni, with Monica Vitti as Giuliana and Richard Harris as Corrado, an engineer. It is set among the petrochemical works at Ravenna. Giuliana has been in an unsettled state since a car accident; her husband holds a post at one of the plants, and she and the visiting Corrado see each other briefly. It was Antonioni's first film in colour, and much of it was achieved by painting the locations themselves: grass sprayed grey, a market stall whitened, factory pipework rendered in yellow, matched to the character's condition rather than to how the place looked. There is little dramatic incident, and the film relies on distant views of the works, the fog and the mudflats. It received the Golden Lion at Venice.",
     cast: [
       { name: "Monica Vitti", zhName: "莫妮卡·维蒂", character: "Giuliana" },
       { name: "Richard Harris", zhName: "理查德·哈里斯", character: "Corrado Zeller" },
@@ -2109,10 +2148,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0069467",
     doubanId: "1296147",
     wikidataId: "Q830874",
-    editorialNote:
-      "一栋红色的宅子里，一个女人正在死去，两个姐妹守在旁边，谁也无法真正靠近谁。伯格曼说他一生反复梦见一个全红的房间，于是整部电影就建在那个梦里——墙是红的，帷幕是红的，连场景之间的转场都用整幅红色画面切开，像血，也像子宫。摄影师尼克维斯特凭此片拿下奥斯卡，那些脸部特写在烛光下几乎是宗教画。这是伯格曼最不留情的一部：临终的痛苦被拍得毫不修饰，而亲情在这里没有拯救任何人，真正给出安慰的反而是那位不说话的女仆。九十分钟，看完需要缓一会儿再开口说话。",
-    editorialNoteEn:
-      "In a red house a woman is dying while two sisters keep vigil, and none of the three can genuinely reach another. Bergman said he dreamed repeatedly of a room that was entirely red, and the film is built inside that dream — red walls, red drapes, and even the transitions between scenes cut through a full frame of red, like blood and like a womb. Sven Nykvist won an Oscar for the photography, and the faces in candlelight are close to religious painting. This is Bergman at his least merciful: the pain of dying is filmed without softening, and family love saves precisely nobody. The only real comfort in the house comes from the servant, who says almost nothing and is not related to any of them. Ninety minutes, and you will want to sit still for a while afterwards before speaking to anyone.",
+    introduction:
+      "《呼喊与细语》是英格玛·伯格曼执导的 1972 年瑞典电影，哈里特·安德森饰演患病垂死的艾格尼丝，英格丽·图林与丽芙·乌曼饰演她的两个姐妹。故事发生在十九世纪末一栋宅子里：两位姐妹回来陪伴临终的妹妹，彼此之间始终隔着距离，反而是女仆安娜给了艾格尼丝最直接的照料。影片以红色为主导色，墙面与帷幕均为红色，场景之间用整幅红色画面转场。摄影由斯文·尼克维斯特担任，多用烛光下的面部特写。本片获奥斯卡最佳摄影奖。",
+    introductionEn:
+      "Cries and Whispers is a 1972 Swedish film directed by Ingmar Bergman, with Harriet Andersson as Agnes, who is dying, and Ingrid Thulin and Liv Ullmann as her sisters. It is set in a manor house at the end of the nineteenth century, where the two sisters have come to sit with Agnes and remain at a distance from her and from each other; the most direct care she receives comes from Anna, the servant. Red dominates the production design, in the walls and the drapes, and the scenes are separated from one another by transitions through a full red frame. Sven Nykvist photographed it, working largely in close-up and by candlelight. The film was nominated for Best Picture, unusually for a foreign-language production, and received the Academy Award for Best Cinematography.",
     cast: [
       { name: "Harriet Andersson", zhName: "哈里特·安德森", character: "Agnes" },
       { name: "Ingrid Thulin", zhName: "英格丽·图林", character: "Karin" },
@@ -2137,10 +2176,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0072443",
     doubanId: "1299248",
     wikidataId: "Q838149",
-    editorialNote:
-      "塔可夫斯基最私人也最难的一部：没有情节，没有连贯的时间，母亲、妻子由同一个演员扮演，童年、战争、新闻片与梦境彼此渗透。它不要求你看懂，它要求你回忆——很多人第一次看会困惑，第二次看会在某个毫无预兆的镜头前掉眼泪，比如风吹过荞麦地，或者一间木屋在雨中缓缓烧起来。彩色与黑白在片中交替出现，不按逻辑，只按记忆的温度。如果你想知道电影除了讲故事还能做什么，这部片子是最直接的答案。请挑一个不会被打断的夜晚。",
-    editorialNoteEn:
-      "Tarkovsky's most private and most difficult film: no plot, no continuous time, the mother and the wife played by the same actor, and childhood, war, newsreel and dream all seeping into one another. It does not ask you to follow it; it asks you to remember. Most people are baffled the first time and then, on a second viewing, find themselves crying at something entirely unheralded — wind moving across a field of buckwheat, or a wooden barn burning slowly in the rain. Color and black-and-white alternate throughout on no logic but the temperature of memory, and the poems on the soundtrack are read by the director's own father. If you want to know what film can do besides tell a story, this is the most direct answer available. Choose an evening when nothing will interrupt you.",
+    introduction:
+      "《镜子》是安德烈·塔可夫斯基执导的 1975 年苏联电影，莫斯科电影制片厂出品，玛格丽塔·捷列霍娃一人分饰主人公的母亲与妻子，伊格纳特·丹尼尔采夫分饰其童年与其子。影片没有连贯情节，由童年记忆、战时片段、梦境与纪录影像交替构成，时序不作标示。素材取自导演本人的家庭经历，片中朗诵的诗作出自其父阿尔谢尼·塔可夫斯基，由本人诵读。彩色、黑白与褪色片段交替使用。全片约一百零七分钟，公映后在苏联被列为限制发行。",
+    introductionEn:
+      "The Mirror is a 1975 Soviet film directed by Andrei Tarkovsky, produced by Mosfilm, with Margarita Terekhova playing both the narrator's mother and his wife and Ignat Daniltsev playing both his son and himself as a boy. There is no continuous plot: the film alternates between childhood recollection, wartime episodes, dreams and documentary footage, and does not mark the chronology. The material is drawn from the director's own family history, and the poems heard on the soundtrack are by his father, Arseny Tarkovsky, read aloud by the poet himself. Colour, black-and-white and desaturated passages alternate throughout, and the documentary inserts include Soviet newsreel of the Spanish Civil War and of a stratospheric balloon ascent. It runs about a hundred and seven minutes, and its distribution within the Soviet Union was restricted after release.",
     cast: [
       {
         name: "Margarita Terekhova",
@@ -2168,10 +2207,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0049902",
     doubanId: "1303562",
     wikidataId: "Q2385009",
-    editorialNote:
-      "片名已经告诉你结局，布列松却依然让这一百分钟紧张得难以呼吸。一个法国抵抗组织成员在里昂的监狱里准备越狱：他磨勺子、拆门板、把床单撕成绳子，摄影机几乎只拍手和物件，声音全靠走廊的脚步与远处的火车。没有配乐渲染，没有闪回交代，也没有一场戏是为了让你认识这个人——但你会在结尾发现自己已经和他一起活了一百分钟。这是极简主义最有力的证明：越是拿掉，越是留下。布列松说他拍的是「圣灵随心所欲地吹拂」，这句话看完就懂了。",
-    editorialNoteEn:
-      "The title gives away the ending and Bresson still makes these hundred minutes almost too tense to breathe through. A member of the French Resistance prepares to break out of a prison in Lyon: he grinds down a spoon, works a door apart, tears bedding into rope, and the camera looks at almost nothing but hands and objects while the sound is footsteps in a corridor and a train somewhere outside. No score underlines anything, no flashback explains him, and not one scene exists to introduce him as a personality — yet by the end you find you have been living alongside him the whole time. It is the most forceful demonstration of minimalism there is: the more that is removed, the more remains. Bresson said his subject was the wind blowing where it wishes, and the film makes that plain.",
+    introduction:
+      "《死囚越狱》是罗贝尔·布列松执导的 1956 年法国电影，弗朗索瓦·勒特里耶饰演方丹。影片取材自安德烈·德维尼的回忆录，讲述 1943 年一名法国抵抗组织成员被囚于里昂蒙吕克监狱、等待处决期间策划越狱：他把汤匙磨成工具拆解牢门板，将床单与铁丝编成绳索，通过敲击墙壁与放风时的低语与邻室联络。行动前夕，一名少年犯被并入他的牢房，其身份无从判断。全片以手部与器物的近景为主，无配乐，声音多为走廊脚步、钥匙与远处火车。片名已交代结局。",
+    introductionEn:
+      "A Man Escaped is a 1956 French film directed by Robert Bresson, with François Leterrier as Fontaine. It is based on the memoir of André Devigny, a member of the Resistance held at Montluc prison in Lyon in 1943. Awaiting execution, Fontaine grinds a spoon into a tool to work the panels of his cell door apart, plaits rope from bedding and wire, and communicates with the neighbouring cells by tapping on walls and speaking low in the exercise yard. On the eve of the attempt a young prisoner is moved in with him, and there is no way to establish whether he can be trusted. The film is built from close shots of hands and objects, carries no score, and takes its sound mostly from footsteps, keys and a distant train. The title states the outcome in advance.",
     cast: [{ name: "François Leterrier", zhName: "弗朗索瓦·勒泰里耶", character: "Fontaine" }],
     directorSlugs: ["robert-bresson"],
   },
@@ -2192,10 +2231,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0038890",
     doubanId: "1296669",
     wikidataId: "Q721146",
-    editorialNote:
-      "新现实主义从这里开始。罗西里尼在德军刚撤走的罗马开拍，胶片是东拼西凑买来的，街道就是真的街道，很多群众演员几个月前刚刚经历过片里的事。安娜·马尼亚尼追着卡车奔跑然后倒下的那个镜头，是电影史上最著名的画面之一，而它之所以有力，正是因为周围的一切都不像在演戏。影片粗糙、噪点很重、录音也差，但这些「缺点」后来变成了一整套美学，直接影响了此后七十年的世界电影。看它不是看一部老片，是看一件在废墟上抢救出来的证物。",
-    editorialNoteEn:
-      "Neorealism begins here. Rossellini started shooting in Rome as the German army was pulling out, using film stock bought in scraps wherever he could find it, on streets that were simply the streets, with extras who had lived through the events being staged only months earlier. The shot of Anna Magnani running after a truck and falling is among the most famous images in cinema, and its force comes precisely from the fact that nothing around it looks like acting. The film is rough, heavily grained and badly recorded, and those defects became an entire aesthetic that has shaped world cinema for seventy years since. Rossellini was not documenting a style; he was working with what a bombed city could supply, and the style is what survived of the necessity. Watching it is less like watching an old film than like examining evidence salvaged from rubble.",
+    introduction:
+      "《罗马，不设防的城市》是罗伯托·罗西里尼执导的 1945 年意大利电影，安娜·马尼亚尼饰演皮娜，阿尔多·法布里齐饰演天主教神父唐·皮埃特罗，剧本参与者包括费德里科·费里尼。故事设在德军占领下的罗马：抵抗组织成员曼弗雷迪躲藏于印刷工皮娜的住处，唐·皮埃特罗为其传递消息，三人先后被盖世太保追捕。影片在德军撤离后不久开拍，胶片为零散收购所得，多处在实际街道与住宅内拍摄，室内光线不足处直接沿用。声音为后期配录。本片在戛纳电影节获大奖。",
+    introductionEn:
+      "Rome, Open City is a 1945 Italian film directed by Roberto Rossellini, with Anna Magnani as Pina and Aldo Fabrizi as the priest Don Pietro; Federico Fellini was among the writers of the screenplay. It is set in Rome under German occupation: a Resistance organiser, Manfredi, hides in the building where Pina lives, Don Pietro carries messages on his behalf, and all three are pursued by the Gestapo. Shooting began not long after the German withdrawal, using film stock bought in whatever quantities could be found, and much of it was done in actual streets and apartments, with poorly lit interiors used as they were rather than relit. The sound was recorded afterwards and dubbed. The film shared the Grand Prix at Cannes.",
     cast: [
       { name: "Anna Magnani", zhName: "安娜·马尼亚尼", character: "Pina" },
       { name: "Aldo Fabrizi", zhName: "阿尔多·法布里齐", character: "Don Pietro" },
@@ -2219,10 +2258,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0056058",
     doubanId: "1304920",
     wikidataId: "Q1584406",
-    editorialNote:
-      "一个落魄浪人走进大名的宅邸，说要在此切腹。对方允许了，并打算看一场好戏——然后他开始讲一个故事，而这个故事会把整座宅子的体面拆得干干净净。小林正树用最工整的构图拍最锋利的控诉：庭院对称、家臣列坐、一切都合乎礼法，正因如此，当真相一层层揭开时才格外骇人。片中那把竹刀是电影史上最残忍的道具之一，它逼出的问题很简单：当荣誉只剩下形式，维持形式的代价由谁来付。仲代达矢的表演由始至终压着，直到最后才爆发。如果你觉得武士片就是打打杀杀，这部会彻底改变你的看法。",
-    editorialNoteEn:
-      "A destitute masterless samurai walks into a great house and announces he intends to disembowel himself there. Permission is granted and the retainers settle in to enjoy the spectacle — and then he begins telling a story, and the story dismantles the entire decorum of the house. Kobayashi films the sharpest possible indictment in the most orderly possible compositions: the courtyard symmetrical, the retainers ranked, everything correct according to form, which is exactly what makes the truth so appalling as it is peeled back layer by layer. The bamboo blade is one of the cruellest props in cinema, and the question it forces is a simple one: when honour has been reduced to form, who pays the cost of maintaining the form. Nakadai holds his performance down throughout and detonates it only at the very end. If you think samurai films are about swordplay, this one will change your mind permanently.",
+    introduction:
+      "《切腹》是小林正树执导的 1962 年日本电影，松竹出品，仲代达矢饰演浪人津云半四郎，三国连太郎饰演家老斋藤勘解由。故事设在江户初期，大批藩士因废藩失去俸禄：津云来到井伊家宅邸，请求在庭中切腹。家老以为又是一名讹钱的浪人，遂讲述数月前另一名浪人千千岩求女的下场——对方被识破无意寻死，仍被逼以竹刀剖腹。津云随后道出自己与求女的关系。全片以对称构图与庭院内的固定机位拍成，仅结尾一场为动作戏。本片获戛纳电影节评审团奖。",
+    introductionEn:
+      "Harakiri is a 1962 Japanese film directed by Masaki Kobayashi, produced by Shochiku, with Tatsuya Nakadai as the ronin Hanshirō Tsugumo and Rentarō Mikuni as the senior retainer Kageyu Saitō. It is set in the early Edo period, when the abolition of many domains had left large numbers of samurai without stipends. Tsugumo arrives at the Iyi house and asks to commit seppuku in its courtyard. Saitō, taking him for another ronin angling for money, recounts what befell an earlier petitioner, Motome Chijiiwa, who was found to have no intention of dying and was compelled to disembowel himself with a bamboo blade. Tsugumo then explains his own connection to him. The film is composed in symmetrical framings from fixed positions within the courtyard, and reserves its only action sequence for the end. It received the Jury Prize at Cannes.",
     cast: [
       {
         name: "Tatsuya Nakadai",
@@ -2257,10 +2296,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0048757",
     doubanId: "1298870",
     wikidataId: "Q3346017",
-    editorialNote:
-      "一对在战时越南相爱的男女，回到战败后的东京，发现那段感情在这里没有位置。成濑巳喜男不给他们任何一个可以重新开始的机会，也不让他们干脆分开——两人就这样拖着，借钱、争吵、投奔、又离开，一路走到最南端的岛上。这是日本电影里最不浪漫的爱情片，也是最真实的一部：它明白人不是被一次打击摧毁的，而是被无数次微小的将就磨平的。高峰秀子的表演几乎没有情绪爆发，却让你看见一个女人如何一寸寸认命。看完会有点难过，但那种难过很干净。",
-    editorialNoteEn:
-      "A man and a woman who fell in love in wartime Indochina return to a defeated Tokyo and discover their feeling has nowhere to live. Naruse gives them no opening to begin again and does not let them cleanly separate either — they simply drag on, borrowing money, quarrelling, turning up on each other's doorsteps, leaving again, all the way down to an island at the southern end of the country. It is the least romantic love story in Japanese cinema and the truest: it understands that people are not destroyed by a single blow but worn flat by countless small accommodations. Hideko Takamine barely raises her voice and yet you watch a woman resign herself inch by inch. You will feel low afterwards, but it is a clean kind of low.",
+    introduction:
+      "《浮云》是成濑巳喜男执导的 1955 年日本电影，东宝出品，高峰秀子饰演幸田雪子，森雅之饰演富冈兼吾，改编自林芙美子的同名小说。两人战时在法属印度支那的农林试验所相识，富冈已有妻室。战败后雪子回到东京寻他，此后数年间两人反复重逢与分开：借钱、争执、各自另有关系，最终一同前往屋久岛，雪子在当地病故。影片以战后物资匮乏的城市与旅舍为主要场景，情节不设转折，人物处境逐段下沉。本片在《电影旬报》年度十佳评选中位列第一。",
+    introductionEn:
+      "Floating Clouds is a 1955 Japanese film directed by Mikio Naruse, produced by Toho, with Hideko Takamine as Yukiko Koda and Masayuki Mori as Kengo Tomioka, adapted from the novel by Fumiko Hayashi. The two meet during the war at a forestry station in French Indochina, where Tomioka is already married. After the defeat Yukiko seeks him out in Tokyo, and over the following years they separate and reunite repeatedly: borrowing money, quarrelling, taking up with other people. They travel together to Yakushima, where Yukiko falls ill and dies. The film is set largely in the lodging houses and depleted streets of the postwar city, and offers no reversal; the characters' circumstances decline steadily from scene to scene. It was placed first in Kinema Junpo's annual critics' poll.",
     cast: [
       { name: "Hideko Takamine", zhName: "高峰秀子", character: "Yukiko", characterZh: "雪子" },
       { name: "Masayuki Mori", zhName: "森雅之", character: "Kengo", characterZh: "富冈兼吾" },
@@ -2284,10 +2323,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0062136",
     doubanId: "1303543",
     wikidataId: "Q1454574",
-    editorialNote:
-      "塔蒂花光身家造了一座城：钢铁、玻璃、直角，全部按他的笑话尺寸定做。影片里没有主角——于洛先生只是众多迷路者之一——也几乎没有台词，笑点分散在画面的各个角落，同一个镜头里可能同时发生七八件事，你看哪里，哪里就是主线。这是对观众注意力的一次彻底反叛：别人的喜剧告诉你什么时候笑，塔蒂让你自己去找。影片当年惨败，令他破产，此后再没能恢复元气。今天它被视作电影史上最精密的喜剧建筑，值得为它专门腾出一个晚上，并且看第二遍。",
-    editorialNoteEn:
-      "Tati spent his entire fortune building a city — steel, glass, right angles, every piece custom-made to the dimensions of his jokes. There is no protagonist; Monsieur Hulot is merely one of many people who have got lost. There is almost no dialogue either, and the gags are distributed across every corner of the frame, with seven or eight things sometimes happening at once, so that whatever you happen to look at becomes the main action. It is a wholesale revolt against how comedy manages attention: other films tell you when to laugh, and Tati makes you go and find it. It flopped, bankrupted him, and he never recovered. It is now considered the most precisely engineered comic architecture ever built, and it repays a second viewing more than almost anything else here.",
+    introduction:
+      "《游戏时间》是雅克·塔蒂执导的 1967 年法国、意大利合拍电影，塔蒂饰演于洛先生。影片没有贯穿的情节：一批美国游客抵达巴黎，于洛前往一处办公楼赴约未果，众人先后经过展销会、公寓与一家当晚开业的餐厅。为拍摄本片，塔蒂在巴黎郊外搭建了一座包含玻璃幕墙建筑与街道的布景，通称「塔蒂城」，费用极高。全片以 70 毫米胶片拍摄，多用远景与深焦，同一画面内常有数处动作同时进行，对白零碎且多不必听清。影片票房失利，塔蒂因此破产，布景其后拆除。",
+    introductionEn:
+      "Playtime is a 1967 French and Italian co-production directed by Jacques Tati, who also plays Monsieur Hulot. There is no continuous plot: a group of American tourists arrives in Paris, Hulot fails to keep an appointment at an office building, and the various characters pass through a trade exhibition, an apartment block, and a restaurant on its opening night. Tati had a set built outside Paris comprising glass-fronted buildings and streets, known as Tativille, at very high cost. The film was shot in 70mm and works largely in long shot and deep focus, with several actions running simultaneously within a single frame and dialogue that is fragmentary and often not meant to be followed. It failed commercially, Tati was made bankrupt, and the set was demolished.",
     cast: [{ name: "Jacques Tati", zhName: "雅克·塔蒂", character: "Monsieur Hulot" }],
     directorSlugs: ["jacques-tati"],
   },
@@ -2308,10 +2347,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0040725",
     doubanId: "1299204",
     wikidataId: "Q625780",
-    editorialNote:
-      "一个芭蕾舞者被要求在爱情与艺术之间二选一，而这部电影认为这个选择本身就是致命的。中段那场十七分钟的《红菱艳》舞剧，是特艺七彩最放肆的一次挥霍：布景在舞者脚下变形，纸张变成人，海浪变成舞台，电影彻底放弃了写实，改用舞蹈的逻辑说话。鲍威尔与普雷斯伯格把英国影坛的克制传统整个掀翻，拍出了一部关于「被自己的天赋吞噬」的恐怖片——那双红鞋一旦穿上就停不下来，这个童话在片中是字面意义上的真的。此后无数导演承认自己是因为这部片子才开始拍电影。",
-    editorialNoteEn:
-      "A ballerina is told to choose between love and art, and the film's position is that the demand itself is fatal. The seventeen-minute ballet at its centre is the most extravagant use Technicolor was ever put to: sets deform beneath the dancer, sheets of newspaper become a man, waves become a stage, and the picture abandons realism entirely to argue in the logic of dance instead. Powell and Pressburger overturned the whole restrained tradition of British cinema to make what is finally a horror film about being devoured by your own gift — once the red shoes go on they cannot be stopped, and in this film the fairy tale is literally true. A remarkable number of directors have said afterwards that this is the film that made them want to make films.",
+    introduction:
+      "《红菱艳》是迈克尔·鲍威尔与埃默里克·普雷斯伯格共同编导的 1948 年英国电影，莫伊拉·希勒饰演舞者维多利亚·佩姬，安东·沃尔布鲁克饰演舞团经理莱蒙托夫，故事取材自安徒生的童话《红鞋》。佩姬加入莱蒙托夫的舞团并出演新排的《红菱艳》，其后与团里的作曲家结婚，莱蒙托夫要求她在婚姻与舞团之间作出选择。片中那段舞剧长约十七分钟，布景在舞蹈过程中变换，使用了叠印与定格等手法。摄影为杰克·卡迪夫，以特艺七彩拍摄。本片获奥斯卡最佳艺术指导与最佳配乐奖。",
+    introductionEn:
+      "The Red Shoes is a 1948 British film written, produced and directed by Michael Powell and Emeric Pressburger, with Moira Shearer as the dancer Victoria Page, Anton Walbrook as the impresario Lermontov, and Marius Goring as the composer Julian Craster. It draws on Hans Christian Andersen's tale of the same name. Page joins Lermontov's company and dances the lead in a new ballet built on that story, then marries Craster, and Lermontov requires her to choose between the marriage and the company. The ballet sequence at the centre runs about seventeen minutes, with sets that change during the dance and effects including superimposition and stop-motion. Jack Cardiff photographed it in Technicolor. The film received Academy Awards for Art Direction and for its score.",
     cast: [
       { name: "Moira Shearer", zhName: "莫伊拉·希勒", character: "Victoria Page" },
       { name: "Anton Walbrook", zhName: "安东·沃尔布鲁克", character: "Boris Lermontov" },
@@ -2326,8 +2365,12 @@ export const seedFilms: SeedFilm[] = [
     titleOriginal: "Lawrence of Arabia",
     titleEn: "Lawrence of Arabia",
     year: 1962,
-    countries: ["英国"],
-    runtimeMinutes: 218,
+    // Both corrected against Wikidata (Q228186) when the introduction was
+    // rewritten and contradicted the row it sits in: a Horizon/Columbia
+    // production credited to the US and UK, and 216 minutes for the 1989
+    // restoration that circulates. 218 was the 1962 roadshow length.
+    countries: ["英国", "美国"],
+    runtimeMinutes: 216,
     aspectRatio: "2.20:1",
     isBlackAndWhite: false,
     tagSlugs: ["epic", "war"],
@@ -2335,10 +2378,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0056172",
     doubanId: "1292349",
     wikidataId: "Q228186",
-    editorialNote:
-      "一根火柴被吹灭，切给一轮沙漠上升起的红日——里恩用一个剪辑就宣告了什么叫大银幕。四个小时里，沙漠不是背景而是角色：它吞掉队伍、吞掉时间，也吞掉劳伦斯这个人。影片最了不起的地方不是场面，而是它对英雄的怀疑——你看着一个理想主义者一点点爱上自己的传奇，然后被这份传奇掏空，最后连他自己都认不出镜子里的人。这是史诗片的最高标准，也几乎是最后一部无法用电脑合成的史诗。请务必找最大的屏幕，四个小时不算长，前提是你别在手机上看。",
-    editorialNoteEn:
-      "A match is blown out and the film cuts to a red sun rising over the desert — with one edit Lean declared what a large screen is for. Across four hours the desert is not scenery but a character: it swallows columns of men, swallows time, and swallows Lawrence himself. What is most remarkable is not the scale but the film's suspicion of its own hero — you watch an idealist fall gradually in love with his legend, get hollowed out by it, and end unable to recognise the man in the mirror. This is the standard against which epics are measured, and very nearly the last epic that could not have been assembled in a computer. Find the largest screen available to you. Four hours is not long, provided you are not watching it on a phone.",
+    introduction:
+      "《阿拉伯的劳伦斯》是大卫·里恩执导的 1962 年英国、美国合拍电影，彼得·奥图尔饰演 T·E·劳伦斯，奥马尔·沙里夫饰演谢里夫·阿里，亚历克·吉尼斯饰演费萨尔亲王。影片取材自劳伦斯在一战期间的经历与其著作《智慧七柱》：他作为英军联络官参与阿拉伯起义，促成部族联合攻取亚喀巴，其后在大马士革目睹起义成果被英法瓜分。全片以 70 毫米胶片在约旦、摩洛哥与西班牙实地拍摄，片长约二百一十六分钟，中间设休息时段。本片获七项奥斯卡奖，包括最佳影片与最佳导演。",
+    introductionEn:
+      "Lawrence of Arabia is a 1962 British and American co-production directed by David Lean, with Peter O'Toole as T. E. Lawrence, Omar Sharif as Sherif Ali and Alec Guinness as Prince Faisal. It draws on Lawrence's service during the First World War and on his book Seven Pillars of Wisdom: attached to the Arab Revolt as a British liaison officer, he helps bring rival tribes together to take Aqaba across the Nefud desert, and later sees the outcome of the revolt divided between Britain and France at Damascus. It was shot in 70mm on location in Jordan, Morocco and Spain, runs about two hundred and sixteen minutes, and was released with an intermission. It received seven Academy Awards, including Best Picture and Best Director.",
     cast: [
       { name: "Peter O'Toole", zhName: "彼得·奥图尔", character: "T. E. Lawrence" },
       { name: "Omar Sharif", zhName: "奥马尔·沙里夫", character: "Sherif Ali" },
@@ -2363,10 +2406,10 @@ export const seedFilms: SeedFilm[] = [
     imdbId: "tt0078788",
     doubanId: "1292260",
     wikidataId: "Q182692",
-    editorialNote:
-      "科波拉把康拉德的《黑暗之心》搬到越南，让一艘小艇逆流而上去刺杀一个疯掉的上校，结果拍出了一部本身就在发疯的电影。菲律宾的拍摄失控到近乎传奇：台风摧毁布景，主演心脏病发，预算靠他抵押家产维持，成片里那种越往上游越不讲道理的气氛，有一半来自剧组自己的处境。直升机伴着瓦格纳扫射村庄的段落已成经典，但真正留下的是后半段的黑暗——当叙事逻辑一起崩溃时，战争片终于不再假装战争可以被讲述。这不是一部关于越战的电影，它本身就是一场战争。",
-    editorialNoteEn:
-      "Coppola moved Conrad's Heart of Darkness to Vietnam, sent a patrol boat upriver to assassinate a colonel who has gone mad, and ended up making a film that is itself deranged. The Philippine shoot became legendary for going out of control: a typhoon destroyed the sets, the lead actor had a heart attack, and the budget was kept alive against his own mortgaged property — and fully half of the film's sense that reason thins the further upriver you go comes from the circumstances of the crew. The helicopter assault set to Wagner is long since canonical, but what actually stays with you is the darkness of the last hour, where the narrative logic collapses along with everything else and the war film finally stops pretending war can be narrated at all.",
+    introduction:
+      "《现代启示录》是弗朗西斯·福特·科波拉执导的 1979 年美国电影，美国活动影像公司出品，马丁·辛饰演威拉德上尉，马龙·白兰度饰演库尔兹上校，罗伯特·杜瓦尔饰演基尔戈中校。剧本以约瑟夫·康拉德的小说《黑暗之心》为底本，移入越战：威拉德受命溯河进入柬埔寨，找到并处决脱离指挥体系、自行建立据点的库尔兹。影片在菲律宾拍摄，历时约十六个月，期间台风摧毁布景，马丁·辛心脏病发，超支部分由科波拉个人担保。现存三个不同长度的版本。本片获戛纳电影节金棕榈奖，以及奥斯卡最佳摄影与最佳音响奖。",
+    introductionEn:
+      "Apocalypse Now is a 1979 American film directed by Francis Ford Coppola, produced by American Zoetrope, with Martin Sheen as Captain Willard, Marlon Brando as Colonel Kurtz and Robert Duvall as Lieutenant Colonel Kilgore. The screenplay takes Joseph Conrad's Heart of Darkness as its basis and relocates it to the Vietnam War: Willard is ordered upriver into Cambodia to find and kill Kurtz, an officer who has left the chain of command and established a base of his own. Shooting took place in the Philippines over roughly sixteen months, during which a typhoon destroyed sets, Sheen suffered a heart attack, and Coppola guaranteed the overruns against his own property. Three versions of differing length exist. The film received the Palme d'Or at Cannes and Academy Awards for cinematography and sound.",
     cast: [
       {
         name: "Martin Sheen",

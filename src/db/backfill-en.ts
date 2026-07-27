@@ -60,13 +60,16 @@ async function main() {
     APPLY ? "MODE: APPLY (writing)\n" : "MODE: dry run (no writes; pass --apply to write)\n",
   );
 
-  // ── Films: en-authored ⇔ editorialNoteEn + titleEn present ──────────────
+  // ── Films: en-authored ⇔ introductionEn + titleEn present ───────────────
+  // Keyed on the introduction, not the note: the note is optional, so
+  // keying on it would leave every translated film unpublished until
+  // somebody wrote one.
   const filmSeeds = seedFilms
     .map((f, index) => ({ f, index }))
-    .filter(({ f }) => f.editorialNoteEn && f.titleEn);
+    .filter(({ f }) => f.introductionEn && f.titleEn);
   const filmState = filmSeeds.length
     ? await db
-        .select({ slug: films.slug, statusEn: films.statusEn, noteEn: films.editorialNoteEn })
+        .select({ slug: films.slug, statusEn: films.statusEn, noteEn: films.introductionEn })
         .from(films)
         .where(
           inArray(
@@ -209,13 +212,14 @@ async function main() {
         .update(films)
         .set({
           titleEn: f.titleEn ?? null,
+          introductionEn: f.introductionEn ?? null,
           editorialNoteEn: f.editorialNoteEn ?? null,
           essayEn: f.essayEn ?? null,
           statusEn: "published",
           publishedEnAt: publishedEnAt(films.publishedAt),
         })
         .where(
-          and(eq(films.slug, f.slug), eq(films.statusEn, "draft"), isNull(films.editorialNoteEn)),
+          and(eq(films.slug, f.slug), eq(films.statusEn, "draft"), isNull(films.introductionEn)),
         )
         .returning({ slug: films.slug });
       filmsN += res.length;
@@ -228,6 +232,7 @@ async function main() {
         .set({
           bioEn: d.bioEn ?? null,
           careerEssayEn: d.careerEssayEn ?? null,
+          editorialNoteEn: d.editorialNoteEn ?? null,
           statusEn: "published",
           publishedEnAt: publishedEnAt(people.publishedAt),
         })
