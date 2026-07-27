@@ -784,13 +784,25 @@ async function assertPublishable(
     }
   }
 
-  // People get the same note ceilings as films. The form schema caps them,
-  // but the seeder and resync are separate write paths that never see it —
-  // so without this a seeded note over the ceiling publishes fine and then
-  // cannot be saved from /admin, which is the failure shape publishProblems
-  // was extracted to prevent. Nothing is required here: 人物介绍 is gated by
-  // validators/person.ts, and the note is optional by design (ADR 0017).
+  // People are inserted `status: "published"` outright, so everything
+  // validators/person.ts demands at publish time has to hold here too. The
+  // checks are restated rather than imported: validators/person.ts pulls in
+  // ./prose, which drags @tiptap/core and the editor extensions along with
+  // it, and the film loop above already restates its own bands the same way.
+  //
+  // Kept in step with publishProblems / publishEnProblems — 人物介绍 required,
+  // the note capped and never required (ADR 0017). Without it /admin refuses
+  // to publish a person the seeder publishes anyway, which is the split
+  // publishProblems was extracted to close.
   for (const d of seedPeople) {
+    if (!d.bio?.trim()) {
+      problems.push(`person ${d.slug}: 人物介绍 (bio) is required to publish`);
+    }
+    // statusEn is derived from bioEn at insert, so a blank one means the
+    // English edition is a draft rather than a broken published row.
+    if (d.bioEn !== undefined && !d.bioEn?.trim()) {
+      problems.push(`person ${d.slug}: bioEn is present but empty`);
+    }
     const noteLen = codePointLength(d.editorialNote ?? "");
     if (noteLen > EDITORIAL_NOTE_MAX) {
       problems.push(

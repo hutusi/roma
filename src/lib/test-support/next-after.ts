@@ -22,18 +22,31 @@ import { mock } from "bun:test";
  * registration and one `pending`, so whichever file triggers it, every reader
  * is looking at the same thing.
  */
-let pending: Promise<unknown> | undefined;
+/**
+ * Every callback, not just the most recent. Keeping a single promise looks
+ * adequate while each test schedules one, and silently stops being adequate
+ * the moment one schedules two: the earlier callback still runs, but nothing
+ * can await it, so its assertions race the test that follows it.
+ */
+let pending: Promise<unknown>[] = [];
 
 mock.module("next/server", () => ({
   after: (fn: () => Promise<unknown>) => {
-    pending = Promise.resolve().then(fn);
+    pending.push(Promise.resolve().then(fn));
   },
 }));
 
-/** Await whatever `after()` was last handed, or undefined if it was never called. */
-export const drainAfter = (): Promise<unknown> | undefined => pending;
+/**
+ * Await every callback `after()` has been handed, or `undefined` if it was
+ * never called — which is a meaningful answer, not an empty one, so tests
+ * asserting "nothing was deferred" can say so directly. Tests that expect
+ * deferred work should assert this is defined before awaiting it: `await
+ * undefined` resolves happily and would let the assertion pass vacuously.
+ */
+export const drainAfter = (): Promise<unknown[]> | undefined =>
+  pending.length ? Promise.all(pending) : undefined;
 
 /** Call in `beforeEach`, so one test's deferred work cannot satisfy the next. */
 export const resetAfter = (): void => {
-  pending = undefined;
+  pending = [];
 };

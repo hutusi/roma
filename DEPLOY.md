@@ -193,4 +193,11 @@ no visible intermediate state. Merging first inverts that and fails outright —
 build for PR #28 died on `column ... introduction does not exist`, because preview builds
 read the production database too.
 
+**Do steps 4 and 5 back to back, with no editing in between.** `CLEAR` is computed by one
+process and applied by another, so a note an editor writes in the gap is on the list to be
+erased — and `--clear` is the one operation here that cannot be undone. `resync` takes row
+locks while it applies, which protects the write itself and does nothing about the window
+before it. If the two commands cannot run together, regenerate `CLEAR` immediately before
+applying rather than reusing an older one.
+
 Clearing the notes is the first irreversible step. The backup is the only copy.

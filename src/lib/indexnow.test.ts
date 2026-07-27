@@ -65,7 +65,13 @@ describe("pingIndexNow", () => {
     process.env.INDEXNOW_KEY = "cafe1234";
     failFetch = true;
     pingIndexNow(["/list/noir"]);
-    await drainAfter(); // would reject if the error escaped the callback
+    // Assert something was deferred before awaiting it. `await undefined`
+    // resolves, so without this the test passes just as happily when the
+    // callback was never scheduled — proving nothing about the error path it
+    // exists to cover.
+    const deferred = drainAfter();
+    expect(deferred).toBeDefined();
+    await deferred; // would reject if the error escaped the callback
     expect(calls.length).toBe(0);
   });
 });
