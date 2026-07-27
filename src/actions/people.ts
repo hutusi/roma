@@ -35,12 +35,14 @@ export async function savePerson(
     name: v.name,
     nameZh: v.nameZh || null,
     primaryRole: v.primaryRole,
-    bio: v.bio || null,
+    bio: v.bio?.trim() || null,
     careerEssay: (v.careerEssay as TiptapDoc) ?? null,
-    bioEn: v.bioEn || null,
+    bioEn: v.bioEn?.trim() || null,
     careerEssayEn: (v.careerEssayEn as TiptapDoc) ?? null,
-    editorialNote: v.editorialNote || null,
-    editorialNoteEn: v.editorialNoteEn || null,
+    // Same reason as films.ts: whitespace is truthy and renders an empty
+    // section under a heading.
+    editorialNote: v.editorialNote?.trim() || null,
+    editorialNoteEn: v.editorialNoteEn?.trim() || null,
   };
   try {
     const outcome = await db.transaction(async (tx) => {
@@ -54,7 +56,6 @@ export async function savePerson(
       if (isPublic) {
         const problems = publishProblems({
           bio: v.bio || null,
-          careerEssay: (v.careerEssay as TiptapDoc) ?? null,
           editorialNote: v.editorialNote || null,
         });
         if (problems.length) {

@@ -179,20 +179,42 @@ async function main() {
       continue;
     }
     console.log(`\n${"─".repeat(80)}\n${BOLD}${slug}${RESET}  ${a.titleZh} (${a.year})`);
+    // The body prose MOVED FIELDS: before ADR 0017 it lived in editorialNote,
+    // after it lives in introduction. Comparing note to note across that
+    // boundary reported "200 → 0" for every film that has no note in the new
+    // scheme — which is 68 of 74 — and averaged the spread over those zeros.
+    // So the introduction is read from whichever field the ref kept it in,
+    // and the note is treated as absent on a pre-split ref, which makes an
+    // added note read as an addition rather than a deleted introduction.
+    const splitDone = b.introduction !== undefined;
+    section(
+      "影片介绍 (zh, code points)",
+      ((splitDone ? b.introduction : b.editorialNote) as string) ?? "",
+      (a.introduction as string) ?? "",
+      codePointLength,
+    );
+    section(
+      "Introduction (en, words)",
+      ((splitDone ? b.introductionEn : b.editorialNoteEn) as string) ?? "",
+      (a.introductionEn as string) ?? "",
+      wordCount,
+    );
     section(
       "编辑札记 (zh, code points)",
-      (b.editorialNote as string) ?? "",
+      splitDone ? ((b.editorialNote as string) ?? "") : "",
       (a.editorialNote as string) ?? "",
       codePointLength,
     );
     section(
       "Editorial note (en, words)",
-      (b.editorialNoteEn as string) ?? "",
+      splitDone ? ((b.editorialNoteEn as string) ?? "") : "",
       (a.editorialNoteEn as string) ?? "",
       wordCount,
     );
-    zhLens.push(codePointLength((a.editorialNote as string) ?? ""));
-    enLens.push(wordCount((a.editorialNoteEn as string) ?? ""));
+    // The spread is reported for the field that gates publishing, so it stays
+    // on the introduction rather than the optional note.
+    zhLens.push(codePointLength((a.introduction as string) ?? ""));
+    enLens.push(wordCount((a.introductionEn as string) ?? ""));
   }
 
   // The point of the rewrite is that lengths stop clustering, so report the

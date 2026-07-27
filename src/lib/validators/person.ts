@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { codePointLength, EDITORIAL_NOTE_EN_MAX, EDITORIAL_NOTE_MAX, wordCount } from "./film";
-import { hasProse, tiptapDocSchema } from "./prose";
+import { tiptapDocSchema } from "./prose";
 
 export const personFormSchema = z.object({
   slug: z
@@ -44,14 +44,17 @@ export type PersonFormValues = z.infer<typeof personFormSchema>;
  */
 export function publishProblems(person: {
   bio: string | null;
-  careerEssay: Record<string, unknown> | null;
   editorialNote?: string | null;
 }): string[] {
   const problems: string[] = [];
-  // careerEssay must actually render — an empty { type: "doc" } used to
-  // pass as a truthy object while rendering nothing (see hasProse).
-  if (!person.bio?.trim() && !hasProse(person.careerEssay)) {
-    problems.push("发布前请填写人物介绍或创作历程");
+  // 人物介绍 is required, not one of two alternatives. It was an either/or
+  // until ADR 0017 gave the field a job beyond the page it sits on: it is
+  // the card blurb on every listing and the meta description, sliced to 160
+  // characters. A person published on 创作历程 alone therefore rendered a
+  // blank card and empty metadata, and the English gate below already
+  // required bioEn — zh being the laxer of the two was backwards.
+  if (!person.bio?.trim()) {
+    problems.push("发布前请填写人物介绍");
   }
   const noteLen = codePointLength((person.editorialNote ?? "").trim());
   if (noteLen > EDITORIAL_NOTE_MAX) {

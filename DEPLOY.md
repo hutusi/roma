@@ -148,3 +148,48 @@ is possible.
 Then run the §7 post-deploy checks, plus: new slugs present in `/sitemap.xml` in both
 locales; `/en/film/<new-slug>` is a real page and not a translation-pending stub;
 `/zh/films?tag=<new-tag>` returns results; `/zh/search-index.json` contains the new titles.
+
+## One-time: the ADR 0017 prose transition
+
+Applies to the release that splits 影片介绍 out of 编辑札记, and to nothing after it.
+
+The migration is additive, so nothing above changes. What is not obvious is that a plain
+`resync-content.ts --all --apply` **leaves 68 films holding their old note**, and the new
+code renders that note in its own section under the new introduction. The prose the release
+exists to replace would come back on the same page, under a heading claiming it is an
+editor's personal voice.
+
+Nothing is broken; the rule is working as designed. `main` defined `editorialNote` for all
+74 films, this release defines 6, and a field seed-data leaves `undefined` is deliberately
+left alone rather than nulled — that is what stops a resync clobbering editor-authored work
+(ADR 0014). Meaning "no note" requires saying so, and `--clear` is how.
+
+```bash
+# The dry run already prints the exact incantation for every field it left alone.
+# Scope the grep to the two note fields: --clear-ing everything unasserted is the
+# silent-clobber shape this design exists to avoid.
+CLEAR=$(bun --env-file=.env.production.local run src/db/resync-content.ts --all --diff \
+  | grep -oE '\-\-clear=[a-z0-9-]+:(editorialNote|editorialNoteEn)' \
+  | sed 's/--clear=//' | paste -sd, -)
+echo "$CLEAR" | tr ',' '\n' | wc -l        # expect 136 (68 films × 2). Read them.
+
+bun --env-file=.env.production.local run src/db/resync-content.ts --all --clear="$CLEAR" --apply
+```
+
+Verify before deploying the code, not after:
+
+```bash
+set -a; source .env.production.local; set +a
+psql "$DATABASE_URL" -c "select count(*) from films where editorial_note is not null;"   # exactly 6
+psql "$DATABASE_URL" -c "select count(*) from films where introduction is null;"         # 0
+```
+
+**Order, which is the whole trick.** Migrate → back up the prose columns → resync with
+`--clear` → *then* merge. The build is what publishes the change: existing film pages are
+prerendered and served frozen until the next one, and these scripts run outside Next and
+cannot call `revalidate.ts`, so the database can be reshaped underneath the live site with
+no visible intermediate state. Merging first inverts that and fails outright — the preview
+build for PR #28 died on `column ... introduction does not exist`, because preview builds
+read the production database too.
+
+Clearing the notes is the first irreversible step. The backup is the only copy.

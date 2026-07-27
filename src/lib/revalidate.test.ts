@@ -1,7 +1,5 @@
-import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
-// Hoisted above the mock.module calls below, so this namespace is the real
-// module — which is what makes the restore in afterAll possible.
-import * as realIndexNow from "@/lib/indexnow";
+import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { drainAfter, resetAfter } from "./test-support/next-after";
 
 // Capture what the revalidate helpers hand to next/cache without touching
 // the real cache. Registered before the dynamic import below so the module
@@ -11,34 +9,46 @@ mock.module("next/cache", () => ({
   revalidatePath: (p: string, type?: string) => paths.push([p, type]),
 }));
 
-// The IndexNow ping has its own tests (indexnow.test.ts); here we only
-// assert whether each helper notifies at all.
-const pinged: string[][] = [];
-mock.module("@/lib/indexnow", () => ({
-  pingIndexNow: (p: string[]) => pinged.push(p),
-}));
-
 /**
- * mock.module is process-global and has no unmock, so this stub outlives
- * the file. On Linux the registry keys by resolved path, which means
- * indexnow.test.ts's `import("./indexnow")` resolved to this same entry and
- * got the stub — its `pingIndexNow` records a call and never reaches
- * `after()` or `fetch`, so every assertion there saw zero calls. macOS keyed
- * the two specifiers apart and the suite stayed green, so this only ever
- * failed in CI, and only once a new test file shifted the discovery order
- * enough to put revalidate.test.ts first.
+ * This used to replace `@/lib/indexnow` wholesale, which was the neater way
+ * to ask "did it notify at all" and also a landmine: `mock.module` is
+ * process-global with no unmock, and on Linux it keys by resolved path, so
+ * indexnow.test.ts's `import("./indexnow")` picked up this stub and every
+ * assertion in that file quietly saw zero calls. Observing the real ping
+ * instead costs a fetch stub and asserts URLs rather than paths — which is
+ * closer to the thing that matters anyway, since the URL list is what an
+ * engine actually receives.
  */
-afterAll(() => {
-  mock.module("@/lib/indexnow", () => realIndexNow);
-});
+const pinged: string[][] = [];
+const realFetch = globalThis.fetch;
 
 const { revalidateFilm, revalidateList, revalidateMedia, revalidatePerson } = await import(
   "./revalidate"
 );
 
+/** The zh/en pair pingIndexNow builds for one path, in its order. */
+const editions = (path: string) => [
+  `https://babuban.com/zh${path === "/" ? "" : path}`,
+  `https://babuban.com/en${path === "/" ? "" : path}`,
+];
+
+/** What a ping of these paths should put on the wire. */
+const expectPinged = (...paths: string[]) => expect(pinged).toEqual([paths.flatMap(editions)]);
+
 beforeEach(() => {
   paths.length = 0;
   pinged.length = 0;
+  resetAfter();
+  process.env.INDEXNOW_KEY = "cafe1234";
+  globalThis.fetch = ((_url: string, init: RequestInit) => {
+    pinged.push(JSON.parse(String(init.body)).urlList);
+    return Promise.resolve(new Response("ok"));
+  }) as typeof fetch;
+});
+
+afterEach(() => {
+  globalThis.fetch = realFetch;
+  delete process.env.INDEXNOW_KEY;
 });
 
 /**
@@ -66,52 +76,60 @@ describe("revalidateFilm", () => {
     expectFullSweep();
   });
 
-  test("does not notify by default, so a draft-only save can't leak its slug", () => {
+  test("does not notify by default, so a draft-only save can't leak its slug", async () => {
     revalidateFilm("unreleased-draft");
+    await drainAfter();
     expect(pinged).toEqual([]);
   });
 
-  test("notifies the film, index, and home when asked", () => {
+  test("notifies the film, index, and home when asked", async () => {
     revalidateFilm("solaris", { notify: true });
-    expect(pinged).toEqual([["/film/solaris", "/films", "/"]]);
+    await drainAfter();
+    expectPinged("/film/solaris", "/films", "/");
   });
 });
 
 describe("revalidatePerson", () => {
-  test("sweeps the public tree, so film cards carrying the name refresh too", () => {
+  test("sweeps the public tree, so film cards carrying the name refresh too", async () => {
     revalidatePerson("tarkovsky", "director");
     expectFullSweep();
+    await drainAfter();
     expect(pinged).toEqual([]);
   });
 
-  test("notifies the person page when asked", () => {
+  test("notifies the person page when asked", async () => {
     revalidatePerson("tarkovsky", "director", { notify: true });
-    expect(pinged).toEqual([["/director/tarkovsky"]]);
+    await drainAfter();
+    expectPinged("/director/tarkovsky");
   });
 
-  test("an actor-primary person notifies the /actor canonical URL", () => {
+  test("an actor-primary person notifies the /actor canonical URL", async () => {
     revalidatePerson("masina", "actor", { notify: true });
-    expect(pinged).toEqual([["/actor/masina"]]);
+    await drainAfter();
+    expectPinged("/actor/masina");
   });
 });
 
 describe("revalidateList", () => {
-  test("sweeps the public tree, so member films' 'appears in' refreshes too", () => {
+  test("sweeps the public tree, so member films' 'appears in' refreshes too", async () => {
     revalidateList("essential-noir");
     expectFullSweep();
+    await drainAfter();
     expect(pinged).toEqual([]);
   });
 
-  test("notifies the list, index, and home when asked", () => {
+  test("notifies the list, index, and home when asked", async () => {
     revalidateList("essential-noir", { notify: true });
-    expect(pinged).toEqual([["/list/essential-noir", "/lists", "/"]]);
+    await drainAfter();
+    expectPinged("/list/essential-noir", "/lists", "/");
   });
 });
 
 describe("revalidateMedia", () => {
-  test("sweeps the public tree but never notifies — media has no URL of its own", () => {
+  test("sweeps the public tree but never notifies — media has no URL of its own", async () => {
     revalidateMedia();
     expectFullSweep();
+    await drainAfter();
     expect(pinged).toEqual([]);
   });
 });
