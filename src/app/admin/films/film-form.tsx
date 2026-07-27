@@ -332,7 +332,13 @@ export function FilmForm({
         <p className="text-ink-muted text-xs">
           中性、可查证：影片是什么、讲什么、怎么拍的、后来评价如何。不写修辞，也不下无从查证的评判——立场放在下面的编辑札记里。
         </p>
-        <Textarea rows={8} {...register("introduction")} className="font-body leading-relaxed" />
+        <Textarea
+          id="introduction"
+          aria-label="影片介绍"
+          rows={8}
+          {...register("introduction")}
+          className="font-body leading-relaxed"
+        />
         <IntroCounter text={intro} />
         {fieldError(errors.introduction?.message)}
       </Section>
@@ -341,7 +347,13 @@ export function FilmForm({
         <p className="text-ink-muted text-xs">
           你自己的看法，不填也可以发布。这里是全站唯一带立场的地方——介绍只管事实，判断放这儿。写多长由内容定，一句话也算一篇；真要展开成长文，用下面的「长文」。
         </p>
-        <Textarea rows={3} {...register("editorialNote")} className="font-body leading-relaxed" />
+        <Textarea
+          id="editorialNote"
+          aria-label="编辑札记"
+          rows={3}
+          {...register("editorialNote")}
+          className="font-body leading-relaxed"
+        />
         <CeilingCounter text={note} />
         {fieldError(errors.editorialNote?.message)}
       </Section>

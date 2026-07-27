@@ -465,7 +465,7 @@ export const seedLists: SeedList[] = [
       {
         filmSlug: "tokyo-story",
         reasoning: doc([
-          p("1953 年小津作品，剧本与野田高梧合写。名单六部中只有本片与《生存》以当代为背景。"),
+          p("1953 年小津作品，剧本与野田高梧合写。名单六部中只有本片与《生之欲》以当代为背景。"),
         ]),
         reasoningEn: doc([
           p(
@@ -674,7 +674,7 @@ export const seedLists: SeedList[] = [
         filmSlug: "sunset-boulevard",
         reasoning: doc([
           p(
-            "1950 年比利·怀尔德作品，格洛丽亚·斯旺森与埃里希·冯·施特罗海姆主演，二人均为默片时期的从业者；本片获奥斯卡最佳故事与剧本奖。",
+            "1950 年比利·怀尔德作品，葛洛丽亚·斯旺森与埃里希·冯·施特罗海姆主演，二人均为默片时期的从业者；本片获奥斯卡最佳故事与剧本奖。",
           ),
         ]),
         reasoningEn: doc([

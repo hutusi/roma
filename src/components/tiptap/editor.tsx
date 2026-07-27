@@ -228,7 +228,10 @@ export function TiptapEditor({
  * introduction and the note were split.
  */
 export function IntroCounter({ text }: { text: string }) {
-  const len = codePointLength(text);
+  // Trimmed, because the publish gates are: publishProblems measures
+  // introduction.trim(), so counting raw text let 200 leading spaces read as
+  // in-range right up until submission rejected them.
+  const len = codePointLength(text.trim());
   const inRange = len >= INTRODUCTION_MIN && len <= INTRODUCTION_MAX;
   return (
     <p className={cn("text-right text-xs", inRange ? "text-ink-muted" : "text-destructive")}>
@@ -239,7 +242,7 @@ export function IntroCounter({ text }: { text: string }) {
 
 /** English introductions measure in words, not code points. */
 export function IntroCounterEn({ text }: { text: string }) {
-  const words = wordCount(text);
+  const words = wordCount(text.trim());
   const inRange = words >= INTRODUCTION_EN_MIN && words <= INTRODUCTION_EN_MAX;
   return (
     <p className={cn("text-right text-xs", inRange ? "text-ink-muted" : "text-destructive")}>
@@ -254,7 +257,8 @@ export function IntroCounterEn({ text }: { text: string }) {
  * turns red once it is over.
  */
 export function CeilingCounter({ text, en = false }: { text: string; en?: boolean }) {
-  const used = en ? wordCount(text) : codePointLength(text);
+  const trimmed = text.trim();
+  const used = en ? wordCount(trimmed) : codePointLength(trimmed);
   const max = en ? EDITORIAL_NOTE_EN_MAX : EDITORIAL_NOTE_MAX;
   const unit = en ? "词" : "字";
   return (

@@ -65,7 +65,10 @@ export async function savePerson(
         }
       }
       if (existing?.statusEn === "published") {
-        const problems = publishEnProblems({ bioEn: v.bioEn || null });
+        const problems = publishEnProblems({
+          bioEn: v.bioEn?.trim() || null,
+          editorialNoteEn: v.editorialNoteEn?.trim() || null,
+        });
         if (problems.length) {
           return {
             error: `英文版已发布，不能存为不可发布的状态：${problems.join("；")}`,
@@ -171,7 +174,7 @@ export async function publishPersonEn(id: string): Promise<ActionResult> {
   const outcome = await db.transaction(async (tx) => {
     const person = await lockPerson(tx, id);
     if (!person) return { error: "人物不存在" } as const;
-    const problems = publishEnProblems({ bioEn: person.bioEn });
+    const problems = publishEnProblems(person);
     if (problems.length) return { error: problems.join("；") } as const;
     await tx
       .update(people)

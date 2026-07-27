@@ -74,6 +74,56 @@ const NEUTRAL: Family[] = [
 ];
 const VOICED: Family[] = ["film.note", "person.note"];
 const ALL_FAMILIES: Family[] = [...NEUTRAL, ...VOICED];
+/** A 片单 states things about entities it links to; those had better agree. */
+const LIST_FAMILIES: Family[] = ["list.theme", "list.intro", "list.reasoning"];
+
+/**
+ * Every spelling the catalogue itself uses. Built once — the corpus is
+ * static within a run, and the near-miss check below is O(names × prose).
+ */
+const namesCache = new Map<Lang, string[]>();
+function canonicalNames(lang: Lang): string[] {
+  let names = namesCache.get(lang);
+  if (!names) {
+    const people = [...seedDirectors, ...seedActors];
+    // A Latin character carries less information than a CJK one, so a
+    // one-character difference between short Latin names says much less. The
+    // higher floor there keeps the rule from pairing up unrelated surnames.
+    const floor = lang === "zh" ? 4 : 8;
+    names = people
+      .map((p) => (lang === "zh" ? p.nameZh : p.name))
+      .filter((n): n is string => typeof n === "string" && n.length >= floor);
+    namesCache.set(lang, names);
+  }
+  return names;
+}
+
+let titlesCache: Set<string> | undefined;
+function canonicalTitles(): Set<string> {
+  titlesCache ??= new Set(
+    seedFilms.flatMap((f) =>
+      [f.titleZh, f.titleZhHk, f.titleZhTw, f.titleOriginal, f.titleEn].filter(
+        (t): t is string => typeof t === "string",
+      ),
+    ),
+  );
+  return titlesCache;
+}
+
+/**
+ * Same length, exactly one character different. Deliberately not a general
+ * edit distance: a substitution is what a wrong transliteration looks like
+ * (葛→格), while an insertion or deletion usually means a genuinely different
+ * word sitting next to a name, which would make this rule cry wolf.
+ */
+function differsByOne(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i] && ++diff > 1) return false;
+  }
+  return diff === 1;
+}
 
 export type ProseUnit = {
   id: string;
@@ -283,6 +333,58 @@ export const RULES: Rule[] = [
       // nothing but noise, which is how it hid real findings for two batches.
       const n = hits(u.text, /—|–(?!\d)|(?<!\d)–/g).length;
       return n ? `${n} em/en dash(es); English prose carries none` : null;
+    },
+  },
+  {
+    /**
+     * A film or person named in list prose must be spelled the way the
+     * catalogue spells it, because both render on the same journey: the list
+     * page says one thing and the page it links to says another.
+     *
+     * Near-miss rather than membership, which is the only workable test here.
+     * List prose legitimately names people who are not in the corpus at all —
+     * cinematographers, composers, novelists — so "must be a catalogued
+     * person" would fire constantly. One character off a catalogued name is
+     * not a different person, it is a typo: 格洛丽亚·斯旺森 for the
+     * 葛洛丽亚·斯旺森 that actors.ts and the sunset-boulevard cast both use.
+     */
+    id: "name-near-miss",
+    severity: "block",
+    families: LIST_FAMILIES,
+    check: (u) => {
+      const found: string[] = [];
+      for (const canonical of canonicalNames(u.lang)) {
+        if (u.text.includes(canonical)) continue;
+        for (let i = 0; i + canonical.length <= u.text.length; i++) {
+          const window = u.text.slice(i, i + canonical.length);
+          if (differsByOne(window, canonical)) {
+            found.push(`${window} → ${canonical}`);
+            break;
+          }
+        }
+      }
+      return found.length ? `not the catalogue's spelling: ${list(found)}` : null;
+    },
+  },
+  {
+    /**
+     * Advisory, not blocking. Every 《X》 in list prose that the catalogue
+     * does not carry gets listed for a human to glance at. It cannot block:
+     * the prose properly cites songs (《四季歌》), magazines (《电影手册》),
+     * novels (《德古拉》) and films outside the catalogue (《西鹤一代女》), and
+     * an allowlist covering those would go stale faster than it would help.
+     * Seven entries today, which is short enough to read.
+     */
+    id: "title-outside-catalogue",
+    severity: "advise",
+    families: LIST_FAMILIES,
+    langs: ["zh"],
+    check: (u) => {
+      const canonical = canonicalTitles();
+      const found = [...u.text.matchAll(/《([^》]+)》/g)]
+        .map((m) => m[1])
+        .filter((t) => !canonical.has(t));
+      return found.length ? `not a catalogued title: ${list(found.map((t) => `《${t}》`))}` : null;
     },
   },
   {

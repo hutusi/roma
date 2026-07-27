@@ -157,6 +157,47 @@ describe("en-em-dash", () => {
   });
 });
 
+describe("name-near-miss", () => {
+  // Both of these shipped in the first neutral draft of the lists and were
+  // found by review, not by this suite: the list page named an entity one
+  // character off the page it links to.
+  test("catches a name one character off the catalogue's spelling", () => {
+    const u = unit("list.reasoning", "zh", "1950 年比利·怀尔德作品，格洛丽亚·斯旺森主演。");
+    expect(rulesHit(u)).toContain("name-near-miss");
+  });
+
+  test("passes the catalogue's own spelling", () => {
+    const u = unit("list.reasoning", "zh", "1950 年比利·怀尔德作品，葛洛丽亚·斯旺森主演。");
+    expect(rulesHit(u)).not.toContain("name-near-miss");
+  });
+
+  // The rule cannot demand membership: list prose properly names people the
+  // catalogue has no page for.
+  test("leaves an uncatalogued name alone", () => {
+    const u = unit("list.reasoning", "zh", "1948 年德西卡作品，摄影卡洛·蒙托里。");
+    expect(rulesHit(u)).not.toContain("name-near-miss");
+  });
+});
+
+describe("title-outside-catalogue", () => {
+  test("names a title the catalogue does not carry", () => {
+    // 生之欲 is ikiru's titleZh; 生存 is nothing.
+    const u = unit("list.reasoning", "zh", "名单六部中只有本片与《生存》以当代为背景。");
+    expect(rulesHit(u)).toContain("title-outside-catalogue");
+  });
+
+  test("accepts a catalogued title", () => {
+    const u = unit("list.reasoning", "zh", "名单六部中只有本片与《生之欲》以当代为背景。");
+    expect(rulesHit(u)).not.toContain("title-outside-catalogue");
+  });
+
+  test("is advisory, so it never blocks", () => {
+    const findings = runVoiceChecks([unit("list.intro", "zh", "见《德古拉》。")]);
+    expect(findings.some((f) => f.rule === "title-outside-catalogue")).toBe(true);
+    expect(blocking(findings).map((f) => f.rule)).not.toContain("title-outside-catalogue");
+  });
+});
+
 describe("note-ceiling", () => {
   test("caps the note and ignores the absence of one", () => {
     expect(rulesHit(unit("film.note", "zh", filler(401)))).toContain("note-ceiling");

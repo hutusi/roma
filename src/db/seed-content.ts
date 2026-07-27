@@ -784,6 +784,27 @@ async function assertPublishable(
     }
   }
 
+  // People get the same note ceilings as films. The form schema caps them,
+  // but the seeder and resync are separate write paths that never see it —
+  // so without this a seeded note over the ceiling publishes fine and then
+  // cannot be saved from /admin, which is the failure shape publishProblems
+  // was extracted to prevent. Nothing is required here: 人物介绍 is gated by
+  // validators/person.ts, and the note is optional by design (ADR 0017).
+  for (const d of seedPeople) {
+    const noteLen = codePointLength(d.editorialNote ?? "");
+    if (noteLen > EDITORIAL_NOTE_MAX) {
+      problems.push(
+        `person ${d.slug}: editorial note ${noteLen} code points (max ${EDITORIAL_NOTE_MAX})`,
+      );
+    }
+    const noteEnWords = wordCount(d.editorialNoteEn ?? "");
+    if (noteEnWords > EDITORIAL_NOTE_EN_MAX) {
+      problems.push(
+        `person ${d.slug}: English note ${noteEnWords} words (max ${EDITORIAL_NOTE_EN_MAX})`,
+      );
+    }
+  }
+
   // Confirm the DB actually holds ≥1 director per seeded film (catches a
   // dropped junction row from a bad reference).
   const filmIds = [...filmIdBySlug.values()];

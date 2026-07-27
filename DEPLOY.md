@@ -101,7 +101,8 @@ psql "$DATABASE_URL" -c "select slug, published_at from films order by published
 #                 --lists= also walks that list's items. A slug in no seed file is an error
 #                 and exits 1 — it used to warn and exit 0, which is how actors stayed
 #                 quietly unreachable. Dry-run first: omit --apply, add --diff to see the
-#                 text. --all sweeps everything and must be spelled out; a field seed-data
+#                 text — or --diff=full, since --diff clips each field and a clipped
+#                 prose diff is worse than none for judging a rewrite. --all sweeps everything and must be spelled out; a field seed-data
 #                 does not define is left alone rather than nulled, and --clear=<slug>:<field>
 #                 is the only way to actually mean null.)
 #      lists    → /admin (moving the featured list, sortOrder 0)

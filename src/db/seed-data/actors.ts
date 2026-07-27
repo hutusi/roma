@@ -169,8 +169,9 @@ export const seedActors: SeedDirector[] = [
     nameZh: "韦伟",
     primaryRole: "actor",
     tmdbPersonId: 236193,
-    // Birth year per TMDB; no death date recorded there. Left open rather
-    // than asserting one we cannot verify — confirm before adding.
+    // The death date TMDB does not carry is on Wikidata (Q7979773, "Chinese
+    // actress (1922–2023)"), which is where it was confirmed before being
+    // asserted here.
     bio: "中国演员，1922–2023。1940 年代在上海文华影业拍片，1948 年在费穆的《小城之春》中饰演周玉纹。1950 年代迁居香港，此后在当地影视界工作。",
     bioEn:
       "Chinese actor, 1922–2023. She worked at the Wenhua company in Shanghai in the 1940s and played Zhou Yuwen in Fei Mu's Spring in a Small Town in 1948. She moved to Hong Kong in the 1950s and worked there in film and television.",

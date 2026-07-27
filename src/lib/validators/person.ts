@@ -63,9 +63,23 @@ export function publishProblems(person: {
   return problems;
 }
 
-/** Gate for the English edition; the career essay stays optional. */
-export function publishEnProblems(person: { bioEn: string | null }): string[] {
-  return person.bioEn?.trim() ? [] : ["缺少英文简介（bioEn）"];
+/**
+ * Gate for the English edition; the career essay stays optional. Mirrors
+ * publishEnProblems in validators/film.ts, note ceiling included — without
+ * it an over-long English note was caught only by the form schema and rode
+ * straight through the seed and resync paths.
+ */
+export function publishEnProblems(person: {
+  bioEn: string | null;
+  editorialNoteEn?: string | null;
+}): string[] {
+  const problems: string[] = [];
+  if (!person.bioEn?.trim()) problems.push("缺少英文简介（bioEn）");
+  const noteWords = wordCount((person.editorialNoteEn ?? "").trim());
+  if (noteWords > EDITORIAL_NOTE_EN_MAX) {
+    problems.push(`英文札记不能超过 ${EDITORIAL_NOTE_EN_MAX} 词（当前 ${noteWords} 词）`);
+  }
+  return problems;
 }
 
 export const viewingOrderSchema = z

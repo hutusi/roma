@@ -82,7 +82,7 @@ export const seedDirectors: SeedDirector[] = [
       "Japanese director, 1910–1998. He worked in both period and contemporary settings and habitually shot with several cameras at once and with long lenses. Rashomon received the Golden Lion at Venice in 1951, the first such award to a Japanese film.",
     careerEssayEn: doc([
       p(
-        "Kurosawa joined P.C.L., the studio that became Toho, as an assistant director in 1936, and directed his first film in 1943. After Rashomon took the prize at Venice in 1950, his work began to be distributed outside Japan.",
+        "Kurosawa joined P.C.L., the studio that became Toho, as an assistant director in 1936, and directed his first film in 1943. After Rashomon took the Golden Lion at Venice in 1951, his work began to be distributed outside Japan.",
       ),
       p(
         "Through the 1950s and 1960s he worked repeatedly with Toshiro Mifune, in both period and contemporary settings, shooting action with several cameras running at once and with long lenses. Financing became difficult after Dodes'ka-den failed commercially in 1970; he made Dersu Uzala with Soviet backing in 1975, and both Kagemusha and Ran in the 1980s drew on foreign investment.",

@@ -38,6 +38,17 @@ describe("publishProblems", () => {
 });
 
 describe("publishEnProblems", () => {
+  // Films have checked editorialNoteEn here since the split; people did not,
+  // so an over-long English note was caught by the form schema alone and rode
+  // through seed and resync untouched.
+  test("holds the English note to its ceiling", () => {
+    const long = Array.from({ length: 251 }, () => "word").join(" ");
+    expect(publishEnProblems({ bioEn: "Italian director.", editorialNoteEn: long })).toHaveLength(
+      1,
+    );
+    expect(publishEnProblems({ bioEn: "Italian director.", editorialNoteEn: null })).toEqual([]);
+  });
+
   test("accepts an English bio", () => {
     expect(publishEnProblems({ bioEn: "Italian director." })).toEqual([]);
   });

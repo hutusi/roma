@@ -2365,8 +2365,12 @@ export const seedFilms: SeedFilm[] = [
     titleOriginal: "Lawrence of Arabia",
     titleEn: "Lawrence of Arabia",
     year: 1962,
-    countries: ["英国"],
-    runtimeMinutes: 218,
+    // Both corrected against Wikidata (Q228186) when the introduction was
+    // rewritten and contradicted the row it sits in: a Horizon/Columbia
+    // production credited to the US and UK, and 216 minutes for the 1989
+    // restoration that circulates. 218 was the 1962 roadshow length.
+    countries: ["英国", "美国"],
+    runtimeMinutes: 216,
     aspectRatio: "2.20:1",
     isBlackAndWhite: false,
     tagSlugs: ["epic", "war"],

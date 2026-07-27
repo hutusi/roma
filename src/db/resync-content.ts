@@ -32,7 +32,8 @@
  * never reaches `server-only`; do not import ./locks here.
  *
  *   bun run src/db/resync-content.ts --films=a,b --people=x,y --lists=z
- *   bun run src/db/resync-content.ts --all --diff
+ *   bun run src/db/resync-content.ts --all --diff       # clipped previews
+ *   bun run src/db/resync-content.ts --all --diff=full  # whole field, to judge prose
  *   bun run src/db/resync-content.ts --all --apply
  *   # prod: DATABASE_URL="$DATABASE_URL_UNPOOLED" bun run … --apply
  */
@@ -180,7 +181,18 @@ function planRow(
   return { next, differing, unasserted };
 }
 
-function report(label: string, plan: Plan, cur: Record<string, unknown>) {
+/**
+ * `clearKey` is passed rather than sliced out of `label`, which is what the
+ * hint used to do: `label.split(" ")[1]` works for "film <slug>" and breaks
+ * on "  item <key>", whose two leading spaces make the second field empty.
+ * That printed `--clear=:reasoningEn`, an incantation that cannot be run.
+ */
+function report(
+  label: string,
+  plan: Plan,
+  cur: Record<string, unknown>,
+  clearKey = label.trim().split(" ")[1] ?? "",
+) {
   if (plan.differing.length) {
     console.log(`  ${label}: differs → resync (${plan.differing.join(", ")})`);
     if (DIFF) {
@@ -196,7 +208,7 @@ function report(label: string, plan: Plan, cur: Record<string, unknown>) {
   for (const u of plan.unasserted) {
     console.log(
       `      ${u.field}: seed asserts nothing; DB holds ${u.dbLen} chars — left alone` +
-        ` (--clear=${label.split(" ")[1]}:${u.field} to null it)`,
+        ` (--clear=${clearKey}:${u.field} to null it)`,
     );
   }
 }
@@ -332,7 +344,9 @@ async function main() {
           ITEM_FIELDS,
           key,
         );
-        report(`  item ${key}`, itemPlan, curItem as Record<string, unknown>);
+        // `key` is exactly what planRow matched --clear against, so hand it
+        // over rather than letting report re-derive it from the label.
+        report(`  item ${key}`, itemPlan, curItem as Record<string, unknown>, key);
         if (itemPlan.differing.length) {
           changed++;
           if (APPLY) {
