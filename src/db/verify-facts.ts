@@ -113,7 +113,7 @@ async function fetchFacts(qids: string[]): Promise<Map<string, Facts>> {
 }
 
 const people = [...seedDirectors, ...seedActors];
-const OK = "  ok ";
+/** Only failures are marked. A film with nothing to say prints no line at all. */
 const BAD = "  ⚠  ";
 
 async function main() {
