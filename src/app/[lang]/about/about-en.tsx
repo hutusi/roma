@@ -1,6 +1,5 @@
-/** The en about prose. The closing line of the fourth paragraph was
- * reworded for the bilingual-parity model (ADR 0012) — the English
- * edition is no longer described as a curated subset. */
+/** The en about prose. Long-form copy lives in per-locale components so
+ * neither language's prose can leak into the other's page. */
 export function AboutEn() {
   return (
     <div className="mt-10 space-y-6 text-[17px] leading-[1.9] tracking-[0.02em]">
@@ -11,22 +10,15 @@ export function AboutEn() {
         live.
       </p>
       <p>
-        This is not a database. You can look up a film&rsquo;s complete credits anywhere else, but
-        not why it deserves to be watched today. Babuban only includes films we genuinely want to
-        recommend — inclusion is the position. Every film carries an editorial note that tells you
-        what makes it good and when to watch it.
+        This is not a database. A film&rsquo;s complete credits can be found anywhere else; why it
+        deserves to be watched today cannot. Babuban only includes films we genuinely want to
+        recommend — inclusion is the position.
       </p>
       <p>
         Lists are the heart of this site. A list has a theme, an introduction, a reason for every
-        film&rsquo;s inclusion, and a deliberate order — it should be read the way you read an
-        essay. We favor black-and-white film, not out of nostalgia, but because where there is no
-        color, light, shadow, and composition must say everything.
-      </p>
-      <p>
-        Babuban is kept by a few editors. It updates slowly, and every update is argued over first.
-        If a film appears here, it is because someone was willing to put their name behind it. The
-        English edition follows the Chinese site essay by essay; entries appear as their
-        translations are finished.
+        film&rsquo;s inclusion, and a deliberate order — it is meant to be read end to end, like an
+        essay. We love classic cinema, not only out of nostalgia, but as a tribute to the masters
+        who made it.
       </p>
       <p className="border-line border-t pt-6 text-ink-muted text-sm">
         Posters, stills, and some metadata come from
