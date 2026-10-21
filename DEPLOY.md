@@ -14,7 +14,7 @@ Vercel Dashboard → Storage → Create → **Neon Postgres**, attach to the `ro
 
 ## 3. Vercel Blob
 
-Dashboard → Storage → Create → **Blob**, attach to the project. This injects `BLOB_READ_WRITE_TOKEN`. Image uploads switch from `public/uploads` to Blob automatically when the token is present.
+Dashboard → Storage → Create → **Blob**, attach to the project. This injects `BLOB_READ_WRITE_TOKEN`. Image uploads switch from `public/uploads` to Blob automatically when the token is present; a production server without it refuses uploads up front (`src/lib/storage.ts`) rather than failing on Vercel's read-only filesystem. Likewise a production server without `DATABASE_URL` fails at startup instead of falling back to `PG*` variables or localhost.
 
 ## 4. Remaining env vars (Production)
 
@@ -26,6 +26,10 @@ RESEND_API_KEY       # REQUIRED in production — password reset throws without 
                      # reset token must never reach the logs). Only dev falls back to console.
 EMAIL_FROM           # optional — e.g. 八部半 <noreply@babuban.com>
 TMDB_API_TOKEN       # optional — enables the metadata-import button in /admin/films/new
+INDEXNOW_KEY         # optional — enables IndexNow pings on publish; served at /indexnow-key.txt
+GOOGLE_SITE_VERIFICATION  # optional — search-console ownership tokens, baked into the
+BING_SITE_VERIFICATION    #   SSG HTML: set, then redeploy
+BAIDU_SITE_VERIFICATION
 ```
 
 ## 5. Migrations + seed (run locally against Neon)

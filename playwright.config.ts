@@ -54,6 +54,8 @@ export default defineConfig({
       // Lets the password-reset loop run against a production build
       // without a Resend key; never set outside e2e.
       E2E_ALLOW_LOG_RESET: "1",
+      // No Blob credentials in e2e: uploads write to public/uploads.
+      E2E_ALLOW_LOCAL_STORAGE: "1",
     },
   },
 });

@@ -23,14 +23,33 @@ export const EXT_BY_MIME: Record<ImageMime, string> = {
  */
 export type StoredImage = { url: string; pathname: string };
 
-const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+/**
+ * Production without a Blob token used to fall through to public/uploads
+ * — a read-only filesystem on Vercel, so every upload failed at write
+ * time with an opaque EROFS. Refuse up front instead. The e2e suite runs
+ * a production build with no Blob credentials and opts in explicitly.
+ */
+function hasBlob(): boolean {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return true;
+  if (process.env.NODE_ENV === "production" && !process.env.E2E_ALLOW_LOCAL_STORAGE) {
+    throw new Error("BLOB_READ_WRITE_TOKEN is not set");
+  }
+  return false;
+}
+
+/** Pathnames are unique per upload and never overwritten, so the bytes behind a URL never change. */
+const ONE_YEAR_SECONDS = 365 * 24 * 60 * 60;
 
 export async function storeImage(image: ValidatedImage, prefix: string): Promise<StoredImage> {
   const ext = EXT_BY_MIME[image.mime];
   const pathname = `${prefix}/${nanoid(10)}${ext}`;
 
   if (hasBlob()) {
-    const blob = await put(pathname, image.bytes, { access: "public", contentType: image.mime });
+    const blob = await put(pathname, image.bytes, {
+      access: "public",
+      contentType: image.mime,
+      cacheControlMaxAge: ONE_YEAR_SECONDS,
+    });
     return { url: blob.url, pathname: blob.pathname };
   }
 

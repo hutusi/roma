@@ -15,7 +15,25 @@ import * as schema from "./schema";
 const globalForDb = globalThis as unknown as { dbPool?: Pool };
 
 function createPool() {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 10 });
+  // Without DATABASE_URL, pg silently falls back to PG* variables and
+  // then localhost — in production that is a wrong database or a hang,
+  // never what anyone meant. Fail loudly instead. (Dev and the content
+  // CLIs keep the fallback.)
+  if (!process.env.DATABASE_URL && process.env.NODE_ENV === "production") {
+    throw new Error("DATABASE_URL is not set");
+  }
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 10,
+    // Client-side bounds, so a saturated pool or a stuck query fails as
+    // an error the page or action can handle, instead of holding the
+    // request until the platform kills the function. Server-side
+    // statement_timeout is not sent as a startup parameter: Neon's
+    // pooler rejects it (set it per role if it is ever wanted).
+    connectionTimeoutMillis: 5_000,
+    idleTimeoutMillis: 30_000,
+    query_timeout: 20_000,
+  });
   // Without a listener, an idle-client disconnect (backend restart,
   // pooler timeout) emits an unhandled 'error' event and kills the
   // process. The pool discards the broken client; log and move on.
