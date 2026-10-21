@@ -11,7 +11,12 @@ export default async function NewFilmPage() {
   await requireEditor();
   const [personRows, tagRows, mediaRows] = await Promise.all([
     db
-      .select({ id: people.id, name: people.name, nameZh: people.nameZh })
+      .select({
+        id: people.id,
+        name: people.name,
+        nameZh: people.nameZh,
+        primaryRole: people.primaryRole,
+      })
       .from(people)
       .orderBy(asc(people.name)),
     db.select({ id: tags.id, nameZh: tags.nameZh }).from(tags).orderBy(asc(tags.slug)),

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { saveFilm } from "@/actions/films";
 import { importFromTmdb } from "@/actions/tmdb";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { CheckboxPicker } from "@/components/admin/checkbox-picker";
 import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { SaveBar } from "@/components/admin/save-bar";
 import {
@@ -23,7 +24,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { type FilmFormValues, filmFormSchema } from "@/lib/validators/film";
 
-export type PersonOption = { id: string; name: string; nameZh: string | null };
+export type PersonOption = {
+  id: string;
+  name: string;
+  nameZh: string | null;
+  primaryRole: "director" | "actor";
+};
 export type TagOption = { id: string; nameZh: string };
 
 const ASPECT_RATIOS = ["1.37:1", "1.33:1", "1.66:1", "1.85:1", "2.35:1"];
@@ -85,6 +91,15 @@ export function FilmForm({
   const introEn = watch("introductionEn") ?? "";
   const note = watch("editorialNote") ?? "";
   const noteEn = watch("editorialNoteEn") ?? "";
+
+  // Directors first; actors stay pickable (some also directed) but say so.
+  const directorOptions = [...people]
+    .sort((a, b) => Number(a.primaryRole === "actor") - Number(b.primaryRole === "actor"))
+    .map((p) => ({
+      id: p.id,
+      label: p.nameZh ?? p.name,
+      hint: p.primaryRole === "actor" ? "演员" : undefined,
+    }));
 
   const onSubmit = handleSubmit(
     async (values) => {
@@ -257,27 +272,13 @@ export function FilmForm({
             control={control}
             name="directorIds"
             render={({ field }) => (
-              <div className="flex flex-wrap gap-3 border border-line bg-card p-3">
-                {people.length === 0 && (
-                  <p className="text-ink-muted text-sm">还没有人物条目——请先在「人物」中创建。</p>
-                )}
-                {people.map((d) => (
-                  <label key={d.id} className="flex items-center gap-1.5 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={field.value.includes(d.id)}
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.checked
-                            ? [...field.value, d.id]
-                            : field.value.filter((id) => id !== d.id),
-                        )
-                      }
-                    />
-                    {d.nameZh ?? d.name}
-                  </label>
-                ))}
-              </div>
+              <CheckboxPicker
+                options={directorOptions}
+                value={field.value}
+                onChange={field.onChange}
+                filterLabel="筛选人物"
+                empty="还没有人物条目——请先在「人物」中创建。"
+              />
             )}
           />
         </div>
@@ -287,27 +288,13 @@ export function FilmForm({
             control={control}
             name="tagIds"
             render={({ field }) => (
-              <div className="flex flex-wrap gap-3 border border-line bg-card p-3">
-                {tags.length === 0 && (
-                  <p className="text-ink-muted text-sm">还没有标签——请先在「标签」中创建。</p>
-                )}
-                {tags.map((t) => (
-                  <label key={t.id} className="flex items-center gap-1.5 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={field.value.includes(t.id)}
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.checked
-                            ? [...field.value, t.id]
-                            : field.value.filter((id) => id !== t.id),
-                        )
-                      }
-                    />
-                    {t.nameZh}
-                  </label>
-                ))}
-              </div>
+              <CheckboxPicker
+                options={tags.map((t) => ({ id: t.id, label: t.nameZh }))}
+                value={field.value}
+                onChange={field.onChange}
+                filterLabel="筛选标签"
+                empty="还没有标签——请先在「标签」中创建。"
+              />
             )}
           />
         </div>
