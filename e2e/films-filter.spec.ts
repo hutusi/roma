@@ -51,12 +51,38 @@ test("?tag filters by slug from a cold URL", async ({ page }) => {
   await expect(card(page, "la-strada")).toHaveCount(0);
 });
 
-test("submitting the form puts the selection in the URL", async ({ page }) => {
+test("choosing a filter applies it at once and puts it in the URL", async ({ page }) => {
   await page.goto("/zh/films");
-  await page.selectOption('select[name="decade"]', "1960");
-  await page.getByRole("button", { name: "筛选" }).click();
-  await expect(page).toHaveURL(/\/zh\/films\?.*decade=1960/);
+  // Counts, not exact numbers: editorial.spec publishes a film at runtime.
+  await expect(page.getByText(/^共 \d+ 部影片$/)).toBeVisible();
+  await page.getByRole("combobox", { name: "年代" }).selectOption("1960");
+  await expect(page).toHaveURL(/\/zh\/films\?decade=1960$/);
   await expect(card(page, "la-strada")).toHaveCount(0);
+  await expect(page.getByText(/^筛选出 \d+ 部，共 \d+ 部/)).toBeVisible();
+
+  // Clearing restores the catalogue and the bare URL.
+  await page.getByRole("button", { name: "清除筛选" }).click();
+  await expect(page).toHaveURL(/\/zh\/films$/);
+  await expect(card(page, "la-strada")).toBeVisible();
+});
+
+test("a filter with no matches says so and offers a way back", async ({ page }) => {
+  await page.goto("/zh/films?decade=1960&palette=color&tag=modernism");
+  await expect(page.getByText("没有符合条件的影片。")).toBeVisible();
+  await page.getByRole("button", { name: "清除筛选" }).last().click();
+  await expect(card(page, "otto-e-mezzo")).toBeVisible();
+});
+
+test("the decade options cover the catalogue, not a fixed range", async ({ page }) => {
+  await page.goto("/zh/films");
+  const options = await page
+    .getByRole("combobox", { name: "年代" })
+    .locator("option")
+    .allTextContents();
+  // Derived from the films the edition shows: the zh fixtures' 1950s and
+  // 1960s, and none of the old hard-coded 1920s–1980s range they don't reach.
+  expect(options).toEqual(expect.arrayContaining(["全部年代", "1950 年代", "1960 年代"]));
+  expect(options).not.toContain("1920 年代");
 });
 
 test("the prerendered HTML carries every film, so crawlers see them unfiltered", async ({

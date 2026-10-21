@@ -1,5 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { type FilmCardData, filterFilms } from "./filtering";
+import {
+  decadesOf,
+  type FilmCardData,
+  filterFilms,
+  isFiltered,
+  parseSelection,
+  selectionParams,
+} from "./filtering";
 
 function card(over: Partial<FilmCardData> & Pick<FilmCardData, "id">): FilmCardData {
   return {
@@ -65,5 +72,45 @@ describe("filterFilms", () => {
     expect(
       ids(filterFilms(films, { decade: 1960, country: "意大利", palette: "bw", tag: "modernism" })),
     ).toEqual(["otto-e-mezzo"]);
+  });
+});
+
+describe("selection ↔ query string", () => {
+  test("parses every facet and ignores junk", () => {
+    expect(
+      parseSelection(new URLSearchParams("decade=1960&country=法国&palette=bw&tag=modernism")),
+    ).toEqual({ decade: 1960, country: "法国", palette: "bw", tag: "modernism" });
+    expect(parseSelection(new URLSearchParams("decade=abc&palette=sepia"))).toEqual({
+      decade: undefined,
+      country: undefined,
+      palette: undefined,
+      tag: undefined,
+    });
+  });
+
+  test("round-trips, dropping empty facets", () => {
+    const selection = { decade: 1950, tag: "neorealism" };
+    expect(selectionParams(selection).toString()).toBe("decade=1950&tag=neorealism");
+    expect(parseSelection(selectionParams(selection))).toMatchObject(selection);
+    expect(selectionParams({}).toString()).toBe("");
+  });
+
+  test("isFiltered is false only for the empty selection", () => {
+    expect(isFiltered({})).toBe(false);
+    expect(isFiltered({ decade: 1920 })).toBe(true);
+    expect(isFiltered({ tag: "x" })).toBe(true);
+  });
+});
+
+describe("decadesOf", () => {
+  test("lists the decades the catalogue spans, sorted — including the 1990s and 2000s", () => {
+    expect(
+      decadesOf([
+        card({ id: "a", year: 2000 }),
+        card({ id: "b", year: 1963 }),
+        card({ id: "c", year: 1991 }),
+        card({ id: "d", year: 1965 }),
+      ]),
+    ).toEqual([1960, 1990, 2000]);
   });
 });

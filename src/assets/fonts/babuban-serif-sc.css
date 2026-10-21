@@ -1780,7 +1780,17 @@
   unicode-range: U+822a,U+83dc;
 }
 
-/* 700 · bucket 37 · 1 glyphs · 764 B · from noto-serif-sc-109-700-normal.woff2 */
+/* 700 · bucket 37 · 6 glyphs · 2196 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/babuban-serif-sc/700-42f422d5cf.woff2") format("woff2");
+  unicode-range: U+5171,U+6362,U+6e05,U+8005,U+8bef,U+9519;
+}
+
+/* 700 · bucket 38 · 1 glyphs · 764 B · from noto-serif-sc-109-700-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;

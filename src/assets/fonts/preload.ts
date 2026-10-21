@@ -3,13 +3,16 @@
 /** The commonest zh buckets (≥90% of pages, 64 KB budget); zh pages only. */
 export const ZH_FONT_PRELOADS = [
   "/fonts/babuban-serif-sc/400-5e8ce5db1e.woff2",
+  "/fonts/babuban-serif-sc/400-6cba852ce6.woff2",
   "/fonts/babuban-serif-sc/400-834411ebcc.woff2",
   "/fonts/babuban-serif-sc/400-a36287f86b.woff2",
   "/fonts/babuban-serif-sc/400-add504d624.woff2",
   "/fonts/babuban-serif-sc/400-afdcc4ba38.woff2",
+  "/fonts/babuban-serif-sc/400-ce3fe1d6c8.woff2",
   "/fonts/babuban-serif-sc/400-e5e3915808.woff2",
   "/fonts/babuban-serif-sc/400-e6753093ef.woff2",
   "/fonts/babuban-serif-sc/700-33aaaa4ca8.woff2",
+  "/fonts/babuban-serif-sc/700-42f422d5cf.woff2",
   "/fonts/babuban-serif-sc/700-4e62f86efd.woff2",
   "/fonts/babuban-serif-sc/700-5e1a63c310.woff2",
   "/fonts/babuban-serif-sc/700-9522778fd3.woff2",

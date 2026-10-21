@@ -11,7 +11,7 @@ import { matchDocs } from "@/lib/search-match";
 
 /**
  * The stateful search UI without useSearchParams, so it can double as
- * the Suspense fallback (the films-view arrangement): the fallback
+ * the Suspense fallback (a page-and-island arrangement): the fallback
  * prerenders the empty-query shell into static HTML, and the island
  * below swaps in with the ?q-seeded state on hydration.
  */
