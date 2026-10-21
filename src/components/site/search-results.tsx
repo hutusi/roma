@@ -37,7 +37,7 @@ export function SearchResults({
     <div className="mt-4 space-y-5">
       {groupResults(results).map((group) => (
         <section key={group.type}>
-          <h3 className="text-ink-muted text-xs tracking-[0.2em]">{labels.groups[group.type]}</h3>
+          <h3 className="text-ink-muted text-xs tracking-label">{labels.groups[group.type]}</h3>
           <ul className="mt-2 space-y-1">
             {group.docs.map((doc) => (
               <li key={doc.href}>

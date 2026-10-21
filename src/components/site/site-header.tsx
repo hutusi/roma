@@ -19,8 +19,8 @@ export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
       <div className="mx-auto flex max-w-5xl items-baseline justify-between px-6 py-5">
         <Link href={localePath(locale, "/")} className="group flex items-baseline gap-3">
           <BrandMark className="h-7 w-7 shrink-0 self-center" />
-          <span className="font-bold text-xl tracking-[0.2em]">八部半</span>
-          <span className="hidden font-display text-ink-muted text-xs uppercase tracking-[0.3em] transition-colors group-hover:text-brand sm:inline">
+          <span className="font-bold text-xl tracking-label">八部半</span>
+          <span className="hidden font-display text-ink-muted text-xs uppercase tracking-eyebrow transition-colors group-hover:text-brand sm:inline">
             Babuban · 8½
           </span>
         </Link>
@@ -29,7 +29,7 @@ export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
             <Link
               key={href}
               href={href}
-              className="tracking-[0.2em] transition-colors hover:text-brand"
+              className="tracking-label transition-colors hover:text-brand"
             >
               {label}
             </Link>

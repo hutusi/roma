@@ -41,7 +41,7 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
             ? localePath(locale, "/sign-in")
             : signInHrefFor(localePath(locale, "/sign-in"), pathname)
         }
-        className="whitespace-nowrap text-sm tracking-[0.2em] transition-colors hover:text-brand"
+        className="whitespace-nowrap text-sm tracking-label transition-colors hover:text-brand"
       >
         {labels.signIn}
       </Link>
@@ -50,9 +50,7 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
 
   return (
     <Suspense
-      fallback={
-        <span className="max-w-[10rem] truncate text-sm tracking-[0.1em]">{user.name}</span>
-      }
+      fallback={<span className="max-w-[10rem] truncate text-sm tracking-title">{user.name}</span>}
     >
       <AuthMenuDropdown locale={locale} labels={labels} user={user} />
     </Suspense>

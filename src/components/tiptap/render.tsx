@@ -85,8 +85,8 @@ export function TiptapContent({
     <div
       className={cn(
         "prose prose-neutral max-w-none font-body text-ink",
-        "prose-p:leading-[1.9] prose-p:tracking-[0.02em]",
-        "prose-headings:font-bold prose-headings:tracking-[0.1em]",
+        "prose-p:leading-[1.9] prose-p:tracking-body",
+        "prose-headings:font-bold prose-headings:tracking-title",
         "prose-a:text-brand prose-a:no-underline hover:prose-a:underline",
         "prose-blockquote:border-l-line prose-blockquote:font-normal prose-blockquote:text-ink-muted prose-blockquote:not-italic",
         className,

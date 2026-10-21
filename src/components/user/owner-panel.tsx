@@ -129,7 +129,7 @@ export function OwnerPanel({
   );
 
   return (
-    <section className="mt-8 border border-line bg-card p-4 font-sans text-[15px]">
+    <section className="mt-8 border border-line bg-card p-4 font-sans text-ui">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-ink-muted text-sm">{labels.ownedHint}</p>
         <div className="flex gap-3 text-sm">

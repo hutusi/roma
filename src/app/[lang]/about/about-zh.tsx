@@ -2,7 +2,7 @@
  * neither language's prose can leak into the other's page. */
 export function AboutZh() {
   return (
-    <div className="mt-10 space-y-6 text-[17px] leading-[1.9] tracking-[0.02em]">
+    <div className="mt-10 space-y-6 text-prose tracking-body">
       <p>
         「八部半」得名于费里尼一九六三年的《8½》——一部关于如何拍电影、
         也关于如何诚实面对自己的电影。我们借用这个名字，是想提醒自己：

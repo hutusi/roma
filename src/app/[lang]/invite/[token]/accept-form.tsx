@@ -82,7 +82,7 @@ export function AcceptInviteForm({ token }: { token: string }) {
         />
       </div>
       {error && <p className="text-destructive text-sm">{error}</p>}
-      <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
+      <Button type="submit" className="w-full tracking-eyebrow" disabled={pending}>
         {pending ? "创建账号中…" : "接受邀请"}
       </Button>
     </form>

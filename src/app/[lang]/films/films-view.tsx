@@ -122,7 +122,7 @@ export function FilmsView({
         )}
         <button
           type="submit"
-          className="h-9 border border-ink px-4 text-sm tracking-[0.2em] transition-colors hover:border-brand hover:text-brand"
+          className="h-9 border border-ink px-4 text-sm tracking-label transition-colors hover:border-brand hover:text-brand"
         >
           {t.filter}
         </button>

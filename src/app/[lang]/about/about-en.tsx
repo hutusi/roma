@@ -2,7 +2,7 @@
  * neither language's prose can leak into the other's page. */
 export function AboutEn() {
   return (
-    <div className="mt-10 space-y-6 text-[17px] leading-[1.9] tracking-[0.02em]">
+    <div className="mt-10 space-y-6 text-prose tracking-body">
       <p>
         Babuban (八部半, &ldquo;eight and a half&rdquo;) takes its name from Fellini&rsquo;s 1963{" "}
         <em>8½</em> — a film about how films get made, and about facing yourself honestly. We

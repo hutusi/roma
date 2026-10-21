@@ -6,7 +6,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section className="border-line border-t pt-6">
       <h2 className="mb-3 font-bold text-lg">{title}</h2>
-      <div className="max-w-[70ch] space-y-3 font-body text-[15px] leading-[1.9]">{children}</div>
+      <div className="max-w-measure space-y-3 font-body text-ui leading-[1.9]">{children}</div>
     </section>
   );
 }

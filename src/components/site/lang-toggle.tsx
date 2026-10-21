@@ -20,7 +20,7 @@ export function LangToggle() {
   return (
     <Link
       href={counterpart.href}
-      className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
+      className="text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
     >
       {counterpart.target === "en" ? "English" : "中文"}
     </Link>

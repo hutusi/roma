@@ -8,7 +8,7 @@ export function SiteFooter({ locale = "zh" }: { locale?: Locale }) {
   return (
     <footer className="mt-24 border-line border-t">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-3 px-6 py-10 text-center">
-        <p className="font-display text-ink-muted text-xs uppercase tracking-[0.35em]">
+        <p className="font-display text-ink-muted text-xs uppercase tracking-eyebrow">
           Babuban · 8½
         </p>
         <p className="text-ink-muted text-sm">{dict.footer.tagline}</p>

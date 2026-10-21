@@ -44,7 +44,7 @@ export function AcademyFrame({
         ) : (
           <div
             aria-hidden
-            className="flex h-full items-center justify-center font-display text-paper/30 text-sm tracking-[0.3em]"
+            className="flex h-full items-center justify-center font-display text-paper/30 text-sm tracking-eyebrow"
           >
             1.37 : 1
           </div>

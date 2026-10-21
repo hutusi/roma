@@ -149,7 +149,7 @@ export function PersonForm({
           />
         </div>
       </section>
-      <Button type="submit" disabled={submitting} className="tracking-[0.2em]">
+      <Button type="submit" disabled={submitting} className="tracking-label">
         {submitting ? "保存中…" : "保存"}
       </Button>
     </form>

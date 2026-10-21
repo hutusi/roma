@@ -48,7 +48,7 @@ export function AuthMenuDropdown({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="max-w-[10rem] truncate text-sm tracking-[0.1em] transition-colors hover:text-brand">
+      <DropdownMenuTrigger className="max-w-[10rem] truncate text-sm tracking-title transition-colors hover:text-brand">
         {user.name}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="font-sans">

@@ -29,7 +29,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       <header className="text-center">
-        <h1 className="font-bold text-4xl tracking-[0.15em]">{displayName}</h1>
+        <h1 className="font-bold text-4xl tracking-title">{displayName}</h1>
         {subName && subName !== displayName && (
           <p className="mt-3 font-display text-ink-muted text-lg">{subName}</p>
         )}
@@ -52,9 +52,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
       )}
 
       {bio && (
-        <p className="mx-auto mt-10 max-w-[70ch] text-[17px] text-ink-muted leading-[1.9] tracking-[0.02em]">
-          {bio}
-        </p>
+        <p className="mx-auto mt-10 max-w-measure text-ink-muted text-prose tracking-body">{bio}</p>
       )}
 
       {/* Its own section, matching the film page: the heading marks the
@@ -62,16 +60,14 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
       {editorialNote && (
         <section className="mt-14">
           <TitleCard eyebrow={en ? undefined : "Editorial Note"} title={dict.editorialNote} />
-          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
-            {editorialNote}
-          </p>
+          <p className="mx-auto mt-8 max-w-measure text-prose tracking-body">{editorialNote}</p>
         </section>
       )}
 
       {careerEssay && (
         <section className="mt-14">
           <TitleCard eyebrow={en ? undefined : "Career"} title={dict.career} />
-          <TiptapContent doc={careerEssay} className="mx-auto mt-8 max-w-[70ch]" />
+          <TiptapContent doc={careerEssay} className="mx-auto mt-8 max-w-measure" />
         </section>
       )}
 
@@ -103,9 +99,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
                     ) : (
                       <span className="font-bold">{filmTitle}</span>
                     )}
-                    {note && (
-                      <p className="mt-1.5 text-[15px] text-ink-muted leading-[1.8]">{note}</p>
-                    )}
+                    {note && <p className="mt-1.5 text-ink-muted text-ui leading-[1.8]">{note}</p>}
                   </div>
                 </li>
               );
@@ -143,7 +137,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
           <TitleCard eyebrow={en ? undefined : "As Actor"} title={dict.actedIn} />
           {/* A film the person also directed repeats here on purpose: this
               row carries the character, which the directed grid can't. */}
-          <ul className="mx-auto mt-8 max-w-xl space-y-2 text-[15px]">
+          <ul className="mx-auto mt-8 max-w-xl space-y-2 text-ui">
             {person.actedIn.map((credit) => {
               const filmTitle = en
                 ? (credit.film.titleEn ?? credit.film.titleOriginal)

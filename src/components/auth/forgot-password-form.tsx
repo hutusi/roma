@@ -22,7 +22,7 @@ export function ForgotPasswordForm({
   if (sent) {
     return (
       <div className="border-line border-y py-10 text-center">
-        <h1 className="font-bold text-2xl tracking-[0.2em]">{t.sentTitle}</h1>
+        <h1 className="font-bold text-2xl tracking-label">{t.sentTitle}</h1>
         <p className="mt-4 text-ink-muted text-sm leading-relaxed">{t.sentBody}</p>
       </div>
     );
@@ -30,7 +30,7 @@ export function ForgotPasswordForm({
 
   return (
     <div className="border-line border-y py-10">
-      <h1 className="text-center font-bold text-2xl tracking-[0.2em]">{t.title}</h1>
+      <h1 className="text-center font-bold text-2xl tracking-label">{t.title}</h1>
       <form
         className="mt-8 space-y-5"
         onSubmit={async (e) => {
@@ -55,7 +55,7 @@ export function ForgotPasswordForm({
           <Label htmlFor="email">{t.emailLabel}</Label>
           <Input id="email" name="email" type="email" required autoComplete="email" />
         </div>
-        <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
+        <Button type="submit" className="w-full tracking-eyebrow" disabled={pending}>
           {pending ? t.submitting : t.submit}
         </Button>
       </form>
