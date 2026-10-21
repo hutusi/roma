@@ -17,6 +17,7 @@ function card(over: Partial<FilmCardData> & Pick<FilmCardData, "id">): FilmCardD
     directorsLabel: "",
     imageUrl: null,
     imageAlt: null,
+    imageColor: null,
     countries: [],
     isBlackAndWhite: true,
     tags: [],

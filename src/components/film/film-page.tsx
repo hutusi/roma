@@ -101,8 +101,9 @@ export function FilmPage({
           src={hero.url}
           alt={hero.alt ?? displayTitle}
           credit={hero.credit}
+          color={hero.dominantColor}
           locale={locale}
-          priority
+          preload
         />
       )}
 
@@ -356,6 +357,7 @@ export function FilmPage({
                     .join(dict.nameSeparator)}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
+                  imageColor={poster?.dominantColor}
                 />
               );
             })}

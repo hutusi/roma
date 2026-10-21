@@ -114,6 +114,7 @@ export async function ProfilePage({
                   .join(en ? ", " : "、")}
                 imageUrl={poster?.url}
                 imageAlt={poster?.alt}
+                imageColor={poster?.dominantColor}
               />
             );
           })}

@@ -48,6 +48,9 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
             src={portrait.url}
             alt={portrait.alt ?? person.name}
             credit={portrait.credit}
+            color={portrait.dominantColor}
+            // The frame is max-w-md (28rem), not the full measure.
+            sizes="(min-width: 480px) 448px, 100vw"
             locale={locale}
           />
         </div>
@@ -127,6 +130,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
                   year={film.year}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
+                  imageColor={poster?.dominantColor}
                 />
               );
             })}

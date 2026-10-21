@@ -51,7 +51,7 @@ export default async function ListsIndexPage({ params }: { params: Promise<{ lan
       <TitleCard as="h1" eyebrow={t.eyebrow} title={t.title} />
       <p className="mx-auto mt-6 max-w-[60ch] text-center text-ink-muted">{t.intro}</p>
       <div className="mt-12 space-y-8 pb-4">
-        {lists.map((list) => {
+        {lists.map((list, index) => {
           const title = en ? (list.titleEn ?? list.title) : list.title;
           const theme = en ? list.themeEn : list.theme;
           return (
@@ -61,12 +61,22 @@ export default async function ListsIndexPage({ params }: { params: Promise<{ lan
               className="group block border border-line bg-card transition-colors hover:border-brand"
             >
               {list.cover && (
-                <div className="relative aspect-[137/60] overflow-hidden bg-ink">
+                <div
+                  className="relative aspect-[137/60] overflow-hidden bg-ink"
+                  style={
+                    list.cover.dominantColor
+                      ? { backgroundColor: list.cover.dominantColor }
+                      : undefined
+                  }
+                >
                   <Image
                     src={list.cover.url}
                     alt={list.cover.alt ?? title}
                     fill
                     sizes="(min-width: 768px) 768px, 100vw"
+                    // The first cover sits above the fold and is the LCP.
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
                     className="object-cover grayscale transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                 </div>

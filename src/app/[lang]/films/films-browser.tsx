@@ -160,6 +160,7 @@ export function FilmsBrowser({ locale, films }: { locale: Locale; films: FilmCar
               directorsLabel={film.directorsLabel}
               imageUrl={film.imageUrl}
               imageAlt={film.imageAlt}
+              imageColor={film.imageColor}
             />
           ))}
         </div>

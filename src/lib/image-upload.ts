@@ -11,7 +11,14 @@ export type ValidatedImage = {
   mime: ImageMime;
   width: number;
   height: number;
+  /** #rrggbb — painted behind the image while it loads. */
+  dominantColor: string;
 };
+
+/** sharp's dominant colour as the #rrggbb the media table stores. */
+export function hexColor({ r, g, b }: { r: number; g: number; b: number }): string {
+  return `#${[r, g, b].map((c) => Math.round(c).toString(16).padStart(2, "0")).join("")}`;
+}
 
 export class ImageValidationError extends Error {}
 
@@ -53,14 +60,16 @@ export async function validateImageUpload(file: File, maxBytes: number): Promise
 
   const bytes = Buffer.from(await file.arrayBuffer());
   let metadata: Awaited<ReturnType<ReturnType<typeof sharp>["metadata"]>>;
+  let dominantColor: string;
   try {
     const image = sharp(bytes, { failOn: "error", limitInputPixels: 40_000_000 });
     metadata = await image.metadata();
     // metadata() reads only the header, so a truncated file passes it
     // and would be stored broken. stats() decodes every pixel; with
     // failOn: "error", truncation surfaces here instead. Cheap enough:
-    // uploads are editor-only and capped at a few megabytes.
-    await image.stats();
+    // uploads are editor-only and capped at a few megabytes. The same
+    // pass yields the dominant colour the frames paint while loading.
+    dominantColor = hexColor((await image.stats()).dominant);
   } catch {
     throw new ImageValidationError("图片文件已损坏或格式无效");
   }
@@ -75,5 +84,5 @@ export async function validateImageUpload(file: File, maxBytes: number): Promise
     throw new ImageValidationError("图片像素尺寸过大");
   }
 
-  return { bytes, mime, width: metadata.width, height: metadata.height };
+  return { bytes, mime, width: metadata.width, height: metadata.height, dominantColor };
 }

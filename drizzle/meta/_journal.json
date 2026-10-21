@@ -113,6 +113,13 @@
       "when": 1792599944259,
       "tag": "0015_thick_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1792603183828,
+      "tag": "0016_parched_deathstrike",
+      "breakpoints": true
     }
   ]
 }

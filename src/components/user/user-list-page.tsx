@@ -146,6 +146,7 @@ export async function UserListPage({
                     .join(en ? ", " : "、")}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
+                  imageColor={poster?.dominantColor}
                 />
               </div>
             </div>

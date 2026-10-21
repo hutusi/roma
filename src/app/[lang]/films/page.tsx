@@ -46,6 +46,7 @@ export default async function FilmsIndexPage({ params }: { params: Promise<{ lan
         .join(en ? ", " : "、"),
       imageUrl: poster?.url ?? null,
       imageAlt: poster?.alt ?? null,
+      imageColor: poster?.dominantColor ?? null,
       // Countries are stored in Chinese; the ?country param speaks the
       // display language, so translate once here rather than per compare.
       countries: en ? film.countries.map(countryToEn) : film.countries,

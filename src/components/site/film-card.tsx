@@ -9,8 +9,8 @@ import Link from "next/link";
  * Every card shares one 2:3 frame, so a grid's rows line up whatever the
  * image: posters fill it, and the rare film with only a still is
  * centre-cropped. (The Academy-ratio letterbox, where composition
- * matters, stays on detail pages.) Until the image arrives the frame is
- * paper-toned, not a black hole.
+ * matters, stays on detail pages.) Until the image arrives the frame
+ * shows its dominant colour (paper-toned when unknown), not a black hole.
  */
 export function FilmCard({
   href,
@@ -20,6 +20,7 @@ export function FilmCard({
   directorsLabel,
   imageUrl,
   imageAlt,
+  imageColor,
 }: {
   href: string;
   title: string;
@@ -29,6 +30,8 @@ export function FilmCard({
   directorsLabel?: string;
   imageUrl?: string | null;
   imageAlt?: string | null;
+  /** The image's dominant colour, painted in the frame while it loads. */
+  imageColor?: string | null;
 }) {
   // Dedupe here so no caller can render the title twice.
   const secondary = subtitle && subtitle !== title ? subtitle : null;
@@ -37,7 +40,10 @@ export function FilmCard({
       href={href}
       className="group flex gap-4 border border-line bg-card p-3 transition-colors hover:border-brand sm:p-4"
     >
-      <div className="relative aspect-[2/3] w-20 shrink-0 overflow-hidden bg-secondary sm:w-24">
+      <div
+        className="relative aspect-[2/3] w-20 shrink-0 overflow-hidden bg-secondary sm:w-24"
+        style={imageColor ? { backgroundColor: imageColor } : undefined}
+      >
         {imageUrl ? (
           <Image
             src={imageUrl}

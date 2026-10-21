@@ -21,6 +21,7 @@ export type FilmCardData = {
   directorsLabel: string;
   imageUrl: string | null;
   imageAlt: string | null;
+  imageColor: string | null;
   countries: string[];
   isBlackAndWhite: boolean;
   /** `label` is already localized; `slug` matches the ?tag param in both editions. */

@@ -91,12 +91,22 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             className="group mt-8 block border border-line bg-card transition-colors hover:border-brand"
           >
             {featured.cover && (
-              <div className="relative aspect-[137/60] overflow-hidden bg-ink">
+              <div
+                className="relative aspect-[137/60] overflow-hidden bg-ink"
+                style={
+                  featured.cover.dominantColor
+                    ? { backgroundColor: featured.cover.dominantColor }
+                    : undefined
+                }
+              >
                 <Image
                   src={featured.cover.url}
                   alt={featured.cover.alt ?? featuredTitle}
                   fill
                   sizes="(min-width: 768px) 768px, 100vw"
+                  // Above the fold on most screens: don't wait for layout.
+                  loading="eager"
+                  fetchPriority="high"
                   className="object-cover grayscale transition-transform duration-500 group-hover:scale-[1.02]"
                 />
               </div>
@@ -143,6 +153,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                     .join(en ? ", " : "、")}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
+                  imageColor={poster?.dominantColor}
                 />
               );
             })}

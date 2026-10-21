@@ -46,8 +46,9 @@ export function ListPage({
             src={list.cover.url}
             alt={list.cover.alt ?? title}
             credit={list.cover.credit}
+            color={list.cover.dominantColor}
             locale={locale}
-            priority
+            preload
           />
         </div>
       )}
@@ -92,6 +93,7 @@ export function ListPage({
                   .join(en ? ", " : "、")}
                 imageUrl={poster?.url}
                 imageAlt={poster?.alt}
+                imageColor={poster?.dominantColor}
               />
               {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-base" />}
             </li>

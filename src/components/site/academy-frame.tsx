@@ -17,7 +17,8 @@ export function AcademyFrame({
   credit,
   locale = "zh",
   sizes = "(min-width: 1024px) 896px, 100vw",
-  priority = false,
+  preload = false,
+  color,
   className,
 }: {
   src?: string | null;
@@ -26,19 +27,25 @@ export function AcademyFrame({
   credit?: string | null;
   locale?: Locale;
   sizes?: string;
-  priority?: boolean;
+  /** The page's LCP image (film hero, list cover): fetched from <head>. */
+  preload?: boolean;
+  /** The image's dominant colour: the letterbox takes it while loading. */
+  color?: string | null;
   className?: string;
 }) {
   return (
     <figure className={cn("w-full", className)}>
-      <div className="relative aspect-[137/100] w-full overflow-hidden bg-ink">
+      <div
+        className="relative aspect-[137/100] w-full overflow-hidden bg-ink"
+        style={color ? { backgroundColor: color } : undefined}
+      >
         {src ? (
           <Image
             src={src}
             alt={alt}
             fill
             sizes={sizes}
-            priority={priority}
+            preload={preload}
             className="object-contain"
           />
         ) : (
