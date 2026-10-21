@@ -103,7 +103,9 @@ export function FilmPage({
       )}
 
       <header className="mt-10 text-center">
-        <h1 className="font-bold text-4xl tracking-title">{displayTitle}</h1>
+        <h1 className="text-balance break-words font-bold text-3xl tracking-title sm:text-4xl">
+          {displayTitle}
+        </h1>
         {subtitle && <p className="mt-3 font-display text-ink-muted text-lg">{subtitle}</p>}
         <p className="mt-4 text-ink-muted text-sm tracking-label">{facts.join(" · ")}</p>
         {directorNames.length > 0 && (
@@ -177,13 +179,13 @@ export function FilmPage({
             {translations.map((t) => (
               <div
                 key={t.label}
-                className="flex justify-between border-line border-b py-2.5 text-ui"
+                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-line border-b py-2.5 text-ui"
               >
                 <dt className="text-ink-muted">{t.label}</dt>
                 <dd>{t.value}</dd>
               </div>
             ))}
-            <div className="flex justify-between py-2.5 text-ui">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-2.5 text-ui">
               <dt className="text-ink-muted">{dict.titleLabels.original}</dt>
               <dd className="font-display">{film.titleOriginal}</dd>
             </div>
@@ -204,7 +206,10 @@ export function FilmPage({
               // Same split as names: /en shows the Latin/original role only.
               const role = en ? member.character : (member.characterZh ?? member.character);
               return (
-                <li key={member.id} className="flex justify-between border-line border-b py-1.5">
+                <li
+                  key={member.id}
+                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-line border-b py-1.5"
+                >
                   <span>
                     {linked && member.person ? (
                       <Link
@@ -245,7 +250,7 @@ export function FilmPage({
                     return (
                       <li
                         key={link.id}
-                        className="flex justify-between border-line border-b py-1.5 text-ui"
+                        className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-line border-b py-1.5 text-ui"
                       >
                         {link.url ? (
                           <a
@@ -311,13 +316,13 @@ export function FilmPage({
                 <li key={list.id}>
                   <Link
                     href={localePath(locale, `/list/${list.slug}`)}
-                    className="group flex items-baseline justify-between border-line border-b py-2.5"
+                    className="group flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-line border-b py-2.5"
                   >
                     <span className="font-bold transition-colors group-hover:text-brand">
                       {listTitle}
                     </span>
                     {listTheme && (
-                      <span className="ml-4 truncate text-ink-muted text-sm">{listTheme}</span>
+                      <span className="min-w-0 truncate text-ink-muted text-sm">{listTheme}</span>
                     )}
                   </Link>
                 </li>

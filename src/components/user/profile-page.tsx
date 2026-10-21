@@ -98,7 +98,7 @@ export async function ProfilePage({
       </nav>
 
       {tab !== "lists" && (
-        <div className="mt-8 grid gap-4 pb-8 sm:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-4 pb-8 sm:grid-cols-2">
           {visibleMarks.map((mark) => {
             const poster = posterOf(mark.film.media);
             return (
@@ -133,17 +133,17 @@ export async function ProfilePage({
             <Link
               key={list.id}
               href={localePath(locale, `/u/${username}/list/${list.id}`)}
-              className="group flex items-baseline justify-between border border-line bg-card p-5 transition-colors hover:border-brand"
+              className="group flex items-start justify-between gap-4 border border-line bg-card p-5 transition-colors hover:border-brand"
             >
-              <span>
-                <span className="font-bold transition-colors group-hover:text-brand">
+              <span className="min-w-0">
+                <span className="block break-words font-bold transition-colors group-hover:text-brand">
                   {list.title}
                 </span>
                 {list.description && (
-                  <span className="ml-3 text-ink-muted text-sm">{list.description}</span>
+                  <span className="mt-1 block text-ink-muted text-sm">{list.description}</span>
                 )}
               </span>
-              <span className="font-display text-ink-muted text-xs tracking-eyebrow">
+              <span className="shrink-0 pt-1 font-display text-ink-muted text-xs tracking-eyebrow">
                 {list.items.filter((i) => i.film.status === "published").length} FILMS
               </span>
             </Link>

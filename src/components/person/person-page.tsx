@@ -29,7 +29,9 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       <header className="text-center">
-        <h1 className="font-bold text-4xl tracking-title">{displayName}</h1>
+        <h1 className="text-balance break-words font-bold text-3xl tracking-title sm:text-4xl">
+          {displayName}
+        </h1>
         {subName && subName !== displayName && (
           <p className="mt-3 font-display text-ink-muted text-lg">{subName}</p>
         )}
@@ -111,7 +113,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
       {person.films.length > 0 && (
         <section className="mt-14 pb-4">
           <TitleCard eyebrow={en ? undefined : "Films"} title={dict.films} />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {person.films.map((film) => {
               const poster = posterOf(film.media);
               const title = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
@@ -145,7 +147,10 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
               // Same split as names: /en shows the Latin/original role only.
               const role = en ? credit.character : (credit.characterZh ?? credit.character);
               return (
-                <li key={credit.id} className="flex justify-between border-line border-b py-2">
+                <li
+                  key={credit.id}
+                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-line border-b py-2"
+                >
                   <span>
                     {credit.film.status === "published" ? (
                       <Link

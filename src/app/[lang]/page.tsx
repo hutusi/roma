@@ -126,7 +126,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <section className="mx-auto max-w-3xl px-6 pt-20 pb-4">
         <TitleCard eyebrow={t.recentEyebrow} title={t.recentTitle} />
         {recentFilms.length > 0 ? (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {recentFilms.map((film) => {
               const poster = posterOf(film.media);
               const title = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
