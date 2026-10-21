@@ -93,6 +93,22 @@ export const en = {
     actedIn: "Films as Actor",
   },
   auth: {
+    errors: {
+      invalidCredentials: "That email and password don't match.",
+      emailTaken: "That email is already registered. You can sign in instead.",
+      usernameTaken: "That username is taken. Try another.",
+      usernameInvalid: "Usernames are 3–30 letters, digits or _ . -.",
+      passwordTooShort: "Passwords need at least 8 characters.",
+      passwordTooLong: "That password is too long.",
+      wrongPassword: "Your current password isn't right.",
+      invalidEmail: "Enter a valid email address.",
+      tokenExpired: "This link has expired. Please request a new one.",
+      banned: "This account has been suspended.",
+      rateLimited: "Too many attempts. Please wait a moment and try again.",
+      network: "Couldn't reach the server. Check your connection and try again.",
+      unknown: "Something went wrong. Please try again later.",
+      required: "Please fill this in.",
+    },
     email: "Email",
     password: "Password",
     signIn: {
@@ -103,6 +119,7 @@ export const en = {
       noAccount: "No account yet?",
       signUpLink: "Sign up",
       forgotLink: "Forgot password",
+      resetDone: "Your password has been reset. Sign in with the new one.",
     },
     signUp: {
       title: "Sign up",
@@ -123,6 +140,7 @@ export const en = {
       emailLabel: "Registered email",
       submit: "Send reset email",
       submitting: "Sending…",
+      backToSignIn: "Back to sign in",
     },
     reset: {
       title: "Reset password",

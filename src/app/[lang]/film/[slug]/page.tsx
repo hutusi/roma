@@ -12,6 +12,7 @@ import {
 import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { signInHrefFor } from "@/lib/safe-next";
 import { seoMetadata } from "@/lib/seo";
 import { filmJsonLd } from "@/lib/structured-data";
 
@@ -96,7 +97,10 @@ export default async function PublicFilmPage({
           <MarkButtons
             filmId={film.id}
             labels={getDict(locale).markButtons}
-            signInHref={localePath(locale, "/sign-in")}
+            signInHref={signInHrefFor(
+              localePath(locale, "/sign-in"),
+              localePath(locale, `/film/${slug}`),
+            )}
           />
         }
       />

@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
+import { asFreshClient } from "./utils/client-ip";
 
 test("sitemap lists published slugs only, on the canonical origin", async ({ request }) => {
   const sitemap = await (await request.get("/sitemap.xml")).text();
@@ -38,6 +39,7 @@ test("unknown film gets the styled 404", async ({ page }) => {
 });
 
 test("password reset loop completes against the production build", async ({ page }) => {
+  await asFreshClient(page);
   await page.goto("/zh/forgot-password");
   await page.fill("#email", "user@e2e.test");
   await page.getByRole("button", { name: "发送重置邮件" }).click();
@@ -55,7 +57,10 @@ test("password reset loop completes against the production build", async ({ page
   await page.goto(resetUrl as string);
   await page.fill("#password", "e2e-user-password"); // same value keeps later specs valid
   await page.getByRole("button", { name: "重置密码" }).click();
-  await page.waitForURL(/\/sign-in/);
+  await page.waitForURL(/\/sign-in\?reset=1/);
+  await expect(page.getByRole("main").getByRole("status")).toHaveText(
+    "密码已重置，请用新密码登录。",
+  );
 
   await page.fill("#email", "user@e2e.test");
   await page.fill("#password", "e2e-user-password");

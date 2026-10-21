@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { asFreshClient } from "./utils/client-ip";
 
 /**
  * The states between content: missing pages, failures, nothing to show.
@@ -26,4 +27,37 @@ test.describe("404", () => {
       await expect(home).toHaveAttribute("href", path.startsWith("/en") ? "/en" : "/zh");
     });
   }
+});
+
+test.describe("sign-in", () => {
+  test.beforeEach(({ page }) => asFreshClient(page));
+
+  test("an empty submit explains each field, in the page's language", async ({ page }) => {
+    await page.goto("/en/sign-in");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    const email = page.getByLabel("Email");
+    await expect(email).toHaveAttribute("aria-invalid", "true");
+    await expect(page.locator("#email-error")).toHaveText("Please fill this in.");
+    await expect(email).toBeFocused();
+  });
+
+  test("a wrong password gets a localized message, not better-auth's English", async ({ page }) => {
+    await page.goto("/zh/sign-in");
+    await page.fill("#email", "user@e2e.test");
+    await page.fill("#password", "not-the-password");
+    await page.getByRole("button", { name: "登录" }).click();
+    // Scoped to main: Next's route announcer is also role="alert".
+    await expect(page.getByRole("main").getByRole("alert")).toHaveText("邮箱或密码不正确。");
+  });
+
+  test("signing in from a film page comes back to it", async ({ page }) => {
+    await page.goto("/zh/film/otto-e-mezzo");
+    await page.getByRole("link", { name: "登录后可标记「看过 / 想看」" }).click();
+    await expect(page).toHaveURL(/\/zh\/sign-in\?next=%2Fzh%2Ffilm%2Fotto-e-mezzo$/);
+    await page.fill("#email", "user@e2e.test");
+    await page.fill("#password", "e2e-user-password");
+    await page.getByRole("button", { name: "登录" }).click();
+    await expect(page).toHaveURL(/\/zh\/film\/otto-e-mezzo$/);
+    await expect(page.getByRole("button", { name: "看过" })).toBeVisible();
+  });
 });

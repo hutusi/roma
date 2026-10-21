@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { getDict } from "@/i18n/dict";
 import type { Locale } from "@/i18n/locales";
@@ -19,9 +18,7 @@ export default async function ResetPasswordPage({ params }: { params: Promise<{ 
   const locale = parseLocale((await params).lang);
   return (
     <div className="mx-auto max-w-sm animate-fade-up px-6 pt-20">
-      <Suspense>
-        <ResetPasswordForm locale={locale} labels={getDict(locale).auth} />
-      </Suspense>
+      <ResetPasswordForm locale={locale} labels={getDict(locale).auth} />
     </div>
   );
 }

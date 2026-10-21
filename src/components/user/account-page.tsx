@@ -19,6 +19,7 @@ export async function AccountPage({ locale = "zh" }: { locale?: Locale }) {
         locale={locale}
         storedLocale={rawLocale != null && isLocale(rawLocale) ? rawLocale : null}
         labels={dict.account}
+        errorLabels={dict.auth.errors}
       />
     </div>
   );

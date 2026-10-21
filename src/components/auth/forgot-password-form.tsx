@@ -1,12 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { type Locale, localePath } from "@/i18n/locales";
-import { authClient } from "@/lib/auth-client";
+import { FormField, fieldErrors } from "./form-field";
 
 export function ForgotPasswordForm({
   locale,
@@ -17,13 +16,22 @@ export function ForgotPasswordForm({
 }) {
   const [sent, setSent] = useState(false);
   const [pending, setPending] = useState(false);
+  const [fields, setFields] = useState<Record<string, string>>({});
   const t = labels.forgot;
 
   if (sent) {
     return (
       <div className="border-line border-y py-10 text-center">
         <h1 className="font-bold text-2xl tracking-label">{t.sentTitle}</h1>
-        <p className="mt-4 text-ink-muted text-sm leading-relaxed">{t.sentBody}</p>
+        <p role="status" className="mt-4 text-ink-muted text-sm leading-relaxed">
+          {t.sentBody}
+        </p>
+        <Link
+          href={localePath(locale, "/sign-in")}
+          className="mt-6 inline-block text-brand text-sm hover:underline"
+        >
+          {t.backToSignIn}
+        </Link>
       </div>
     );
   }
@@ -33,11 +41,16 @@ export function ForgotPasswordForm({
       <h1 className="text-center font-bold text-2xl tracking-label">{t.title}</h1>
       <form
         className="mt-8 space-y-5"
+        noValidate
         onSubmit={async (e) => {
           e.preventDefault();
+          const invalid = fieldErrors(e.currentTarget, labels.errors);
+          setFields(invalid);
+          if (Object.keys(invalid).length) return;
           const form = new FormData(e.currentTarget);
           setPending(true);
           try {
+            const { authClient } = await import("@/lib/auth-client");
             await authClient.requestPasswordReset({
               email: String(form.get("email")),
               redirectTo: localePath(locale, "/reset-password"),
@@ -51,14 +64,23 @@ export function ForgotPasswordForm({
           }
         }}
       >
-        <div className="space-y-2">
-          <Label htmlFor="email">{t.emailLabel}</Label>
-          <Input id="email" name="email" type="email" required autoComplete="email" />
-        </div>
+        <FormField
+          id="email"
+          label={t.emailLabel}
+          type="email"
+          required
+          autoComplete="email"
+          error={fields.email}
+        />
         <Button type="submit" className="w-full tracking-eyebrow" disabled={pending}>
           {pending ? t.submitting : t.submit}
         </Button>
       </form>
+      <p className="mt-6 text-center text-sm">
+        <Link href={localePath(locale, "/sign-in")} className="text-brand hover:underline">
+          {t.backToSignIn}
+        </Link>
+      </p>
     </div>
   );
 }
