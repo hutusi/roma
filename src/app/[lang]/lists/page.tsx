@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { EmptyState } from "@/components/site/empty-state";
 import { TitleCard } from "@/components/site/title-card";
 import { getPublishedLists } from "@/db/queries/public";
 import { getDict } from "@/i18n/dict";
@@ -82,7 +83,16 @@ export default async function ListsIndexPage({ params }: { params: Promise<{ lan
             </Link>
           );
         })}
-        {lists.length === 0 && <p className="text-center text-ink-muted">{t.empty}</p>}
+        {lists.length === 0 && (
+          <EmptyState
+            action={{
+              href: localePath(locale, "/films"),
+              label: getDict(locale).search.browseFilms,
+            }}
+          >
+            {t.empty}
+          </EmptyState>
+        )}
       </div>
     </div>
   );

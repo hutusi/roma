@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { AcademyFrame } from "@/components/site/academy-frame";
+import { FilmCard } from "@/components/site/film-card";
 import { LocaleSwitch } from "@/components/site/locale-switch";
 import { SectionHeading, TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
-import { heroOf, type PublicFilm } from "@/db/queries/public";
+import { type FilmCardRow, heroOf, type PublicFilm, posterOf } from "@/db/queries/public";
 import { countryToEn } from "@/i18n/countries";
 import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
@@ -31,10 +32,13 @@ export function FilmPage({
   film,
   locale = "zh",
   actions,
+  moreFilms = [],
 }: {
   film: PublicFilm;
   locale?: Locale;
   actions?: React.ReactNode;
+  /** Other films by the same director(s), already filtered to this edition. */
+  moreFilms?: FilmCardRow[];
 }) {
   const dict = getDict(locale).film;
   const en = locale === "en";
@@ -331,6 +335,41 @@ export function FilmPage({
           </ul>
         </section>
       )}
+
+      {/* The page never ends in a dead end: more by the same hands, then the catalogue. */}
+      {moreFilms.length > 0 && (
+        <section className="mt-14">
+          <SectionHeading title={dict.moreByDirector} />
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {moreFilms.map((other) => {
+              const poster = posterOf(other.media);
+              const title = en ? (other.titleEn ?? other.titleOriginal) : other.titleZh;
+              return (
+                <FilmCard
+                  key={other.id}
+                  href={localePath(locale, `/film/${other.slug}`)}
+                  title={title}
+                  subtitle={other.titleOriginal !== title ? other.titleOriginal : null}
+                  year={other.year}
+                  directorsLabel={other.filmDirectors
+                    .map((fd) => (en ? fd.director.name : (fd.director.nameZh ?? fd.director.name)))
+                    .join(dict.nameSeparator)}
+                  imageUrl={poster?.url}
+                  imageAlt={poster?.alt}
+                />
+              );
+            })}
+          </div>
+        </section>
+      )}
+      <p className="mt-14 pb-4 text-center">
+        <Link
+          href={localePath(locale, "/films")}
+          className="text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
+        >
+          {dict.allFilms} →
+        </Link>
+      </p>
     </article>
   );
 }

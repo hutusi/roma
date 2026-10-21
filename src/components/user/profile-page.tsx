@@ -1,6 +1,7 @@
 import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { EmptyState } from "@/components/site/empty-state";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
@@ -117,9 +118,12 @@ export async function ProfilePage({
             );
           })}
           {visibleMarks.length === 0 && (
-            <p className="col-span-full py-8 text-center text-ink-muted">
+            <EmptyState
+              className="col-span-full mt-4"
+              action={{ href: localePath(locale, "/films"), label: t.browseFilms }}
+            >
               {tab === "watched" ? t.emptyWatched : t.emptyWant}
-            </p>
+            </EmptyState>
           )}
         </div>
       )}
@@ -148,8 +152,8 @@ export async function ProfilePage({
               </span>
             </Link>
           ))}
-          {lists.length === 0 && !isOwner && (
-            <p className="py-8 text-center text-ink-muted">{t.emptyLists}</p>
+          {lists.length === 0 && (
+            <EmptyState className="mt-6">{isOwner ? t.emptyOwnerLists : t.emptyLists}</EmptyState>
           )}
         </div>
       )}

@@ -18,6 +18,9 @@ export const en = {
     aboutLink: "About",
   },
   search: {
+    emptyQuery: "Search for films, directors, actors or lists.",
+    browseFilms: "All films",
+    browseLists: "All lists",
     close: "Close",
     open: "Search",
     title: "Search",
@@ -53,6 +56,8 @@ export const en = {
     failed: "The follow wasn't updated. Please try again.",
   },
   film: {
+    moreByDirector: "More by the same director",
+    allFilms: "All films",
     directedBy: "Directed by ",
     nameSeparator: ", ",
     runtime: (minutes: number) => `${minutes} min`,
@@ -153,13 +158,20 @@ export const en = {
       error: "Reset failed: the link may have expired. Please request a new one.",
     },
   },
+  curatedList: {
+    empty: "This list is still being put together.",
+    allLists: "See the other lists",
+  },
   profile: {
+    browseFilms: "Browse the films",
+    emptyOwnerLists: "No lists yet. Start one, and put the films you'd recommend in order.",
     tabs: { watched: "Watched", want: "Want to see", lists: "Lists" },
     emptyWatched: "No films marked as watched yet.",
     emptyWant: "No films marked as want-to-see yet.",
     emptyLists: "No lists created yet.",
   },
   userList: {
+    backToProfile: "Back to profile",
     newList: "New list",
     listSuffix: "'s list",
     titleLabel: "Title",

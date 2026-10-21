@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { MarkButtons } from "@/components/site/mark-buttons";
 import {
   getFilmStubBySlug,
+  getMoreByDirectors,
   getPublishedFilmBySlug,
   getPublishedFilmSlugs,
 } from "@/db/queries/public";
@@ -87,12 +88,18 @@ export default async function PublicFilmPage({
     }
     notFound();
   }
+  const moreFilms = await getMoreByDirectors(
+    film.id,
+    film.filmDirectors.map((fd) => fd.director.id),
+    locale,
+  );
   return (
     <>
       <JsonLd data={filmJsonLd(film, locale)} />
       <FilmPage
         film={film}
         locale={locale}
+        moreFilms={moreFilms}
         actions={
           <MarkButtons
             filmId={film.id}

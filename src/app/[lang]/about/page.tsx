@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { ButtonLink } from "@/components/site/button-link";
 import { TitleCard } from "@/components/site/title-card";
-import type { Locale } from "@/i18n/locales";
+import { type Locale, localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
 import { AboutEn } from "./about-en";
@@ -33,6 +34,12 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
     <article className="mx-auto max-w-measure animate-fade-up px-6 pt-16">
       <TitleCard as="h1" eyebrow="About" title={HEADING[locale]} />
       {locale === "en" ? <AboutEn /> : <AboutZh />}
+      {/* Reading about the site should end at the thing it is about. */}
+      <p className="mt-12 pb-4 text-center">
+        <ButtonLink href={localePath(locale, "/lists")}>
+          {locale === "en" ? "Browse the lists" : "浏览片单"}
+        </ButtonLink>
+      </p>
     </article>
   );
 }

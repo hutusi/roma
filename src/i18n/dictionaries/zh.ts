@@ -24,6 +24,9 @@ export const zh = {
     aboutLink: "关于本站",
   },
   search: {
+    emptyQuery: "可以搜片名、导演、演员或片单。",
+    browseFilms: "全部影片",
+    browseLists: "全部片单",
     close: "关闭",
     open: "搜索",
     title: "搜索",
@@ -59,6 +62,8 @@ export const zh = {
     failed: "关注没有更新，请重试。",
   },
   film: {
+    moreByDirector: "同导演作品",
+    allFilms: "全部影片",
     directedBy: "导演：",
     nameSeparator: "、",
     runtime: (minutes: number) => `${minutes} 分钟`,
@@ -157,13 +162,20 @@ export const zh = {
       error: "重置失败：链接可能已过期，请重新申请。",
     },
   },
+  curatedList: {
+    empty: "这份片单还在整理中。",
+    allLists: "看看其他片单",
+  },
   profile: {
+    browseFilms: "去影片库看看",
+    emptyOwnerLists: "还没有片单。新建一份，把你想推荐的影片排个顺序。",
     tabs: { watched: "看过", want: "想看", lists: "片单" },
     emptyWatched: "还没有标记看过的影片。",
     emptyWant: "还没有想看的影片。",
     emptyLists: "还没有创建片单。",
   },
   userList: {
+    backToProfile: "回到主页",
     newList: "新建片单",
     listSuffix: " 的片单",
     titleLabel: "标题",

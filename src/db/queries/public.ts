@@ -1,5 +1,5 @@
 import "server-only";
-import { and, arrayContains, asc, desc, eq, gte, lte } from "drizzle-orm";
+import { and, arrayContains, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
 import { db } from "@/db";
 import {
   curatedListItems,
@@ -140,6 +140,35 @@ export async function getPublishedFilms(
 }
 
 export type PublicFilmListItem = Awaited<ReturnType<typeof getPublishedFilms>>[number];
+
+/**
+ * Other films by any of a film's directors, for the film page's onward
+ * section — same visibility rule as every other read (en needs zh + en
+ * published). Two small queries rather than a join through the junction,
+ * so the card relations stay the shared `filmCardRelations`.
+ */
+export async function getMoreByDirectors(
+  filmId: string,
+  directorIds: string[],
+  locale: Locale = "zh",
+  limit = 4,
+) {
+  if (directorIds.length === 0) return [];
+  const credits = await db
+    .select({ filmId: filmDirectors.filmId })
+    .from(filmDirectors)
+    .where(inArray(filmDirectors.directorId, directorIds));
+  const ids = [...new Set(credits.map((c) => c.filmId))].filter((id) => id !== filmId);
+  if (ids.length === 0) return [];
+  return db.query.films.findMany({
+    where: and(inArray(films.id, ids), ...filmStatusConds(locale)),
+    orderBy: [asc(films.year), asc(films.slug)],
+    limit,
+    with: filmCardRelations,
+  });
+}
+
+export type FilmCardRow = Awaited<ReturnType<typeof getMoreByDirectors>>[number];
 
 export async function getPublishedFilmSlugs(locale: Locale = "zh") {
   return db
