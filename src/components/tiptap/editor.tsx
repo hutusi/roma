@@ -413,6 +413,16 @@ export function TiptapEditor({
     ],
     content: value ?? undefined,
     immediatelyRender: false,
+    // StarterKit's TrailingNode appends an empty paragraph after a final
+    // blockquote, heading or image, on whichever transaction comes first —
+    // often Placeholder's own, fired when the editor scrolls into view. That
+    // reported an "update", so a form marked itself dirty (and the leave
+    // guard objected) with nothing edited. Normalize once, up front, outside
+    // both the update stream and undo history.
+    onCreate: ({ editor }) =>
+      editor.view.dispatch(
+        editor.state.tr.setMeta("preventUpdate", true).setMeta("addToHistory", false),
+      ),
     onUpdate: ({ editor }) => onChange(plainJson(editor.getJSON())),
     editorProps: {
       attributes: {

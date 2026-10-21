@@ -98,6 +98,22 @@ test("a formatted essay saves, and its image carries the library credit onto the
   await dropFilm(id);
 });
 
+test("opening an essay to look at it doesn't count as an edit", async ({ page }) => {
+  // 八部半's essay ends in a blockquote, so the editor normalizes it by
+  // appending an empty paragraph — which used to mark the form dirty.
+  const film = await queryOne<{ id: string }>("select id from films where slug = 'otto-e-mezzo'");
+  await page.goto(`/admin/films/${film?.id}`);
+  const toolbar = page.getByRole("toolbar", { name: "长文 · 格式", exact: true });
+  await page.locator('.ProseMirror[aria-label="长文"]').getByRole("heading").click();
+  // The click's transaction has been processed once the toolbar follows it.
+  await expect(toolbar.getByRole("button", { name: "二级标题" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByText("没有修改")).toBeVisible();
+  await expect(toolbar.getByRole("button", { name: "撤销" })).toBeDisabled();
+});
+
 test("the media library shows its film filter, and a refused change rolls back", async ({
   page,
 }) => {
