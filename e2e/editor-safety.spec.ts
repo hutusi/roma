@@ -29,6 +29,17 @@ async function draftFilm() {
 const toast = (page: Page, text: string | RegExp) =>
   page.locator("[data-sonner-toast]", { hasText: text });
 
+/**
+ * Opens the film form and waits until it's hydrated: the essay editors
+ * only mount client-side. Typing earlier raced react-hook-form's register,
+ * which rewrites the input mid-fill — so "Saved First" landed as
+ * "Editor SafetySaved First".
+ */
+async function openForm(page: Page, id: string) {
+  await page.goto(`/admin/films/${id}`);
+  await expect(page.getByRole("toolbar", { name: "长文 · 格式", exact: true })).toBeVisible();
+}
+
 test("a stale save is refused, not applied over a colleague's", async ({ browser }) => {
   const id = await draftFilm();
   const first = await (
@@ -37,7 +48,7 @@ test("a stale save is refused, not applied over a colleague's", async ({ browser
   const second = await (
     await browser.newContext({ storageState: "e2e/.auth/admin.json" })
   ).newPage();
-  await Promise.all([first.goto(`/admin/films/${id}`), second.goto(`/admin/films/${id}`)]);
+  await Promise.all([openForm(first, id), openForm(second, id)]);
 
   await first.fill("#titleOriginal", "Saved First");
   await first.getByRole("button", { name: /^保存/ }).click();
@@ -62,7 +73,7 @@ test("a stale save is refused, not applied over a colleague's", async ({ browser
 
 test("a failed request keeps the form and frees the button", async ({ page }) => {
   const id = await draftFilm();
-  await page.goto(`/admin/films/${id}`);
+  await openForm(page, id);
   await page.fill("#titleOriginal", "Unsaved Edit");
 
   // Server actions POST to the page URL; drop exactly those.
@@ -80,7 +91,7 @@ test("a failed request keeps the form and frees the button", async ({ page }) =>
 
 test("leaving a dirty form asks first", async ({ page }) => {
   const id = await draftFilm();
-  await page.goto(`/admin/films/${id}`);
+  await openForm(page, id);
   await page.fill("#titleOriginal", "Half-Typed");
 
   await page.getByRole("link", { name: "影片", exact: true }).click();
