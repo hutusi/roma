@@ -1,85 +1,51 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { lazy, Suspense } from "react";
+import { useMe } from "@/components/site/use-me";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { type Locale, localePath } from "@/i18n/locales";
-import { authClient } from "@/lib/auth-client";
+
+// Radix DropdownMenu (and floating-ui) load only once someone is signed
+// in; a signed-out reader gets a plain link. Until the chunk arrives the
+// name renders in the trigger's place, so the header doesn't shift.
+const AuthMenuDropdown = lazy(() =>
+  import("./auth-menu-dropdown").then((m) => ({ default: m.AuthMenuDropdown })),
+);
 
 /**
- * Header auth entry. A client island using the client-side session so
+ * Header auth entry. A client island reading the shared useMe store, so
  * the header can live on fully static pages. Labels arrive as props
- * (dictionaries are server-only). User areas (/u, /me, /account) are
- * localized, so their links follow the current locale; /admin stays zh
- * (the admin is zh-only).
+ * (dictionaries are server-only).
  */
 export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionary["authMenu"] }) {
-  const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
+  const { status, user } = useMe();
 
-  if (isPending) return <span className="w-10" aria-hidden />;
+  // Fixed footprint while unknown, so the nav doesn't jump when it resolves.
+  if (status === "loading" && !user) {
+    return <span className="inline-block w-10" aria-hidden />;
+  }
 
-  if (!session) {
+  // Signed out — or unknown after a failed read: the sign-in page is the
+  // useful place to land either way.
+  if (!user) {
     return (
       <Link
         href={localePath(locale, "/sign-in")}
-        className="text-sm tracking-[0.2em] transition-colors hover:text-brand"
+        className="whitespace-nowrap text-sm tracking-[0.2em] transition-colors hover:text-brand"
       >
         {labels.signIn}
       </Link>
     );
   }
 
-  const role = (session.user as { role?: string }).role;
-  const username = (session.user as { username?: string }).username;
-
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="text-sm tracking-[0.1em] transition-colors hover:text-brand">
-        {session.user.name}
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="font-sans">
-        {username && (
-          <DropdownMenuItem asChild>
-            <Link href={localePath(locale, `/u/${username}`)}>{labels.myPage}</Link>
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem asChild>
-          <Link href={localePath(locale, "/me/follows")}>{labels.follows}</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={localePath(locale, "/account")}>{labels.account}</Link>
-        </DropdownMenuItem>
-        {(role === "admin" || role === "editor") && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/admin">{labels.editorial}</Link>
-            </DropdownMenuItem>
-          </>
-        )}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={async () => {
-            // Guard the network call so a failed sign-out doesn't throw an
-            // unhandled rejection. No toast here: this menu is shared chrome
-            // rendered on /en too, and refresh() re-checks the session.
-            try {
-              await authClient.signOut();
-            } catch {}
-            router.refresh();
-          }}
-        >
-          {labels.signOut}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Suspense
+      fallback={
+        <span className="max-w-[10rem] truncate text-sm tracking-[0.1em]">{user.name}</span>
+      }
+    >
+      <AuthMenuDropdown locale={locale} labels={labels} user={user} />
+    </Suspense>
   );
 }

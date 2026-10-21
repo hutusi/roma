@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { invalidateMe } from "@/components/site/use-me";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +32,8 @@ export function SignInForm({ locale, labels }: { locale: Locale; labels: Diction
       setError(t.error);
       return;
     }
+    // The header and islands read the session from a shared store.
+    invalidateMe();
     const next = searchParams.get("next");
     // Same-origin paths only: "//evil.com" passes startsWith("/") but
     // navigates cross-origin (open redirect).
