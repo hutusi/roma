@@ -55,6 +55,7 @@ export default async function AdminInvitesPage() {
                   inviteId={invite.id}
                   token={invite.token}
                   active={statusOf(invite) === "待接受"}
+                  accepted={Boolean(invite.acceptedAt)}
                 />
               </TableCell>
             </TableRow>

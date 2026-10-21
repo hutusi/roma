@@ -10,6 +10,7 @@ import {
   updateItemReasoning,
 } from "@/actions/lists";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { ConfirmButton } from "@/components/admin/confirm-button";
 import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { SortableList } from "@/components/list/sortable-list";
 import { TiptapEditor } from "@/components/tiptap/editor";
@@ -142,24 +143,32 @@ export function ItemsPanel({
                   {item.reasoning || drafts[item.id] ? "已有理由" : "缺入选理由"}
                   {expanded === item.id ? " ▲" : " ▼"}
                 </span>
-                <button
-                  type="button"
-                  className="text-ink-muted text-sm hover:text-destructive"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!window.confirm(`把《${item.title}》移出片单？`)) return;
-                    startTransition(async () => {
-                      const result = await callAction(() => removeListItem(item.id));
-                      if (!result.ok) {
-                        notifyActionError(result.error);
-                        return;
-                      }
-                      setItems(items.filter((it) => it.id !== item.id));
-                    });
-                  }}
-                >
-                  移除
-                </button>
+                {/* The row toggles its editor on click; keep this out of it. */}
+                {/* biome-ignore lint/a11y/noStaticElementInteractions: only stops the bubble into the clickable row; the button inside is the control. */}
+                {/* biome-ignore lint/a11y/useKeyWithClickEvents: as above — keyboard activation happens on the button. */}
+                <span onClick={(e) => e.stopPropagation()}>
+                  <ConfirmButton
+                    size="sm"
+                    variant="ghost"
+                    className="text-ink-muted hover:text-destructive"
+                    title="移出片单？"
+                    description={`《${item.title}》和它的入选理由会从这份片单里移除。`}
+                    confirmLabel="移出"
+                    onConfirm={() =>
+                      startTransition(async () => {
+                        const result = await callAction(() => removeListItem(item.id));
+                        if (!result.ok) {
+                          notifyActionError(result.error);
+                          return;
+                        }
+                        setItems(items.filter((it) => it.id !== item.id));
+                        toast.success("已移出片单");
+                      })
+                    }
+                  >
+                    移除
+                  </ConfirmButton>
+                </span>
               </div>
               {expanded === item.id && (
                 <div className="mt-3 space-y-2">

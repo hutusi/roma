@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
+import { confirm } from "./utils/confirm";
 import { blockedTransactionCount, holdDatabaseLock, queryOne } from "./utils/db";
 
 const NOTE = "并".repeat(220);
@@ -78,17 +79,15 @@ test("two concurrent removals cannot empty a published list", async ({ browser }
     firstPage.goto(`/admin/lists/${listId}`),
     secondPage.goto(`/admin/lists/${listId}`),
   ]);
-  firstPage.once("dialog", (dialog) => dialog.accept());
-  secondPage.once("dialog", (dialog) => dialog.accept());
+  // Open both confirmations first, so only the confirmed removals race.
+  await firstPage.getByRole("button", { name: "移除", exact: true }).first().click();
+  await secondPage.getByRole("button", { name: "移除", exact: true }).nth(1).click();
 
   const release = await holdDatabaseLock("select id from curated_lists where id = $1 for update", [
     listId,
   ]);
   try {
-    await Promise.all([
-      firstPage.getByRole("button", { name: "移除", exact: true }).first().click(),
-      secondPage.getByRole("button", { name: "移除", exact: true }).nth(1).click(),
-    ]);
+    await Promise.all([confirm(firstPage, "移出"), confirm(secondPage, "移出")]);
     await expect.poll(blockedTransactionCount).toBeGreaterThanOrEqual(2);
   } finally {
     await release();
@@ -259,6 +258,8 @@ test("publishing a list cannot race a member film's unpublish into an empty live
     // Both transactions must block on the LIST row: publishList locks it
     // first thing; unpublishFilm locks the film, then every containing
     // list — including this draft one, which is the point of the fix.
+    // Unpublishing asks first; open that dialog before the lock is held.
+    await filmPage.getByRole("button", { name: "撤回", exact: true }).click();
     const release = await holdDatabaseLock(
       "select id from curated_lists where id = $1 for update",
       [listId],
@@ -266,7 +267,7 @@ test("publishing a list cannot race a member film's unpublish into an empty live
     try {
       await Promise.all([
         listPage.getByRole("button", { name: "发布", exact: true }).click(),
-        filmPage.getByRole("button", { name: "撤回", exact: true }).click(),
+        confirm(filmPage, "撤回"),
       ]);
       await expect.poll(blockedTransactionCount).toBeGreaterThanOrEqual(2);
     } finally {

@@ -46,6 +46,7 @@ export default async function AdminUsersPage() {
               <TableCell>
                 <UserRowControls
                   userId={user.id}
+                  name={user.name}
                   role={(user.role as string) ?? "user"}
                   banned={Boolean(user.banned)}
                   isSelf={user.id === session.user.id}

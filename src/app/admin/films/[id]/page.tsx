@@ -69,7 +69,8 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             onPublish={publishFilm.bind(null, film.id)}
             onUnpublish={unpublishFilm.bind(null, film.id)}
             onDelete={deleteFilm.bind(null, film.id)}
-            deleteConfirmText={`确定删除《${film.titleZh}》？该操作不可撤销。`}
+            deleteConfirmText={`《${film.titleZh}》将被永久删除，不可恢复。已发布的影片需先撤回。`}
+            unpublishConfirmText="撤回后读者将无法访问这部影片。若某份片单因此没有已发布的影片，它也会一并撤回。"
             afterDeleteHref="/admin/films"
           />
           <PublishControls

@@ -6,6 +6,7 @@ import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteMedia, updateMedia, uploadMedia } from "@/actions/media";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { ConfirmButton } from "@/components/admin/confirm-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -223,24 +224,28 @@ export function MediaManager({
                   });
                 }}
               />
-              <button
-                type="button"
+              <ConfirmButton
+                size="xs"
+                variant="ghost"
                 disabled={pending}
-                className="text-ink-muted text-xs hover:text-destructive"
-                onClick={() => {
-                  if (!window.confirm("删除这张图片？文件也会被移除。")) return;
+                className="text-ink-muted hover:text-destructive"
+                title="删除这张图片？"
+                description="文件会从存储中移除；用到它的页面将不再显示它。"
+                confirmLabel="删除"
+                onConfirm={() =>
                   startTransition(async () => {
                     const result = await callAction(() => deleteMedia(m.id));
                     if (!result.ok) {
                       notifyActionError(result.error);
                       return;
                     }
+                    toast.success("图片已删除");
                     router.refresh();
-                  });
-                }}
+                  })
+                }
               >
                 删除
-              </button>
+              </ConfirmButton>
             </div>
           </div>
         ))}

@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { type Browser, expect, type Page, test } from "@playwright/test";
+import { confirm } from "./utils/confirm";
 import { queryOne } from "./utils/db";
 
 const activeClass = /bg-brand/;
@@ -126,6 +127,7 @@ test.describe("reader", () => {
 
     await adminPage.goto(filmAdminUrl);
     await adminPage.getByRole("button", { name: "撤回", exact: true }).click();
+    await confirm(adminPage, "撤回");
     await expect(adminPage.locator("[data-sonner-toast]").last()).toBeVisible();
 
     await page.goto(listUrl);
