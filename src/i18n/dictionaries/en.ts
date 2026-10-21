@@ -160,6 +160,10 @@ export const en = {
     emptyOwner: "Add your first film above.",
     emptyViewer: "This list is empty.",
     errors: {
+      invalid: "That request wasn't valid. Refresh and try again.",
+      tooManyLists: "You've reached the limit of 100 lists.",
+      listFull: "This list is full (500 films).",
+      sessionExpired: "Your session has expired. Please sign in again.",
       unknown: "That didn't go through. Please try again.",
       titleRequired: "Title can't be empty",
       titleTooLong: "Title can't exceed 60 characters",

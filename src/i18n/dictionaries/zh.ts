@@ -163,6 +163,10 @@ export const zh = {
     emptyOwner: "从上方加入第一部影片。",
     emptyViewer: "这份片单还是空的。",
     errors: {
+      invalid: "提交的内容无效，请刷新后重试。",
+      tooManyLists: "片单数量已达上限（100 份）。",
+      listFull: "这份片单已满（500 部）。",
+      sessionExpired: "登录已过期，请重新登录后再试。",
       unknown: "操作没有完成，请重试。",
       titleRequired: "标题不能为空",
       titleTooLong: "标题不能超过 60 字",
