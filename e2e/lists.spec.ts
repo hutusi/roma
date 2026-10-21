@@ -28,13 +28,17 @@ test("keyboard drag-reorder persists across reload", async ({ page }) => {
   const firstRowBefore = await page.getByTitle("拖动排序").first().locator("..").textContent();
 
   const secondHandle = page.getByTitle("拖动排序").nth(1);
+  const secondRow = secondHandle.locator("..");
   await secondHandle.focus();
+  // dnd-kit marks the row while it is being dragged; wait on that rather
+  // than on guessed delays, then on the reorder action's response.
   await page.keyboard.press("Space");
-  await page.waitForTimeout(300);
+  await expect(secondRow).toHaveClass(/opacity-60/);
   await page.keyboard.press("ArrowUp");
-  await page.waitForTimeout(300);
-  await page.keyboard.press("Space");
-  await page.waitForTimeout(1500);
+  await Promise.all([
+    page.waitForResponse((r) => r.request().method() === "POST" && r.ok()),
+    page.keyboard.press("Space"),
+  ]);
 
   await page.reload();
   const firstRowAfter = await page.getByTitle("拖动排序").first().locator("..").textContent();

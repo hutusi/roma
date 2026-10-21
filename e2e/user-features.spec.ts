@@ -12,15 +12,21 @@ test.describe("reader", () => {
     browser,
   }) => {
     await page.goto("/zh/film/la-strada");
-    await page.getByRole("button", { name: "看过" }).click();
-    await page.waitForTimeout(1000);
+    // Wait for the server action itself, not a guessed duration: the
+    // button flips optimistically before the write lands.
+    await Promise.all([
+      page.waitForResponse((r) => r.request().method() === "POST" && r.ok()),
+      page.getByRole("button", { name: "看过" }).click(),
+    ]);
     await page.reload();
     await expect(page.getByRole("button", { name: "看过" })).toHaveClass(activeClass, {
       timeout: 10_000,
     });
 
-    await page.getByRole("button", { name: "想看" }).click();
-    await page.waitForTimeout(1000);
+    await Promise.all([
+      page.waitForResponse((r) => r.request().method() === "POST" && r.ok()),
+      page.getByRole("button", { name: "想看" }).click(),
+    ]);
     await page.reload();
     await expect(page.getByRole("button", { name: "想看" })).toHaveClass(activeClass, {
       timeout: 10_000,
@@ -44,8 +50,10 @@ test.describe("reader", () => {
 
   test("follow shows up in /me/follows", async ({ page }) => {
     await page.goto("/zh/list/fellini-primer");
-    await page.getByRole("button", { name: "关注片单" }).click();
-    await page.waitForTimeout(1000);
+    await Promise.all([
+      page.waitForResponse((r) => r.request().method() === "POST" && r.ok()),
+      page.getByRole("button", { name: "关注片单" }).click(),
+    ]);
     await page.goto("/zh/me/follows");
     await expect(page.locator('a[href="/zh/list/fellini-primer"]')).toBeVisible();
   });
