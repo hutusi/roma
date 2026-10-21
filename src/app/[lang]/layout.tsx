@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DocumentShell } from "@/components/layout/document-shell";
 import { LangHintBanner } from "@/components/site/lang-hint-banner";
+import { LazyToaster } from "@/components/site/lazy-toaster";
 import { RumBeacon } from "@/components/site/rum-beacon";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -97,6 +98,7 @@ export default async function LangRootLayout({
       <SiteHeader locale={locale} />
       <main className="flex-1">{children}</main>
       <SiteFooter locale={locale} />
+      <LazyToaster />
     </DocumentShell>
   );
 }

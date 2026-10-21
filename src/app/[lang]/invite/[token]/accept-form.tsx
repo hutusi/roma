@@ -7,7 +7,6 @@ import { acceptInvite } from "@/actions/invites";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Toaster } from "@/components/ui/sonner";
 import { localePath } from "@/i18n/locales";
 
 export function AcceptInviteForm({ token }: { token: string }) {
@@ -86,7 +85,6 @@ export function AcceptInviteForm({ token }: { token: string }) {
       <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
         {pending ? "创建账号中…" : "接受邀请"}
       </Button>
-      <Toaster position="top-center" />
     </form>
   );
 }
