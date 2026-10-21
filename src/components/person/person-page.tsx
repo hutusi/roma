@@ -72,7 +72,12 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
       {careerEssay && (
         <section className="mt-14">
           <TitleCard eyebrow={en ? undefined : "Career"} title={dict.career} />
-          <TiptapContent doc={careerEssay} className="mx-auto mt-8 max-w-measure" />
+          <TiptapContent
+            doc={careerEssay}
+            credits={person.imageCredits}
+            locale={locale}
+            className="mx-auto mt-8 max-w-measure"
+          />
         </section>
       )}
 

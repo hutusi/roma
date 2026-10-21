@@ -173,7 +173,12 @@ export function FilmPage({
 
       {essay && (
         <section className="mt-14">
-          <TiptapContent doc={essay} className="mx-auto max-w-measure" />
+          <TiptapContent
+            doc={essay}
+            credits={film.imageCredits}
+            locale={locale}
+            className="mx-auto max-w-measure"
+          />
         </section>
       )}
 

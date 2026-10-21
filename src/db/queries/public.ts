@@ -15,6 +15,7 @@ import {
   people,
 } from "@/db/schema";
 import type { Locale } from "@/i18n/locales";
+import { collectImageSrcs } from "@/lib/validators/prose";
 import { visibleIn } from "./visibility";
 
 /**
@@ -90,7 +91,7 @@ export const getPublishedFilmBySlug = cache(async (slug: string, locale: Locale 
     with: filmDetailRelations,
   });
   if (!film) return null;
-  return normalizeFilm(film, locale);
+  return withImageCredits(normalizeFilm(film, locale), [film.essay, film.essayEn]);
 });
 
 export async function getFilmForPreview(id: string, locale: Locale = "zh") {
@@ -99,7 +100,7 @@ export async function getFilmForPreview(id: string, locale: Locale = "zh") {
     with: filmDetailRelations,
   });
   if (!film) return null;
-  return normalizeFilm(film, locale);
+  return withImageCredits(normalizeFilm(film, locale), [film.essay, film.essayEn]);
 }
 
 /** Ordering is the query's job now; this only resolves the locale view. */
@@ -208,7 +209,11 @@ export const getPublishedPersonBySlug = cache(async (slug: string, locale: Local
     where: and(eq(people.slug, slug), ...personStatusConds(locale)),
     with: personRelations,
   });
-  return person ? normalizePerson(person, locale) : null;
+  if (!person) return null;
+  return withImageCredits(normalizePerson(person, locale), [
+    person.careerEssay,
+    person.careerEssayEn,
+  ]);
 });
 
 export async function getPersonForPreview(id: string, locale: Locale = "zh") {
@@ -216,7 +221,11 @@ export async function getPersonForPreview(id: string, locale: Locale = "zh") {
     where: eq(people.id, id),
     with: personRelations,
   });
-  return person ? normalizePerson(person, locale) : null;
+  if (!person) return null;
+  return withImageCredits(normalizePerson(person, locale), [
+    person.careerEssay,
+    person.careerEssayEn,
+  ]);
 }
 
 const personRelations = {
@@ -294,7 +303,8 @@ export const getPublishedListBySlug = cache(async (slug: string, locale: Locale 
   });
   // Items keep every zh-published member in both locales (顺序即立场);
   // the en renderer degrades untranslated members to unlinked entries.
-  return list ? normalizeList(list, { publishedFilmsOnly: true }) : null;
+  if (!list) return null;
+  return withImageCredits(normalizeList(list, { publishedFilmsOnly: true }), listProse(list));
 });
 
 export async function getListForPreview(id: string) {
@@ -303,8 +313,15 @@ export async function getListForPreview(id: string) {
     with: listRelations,
   });
   // Preview keeps draft films: editors need the full picture.
-  return list ? normalizeList(list, { publishedFilmsOnly: false }) : null;
+  if (!list) return null;
+  return withImageCredits(normalizeList(list, { publishedFilmsOnly: false }), listProse(list));
 }
+
+const listProse = (list: NonNullable<Awaited<ReturnType<typeof rawList>>>) => [
+  list.intro,
+  list.introEn,
+  ...list.items.flatMap((item) => [item.reasoning, item.reasoningEn]),
+];
 
 function normalizeList(
   list: NonNullable<Awaited<ReturnType<typeof rawList>>>,
@@ -490,6 +507,27 @@ export async function getSearchCorpus(locale: Locale = "zh") {
       .orderBy(asc(curatedLists.sortOrder), asc(curatedLists.slug)),
   ]);
   return { films: searchFilms, people: searchPeople, lists: searchLists };
+}
+
+/**
+ * Attaches the credits of the images a page's essays embed, keyed by URL,
+ * for the renderer's captions. Read from the media rows at render time
+ * rather than stored in the document, so a corrected credit reaches every
+ * essay that uses the image. One query, and none when no essay has an
+ * image, which is most of them.
+ */
+async function withImageCredits<T>(row: T, docs: unknown[]) {
+  const urls = [...new Set(docs.flatMap(collectImageSrcs))];
+  const rows = urls.length
+    ? await db
+        .select({ url: media.url, credit: media.credit })
+        .from(media)
+        .where(inArray(media.url, urls))
+    : [];
+  const imageCredits: Record<string, string> = Object.fromEntries(
+    rows.map((r) => [r.url, r.credit]),
+  );
+  return { ...row, imageCredits };
 }
 
 /**

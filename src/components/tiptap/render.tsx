@@ -2,6 +2,8 @@ import type { JSONContent } from "@tiptap/core";
 import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
 import Image from "next/image";
 import type React from "react";
+import { getDict } from "@/i18n/dict";
+import type { Locale } from "@/i18n/locales";
 import { cn } from "@/lib/utils";
 // The image-src allowlist lives with the validators so the publish gate
 // (hasProse) and this renderer share one definition of "this image draws".
@@ -17,9 +19,14 @@ import { isAllowedLinkHref } from "./link-policy";
 
 export function TiptapContent({
   doc,
+  credits = {},
+  locale = "zh",
   className,
 }: {
   doc: Record<string, unknown> | null | undefined;
+  /** Image credits by URL (the read layer's `imageCredits`), for captions. */
+  credits?: Record<string, string>;
+  locale?: Locale;
   className?: string;
 }) {
   if (!doc || !Array.isArray(doc.content) || doc.content.length === 0) {
@@ -45,16 +52,28 @@ export function TiptapContent({
             const src = node.attrs?.src;
             if (!isAllowedImageSrc(src)) return null;
             const alt = typeof node.attrs?.alt === "string" ? node.attrs.alt : "";
+            const credit = credits[src];
+            // Images are block nodes (extensions.ts: inline: false) and the
+            // save validator parses against that schema, so a <figure> never
+            // lands inside a <p>.
             return (
-              <span className="relative my-8 block aspect-[137/100] w-full overflow-hidden bg-ink">
-                <Image
-                  src={src}
-                  alt={alt}
-                  fill
-                  sizes="(min-width: 1024px) 700px, 100vw"
-                  className="object-contain"
-                />
-              </span>
+              <figure className="my-8">
+                <span className="relative block aspect-[137/100] w-full overflow-hidden bg-ink">
+                  <Image
+                    src={src}
+                    alt={alt}
+                    fill
+                    sizes="(min-width: 1024px) 700px, 100vw"
+                    className="object-contain"
+                  />
+                </span>
+                {credit && (
+                  <figcaption className="mt-2 text-right text-ink-muted text-xs">
+                    {getDict(locale).imageCredit}
+                    {credit}
+                  </figcaption>
+                )}
+              </figure>
             );
           },
         },

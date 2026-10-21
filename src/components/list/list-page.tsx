@@ -53,7 +53,14 @@ export function ListPage({
         </div>
       )}
 
-      {intro && <TiptapContent doc={intro} className="mx-auto mt-10 max-w-measure" />}
+      {intro && (
+        <TiptapContent
+          doc={intro}
+          credits={list.imageCredits}
+          locale={locale}
+          className="mx-auto mt-10 max-w-measure"
+        />
+      )}
 
       {list.items.length === 0 && (
         <EmptyState
@@ -95,7 +102,14 @@ export function ListPage({
                 imageAlt={poster?.alt}
                 imageColor={poster?.dominantColor}
               />
-              {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-base" />}
+              {reasoning && (
+                <TiptapContent
+                  doc={reasoning}
+                  credits={list.imageCredits}
+                  locale={locale}
+                  className="mt-4 pl-2 text-base"
+                />
+              )}
             </li>
           );
         })}
