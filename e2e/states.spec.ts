@@ -61,3 +61,42 @@ test.describe("sign-in", () => {
     await expect(page.getByRole("button", { name: "看过" })).toBeVisible();
   });
 });
+
+test.describe("failed reads", () => {
+  test.describe("as a signed-in reader", () => {
+    test.use({ storageState: "e2e/.auth/user.json" });
+
+    test("a failed session read never asks a signed-in reader to sign in", async ({ page }) => {
+      let failing = true;
+      await page.route("**/api/me/state**", (route) =>
+        failing ? route.fulfill({ status: 503, body: "" }) : route.continue(),
+      );
+      await page.goto("/zh/film/otto-e-mezzo");
+      const retry = page.getByRole("button", { name: "暂时无法读取标记，点此重试" });
+      await expect(retry).toBeVisible();
+      await expect(page.getByText("登录后可标记")).toHaveCount(0);
+
+      failing = false;
+      await retry.click();
+      await expect(page.getByRole("button", { name: "看过" })).toBeVisible();
+    });
+  });
+
+  test("search says when its index fails, and typing again retries", async ({ page }) => {
+    let failing = true;
+    await page.route("**/zh/search-index.json", (route) =>
+      failing ? route.abort("failed") : route.continue(),
+    );
+    await page.goto("/zh/about");
+    await page.getByRole("banner").getByRole("button", { name: "搜索" }).click();
+    const input = page.getByRole("dialog").getByRole("searchbox", { name: "搜索" });
+    await input.fill("费里");
+    await expect(page.getByRole("dialog")).toContainText("搜索暂不可用，请稍后再试。");
+
+    failing = false;
+    await input.pressSequentially("尼");
+    await expect(
+      page.getByRole("dialog").locator('a[href="/zh/director/federico-fellini"]'),
+    ).toBeVisible();
+  });
+});
