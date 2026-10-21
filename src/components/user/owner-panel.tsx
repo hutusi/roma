@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { lazy, Suspense, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import {
   addFilmToUserList,
@@ -34,12 +34,7 @@ import { type Locale, localePath } from "@/i18n/locales";
  */
 type Item = { id: string; filmId: string; title: string; year: number; unavailable?: boolean };
 
-// dnd-kit is only for the owner: loaded here, never in the page bundle
-// every viewer of a user list downloads. Rows render statically (minus
-// the drag handle) until it arrives.
-const SortableList = lazy(() =>
-  import("@/components/list/sortable-list").then((m) => ({ default: m.SortableList<Item> })),
-);
+type SortableListComponent = typeof import("@/components/list/sortable-list").SortableList<Item>;
 
 export function OwnerPanel({
   listId,
@@ -72,6 +67,21 @@ export function OwnerPanel({
   const [editing, setEditing] = useState(false);
   const [removing, setRemoving] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  // dnd-kit is only for the owner: imported after mount, never in the
+  // page bundle every viewer of a user list downloads. Rows render
+  // statically (minus the drag handle) until it arrives. An effect rather
+  // than lazy()+Suspense, which on a streamed page put a second, hidden
+  // copy of the rows in the DOM until the swap.
+  const [SortableList, setSortableList] = useState<SortableListComponent | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    import("@/components/list/sortable-list").then((m) => {
+      if (!cancelled) setSortableList(() => m.SortableList as SortableListComponent);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Adopt fresh server data after router.refresh() (e.g. a film just
   // added) — useState alone only seeds on mount. State-during-render
@@ -264,17 +274,7 @@ export function OwnerPanel({
       {items.length > 0 && (
         <div className="mt-4">
           {items.length > 1 && <p className="mb-2 text-ink-muted text-xs">{labels.reorderHint}</p>}
-          <Suspense
-            fallback={
-              <div className="flex flex-col gap-2">
-                {items.map((item, index) => (
-                  <div key={item.id} className="border border-line bg-card p-3 pl-8">
-                    {row(item, index)}
-                  </div>
-                ))}
-              </div>
-            }
-          >
+          {SortableList ? (
             <SortableList
               items={items}
               handleLabel={labels.dragHandle}
@@ -299,7 +299,15 @@ export function OwnerPanel({
               }}
               renderItem={row}
             />
-          </Suspense>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {items.map((item, index) => (
+                <div key={item.id} className="border border-line bg-card p-3 pl-8">
+                  {row(item, index)}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </section>
