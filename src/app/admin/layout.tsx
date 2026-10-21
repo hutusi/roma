@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { DirtyGuardProvider, GuardedLink } from "@/components/admin/dirty-guard";
+import { AdminShell } from "@/components/admin/admin-shell";
+import { DirtyGuardProvider } from "@/components/admin/dirty-guard";
 import { DocumentShell } from "@/components/layout/document-shell";
 import { Toaster } from "@/components/ui/sonner";
 import { requireEditor, roleOf } from "@/lib/auth-guards";
@@ -42,37 +43,36 @@ export default async function AdminLayout({
   // since layouts don't re-run on soft navigation.
   const session = await requireEditor();
 
+  const nav = NAV.filter(
+    (item) => !("adminOnly" in item && item.adminOnly) || roleOf(session) === "admin",
+  ).map(({ href, label }) => ({ href, label }));
+
   return (
     <DocumentShell lang="zh-CN">
       <DirtyGuardProvider>
-        <div className="flex min-h-full flex-1 font-sans text-ui">
-          <aside className="flex w-52 shrink-0 flex-col border-line border-r bg-secondary/40 px-4 py-6">
-            <GuardedLink href="/admin" className="px-2 font-bold tracking-label">
-              八部半 · 编辑部
-            </GuardedLink>
-            <nav className="mt-8 flex flex-1 flex-col gap-1">
-              {NAV.filter(
-                (item) => !("adminOnly" in item && item.adminOnly) || roleOf(session) === "admin",
-              ).map(({ href, label }) => (
-                <GuardedLink
-                  key={href}
-                  href={href}
-                  className="rounded px-2 py-1.5 transition-colors hover:bg-accent hover:text-brand"
-                >
-                  {label}
-                </GuardedLink>
-              ))}
-            </nav>
-            <div className="border-line border-t pt-4 text-sm">
+        <AdminShell
+          nav={nav}
+          account={
+            <>
               <p className="truncate px-2 text-ink-muted">
                 {session.user.name}（{roleOf(session) === "admin" ? "管理员" : "编辑"}）
               </p>
+              {/* The site itself, in a new tab — for checking what readers see. */}
+              <a
+                href="/zh"
+                target="_blank"
+                rel="noopener"
+                className="mt-1 block rounded px-2 py-1.5 text-ink-muted transition-colors hover:bg-accent hover:text-brand"
+              >
+                查看前台 ↗
+              </a>
               <SignOutButton />
-            </div>
-          </aside>
-          <div className="flex-1 px-8 py-6">{children}</div>
-          <Toaster position="top-center" />
-        </div>
+            </>
+          }
+        >
+          {children}
+        </AdminShell>
+        <Toaster position="top-center" />
       </DirtyGuardProvider>
     </DocumentShell>
   );
