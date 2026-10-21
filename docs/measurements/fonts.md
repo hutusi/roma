@@ -12,11 +12,11 @@ Measured 2026-10-21:
 
 | Pages | n | Before (median) | After (median) | After, late fallback (median) |
 |---|---|---|---|---|
-| zh film pages | 74 | 963 KB / 25 files | 286 KB / 34 files | 0 KB (0 glyphs) |
-| zh person pages | 63 | 883 KB / 23 files | 261 KB / 26 files | 0 KB (0 glyphs) |
-| zh list pages | 8 | 1052 KB / 27 files | 280 KB / 30 files | 0 KB (0 glyphs) |
-| zh index pages | 7 | 594 KB / 17 files | 204 KB / 15 files | 0 KB (0 glyphs) |
-| en pages | 154 | 298 KB / 8 files | 68 KB / 5 files | 0 KB (0 glyphs) |
+| zh film pages | 74 | 1031 KB / 27 files | 302 KB / 37 files | 0 KB (0 glyphs) |
+| zh person pages | 63 | 883 KB / 23 files | 269 KB / 27 files | 0 KB (0 glyphs) |
+| zh list pages | 8 | 1052 KB / 27 files | 291 KB / 32 files | 0 KB (0 glyphs) |
+| zh index pages | 7 | 594 KB / 17 files | 219 KB / 16 files | 0 KB (0 glyphs) |
+| en pages | 154 | 303 KB / 8 files | 68 KB / 6 files | 0 KB (0 glyphs) |
 
-Render-blocking CJK @font-face CSS: 66.2 KB gz before → 11.9 KB gz after.
+Render-blocking CJK @font-face CSS: 66.2 KB gz before → 11.8 KB gz after.
 Most late-fallback glyphs: zh/film/la-strada (1).
