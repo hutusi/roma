@@ -60,7 +60,7 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
             publishedEn={person.statusEn === "published"}
           />
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <PublishControls
             status={person.status}
             onPublish={publishPerson.bind(null, person.id)}

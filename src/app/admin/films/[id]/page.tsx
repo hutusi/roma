@@ -73,7 +73,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             publishedEn={film.statusEn === "published"}
           />
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <PublishControls
             status={film.status}
             onPublish={publishFilm.bind(null, film.id)}

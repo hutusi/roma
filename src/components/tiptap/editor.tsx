@@ -139,13 +139,15 @@ function LinkDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md font-sans" closeLabel="关闭">
+      <DialogContent className="font-sans" closeLabel="关闭">
         <DialogHeader>
           <DialogTitle>{existing ? "编辑链接" : "添加链接"}</DialogTitle>
           <DialogDescription>
-            {editor.state.selection.empty && !existing
-              ? "未选中文字：将直接插入这个地址。"
-              : "链接加在选中的文字上。"}
+            {existing
+              ? "修改或移除光标所在的链接。"
+              : editor.state.selection.empty
+                ? "未选中文字：将直接插入这个地址。"
+                : "链接加在选中的文字上。"}
           </DialogDescription>
         </DialogHeader>
         {/* The dialog portals out of the DOM form, but React events still
@@ -244,7 +246,7 @@ function ImagePicker({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl font-sans" closeLabel="关闭">
+      <DialogContent className="font-sans sm:max-w-2xl" closeLabel="关闭">
         <DialogHeader>
           <DialogTitle>{chosen ? "图片说明" : "从媒体库插入图片"}</DialogTitle>
           <DialogDescription>

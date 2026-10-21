@@ -52,7 +52,7 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
             publishedEn={list.statusEn === "published"}
           />
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <PublishControls
             status={list.status}
             onPublish={publishList.bind(null, list.id)}

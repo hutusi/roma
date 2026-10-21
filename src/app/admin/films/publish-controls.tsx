@@ -53,7 +53,7 @@ export function PublishControls({
     });
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 whitespace-nowrap">
       {label && <span className="text-ink-muted text-sm">{label}</span>}
       <Badge variant={status === "published" ? "default" : "secondary"}>
         {status === "published" ? "已发布" : "草稿"}
