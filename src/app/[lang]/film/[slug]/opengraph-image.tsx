@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPublishedFilmBySlug } from "@/db/queries/public";
+import { getFilmStubBySlug, getPublishedFilmSlugs } from "@/db/queries/public";
 import { parseLocale } from "@/i18n/params";
 import { OG_SIZE, ogCard } from "@/lib/og";
 
@@ -8,6 +8,14 @@ import { OG_SIZE, ogCard } from "@/lib/og";
 export const alt = "Babuban film page";
 export const size = OG_SIZE;
 export const contentType = "image/png";
+
+// Prerendered with the page: without params of its own the card rendered
+// on every request (Next serves ImageResponse with max-age=0), running a
+// query per crawler hit.
+export async function generateStaticParams() {
+  const slugs = await getPublishedFilmSlugs();
+  return slugs.map(({ slug }) => ({ slug }));
+}
 
 export default async function Image({
   params,
@@ -18,7 +26,8 @@ export default async function Image({
   const locale = parseLocale(lang);
   // zh visibility: en-pending entities render stubs, and a stub page's
   // auto-referenced og:image must resolve too (ADR 0012).
-  const film = await getPublishedFilmBySlug(slug);
+  // The slim stub row, not the detail query: a card needs four columns.
+  const film = await getFilmStubBySlug(slug);
   if (!film) notFound();
   return ogCard({
     title: locale === "en" ? (film.titleEn ?? film.titleOriginal) : film.titleOriginal,

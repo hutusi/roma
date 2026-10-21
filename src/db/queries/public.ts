@@ -1,5 +1,6 @@
 import "server-only";
-import { and, arrayContains, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
+import { and, arrayContains, asc, count, desc, eq, gte, inArray, lte } from "drizzle-orm";
+import { cache } from "react";
 import { db } from "@/db";
 import {
   curatedListItems,
@@ -78,14 +79,19 @@ const filmDetailRelations = {
   listItems: { with: { list: true as const } },
 };
 
-export async function getPublishedFilmBySlug(slug: string, locale: Locale = "zh") {
+/**
+ * Wrapped in React cache(): generateMetadata and the page both ask for
+ * the same row in one render, and now share the query. (Outside a
+ * render — the content CLIs — cache() simply calls through.)
+ */
+export const getPublishedFilmBySlug = cache(async (slug: string, locale: Locale = "zh") => {
   const film = await db.query.films.findFirst({
     where: and(eq(films.slug, slug), ...filmStatusConds(locale)),
     with: filmDetailRelations,
   });
   if (!film) return null;
   return normalizeFilm(film, locale);
-}
+});
 
 export async function getFilmForPreview(id: string, locale: Locale = "zh") {
   const film = await db.query.films.findFirst({
@@ -192,13 +198,18 @@ const personStatusConds = (locale: Locale) =>
     ? [eq(people.status, "published"), eq(people.statusEn, "published")]
     : [eq(people.status, "published")];
 
-export async function getPublishedPersonBySlug(slug: string, locale: Locale = "zh") {
+/**
+ * Wrapped in React cache(): generateMetadata and the page both ask for
+ * the same row in one render, and now share the query. (Outside a
+ * render — the content CLIs — cache() simply calls through.)
+ */
+export const getPublishedPersonBySlug = cache(async (slug: string, locale: Locale = "zh") => {
   const person = await db.query.people.findFirst({
     where: and(eq(people.slug, slug), ...personStatusConds(locale)),
     with: personRelations,
   });
   return person ? normalizePerson(person, locale) : null;
-}
+});
 
 export async function getPersonForPreview(id: string, locale: Locale = "zh") {
   const person = await db.query.people.findFirst({
@@ -271,7 +282,12 @@ const listStatusConds = (locale: Locale) =>
     ? [eq(curatedLists.status, "published"), eq(curatedLists.statusEn, "published")]
     : [eq(curatedLists.status, "published")];
 
-export async function getPublishedListBySlug(slug: string, locale: Locale = "zh") {
+/**
+ * Wrapped in React cache(): generateMetadata and the page both ask for
+ * the same row in one render, and now share the query. (Outside a
+ * render — the content CLIs — cache() simply calls through.)
+ */
+export const getPublishedListBySlug = cache(async (slug: string, locale: Locale = "zh") => {
   const list = await db.query.curatedLists.findFirst({
     where: and(eq(curatedLists.slug, slug), ...listStatusConds(locale)),
     with: listRelations,
@@ -279,7 +295,7 @@ export async function getPublishedListBySlug(slug: string, locale: Locale = "zh"
   // Items keep every zh-published member in both locales (顺序即立场);
   // the en renderer degrades untranslated members to unlinked entries.
   return list ? normalizeList(list, { publishedFilmsOnly: true }) : null;
-}
+});
 
 export async function getListForPreview(id: string) {
   const list = await db.query.curatedLists.findFirst({
@@ -356,7 +372,13 @@ export async function getHomeData(locale: Locale = "zh") {
  */
 export async function getFilmStubBySlug(slug: string) {
   const film = await db.query.films.findFirst({
-    columns: { slug: true, titleEn: true, titleOriginal: true, year: true },
+    columns: {
+      slug: true,
+      titleEn: true,
+      titleOriginal: true,
+      year: true,
+      isBlackAndWhite: true,
+    },
     where: and(eq(films.slug, slug), eq(films.status, "published")),
   });
   return film ?? null;
@@ -370,6 +392,24 @@ export async function getPersonStubBySlug(slug: string) {
     where: and(eq(people.slug, slug), eq(people.status, "published")),
   });
   return person ?? null;
+}
+
+/**
+ * How many published films a published list holds — all the list's OG
+ * card needs, instead of the whole list with every item's film.
+ */
+export async function getPublishedListFilmCount(slug: string): Promise<number | null> {
+  const list = await db.query.curatedLists.findFirst({
+    columns: { id: true },
+    where: and(eq(curatedLists.slug, slug), eq(curatedLists.status, "published")),
+  });
+  if (!list) return null;
+  const [row] = await db
+    .select({ n: count() })
+    .from(curatedListItems)
+    .innerJoin(films, eq(films.id, curatedListItems.filmId))
+    .where(and(eq(curatedListItems.listId, list.id), eq(films.status, "published")));
+  return row?.n ?? 0;
 }
 
 export async function getListStubBySlug(slug: string) {
