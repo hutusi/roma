@@ -9,6 +9,7 @@
     "lint": "biome check .",
     "check:portability": "bun run scripts/check-portability.ts",
     "brand:generate": "bun run scripts/generate-brand-assets.ts",
+    "fonts:generate": "bun --conditions=react-server run scripts/generate-fonts.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -70,8 +71,10 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.10",
+    "fontverter": "2",
     "opentype.js": "^2.0.0",
     "sharp": "^0.35.3",
+    "subset-font": "2",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
