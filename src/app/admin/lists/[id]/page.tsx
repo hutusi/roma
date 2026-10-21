@@ -7,7 +7,7 @@ import {
   unpublishList,
   unpublishListEn,
 } from "@/actions/lists";
-import { GuardedLink } from "@/components/admin/dirty-guard";
+import { EditorLinks } from "@/components/admin/editor-links";
 import { db } from "@/db";
 import { curatedLists, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -45,22 +45,16 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">
-          编辑片单 · {list.title}
-          <GuardedLink
-            href={`/admin/preview/list/${list.id}`}
-            className="ml-3 font-normal text-brand text-sm hover:underline"
-          >
-            预览
-          </GuardedLink>
-          <GuardedLink
-            href={`/admin/preview/list/${list.id}?locale=en`}
-            className="ml-2 font-normal text-brand text-sm hover:underline"
-          >
-            EN 预览
-          </GuardedLink>
-        </h1>
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+        <div className="min-w-0 space-y-1">
+          <h1 className="font-bold text-xl">编辑片单 · {list.title}</h1>
+          <EditorLinks
+            previewHref={`/admin/preview/list/${list.id}`}
+            publicPath={`/list/${list.slug}`}
+            published={list.status === "published"}
+            publishedEn={list.statusEn === "published"}
+          />
+        </div>
         <div className="flex items-center gap-6">
           <PublishControls
             status={list.status}

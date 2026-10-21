@@ -7,11 +7,12 @@ import {
   unpublishPerson,
   unpublishPersonEn,
 } from "@/actions/people";
-import { GuardedLink } from "@/components/admin/dirty-guard";
+import { EditorLinks } from "@/components/admin/editor-links";
 import { PublishReadiness } from "@/components/admin/publish-readiness";
 import { db } from "@/db";
 import { films, media, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
+import { personPath } from "@/lib/routes";
 import { publishEnProblems, publishProblems } from "@/lib/validators/person";
 import { PublishControls } from "../../films/publish-controls";
 import { PersonForm } from "../person-form";
@@ -52,22 +53,16 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">
-          编辑人物 · {person.nameZh ?? person.name}
-          <GuardedLink
-            href={`/admin/preview/person/${person.id}`}
-            className="ml-3 font-normal text-brand text-sm hover:underline"
-          >
-            预览
-          </GuardedLink>
-          <GuardedLink
-            href={`/admin/preview/person/${person.id}?locale=en`}
-            className="ml-2 font-normal text-brand text-sm hover:underline"
-          >
-            EN 预览
-          </GuardedLink>
-        </h1>
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+        <div className="min-w-0 space-y-1">
+          <h1 className="font-bold text-xl">编辑人物 · {person.nameZh ?? person.name}</h1>
+          <EditorLinks
+            previewHref={`/admin/preview/person/${person.id}`}
+            publicPath={personPath(person)}
+            published={person.status === "published"}
+            publishedEn={person.statusEn === "published"}
+          />
+        </div>
         <div className="flex items-center gap-6">
           <PublishControls
             status={person.status}

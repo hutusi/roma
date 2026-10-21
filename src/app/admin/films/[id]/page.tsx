@@ -9,6 +9,7 @@ import {
   unpublishFilmEn,
 } from "@/actions/films";
 import { GuardedLink } from "@/components/admin/dirty-guard";
+import { EditorLinks } from "@/components/admin/editor-links";
 import { PublishReadiness } from "@/components/admin/publish-readiness";
 import { db } from "@/db";
 import { films, media, people, tags } from "@/db/schema";
@@ -60,22 +61,16 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">
-          编辑影片 · {film.titleZh}
-          <GuardedLink
-            href={`/admin/preview/film/${film.id}`}
-            className="ml-3 font-normal text-brand text-sm hover:underline"
-          >
-            预览
-          </GuardedLink>
-          <GuardedLink
-            href={`/admin/preview/film/${film.id}?locale=en`}
-            className="ml-2 font-normal text-brand text-sm hover:underline"
-          >
-            EN 预览
-          </GuardedLink>
-        </h1>
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+        <div className="min-w-0 space-y-1">
+          <h1 className="font-bold text-xl">编辑影片 · {film.titleZh}</h1>
+          <EditorLinks
+            previewHref={`/admin/preview/film/${film.id}`}
+            publicPath={`/film/${film.slug}`}
+            published={film.status === "published"}
+            publishedEn={film.statusEn === "published"}
+          />
+        </div>
         <div className="flex items-center gap-6">
           <PublishControls
             status={film.status}
