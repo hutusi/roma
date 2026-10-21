@@ -1,7 +1,7 @@
 "use server";
 
 import { requireEditor } from "@/lib/auth-guards";
-import { type ActionResult, fail, ok } from "./result";
+import { type ActionResult, fail, failWith, ok } from "./result";
 
 /**
  * Prefills the film form from TMDB — metadata only, editors curate and
@@ -33,6 +33,9 @@ export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbP
     const res = await fetch(`${TMDB}${path}`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store",
+      // A hung TMDB request would otherwise hold the editor's form until
+      // the function times out.
+      signal: AbortSignal.timeout(10_000),
     });
     if (!res.ok) throw new Error(`TMDB ${res.status}`);
     return res.json();
@@ -86,10 +89,7 @@ export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbP
           }) ?? [],
     });
   } catch (error) {
-    return fail(
-      error instanceof Error && error.message.includes("404")
-        ? "TMDB 上没有这个 ID"
-        : "TMDB 请求失败，请稍后再试",
-    );
+    if (error instanceof Error && error.message.includes("404")) return fail("TMDB 上没有这个 ID");
+    return failWith("TMDB 请求失败，请稍后再试", error, "importFromTmdb");
   }
 }
