@@ -10,6 +10,7 @@
     "check:portability": "bun run scripts/check-portability.ts",
     "brand:generate": "bun run scripts/generate-brand-assets.ts",
     "fonts:generate": "bun --conditions=react-server run scripts/generate-fonts.ts",
+    "fonts:report": "bun --conditions=react-server run scripts/font-report.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
