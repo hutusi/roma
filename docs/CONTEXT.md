@@ -31,6 +31,7 @@ One-page orientation for contributors (human or agent). Decisions with rationale
 - `src/components/tiptap/extensions.ts` — the **contract** between the admin editor and the public static renderer. Extend both sides together or not at all.
 - `src/lib/revalidate.ts` — the single seam every editorial mutation (including media) invalidates through; readers see changes without redeploys. It sweeps the whole public tree (`/[lang]` layout + `/sitemap.xml` + both `rss.xml`) rather than mapping entity → pages: the graph is densely cross-linked, so an accurate map is most of the read layer restated, and the map it replaced under-invalidated on every edge it forgot. Paths are the only mechanism — ADR 0005 leaves `cacheComponents` off, so there is nothing to `cacheTag`. IndexNow notification is a separate opt-in (`{ notify: true }`), reserved for rows that actually have a public URL.
 - `src/lib/seo.ts` — every indexable page composes canonical + hreflang + og/twitter identity by spreading `seoMetadata()`; never hand-roll `alternates` on a page. It deliberately sets no titles/descriptions/images — Next inherits those and merges the file-convention OG images.
+- `scripts/generate-fonts.ts` → `public/fonts/babuban-serif-sc/` + `src/assets/fonts/` — "Babuban Serif SC", Noto Serif SC subset to the glyphs the public site renders (modelled in `src/lib/font-corpus.ts`), bucketed by how many pages share them, ahead of the lazily loaded full Fontsource Noto in the stack (ADR 0018). Generated and deterministic: after seed-data or public UI copy changes, `bun run fonts:generate` (the coverage test fails until you do); `bun run fonts:report` measures real per-page bytes from a production build.
 - `scripts/generate-brand-assets.ts` → `src/assets/brand/` — the 8½ monogram (live) and 红印章 seal (candidate; compare in `src/assets/brand/preview.html`), plus every icon (favicon/apple/manifest/header paths). All generated and deterministic: edit the script, `bun run brand:generate` — never the assets.
 - `src/lib/storage.ts` — the storage seam (Vercel Blob in prod, `public/uploads` in dev). Keep all storage behind it (ADR 0008).
 - `src/db/locks.ts` — editorial mutations serialize on `SELECT … FOR UPDATE` row locks taken ONLY through this module, in the canonical order **people → tags → films → lists** (multi-row helpers sort by id). Acquiring locks in any other order can deadlock. Gates and writes run inside one transaction; `revalidate*`/IndexNow run only after commit.
@@ -51,6 +52,6 @@ CI: `checks.yml` on every PR and main push; `e2e.yml` on main pushes + manual di
 ## Non-negotiables
 
 - The Roma codename never appears in user-facing output.
-- No Google Fonts at build or runtime (mainland-China audience) — fonts are self-hosted slices (ADR 0002).
+- No Google Fonts at build or runtime (mainland-China audience) — fonts are self-hosted: a generated corpus subset ahead of Fontsource slices (ADR 0002, 0018).
 - Tiptap JSON reaches HTML only through `src/components/tiptap/render.tsx`. No `dangerouslySetInnerHTML`.
 - Image uploads: extension derives from validated MIME; `credit` is mandatory (licensing posture).
