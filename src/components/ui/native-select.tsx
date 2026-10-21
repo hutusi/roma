@@ -1,6 +1,5 @@
 import { ChevronDownIcon } from "lucide-react";
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/utils";
 
 /**
  * The one style for native <select>s (filters, pickers): square, a 3:1
@@ -14,12 +13,10 @@ export function NativeSelect({
   ...props
 }: ComponentProps<"select"> & { wrapperClassName?: string }) {
   return (
-    <span className={cn("relative inline-flex", wrapperClassName)}>
+    <span className={`relative inline-flex ${wrapperClassName ?? ""}`}>
       <select
-        className={cn(
-          "h-9 w-full min-w-0 appearance-none border border-line-strong bg-paper py-0 pr-8 pl-3 text-ink text-sm transition-colors hover:border-ink focus-visible:border-brand disabled:opacity-50",
-          className,
-        )}
+        // Concatenated, not merged: keeps tailwind-merge out of client bundles.
+        className={`h-9 w-full min-w-0 appearance-none border border-line-strong bg-paper py-0 pr-8 pl-3 text-ink text-sm transition-colors hover:border-ink focus-visible:border-brand disabled:opacity-50 ${className ?? ""}`}
         {...props}
       />
       <ChevronDownIcon

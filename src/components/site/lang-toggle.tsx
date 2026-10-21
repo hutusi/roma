@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { countryToEn, countryToZh } from "@/i18n/countries";
 import { counterpartPath, counterpartQuery } from "@/i18n/locales";
-import { cn } from "@/lib/utils";
 
 /**
  * Link to the same page in the other edition — in the header ("English" /
@@ -39,10 +38,12 @@ export function LangToggle({
         const map = counterpart.target === "en" ? countryToEn : countryToZh;
         router.push(counterpart.href + counterpartQuery(window.location.search, map));
       }}
-      className={cn(
-        "whitespace-nowrap text-ink-muted text-sm tracking-label transition-colors hover:text-brand",
-        className,
-      )}
+      // Replaces the default classes rather than merging (no tailwind-merge
+      // in the layout chunk); the footer passes its own full set.
+      className={
+        className ??
+        "whitespace-nowrap text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
+      }
     >
       {counterpart.target === "en" ? labels.en : labels.zh}
     </Link>

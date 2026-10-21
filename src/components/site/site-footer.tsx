@@ -20,7 +20,7 @@ export function SiteFooter({ locale = "zh" }: { locale?: Locale }) {
           {/* The same page in the other edition, not its home page. */}
           <LangToggle
             labels={{ en: "English Edition", zh: "中文版" }}
-            className="text-xs tracking-normal"
+            className="whitespace-nowrap transition-colors hover:text-brand"
           />
           <span className="mx-2">·</span>© {new Date().getFullYear()} babuban.com
         </p>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { buttonVariants } from "@/components/ui/button";
+import { HOUSE_BUTTON } from "@/components/site/house-button";
 import { isLocale, localePath } from "@/i18n/locales";
 
 const COPY = {
@@ -43,11 +43,7 @@ export default function SiteError({
       <h1 className="mt-4 font-bold text-3xl tracking-label">{t.title}</h1>
       <p className="mt-4 max-w-[40ch] text-ink-muted leading-[1.9]">{t.body}</p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-        <button
-          type="button"
-          onClick={reset}
-          className={buttonVariants({ variant: "house", size: "house" })}
-        >
+        <button type="button" onClick={reset} className={HOUSE_BUTTON}>
           {t.retry}
         </button>
         <Link

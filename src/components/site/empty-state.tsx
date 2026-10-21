@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { ButtonLink } from "@/components/site/button-link";
-import { cn } from "@/lib/utils";
 
 /**
  * What a page says when it has nothing to show — and where to go
@@ -20,10 +19,10 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div className={cn("mx-auto mt-12 max-w-md text-center", className)}>
+    <div className={`mx-auto mt-12 max-w-md text-center ${className ?? ""}`}>
       {title && <p className="font-bold tracking-title">{title}</p>}
       {children && (
-        <div className={cn("text-ink-muted text-sm leading-relaxed", title && "mt-2")}>
+        <div className={`text-ink-muted text-sm leading-relaxed${title ? "mt-2" : ""}`}>
           {children}
         </div>
       )}

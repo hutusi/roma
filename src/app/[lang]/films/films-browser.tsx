@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { EmptyState } from "@/components/site/empty-state";
 import { FilmCard } from "@/components/site/film-card";
-import { buttonVariants } from "@/components/ui/button";
+import { HOUSE_BUTTON } from "@/components/site/house-button";
 import { NativeSelect } from "@/components/ui/native-select";
 import { type Locale, localePath } from "@/i18n/locales";
 import { COPY } from "./copy";
@@ -167,11 +167,7 @@ export function FilmsBrowser({ locale, films }: { locale: Locale; films: FilmCar
       ) : (
         <EmptyState title={t.empty}>
           <p>{t.emptyHint}</p>
-          <button
-            type="button"
-            className={buttonVariants({ variant: "house", size: "house", className: "mt-6" })}
-            onClick={() => update({})}
-          >
+          <button type="button" className={`${HOUSE_BUTTON} mt-6`} onClick={() => update({})}>
             {t.clear}
           </button>
         </EmptyState>
