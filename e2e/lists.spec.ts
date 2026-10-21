@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { serverActionDone } from "./utils/actions";
 import { queryOne } from "./utils/db";
 
 test.use({ storageState: "e2e/.auth/admin.json" });
@@ -35,10 +36,7 @@ test("keyboard drag-reorder persists across reload", async ({ page }) => {
   await page.keyboard.press("Space");
   await expect(secondRow).toHaveClass(/opacity-60/);
   await page.keyboard.press("ArrowUp");
-  await Promise.all([
-    page.waitForResponse((r) => r.request().method() === "POST" && r.ok()),
-    page.keyboard.press("Space"),
-  ]);
+  await Promise.all([serverActionDone(page), page.keyboard.press("Space")]);
 
   await page.reload();
   const firstRowAfter = await page.getByTitle("拖动排序").first().locator("..").textContent();
