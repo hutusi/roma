@@ -83,7 +83,7 @@ export default async function LangRootLayout({
 }>) {
   const locale = parseLocale((await params).lang);
   return (
-    <DocumentShell lang={HTML_LANG[locale]}>
+    <DocumentShell lang={HTML_LANG[locale]} preloadFonts={locale === "zh"}>
       {/* Hoisted to <head> by React; here (not layout metadata) so it survives
           pages that set their own `alternates`, e.g. the home page's hreflang. */}
       <link

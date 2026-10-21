@@ -5,8 +5,7 @@
 // can't know the locale — the layout that would resolve it is what failed.
 // Hence the bilingual copy. Ordinary route errors are handled by the
 // [lang]/error.tsx and admin/error.tsx boundaries.
-import "@fontsource/noto-serif-sc/400.css";
-import "@fontsource/noto-serif-sc/700.css";
+import "@/assets/fonts/babuban-serif-sc.css";
 import "@fontsource/playfair-display/400.css";
 import "@fontsource/playfair-display/700.css";
 import "./globals.css";
