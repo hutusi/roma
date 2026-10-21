@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { type Locale, localePath } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
+import { safeNextPath } from "@/lib/safe-next";
 
 export function SignInForm({ locale, labels }: { locale: Locale; labels: Dictionary["auth"] }) {
   const router = useRouter();
@@ -34,10 +35,7 @@ export function SignInForm({ locale, labels }: { locale: Locale; labels: Diction
     }
     // The header and islands read the session from a shared store.
     invalidateMe();
-    const next = searchParams.get("next");
-    // Same-origin paths only: "//evil.com" passes startsWith("/") but
-    // navigates cross-origin (open redirect).
-    router.push(next?.startsWith("/") && !next.startsWith("//") ? next : localePath(locale, "/"));
+    router.push(safeNextPath(searchParams.get("next"), localePath(locale, "/")));
     router.refresh();
   }
 

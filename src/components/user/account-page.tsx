@@ -1,13 +1,13 @@
 import { TitleCard } from "@/components/site/title-card";
 import { getDict } from "@/i18n/dict";
-import { isLocale, type Locale } from "@/i18n/locales";
+import { isLocale, type Locale, localePath } from "@/i18n/locales";
 import { requireUser } from "@/lib/auth-guards";
 import { AccountForm } from "./account-form";
 
 /** Account settings, rendered for both locales; the form chrome is localized. */
 export async function AccountPage({ locale = "zh" }: { locale?: Locale }) {
   const dict = getDict(locale);
-  const session = await requireUser(locale);
+  const session = await requireUser(locale, localePath(locale, "/account"));
   const rawLocale = (session.user as { locale?: string | null }).locale;
   return (
     <div className="mx-auto max-w-md animate-fade-up px-6 pt-16">

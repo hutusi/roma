@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { lazy, Suspense } from "react";
 import { useMe } from "@/components/site/use-me";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { type Locale, localePath } from "@/i18n/locales";
+import { signInHrefFor } from "@/lib/safe-next";
 
 // Radix DropdownMenu (and floating-ui) load only once someone is signed
 // in; a signed-out reader gets a plain link. Until the chunk arrives the
@@ -20,6 +22,7 @@ const AuthMenuDropdown = lazy(() =>
  */
 export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionary["authMenu"] }) {
   const { status, user } = useMe();
+  const pathname = usePathname();
 
   // Fixed footprint while unknown, so the nav doesn't jump when it resolves.
   if (status === "loading" && !user) {
@@ -31,7 +34,13 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
   if (!user) {
     return (
       <Link
-        href={localePath(locale, "/sign-in")}
+        // Back to this page afterwards, not the home page. The sign-in
+        // pages themselves carry no next (it would point at sign-in).
+        href={
+          /\/(sign-in|sign-up|forgot-password|reset-password)$/.test(pathname)
+            ? localePath(locale, "/sign-in")
+            : signInHrefFor(localePath(locale, "/sign-in"), pathname)
+        }
         className="whitespace-nowrap text-sm tracking-[0.2em] transition-colors hover:text-brand"
       >
         {labels.signIn}
