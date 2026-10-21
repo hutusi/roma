@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { createInvite, revokeInvite } from "@/actions/invites";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { localePath } from "@/i18n/locales";
@@ -20,9 +21,9 @@ export function InviteCreateForm() {
       onSubmit={(e) => {
         e.preventDefault();
         startTransition(async () => {
-          const result = await createInvite(email, role);
+          const result = await callAction(() => createInvite(email, role));
           if (!result.ok) {
-            toast.error(result.error);
+            notifyActionError(result.error);
             return;
           }
           const url = `${window.location.origin}${localePath("zh", `/invite/${result.data.token}`)}`;
@@ -103,9 +104,9 @@ export function InviteControls({
         className="text-ink-muted hover:text-destructive"
         onClick={() =>
           startTransition(async () => {
-            const result = await revokeInvite(inviteId);
+            const result = await callAction(() => revokeInvite(inviteId));
             if (!result.ok) {
-              toast.error(result.error);
+              notifyActionError(result.error);
               return;
             }
             router.refresh();

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { banUser, setUserRole, unbanUser } from "@/actions/admin-users";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
 
 export function UserRowControls({
   userId,
@@ -31,9 +32,11 @@ export function UserRowControls({
         disabled={pending}
         onChange={(e) =>
           startTransition(async () => {
-            const result = await setUserRole(userId, e.target.value as "admin" | "editor" | "user");
+            const result = await callAction(() =>
+              setUserRole(userId, e.target.value as "admin" | "editor" | "user"),
+            );
             if (!result.ok) {
-              toast.error(result.error);
+              notifyActionError(result.error);
               return;
             }
             toast.success("角色已更新");
@@ -52,8 +55,8 @@ export function UserRowControls({
         onClick={() => {
           if (banned) {
             startTransition(async () => {
-              const result = await unbanUser(userId);
-              if (!result.ok) toast.error(result.error);
+              const result = await callAction(() => unbanUser(userId));
+              if (!result.ok) notifyActionError(result.error);
               else router.refresh();
             });
             return;
@@ -61,8 +64,8 @@ export function UserRowControls({
           const reason = window.prompt("封禁原因（可留空）");
           if (reason === null) return;
           startTransition(async () => {
-            const result = await banUser(userId, reason);
-            if (!result.ok) toast.error(result.error);
+            const result = await callAction(() => banUser(userId, reason));
+            if (!result.ok) notifyActionError(result.error);
             else router.refresh();
           });
         }}

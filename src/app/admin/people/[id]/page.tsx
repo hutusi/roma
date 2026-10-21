@@ -1,5 +1,4 @@
 import { asc, desc, eq } from "drizzle-orm";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   deletePerson,
@@ -8,6 +7,7 @@ import {
   unpublishPerson,
   unpublishPersonEn,
 } from "@/actions/people";
+import { GuardedLink } from "@/components/admin/dirty-guard";
 import { db } from "@/db";
 import { films, media, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -47,18 +47,18 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-xl">
           编辑人物 · {person.nameZh ?? person.name}
-          <Link
+          <GuardedLink
             href={`/admin/preview/person/${person.id}`}
             className="ml-3 font-normal text-brand text-sm hover:underline"
           >
             预览
-          </Link>
-          <Link
+          </GuardedLink>
+          <GuardedLink
             href={`/admin/preview/person/${person.id}?locale=en`}
             className="ml-2 font-normal text-brand text-sm hover:underline"
           >
             EN 预览
-          </Link>
+          </GuardedLink>
         </h1>
         <div className="flex items-center gap-6">
           <PublishControls
@@ -80,6 +80,7 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
       <div className="mt-6">
         <PersonForm
           personId={person.id}
+          revision={person.revision}
           media={mediaRows}
           defaultValues={{
             slug: person.slug,

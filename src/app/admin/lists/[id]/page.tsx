@@ -1,5 +1,4 @@
 import { asc, desc, eq } from "drizzle-orm";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   deleteList,
@@ -8,6 +7,7 @@ import {
   unpublishList,
   unpublishListEn,
 } from "@/actions/lists";
+import { GuardedLink } from "@/components/admin/dirty-guard";
 import { db } from "@/db";
 import { curatedLists, films, media } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -48,18 +48,18 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-xl">
           编辑片单 · {list.title}
-          <Link
+          <GuardedLink
             href={`/admin/preview/list/${list.id}`}
             className="ml-3 font-normal text-brand text-sm hover:underline"
           >
             预览
-          </Link>
-          <Link
+          </GuardedLink>
+          <GuardedLink
             href={`/admin/preview/list/${list.id}?locale=en`}
             className="ml-2 font-normal text-brand text-sm hover:underline"
           >
             EN 预览
-          </Link>
+          </GuardedLink>
         </h1>
         <div className="flex items-center gap-6">
           <PublishControls
@@ -81,6 +81,7 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
       <div className="mt-6">
         <ListForm
           listId={list.id}
+          revision={list.revision}
           media={mediaRows}
           defaultValues={{
             slug: list.slug,

@@ -1,6 +1,5 @@
 import { asc, desc, eq } from "drizzle-orm";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   deleteFilm,
@@ -9,6 +8,7 @@ import {
   unpublishFilm,
   unpublishFilmEn,
 } from "@/actions/films";
+import { GuardedLink } from "@/components/admin/dirty-guard";
 import { db } from "@/db";
 import { films, media, people, tags } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
@@ -50,18 +50,18 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-xl">
           编辑影片 · {film.titleZh}
-          <Link
+          <GuardedLink
             href={`/admin/preview/film/${film.id}`}
             className="ml-3 font-normal text-brand text-sm hover:underline"
           >
             预览
-          </Link>
-          <Link
+          </GuardedLink>
+          <GuardedLink
             href={`/admin/preview/film/${film.id}?locale=en`}
             className="ml-2 font-normal text-brand text-sm hover:underline"
           >
             EN 预览
-          </Link>
+          </GuardedLink>
         </h1>
         <div className="flex items-center gap-6">
           <PublishControls
@@ -88,18 +88,19 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
               <Image src={m.url} alt={m.alt ?? ""} fill sizes="96px" className="object-contain" />
             </div>
           ))}
-          <Link
+          <GuardedLink
             href={`/admin/media?filmId=${film.id}`}
             className="self-center text-brand text-sm hover:underline"
           >
             管理图片 →
-          </Link>
+          </GuardedLink>
         </div>
       )}
 
       <div className="mt-6">
         <FilmForm
           filmId={film.id}
+          revision={film.revision}
           people={personRows}
           tags={tagRows}
           media={mediaRows}

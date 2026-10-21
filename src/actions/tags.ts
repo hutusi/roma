@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { lockFilms, lockTag } from "@/db/locks";
 import { films, filmTags, tags } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import { requireEditorResult } from "@/lib/auth-guards";
 import { revalidateTags } from "@/lib/revalidate";
 import { type TagFormValues, tagFormSchema } from "@/lib/validators/tag";
 import { type ActionResult, fail, isUniqueViolation, ok } from "./result";
@@ -13,7 +13,8 @@ export async function saveTag(
   id: string | null,
   values: TagFormValues,
 ): Promise<ActionResult<{ id: string }>> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const parsed = tagFormSchema.safeParse(values);
   if (!parsed.success) {
     return fail(parsed.error.issues.map((i) => i.message).join("；"));
@@ -44,7 +45,8 @@ export async function saveTag(
 }
 
 export async function deleteTag(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const tag = await lockTag(tx, id);
     if (!tag) return { error: "标签不存在" } as const;

@@ -2,10 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { savePerson } from "@/actions/people";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { CeilingCounter, type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,10 +17,13 @@ import { type PersonFormValues, personFormSchema } from "@/lib/validators/person
 
 export function PersonForm({
   personId,
+  revision = 0,
   defaultValues,
   media,
 }: {
   personId: string | null;
+  /** The revision this form loaded; a stale save is refused (optimistic concurrency). */
+  revision?: number;
   defaultValues: PersonFormValues;
   media: MediaOption[];
 }) {
@@ -29,22 +34,29 @@ export function PersonForm({
     control,
     handleSubmit,
     watch,
-    formState: { errors },
+    reset,
+    formState: { errors, isDirty },
   } = useForm<PersonFormValues>({
     resolver: zodResolver(personFormSchema),
     defaultValues,
   });
+  const revisionRef = useRef(revision);
+  // Unsaved edits ask before navigation; a save in flight doesn't count.
+  useDirtyGuard("person-form", isDirty && !submitting);
   const note = watch("editorialNote") ?? "";
   const noteEn = watch("editorialNoteEn") ?? "";
 
   const onSubmit = handleSubmit(async (values) => {
     setSubmitting(true);
-    const result = await savePerson(personId, values);
+    const result = await callAction(() => savePerson(personId, values, revisionRef.current));
     setSubmitting(false);
     if (!result.ok) {
-      toast.error(result.error);
+      notifyActionError(result.error);
       return;
     }
+    revisionRef.current = result.data.revision;
+    // Saved values become the new baseline, so the form reads clean.
+    reset(values);
     toast.success("已保存");
     if (!personId) router.push(`/admin/people/${result.data.id}`);
     router.refresh();

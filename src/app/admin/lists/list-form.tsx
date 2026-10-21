@@ -2,10 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { saveListMeta } from "@/actions/lists";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,10 +16,13 @@ import { type ListFormValues, listFormSchema } from "@/lib/validators/list";
 
 export function ListForm({
   listId,
+  revision = 0,
   defaultValues,
   media,
 }: {
   listId: string | null;
+  /** The revision this form loaded; a stale save is refused (optimistic concurrency). */
+  revision?: number;
   defaultValues: ListFormValues;
   media: MediaOption[];
 }) {
@@ -27,20 +32,27 @@ export function ListForm({
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isDirty },
   } = useForm<ListFormValues>({
     resolver: zodResolver(listFormSchema),
     defaultValues,
   });
+  const revisionRef = useRef(revision);
+  // Unsaved edits ask before navigation; a save in flight doesn't count.
+  useDirtyGuard("list-form", isDirty && !submitting);
 
   const onSubmit = handleSubmit(async (values) => {
     setSubmitting(true);
-    const result = await saveListMeta(listId, values);
+    const result = await callAction(() => saveListMeta(listId, values, revisionRef.current));
     setSubmitting(false);
     if (!result.ok) {
-      toast.error(result.error);
+      notifyActionError(result.error);
       return;
     }
+    revisionRef.current = result.data.revision;
+    // Saved values become the new baseline, so the form reads clean.
+    reset(values);
     toast.success("已保存");
     if (!listId) router.push(`/admin/lists/${result.data.id}`);
     router.refresh();

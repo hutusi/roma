@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import type { ActionResult } from "@/actions/result";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -35,9 +36,9 @@ export function PublishControls({
 
   const run = (fn: () => Promise<ActionResult>, successMessage: string) =>
     startTransition(async () => {
-      const result = await fn();
+      const result = await callAction(fn);
       if (!result.ok) {
-        toast.error(result.error);
+        notifyActionError(result.error);
         return;
       }
       toast.success(successMessage);
@@ -73,9 +74,9 @@ export function PublishControls({
           onClick={() => {
             if (!window.confirm(deleteConfirmText ?? "确定删除？该操作不可撤销。")) return;
             startTransition(async () => {
-              const result = await onDelete();
+              const result = await callAction(onDelete);
               if (!result.ok) {
-                toast.error(result.error);
+                notifyActionError(result.error);
                 return;
               }
               if (afterDeleteHref) router.push(afterDeleteHref);

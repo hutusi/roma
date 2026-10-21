@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteMedia, updateMedia, uploadMedia } from "@/actions/media";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,7 +55,7 @@ export function MediaManager({
           setUploading(true);
           let result: Awaited<ReturnType<typeof uploadMedia>>;
           try {
-            result = await uploadMedia(formData);
+            result = await callAction(() => uploadMedia(formData));
           } catch {
             // A thrown upload (network drop, aborted request) would otherwise
             // bubble up as an unhandled rejection with no feedback.
@@ -65,7 +66,7 @@ export function MediaManager({
             setUploading(false);
           }
           if (!result.ok) {
-            toast.error(result.error);
+            notifyActionError(result.error);
             return;
           }
           toast.success("已上传");
@@ -158,8 +159,10 @@ export function MediaManager({
                   defaultValue={m.kind}
                   onChange={(e) =>
                     startTransition(async () => {
-                      const result = await updateMedia(m.id, { kind: e.target.value });
-                      if (!result.ok) toast.error(result.error);
+                      const result = await callAction(() =>
+                        updateMedia(m.id, { kind: e.target.value }),
+                      );
+                      if (!result.ok) notifyActionError(result.error);
                     })
                   }
                 >
@@ -174,10 +177,12 @@ export function MediaManager({
                   defaultValue={m.filmId ?? ""}
                   onChange={(e) =>
                     startTransition(async () => {
-                      const result = await updateMedia(m.id, {
-                        filmId: e.target.value || null,
-                      });
-                      if (!result.ok) toast.error(result.error);
+                      const result = await callAction(() =>
+                        updateMedia(m.id, {
+                          filmId: e.target.value || null,
+                        }),
+                      );
+                      if (!result.ok) notifyActionError(result.error);
                     })
                   }
                 >
@@ -196,8 +201,10 @@ export function MediaManager({
                 onBlur={(e) => {
                   if (e.target.value === m.credit) return;
                   startTransition(async () => {
-                    const result = await updateMedia(m.id, { credit: e.target.value });
-                    if (!result.ok) toast.error(result.error);
+                    const result = await callAction(() =>
+                      updateMedia(m.id, { credit: e.target.value }),
+                    );
+                    if (!result.ok) notifyActionError(result.error);
                     else toast.success("来源已更新");
                   });
                 }}
@@ -209,8 +216,10 @@ export function MediaManager({
                 onBlur={(e) => {
                   if (e.target.value === m.alt) return;
                   startTransition(async () => {
-                    const result = await updateMedia(m.id, { alt: e.target.value });
-                    if (!result.ok) toast.error(result.error);
+                    const result = await callAction(() =>
+                      updateMedia(m.id, { alt: e.target.value }),
+                    );
+                    if (!result.ok) notifyActionError(result.error);
                   });
                 }}
               />
@@ -221,9 +230,9 @@ export function MediaManager({
                 onClick={() => {
                   if (!window.confirm("删除这张图片？文件也会被移除。")) return;
                   startTransition(async () => {
-                    const result = await deleteMedia(m.id);
+                    const result = await callAction(() => deleteMedia(m.id));
                     if (!result.ok) {
-                      toast.error(result.error);
+                      notifyActionError(result.error);
                       return;
                     }
                     router.refresh();

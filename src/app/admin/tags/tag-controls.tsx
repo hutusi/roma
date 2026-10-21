@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteTag, saveTag } from "@/actions/tags";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -23,9 +24,9 @@ export function TagCreateForm() {
       onSubmit={(e) => {
         e.preventDefault();
         startTransition(async () => {
-          const result = await saveTag(null, values);
+          const result = await callAction(() => saveTag(null, values));
           if (!result.ok) {
-            toast.error(result.error);
+            notifyActionError(result.error);
             return;
           }
           toast.success("标签已创建");
@@ -98,9 +99,9 @@ export function TagRow({ tag, filmCount }: { tag: { id: string } & TagValues; fi
                   return;
                 }
                 startTransition(async () => {
-                  const result = await deleteTag(tag.id);
+                  const result = await callAction(() => deleteTag(tag.id));
                   if (!result.ok) {
-                    toast.error(result.error);
+                    notifyActionError(result.error);
                     return;
                   }
                   toast.success("标签已删除");
@@ -145,9 +146,9 @@ export function TagRow({ tag, filmCount }: { tag: { id: string } & TagValues; fi
             className="text-brand hover:underline"
             onClick={() =>
               startTransition(async () => {
-                const result = await saveTag(tag.id, values);
+                const result = await callAction(() => saveTag(tag.id, values));
                 if (!result.ok) {
-                  toast.error(result.error);
+                  notifyActionError(result.error);
                   return;
                 }
                 toast.success("标签已保存");

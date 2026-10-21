@@ -2,11 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { saveFilm } from "@/actions/films";
 import { importFromTmdb } from "@/actions/tmdb";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import {
   CeilingCounter,
   IntroCounter,
@@ -42,6 +44,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function FilmForm({
   filmId,
+  revision = 0,
   defaultValues,
   people,
   tags,
@@ -49,6 +52,8 @@ export function FilmForm({
   tmdbEnabled = false,
 }: {
   filmId: string | null;
+  /** The revision this form loaded; a stale save is refused (optimistic concurrency). */
+  revision?: number;
   defaultValues: FilmFormValues;
   people: PersonOption[];
   tags: TagOption[];
@@ -64,11 +69,14 @@ export function FilmForm({
     watch,
     reset,
     getValues,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FilmFormValues>({
     resolver: zodResolver(filmFormSchema),
     defaultValues,
   });
+  const revisionRef = useRef(revision);
+  // Unsaved edits ask before navigation; a save in flight doesn't count.
+  useDirtyGuard("film-form", isDirty && !submitting);
   const castArray = useFieldArray({ control, name: "cast" });
   const linksArray = useFieldArray({ control, name: "watchLinks" });
   const intro = watch("introduction") ?? "";
@@ -79,12 +87,15 @@ export function FilmForm({
   const onSubmit = handleSubmit(
     async (values) => {
       setSubmitting(true);
-      const result = await saveFilm(filmId, values);
+      const result = await callAction(() => saveFilm(filmId, values, revisionRef.current));
       setSubmitting(false);
       if (!result.ok) {
-        toast.error(result.error);
+        notifyActionError(result.error);
         return;
       }
+      revisionRef.current = result.data.revision;
+      // Saved values become the new baseline, so the form reads clean.
+      reset(values);
       toast.success("已保存");
       if (!filmId) router.push(`/admin/films/${result.data.id}`);
       router.refresh();
@@ -108,9 +119,9 @@ export function FilmForm({
             onClick={async () => {
               const id = window.prompt("TMDB 影片 ID（数字）");
               if (!id) return;
-              const result = await importFromTmdb(id);
+              const result = await callAction(() => importFromTmdb(id));
               if (!result.ok) {
-                toast.error(result.error);
+                notifyActionError(result.error);
                 return;
               }
               const d = result.data;

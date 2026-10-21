@@ -9,6 +9,8 @@ import {
   reorderListItems,
   updateItemReasoning,
 } from "@/actions/lists";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { SortableList } from "@/components/list/sortable-list";
 import { TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
@@ -43,6 +45,7 @@ export function ItemsPanel({
   const [expanded, setExpanded] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, Record<string, unknown>>>({});
   const [draftsEn, setDraftsEn] = useState<Record<string, Record<string, unknown>>>({});
+  useDirtyGuard("list-reasoning", Object.keys(drafts).length + Object.keys(draftsEn).length > 0);
   const [pending, startTransition] = useTransition();
 
   // router.refresh() re-renders the server parent with fresh
@@ -80,9 +83,9 @@ export function ItemsPanel({
           disabled={!selectedFilm || pending}
           onClick={() =>
             startTransition(async () => {
-              const result = await addFilmToList(listId, selectedFilm);
+              const result = await callAction(() => addFilmToList(listId, selectedFilm));
               if (!result.ok) {
-                toast.error(result.error);
+                notifyActionError(result.error);
                 return;
               }
               setSelectedFilm("");
@@ -103,13 +106,15 @@ export function ItemsPanel({
             const previous = items;
             setItems(next);
             startTransition(async () => {
-              const result = await reorderListItems(
-                listId,
-                next.map((item) => item.id),
+              const result = await callAction(() =>
+                reorderListItems(
+                  listId,
+                  next.map((item) => item.id),
+                ),
               );
               if (!result.ok) {
                 setItems(previous);
-                toast.error(result.error);
+                notifyActionError(result.error);
               }
             });
           }}
@@ -144,9 +149,9 @@ export function ItemsPanel({
                     e.stopPropagation();
                     if (!window.confirm(`把《${item.title}》移出片单？`)) return;
                     startTransition(async () => {
-                      const result = await removeListItem(item.id);
+                      const result = await callAction(() => removeListItem(item.id));
                       if (!result.ok) {
-                        toast.error(result.error);
+                        notifyActionError(result.error);
                         return;
                       }
                       setItems(items.filter((it) => it.id !== item.id));
@@ -168,9 +173,11 @@ export function ItemsPanel({
                     disabled={pending || !drafts[item.id]}
                     onClick={() =>
                       startTransition(async () => {
-                        const result = await updateItemReasoning(item.id, drafts[item.id]);
+                        const result = await callAction(() =>
+                          updateItemReasoning(item.id, drafts[item.id]),
+                        );
                         if (!result.ok) {
-                          toast.error(result.error);
+                          notifyActionError(result.error);
                           return;
                         }
                         setItems(
@@ -178,6 +185,9 @@ export function ItemsPanel({
                             it.id === item.id ? { ...it, reasoning: drafts[item.id] } : it,
                           ),
                         );
+                        // Saved: the draft is the record now, so it stops
+                        // counting as unsaved (and the button settles).
+                        setDrafts(({ [item.id]: _saved, ...rest }) => rest);
                         toast.success("入选理由已保存");
                       })
                     }
@@ -196,9 +206,11 @@ export function ItemsPanel({
                     disabled={pending || !draftsEn[item.id]}
                     onClick={() =>
                       startTransition(async () => {
-                        const result = await updateItemReasoning(item.id, draftsEn[item.id], "en");
+                        const result = await callAction(() =>
+                          updateItemReasoning(item.id, draftsEn[item.id], "en"),
+                        );
                         if (!result.ok) {
-                          toast.error(result.error);
+                          notifyActionError(result.error);
                           return;
                         }
                         setItems(
@@ -206,6 +218,7 @@ export function ItemsPanel({
                             it.id === item.id ? { ...it, reasoningEn: draftsEn[item.id] } : it,
                           ),
                         );
+                        setDraftsEn(({ [item.id]: _saved, ...rest }) => rest);
                         toast.success("英文理由已保存");
                       })
                     }

@@ -5,7 +5,7 @@ import { db } from "@/db";
 import { lockCuratedList, lockFilm } from "@/db/locks";
 import type { TiptapDoc } from "@/db/schema";
 import { curatedListItems, curatedLists, films } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import { requireEditorResult } from "@/lib/auth-guards";
 import { publishedMemberCount } from "@/lib/list-invariants";
 import { revalidateList } from "@/lib/revalidate";
 import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
@@ -27,11 +27,19 @@ function hasSlug<T extends { slug?: string }>(value: T): value is T & { slug: st
   return typeof value.slug === "string";
 }
 
+/** What a stale save is told — its edits are still in the form. */
+const CONFLICT =
+  "这份片单在你打开之后已被其他编辑保存过。你的修改还在页面上：先复制要保留的内容，刷新页面后再合并保存。";
+
+/** `expectedRevision`: see saveFilm — a stale save is refused, not applied. */
 export async function saveListMeta(
   id: string | null,
   values: ListFormValues,
-): Promise<ActionResult<{ id: string }>> {
-  const session = await requireEditor();
+  expectedRevision?: number,
+): Promise<ActionResult<{ id: string; revision: number }>> {
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
+  const session = guarded.session;
   const parsed = listFormSchema.safeParse(values);
   if (!parsed.success) return fail(parsed.error.issues.map((issue) => issue.message).join("；"));
   const v = parsed.data;
@@ -51,6 +59,10 @@ export async function saveListMeta(
       let targetId = id;
       const existing = targetId ? await lockCuratedList(tx, targetId) : undefined;
       if (targetId && !existing) return { error: "片单不存在，可能已被删除" } as const;
+      if (existing && expectedRevision !== undefined && existing.revision !== expectedRevision) {
+        return { error: CONFLICT } as const;
+      }
+      const revision = existing ? existing.revision + 1 : 0;
       if (existing?.statusEn === "published") {
         const problems = publishEnProblems({ titleEn: v.titleEn || null });
         if (problems.length) {
@@ -61,7 +73,10 @@ export async function saveListMeta(
       }
 
       if (targetId) {
-        await tx.update(curatedLists).set(row).where(eq(curatedLists.id, targetId));
+        await tx
+          .update(curatedLists)
+          .set({ ...row, revision })
+          .where(eq(curatedLists.id, targetId));
       } else {
         const [created] = await tx
           .insert(curatedLists)
@@ -73,6 +88,7 @@ export async function saveListMeta(
         id: targetId,
         previousSlug: existing?.slug,
         wasPublic: existing?.status === "published",
+        revision,
       } as const;
     });
     if ("error" in outcome && outcome.error) return fail(outcome.error);
@@ -80,7 +96,7 @@ export async function saveListMeta(
     if (outcome.wasPublic && outcome.previousSlug && outcome.previousSlug !== v.slug) {
       revalidateList(outcome.previousSlug, { notify: true });
     }
-    return ok({ id: outcome.id });
+    return ok({ id: outcome.id, revision: outcome.revision });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(`slug「${v.slug}」已被使用`);
     throw error;
@@ -88,7 +104,8 @@ export async function saveListMeta(
 }
 
 export async function addFilmToList(listId: string, filmId: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   try {
     const outcome = await db.transaction(async (tx) => {
       const film = await lockFilm(tx, filmId);
@@ -112,7 +129,8 @@ export async function addFilmToList(listId: string, filmId: string): Promise<Act
 }
 
 export async function removeListItem(itemId: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const pointer = await db.query.curatedListItems.findFirst({
     where: eq(curatedListItems.id, itemId),
     columns: { listId: true },
@@ -162,7 +180,8 @@ export async function reorderListItems(
   listId: string,
   orderedItemIds: string[],
 ): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const list = await lockCuratedList(tx, listId);
     if (!list) return { error: "片单不存在，可能已被删除" } as const;
@@ -201,7 +220,8 @@ export async function updateItemReasoning(
   reasoning: Record<string, unknown> | null,
   locale: "zh" | "en" = "zh",
 ): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const parsed = tiptapDocSchema.safeParse(reasoning);
   if (!parsed.success) return fail(parsed.error.issues.map((issue) => issue.message).join("；"));
   const pointer = await db.query.curatedListItems.findFirst({
@@ -231,7 +251,8 @@ export async function updateItemReasoning(
 }
 
 export async function publishList(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const list = await lockCuratedList(tx, id);
     if (!list) return { error: "片单不存在" } as const;
@@ -250,7 +271,8 @@ export async function publishList(id: string): Promise<ActionResult> {
 }
 
 export async function publishListEn(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const list = await lockCuratedList(tx, id);
     if (!list) return { error: "片单不存在" } as const;
@@ -268,7 +290,8 @@ export async function publishListEn(id: string): Promise<ActionResult> {
 }
 
 export async function unpublishListEn(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const list = await lockCuratedList(tx, id);
     if (!list) return null;
@@ -281,7 +304,8 @@ export async function unpublishListEn(id: string): Promise<ActionResult> {
 }
 
 export async function unpublishList(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const list = await lockCuratedList(tx, id);
     if (!list) return null;
@@ -294,7 +318,8 @@ export async function unpublishList(id: string): Promise<ActionResult> {
 }
 
 export async function deleteList(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const list = await lockCuratedList(tx, id);
     if (!list) return null;

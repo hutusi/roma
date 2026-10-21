@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { setViewingOrder } from "@/actions/people";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { SortableList } from "@/components/list/sortable-list";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +37,7 @@ export function ViewingOrderPanel({
   const [selectedFilm, setSelectedFilm] = useState("");
   const [pending, startTransition] = useTransition();
   const [dirty, setDirty] = useState(false);
+  useDirtyGuard("viewing-order", dirty && !pending);
 
   const update = (next: ViewingItem[]) => {
     setItems(next);
@@ -45,16 +48,18 @@ export function ViewingOrderPanel({
 
   const save = () =>
     startTransition(async () => {
-      const result = await setViewingOrder(
-        personId,
-        items.map(({ filmId, note, noteEn }) => ({
-          filmId,
-          note: note || undefined,
-          noteEn: noteEn || undefined,
-        })),
+      const result = await callAction(() =>
+        setViewingOrder(
+          personId,
+          items.map(({ filmId, note, noteEn }) => ({
+            filmId,
+            note: note || undefined,
+            noteEn: noteEn || undefined,
+          })),
+        ),
       );
       if (!result.ok) {
-        toast.error(result.error);
+        notifyActionError(result.error);
         return;
       }
       toast.success("观看顺序已保存");

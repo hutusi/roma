@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { media, mediaKind } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import { requireEditorResult } from "@/lib/auth-guards";
 import { ImageValidationError, type ValidatedImage, validateImageUpload } from "@/lib/image-upload";
 import { revalidateMedia } from "@/lib/revalidate";
 import { deleteImage, type StoredImage, storeImage } from "@/lib/storage";
@@ -23,7 +23,8 @@ const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // Vercel request-body ceiling is 4.5M
 export async function uploadMedia(
   formData: FormData,
 ): Promise<ActionResult<{ id: string; url: string }>> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) return fail("请选择图片文件");
 
@@ -95,7 +96,8 @@ export async function updateMedia(
     sortOrder?: number;
   },
 ): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   if (!rowId.safeParse(id).success) return fail("图片不存在");
   const parsed = mediaFields.safeParse(fields);
   if (!parsed.success) return fail("提交的内容无效");
@@ -138,7 +140,8 @@ export async function updateMedia(
 }
 
 export async function deleteMedia(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   if (!rowId.safeParse(id).success) return fail("图片不存在");
   const row = await db.query.media.findFirst({ where: eq(media.id, id) });
   if (!row) return fail("图片不存在");

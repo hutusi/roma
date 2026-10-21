@@ -5,7 +5,7 @@ import { db } from "@/db";
 import { lockFilms, lockPerson } from "@/db/locks";
 import type { TiptapDoc } from "@/db/schema";
 import { directorViewingItems, filmDirectors, films, people } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import { requireEditorResult } from "@/lib/auth-guards";
 import { revalidatePerson } from "@/lib/revalidate";
 import {
   type PersonFormValues,
@@ -20,11 +20,18 @@ function hasSlug<T extends { slug?: string }>(value: T): value is T & { slug: st
   return typeof value.slug === "string";
 }
 
+/** What a stale save is told — its edits are still in the form. */
+const CONFLICT =
+  "这位人物在你打开之后已被其他编辑保存过。你的修改还在页面上：先复制要保留的内容，刷新页面后再合并保存。";
+
+/** `expectedRevision`: see saveFilm — a stale save is refused, not applied. */
 export async function savePerson(
   id: string | null,
   values: PersonFormValues,
-): Promise<ActionResult<{ id: string }>> {
-  await requireEditor();
+  expectedRevision?: number,
+): Promise<ActionResult<{ id: string; revision: number }>> {
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const parsed = personFormSchema.safeParse(values);
   if (!parsed.success) {
     return fail(parsed.error.issues.map((i) => i.message).join("；"));
@@ -49,6 +56,10 @@ export async function savePerson(
       let targetId = id;
       const existing = targetId ? await lockPerson(tx, targetId) : undefined;
       if (targetId && !existing) return { error: "人物不存在，可能已被删除" } as const;
+      if (existing && expectedRevision !== undefined && existing.revision !== expectedRevision) {
+        return { error: CONFLICT } as const;
+      }
+      const revision = existing ? existing.revision + 1 : 0;
       const previousSlug = existing?.slug;
       const previousRole = existing?.primaryRole;
       const isPublic = existing?.status === "published";
@@ -77,15 +88,18 @@ export async function savePerson(
       }
 
       if (targetId) {
-        await tx.update(people).set(row).where(eq(people.id, targetId));
+        await tx
+          .update(people)
+          .set({ ...row, revision })
+          .where(eq(people.id, targetId));
       } else {
         const [created] = await tx.insert(people).values(row).returning({ id: people.id });
         targetId = created.id;
       }
-      return { id: targetId, previousSlug, previousRole, isPublic } as const;
+      return { id: targetId, previousSlug, previousRole, isPublic, revision } as const;
     });
     if ("error" in outcome && outcome.error) return fail(outcome.error);
-    const { id: targetId, previousSlug, previousRole, isPublic } = outcome;
+    const { id: targetId, previousSlug, previousRole, isPublic, revision } = outcome;
     revalidatePerson(v.slug, v.primaryRole, { notify: isPublic });
     // A moved canonical URL (slug or role change) leaves the old one
     // 308ing — notify it so crawlers recrawl and follow.
@@ -97,7 +111,7 @@ export async function savePerson(
     ) {
       revalidatePerson(previousSlug, previousRole, { notify: true });
     }
-    return ok({ id: targetId });
+    return ok({ id: targetId, revision });
   } catch (error) {
     if (isUniqueViolation(error)) {
       return fail(`slug「${v.slug}」已被使用`);
@@ -110,7 +124,8 @@ export async function setViewingOrder(
   personId: string,
   items: { filmId: string; note?: string; noteEn?: string }[],
 ): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const parsed = viewingOrderSchema.safeParse(items);
   if (!parsed.success) return fail("观看顺序数据无效");
   const outcome = await db.transaction(async (tx) => {
@@ -147,7 +162,8 @@ export async function setViewingOrder(
 }
 
 export async function publishPerson(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const person = await lockPerson(tx, id);
     if (!person) return { error: "人物不存在" } as const;
@@ -165,7 +181,8 @@ export async function publishPerson(id: string): Promise<ActionResult> {
 }
 
 export async function publishPersonEn(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const person = await lockPerson(tx, id);
     if (!person) return { error: "人物不存在" } as const;
@@ -187,7 +204,8 @@ export async function publishPersonEn(id: string): Promise<ActionResult> {
 }
 
 export async function unpublishPersonEn(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const person = await lockPerson(tx, id);
     if (!person) return null;
@@ -200,7 +218,8 @@ export async function unpublishPersonEn(id: string): Promise<ActionResult> {
 }
 
 export async function unpublishPerson(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const person = await lockPerson(tx, id);
     if (!person) return null;
@@ -217,7 +236,8 @@ export async function unpublishPerson(id: string): Promise<ActionResult> {
 }
 
 export async function deletePerson(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const person = await lockPerson(tx, id);
     if (!person) return { error: "人物不存在" } as const;
