@@ -31,3 +31,17 @@ export function counterpartPath(pathname: string): { target: Locale; href: strin
   const target: Locale = first === "zh" ? "en" : "zh";
   return { target, href: rest.length ? `/${target}/${rest.join("/")}` : `/${target}` };
 }
+
+/**
+ * A query string carried across editions. Filter params are
+ * locale-neutral except ?country, which speaks the display language
+ * (/zh/films?country=法国 ↔ /en/films?country=France), so it is mapped;
+ * everything else (?decade, ?tag, ?q…) passes through unchanged.
+ */
+export function counterpartQuery(search: string, mapCountry: (name: string) => string): string {
+  const params = new URLSearchParams(search);
+  const country = params.get("country");
+  if (country) params.set("country", mapCountry(country));
+  const query = params.toString();
+  return query ? `?${query}` : "";
+}

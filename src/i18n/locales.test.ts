@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { counterpartPath, isLocale, localePath } from "./locales";
+import { counterpartPath, counterpartQuery, isLocale, localePath } from "./locales";
 
 describe("localePath", () => {
   test("prefixes the locale and collapses the bare root", () => {
@@ -32,5 +32,18 @@ describe("counterpartPath", () => {
     expect(counterpartPath("/")).toBeNull();
     expect(counterpartPath("/fr/x")).toBeNull();
     expect(counterpartPath("/api/rum")).toBeNull();
+  });
+});
+
+describe("counterpartQuery", () => {
+  const toEn = (zh: string) => ({ 法国: "France" })[zh] ?? zh;
+  test("translates ?country and keeps the rest", () => {
+    expect(counterpartQuery(`?country=${encodeURIComponent("法国")}&decade=1960`, toEn)).toBe(
+      "?country=France&decade=1960",
+    );
+  });
+  test("passes other params through, and an empty query stays empty", () => {
+    expect(counterpartQuery("?q=fellini", (x) => x)).toBe("?q=fellini");
+    expect(counterpartQuery("", toEn)).toBe("");
   });
 });

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { TitleCard } from "@/components/site/title-card";
 import { getPublishedLists } from "@/db/queries/public";
+import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
@@ -74,8 +75,8 @@ export default async function ListsIndexPage({ params }: { params: Promise<{ lan
                   {title}
                 </h2>
                 {theme && <p className="mt-2 text-ink-muted text-sm">{theme}</p>}
-                <p className="mt-3 font-display text-ink-muted text-xs tracking-eyebrow">
-                  {list.items.length} FILMS
+                <p className="mt-3 font-display text-ink-muted text-xs uppercase tracking-eyebrow">
+                  {getDict(locale).filmCount(list.items.length)}
                 </p>
               </div>
             </Link>

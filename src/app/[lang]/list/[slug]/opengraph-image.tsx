@@ -19,7 +19,7 @@ export default async function Image({
   if (!list) notFound();
   return ogCard({
     title: "A Curated List",
-    subtitle: `${list.items.length} FILMS`,
+    subtitle: `${list.items.length} ${list.items.length === 1 ? "FILM" : "FILMS"}`,
     kicker: "Curated Lists",
   });
 }

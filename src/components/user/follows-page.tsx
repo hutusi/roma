@@ -70,8 +70,8 @@ export async function FollowsPage({ locale = "zh" }: { locale?: Locale }) {
                   {listTitle}
                 </h2>
                 {listTheme && <p className="mt-1.5 text-ink-muted text-sm">{listTheme}</p>}
-                <p className="mt-2 font-display text-ink-muted text-xs tracking-eyebrow">
-                  {list.items.length} FILMS
+                <p className="mt-2 font-display text-ink-muted text-xs uppercase tracking-eyebrow">
+                  {getDict(locale).filmCount(list.items.length)}
                 </p>
               </div>
             </Link>

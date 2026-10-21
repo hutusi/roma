@@ -6,6 +6,8 @@
  * enforced by the type checker, not a runtime test.
  */
 export const zh = {
+  /** A film count, e.g. "8 部影片". */
+  filmCount: (n: number) => `${n} 部影片`,
   a11y: {
     skipToContent: "跳到正文",
   },

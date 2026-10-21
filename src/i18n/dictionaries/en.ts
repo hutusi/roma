@@ -1,6 +1,7 @@
 import type { Dictionary } from "./zh";
 
 export const en = {
+  filmCount: (n: number) => (n === 1 ? "1 film" : `${n} films`),
   a11y: {
     skipToContent: "Skip to content",
   },

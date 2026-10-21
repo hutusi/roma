@@ -143,8 +143,8 @@ export async function ProfilePage({
                   <span className="mt-1 block text-ink-muted text-sm">{list.description}</span>
                 )}
               </span>
-              <span className="shrink-0 pt-1 font-display text-ink-muted text-xs tracking-eyebrow">
-                {list.items.filter((i) => i.film.status === "published").length} FILMS
+              <span className="shrink-0 pt-1 font-display text-ink-muted text-xs uppercase tracking-eyebrow">
+                {dict.filmCount(list.items.filter((i) => i.film.status === "published").length)}
               </span>
             </Link>
           ))}

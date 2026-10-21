@@ -145,9 +145,12 @@ test("header language toggle swaps the same page across locales", async ({ page 
   await page.goto("/en/film/la-strada");
   await expect(header.locator('a[href="/zh/film/la-strada"]')).toBeVisible();
 
-  // Query strings are dropped: /films' country param is locale-mapped.
-  await page.goto(`/zh/films?country=${encodeURIComponent("法国")}`);
-  await expect(header.locator('a[href="/en/films"]')).toBeVisible();
+  // The query comes along, with ?country translated (it speaks the
+  // display language). The href stays bare for no-JS readers; the click
+  // carries the query.
+  await page.goto(`/zh/films?country=${encodeURIComponent("法国")}&decade=1960`);
+  await header.locator('a[href="/en/films"]').click();
+  await expect(page).toHaveURL(/\/en\/films\?country=France&decade=1960$/);
 });
 
 test("en OG image renders as PNG", async ({ page, request }) => {

@@ -7,6 +7,7 @@ import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
 import { getHomeData, posterOf } from "@/db/queries/public";
+import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
@@ -105,8 +106,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                 {featuredTitle}
               </h2>
               {featuredTheme && <p className="mt-2 text-ink-muted text-sm">{featuredTheme}</p>}
-              <p className="mt-3 font-display text-ink-muted text-xs tracking-eyebrow">
-                {featured.items.length} FILMS
+              <p className="mt-3 font-display text-ink-muted text-xs uppercase tracking-eyebrow">
+                {getDict(locale).filmCount(featured.items.length)}
               </p>
             </div>
           </Link>
