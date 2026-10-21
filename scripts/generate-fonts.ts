@@ -18,11 +18,15 @@
  * per-request penalty). Common characters thus share a small file every
  * page loads; rare ones sit in files only their pages pay for.
  *
- * Deterministic: rerunning without corpus changes must produce identical
- * bytes (and therefore identical content-hashed file names).
+ * Incremental: the buckets in the committed CSS are kept byte for byte
+ * (files are named by content hash, so their URLs and cache entries
+ * survive) and only glyphs they lack are cut into new buckets. Run with
+ * --repartition to re-optimise from scratch when the summary reports
+ * drift. Deterministic either way: rerunning without corpus changes
+ * produces identical bytes.
  *
- * Run: bun run fonts:generate   (regenerate whenever seed-data or public
- * UI copy changes — the coverage test fails until you do)
+ * Run: bun run fonts:generate [--repartition]   (whenever seed-data or
+ * public UI copy changes — the coverage test fails until you do)
  */
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -171,12 +175,38 @@ async function writeBucket(
   const text = String.fromCodePoint(...[...cps].sort((a, b) => a - b));
   const woff2: Buffer = await subsetFont(source, text, { targetFormat: "woff2" });
   const hash = createHash("sha256").update(woff2).digest("hex").slice(0, 10);
-  const file = `${weight}-${index}.${hash}.woff2`;
+  // Named by content alone, so a bucket that survives a regeneration
+  // keeps its URL — and its place in returning readers' caches.
+  const file = `${weight}-${hash}.woff2`;
   writeFileSync(join(root, PUBLIC_DIR, file), woff2);
   return { weight, index, cps, file, bytes: woff2.length, from };
 }
 
-async function buildWeight(weight: Weight, pages: FontPage[]): Promise<Bucket[]> {
+/** Buckets the committed CSS declares for a weight: the partition to keep. */
+function previousBuckets(weight: Weight): { cps: number[]; from?: string }[] {
+  let css: string;
+  try {
+    css = readFileSync(join(root, CSS_OUT), "utf8");
+  } catch {
+    return [];
+  }
+  const re =
+    /\/\* (\d+) · bucket \d+ · \d+ glyphs · \d+ B(?: · from ([^ ]+))? \*\/\s*@font-face \{([\s\S]*?)\}/g;
+  return [...css.matchAll(re)]
+    .filter((m) => Number(m[1]) === weight)
+    .map((m) => ({
+      cps: parseRange(/unicode-range:\s*([^;]+);/.exec(m[3])?.[1] ?? "").flatMap(([a, b]) =>
+        Array.from({ length: b - a + 1 }, (_, i) => a + i),
+      ),
+      from: m[2] ? `files/${m[2]}` : undefined,
+    }));
+}
+
+async function buildWeight(
+  weight: Weight,
+  pages: FontPage[],
+  repartition: boolean,
+): Promise<Bucket[]> {
   const source = readFileSync(join(root, SOURCES[weight]));
   const cmap = await cmapOf(source);
   const pageSets = pages.map(
@@ -189,8 +219,25 @@ async function buildWeight(weight: Weight, pages: FontPage[]): Promise<Bucket[]>
   for (const s of pageSets) for (const cp of s) freq.set(cp, (freq.get(cp) ?? 0) + 1);
   const ranked = [...freq.keys()].sort((a, b) => (freq.get(b) ?? 0) - (freq.get(a) ?? 0) || a - b);
 
+  // Incremental by default: the committed buckets stay exactly as they
+  // are (same bytes, same URLs) and only glyphs they lack are partitioned
+  // into new buckets. A UI string no longer re-cuts — and re-downloads —
+  // the whole set. --repartition starts from scratch.
+  const previous = repartition ? [] : previousBuckets(weight);
+  const kept = previous.filter((b) => !b.from);
+  const covered = new Set(kept.flatMap((b) => b.cps));
+  const fresh = ranked.filter((cp) => !covered.has(cp));
+  stats[weight] = {
+    stale: [...covered].filter((cp) => !freq.has(cp)).length,
+    fresh: fresh.length,
+    total: ranked.length,
+  };
+
   const buckets: Bucket[] = [];
-  for (const cps of partition(ranked, pageSets)) {
+  for (const cps of [
+    ...kept.map((b) => b.cps),
+    ...(fresh.length ? partition(fresh, pageSets) : []),
+  ]) {
     buckets.push(await writeBucket(weight, buckets.length, source, cps));
   }
 
@@ -203,8 +250,16 @@ async function buildWeight(weight: Weight, pages: FontPage[]): Promise<Bucket[]>
     pages.flatMap((p) => [...glyphCodePoints(weight === 400 ? p.regular : p.bold)]),
   );
   const faces = fontsourceFaces(weight);
+  const keptExtras = previous.filter((b) => b.from);
+  for (const b of keptExtras) {
+    const extra = readFileSync(join(root, FONTSOURCE_DIR, b.from as string));
+    buckets.push(await writeBucket(weight, buckets.length, extra, b.cps, b.from));
+  }
+  const extraCovered = new Set(keptExtras.flatMap((b) => b.cps));
   const byFile = new Map<string, number[]>();
-  for (const cp of [...needed].filter((c) => !cmap.has(c)).sort((a, b) => a - b)) {
+  for (const cp of [...needed]
+    .filter((c) => !cmap.has(c) && !extraCovered.has(c))
+    .sort((a, b) => a - b)) {
     const face = faces.find((f) => f.ranges.some(([a, b]) => cp >= a && cp <= b));
     if (face) byFile.set(face.file, [...(byFile.get(face.file) ?? []), cp]);
   }
@@ -218,12 +273,17 @@ async function buildWeight(weight: Weight, pages: FontPage[]): Promise<Bucket[]>
   return buckets;
 }
 
+const repartition = process.argv.includes("--repartition");
+const stats: Partial<Record<Weight, { stale: number; fresh: number; total: number }>> = {};
 const pages = fontPages(root);
 rmSync(join(root, PUBLIC_DIR), { recursive: true, force: true });
 mkdirSync(join(root, PUBLIC_DIR), { recursive: true });
 mkdirSync(join(root, "src/assets/fonts"), { recursive: true });
 
-const all = [...(await buildWeight(400, pages)), ...(await buildWeight(700, pages))];
+const all = [
+  ...(await buildWeight(400, pages, repartition)),
+  ...(await buildWeight(700, pages, repartition)),
+];
 
 const faces = all.map(
   (
@@ -276,6 +336,18 @@ for (const w of [400, 700] as const) {
     `${w}: ${bs.length} buckets, ${bs.reduce((n, b) => n + b.cps.length, 0)} glyphs, ` +
       `${Math.round(bs.reduce((n, b) => n + b.bytes, 0) / 1024)} KB — ` +
       bs.map((b) => `${b.cps.length}g/${Math.round(b.bytes / 1024)}KB`).join(", "),
+  );
+}
+
+// Incremental runs drift from the optimum as glyphs come and go; say
+// when a full re-cut is worth the one-time cache miss.
+for (const w of [400, 700] as const) {
+  const st = stats[w];
+  if (!st || repartition) continue;
+  const drift = (st.stale + st.fresh) / Math.max(1, st.total);
+  console.log(
+    `${w}: kept the committed buckets; ${st.fresh} new glyphs, ${st.stale} no longer used` +
+      (drift > 0.15 ? " — over 15% drift, consider --repartition" : ""),
   );
 }
 
