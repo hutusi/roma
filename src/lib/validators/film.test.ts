@@ -6,6 +6,7 @@ import {
   filmFormSchema,
   INTRODUCTION_MAX,
   parseCountries,
+  parseTmdbId,
   publishEnProblems,
   publishProblems,
   watchLinkSchema,
@@ -221,5 +222,19 @@ describe("watchLinkSchema", () => {
 
   test("rejects unknown regions", () => {
     expect(watchLinkSchema.safeParse({ platform: "CC", region: "JP" }).success).toBe(false);
+  });
+});
+
+describe("parseTmdbId", () => {
+  test("takes the bare id or a pasted film page URL", () => {
+    expect(parseTmdbId(" 422 ")).toBe("422");
+    expect(parseTmdbId("https://www.themoviedb.org/movie/422-8-1-2")).toBe("422");
+    expect(parseTmdbId("themoviedb.org/movie/422?language=zh-CN")).toBe("422");
+  });
+
+  test("refuses anything else", () => {
+    for (const bad of ["", "abc", "tt0056801", "https://www.themoviedb.org/tv/1399", "42a"]) {
+      expect(parseTmdbId(bad)).toBeNull();
+    }
   });
 });

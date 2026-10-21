@@ -82,9 +82,12 @@ export function InviteControls({
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  // Set when the clipboard refuses (insecure origin, denied permission):
+  // the link is shown, selected, for a manual copy — not in a prompt().
+  const [manualUrl, setManualUrl] = useState<string | null>(null);
 
   return (
-    <span className="flex gap-3 text-xs">
+    <span className="flex flex-wrap items-center gap-3 text-xs">
       {active && (
         <button
           type="button"
@@ -93,14 +96,27 @@ export function InviteControls({
             const url = `${window.location.origin}${localePath("zh", `/invite/${token}`)}`;
             try {
               await navigator.clipboard.writeText(url);
+              setManualUrl(null);
               toast.success("链接已复制");
             } catch {
-              window.prompt("复制失败，请手动复制：", url);
+              setManualUrl(url);
+              toast.message("无法自动复制，请手动复制显示的链接");
             }
           }}
         >
           复制链接
         </button>
+      )}
+      {active && manualUrl && (
+        <input
+          readOnly
+          value={manualUrl}
+          aria-label="邀请链接"
+          // biome-ignore lint/a11y/noAutofocus: shown in response to the click, to be copied at once.
+          autoFocus
+          onFocus={(e) => e.currentTarget.select()}
+          className="h-7 w-64 border border-line-strong bg-transparent px-2"
+        />
       )}
       {!accepted && (
         <ConfirmButton

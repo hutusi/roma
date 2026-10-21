@@ -196,3 +196,13 @@ export function parseCountries(input: string | undefined): string[] {
     .map((s) => s.trim())
     .filter(Boolean);
 }
+
+/**
+ * The TMDB id in what an editor typed: the number itself, or a pasted
+ * film page URL (https://www.themoviedb.org/movie/422-8-1-2 → "422").
+ */
+export function parseTmdbId(input: string): string | null {
+  const value = input.trim();
+  if (/^\d+$/.test(value)) return value;
+  return value.match(/themoviedb\.org\/movie\/(\d+)/)?.[1] ?? null;
+}

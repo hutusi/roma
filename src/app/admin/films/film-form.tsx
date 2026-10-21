@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { type FilmFormValues, filmFormSchema } from "@/lib/validators/film";
+import { type FilmFormValues, filmFormSchema, parseTmdbId } from "@/lib/validators/film";
 
 export type PersonOption = {
   id: string;
@@ -129,49 +129,37 @@ export function FilmForm({
   return (
     <form id="film-form" onSubmit={onSubmit} className="max-w-3xl space-y-6">
       {tmdbEnabled && !filmId && (
-        <div className="border border-line bg-card p-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={async () => {
-              const id = window.prompt("TMDB 影片 ID（数字）");
-              if (!id) return;
-              const result = await callAction(() => importFromTmdb(id));
-              if (!result.ok) {
-                notifyActionError(result.error);
-                return;
-              }
-              const d = result.data;
-              reset({
-                ...getValues(),
-                titleZh: d.titleZh ?? getValues("titleZh"),
-                titleZhHk: d.titleZhHk ?? "",
-                titleZhTw: d.titleZhTw ?? "",
-                titleOriginal: d.titleOriginal,
-                titleEn: d.titleEn ?? "",
-                year: d.year ?? getValues("year"),
-                runtimeMinutes: d.runtimeMinutes ?? "",
-                countries: d.countries,
-                tmdbId: id.trim(),
-                imdbId: d.imdbId ?? "",
-                cast: d.cast.map((m) => ({
-                  name: m.name,
-                  nameZh: "",
-                  character: m.character ?? "",
-                  characterZh: m.characterZh ?? "",
-                  personId: "",
-                })),
-              });
-              toast.success("已从 TMDB 预填，请核对并补写影片介绍");
-            }}
-          >
-            从 TMDB 导入元数据
-          </Button>
-          <span className="ml-3 text-ink-muted text-xs">
-            仅预填资料，不导入图片；介绍与札记始终手写。
-          </span>
-        </div>
+        <TmdbImport
+          onImport={async (id) => {
+            const result = await callAction(() => importFromTmdb(id));
+            if (!result.ok) {
+              notifyActionError(result.error);
+              return;
+            }
+            const d = result.data;
+            reset({
+              ...getValues(),
+              titleZh: d.titleZh ?? getValues("titleZh"),
+              titleZhHk: d.titleZhHk ?? "",
+              titleZhTw: d.titleZhTw ?? "",
+              titleOriginal: d.titleOriginal,
+              titleEn: d.titleEn ?? "",
+              year: d.year ?? getValues("year"),
+              runtimeMinutes: d.runtimeMinutes ?? "",
+              countries: d.countries,
+              tmdbId: id,
+              imdbId: d.imdbId ?? "",
+              cast: d.cast.map((m) => ({
+                name: m.name,
+                nameZh: "",
+                character: m.character ?? "",
+                characterZh: m.characterZh ?? "",
+                personId: "",
+              })),
+            });
+            toast.success("已从 TMDB 预填，请核对并补写影片介绍");
+          }}
+        />
       )}
       <Section title="译名与原名">
         <div className="grid gap-4 sm:grid-cols-2">
@@ -514,5 +502,62 @@ export function FilmForm({
 
       <SaveBar formId="film-form" dirty={isDirty} submitting={submitting} savedAt={savedAt} />
     </form>
+  );
+}
+
+/**
+ * Prefill from TMDB, inline. It was a window.prompt with no room to say
+ * what it wanted, no pending state while the lookup ran, and nothing
+ * when the id was wrong.
+ */
+function TmdbImport({ onImport }: { onImport: (id: string) => Promise<void> }) {
+  const [input, setInput] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const run = async () => {
+    const id = parseTmdbId(input);
+    if (!id) {
+      setError("填 TMDB 影片 ID（数字），或直接粘贴影片页链接");
+      return;
+    }
+    setPending(true);
+    try {
+      await onImport(id);
+    } finally {
+      setPending(false);
+    }
+  };
+  return (
+    <div className="space-y-2 border border-line bg-card p-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <Input
+          aria-label="TMDB 影片 ID 或链接"
+          placeholder="TMDB 影片 ID 或链接"
+          className="h-8 w-56"
+          value={input}
+          aria-invalid={error ? true : undefined}
+          onChange={(e) => {
+            setInput(e.target.value);
+            setError(null);
+          }}
+          // Enter imports; it must not submit the film form around it.
+          onKeyDown={(e) => {
+            if (e.key !== "Enter") return;
+            e.preventDefault();
+            void run();
+          }}
+        />
+        <Button type="button" variant="outline" size="sm" disabled={pending} onClick={run}>
+          {pending ? "导入中…" : "从 TMDB 导入元数据"}
+        </Button>
+      </div>
+      {error ? (
+        <p role="alert" className="text-destructive text-xs">
+          {error}
+        </p>
+      ) : (
+        <p className="text-ink-muted text-xs">仅预填资料，不导入图片；介绍与札记始终手写。</p>
+      )}
+    </div>
   );
 }
