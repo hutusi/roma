@@ -30,8 +30,8 @@ export async function generateMetadata({
 export default async function AboutPage({ params }: { params: Promise<{ lang: string }> }) {
   const locale = parseLocale((await params).lang);
   return (
-    <article className="mx-auto max-w-[70ch] animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow="About" title={HEADING[locale]} />
+    <article className="mx-auto max-w-measure animate-fade-up px-6 pt-16">
+      <TitleCard as="h1" eyebrow="About" title={HEADING[locale]} />
       {locale === "en" ? <AboutEn /> : <AboutZh />}
     </article>
   );

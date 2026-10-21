@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/seo/json-ld";
+import { ButtonLink } from "@/components/site/button-link";
 import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
@@ -70,17 +71,14 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <section className="relative overflow-hidden border-line border-b bg-paper">
         <Grain />
         <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 py-24 text-center sm:py-32">
-          <p className="font-display text-ink-muted text-sm uppercase tracking-[0.4em]">
+          <p className="font-display text-ink-muted text-sm uppercase tracking-eyebrow">
             Babuban · 8½
           </p>
-          <h1 className="font-bold text-5xl tracking-[0.25em] sm:text-6xl">八部半</h1>
+          <h1 className="font-bold text-5xl tracking-label sm:text-6xl">八部半</h1>
           <p className={`${t.taglineWidth} text-ink-muted text-lg leading-[1.9]`}>{t.tagline}</p>
-          <Link
-            href={localePath(locale, "/lists")}
-            className="mt-4 border border-ink px-8 py-3 text-sm tracking-[0.3em] transition-colors hover:border-brand hover:text-brand"
-          >
+          <ButtonLink href={localePath(locale, "/lists")} className="mt-4">
             {t.browseCta}
-          </Link>
+          </ButtonLink>
         </div>
       </section>
 
@@ -103,11 +101,11 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
               </div>
             )}
             <div className="p-6 text-center">
-              <h2 className="font-bold text-xl tracking-[0.1em] transition-colors group-hover:text-brand">
+              <h2 className="font-bold text-xl tracking-title transition-colors group-hover:text-brand">
                 {featuredTitle}
               </h2>
               {featuredTheme && <p className="mt-2 text-ink-muted text-sm">{featuredTheme}</p>}
-              <p className="mt-3 font-display text-ink-muted text-xs tracking-[0.3em]">
+              <p className="mt-3 font-display text-ink-muted text-xs tracking-eyebrow">
                 {featured.items.length} FILMS
               </p>
             </div>
@@ -116,7 +114,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             <p className="mt-4 text-center">
               <Link
                 href={localePath(locale, "/lists")}
-                className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
+                className="text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
               >
                 {t.allListsCta}
               </Link>

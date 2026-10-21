@@ -29,8 +29,8 @@ export function ListPage({
 
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
-      <TitleCard eyebrow="Curated List" title={title} />
-      {theme && <p className="mt-4 text-center text-ink-muted text-sm tracking-[0.2em]">{theme}</p>}
+      <TitleCard as="h1" eyebrow="Curated List" title={title} />
+      {theme && <p className="mt-4 text-center text-ink-muted text-sm tracking-label">{theme}</p>}
       {list.status === "published" && (
         <p className="mt-3 text-center">
           <LocaleSwitch locale={locale} path={`/list/${list.slug}`} />
@@ -50,7 +50,7 @@ export function ListPage({
         </div>
       )}
 
-      {intro && <TiptapContent doc={intro} className="mx-auto mt-10 max-w-[70ch]" />}
+      {intro && <TiptapContent doc={intro} className="mx-auto mt-10 max-w-measure" />}
 
       <ol className="mt-14 space-y-12 pb-4">
         {list.items.map((item, index) => {
@@ -80,7 +80,7 @@ export function ListPage({
                 imageUrl={poster?.url}
                 imageAlt={poster?.alt}
               />
-              {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-[16px]" />}
+              {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-base" />}
             </li>
           );
         })}

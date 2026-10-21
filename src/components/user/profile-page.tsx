@@ -75,7 +75,7 @@ export async function ProfilePage({
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow="Profile" title={user.name} />
+      <TitleCard as="h1" eyebrow="Profile" title={user.name} />
       <p className="mt-3 text-center font-display text-ink-muted text-sm">@{user.username}</p>
 
       <nav className="mt-10 flex justify-center gap-6 border-line border-b pb-3 text-sm">
@@ -85,8 +85,8 @@ export async function ProfilePage({
             href={localePath(locale, `/u/${username}?tab=${key}`)}
             className={
               tab === key
-                ? "text-brand tracking-[0.2em]"
-                : "text-ink-muted tracking-[0.2em] transition-colors hover:text-brand"
+                ? "text-brand tracking-label"
+                : "text-ink-muted tracking-label transition-colors hover:text-brand"
             }
           >
             {t.tabs[key]}
@@ -143,7 +143,7 @@ export async function ProfilePage({
                   <span className="ml-3 text-ink-muted text-sm">{list.description}</span>
                 )}
               </span>
-              <span className="font-display text-ink-muted text-xs tracking-[0.3em]">
+              <span className="font-display text-ink-muted text-xs tracking-eyebrow">
                 {list.items.filter((i) => i.film.status === "published").length} FILMS
               </span>
             </Link>

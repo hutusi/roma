@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AcademyFrame } from "@/components/site/academy-frame";
 import { LocaleSwitch } from "@/components/site/locale-switch";
-import { TitleCard } from "@/components/site/title-card";
+import { SectionHeading, TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
 import { heroOf, type PublicFilm } from "@/db/queries/public";
 import { countryToEn } from "@/i18n/countries";
@@ -10,14 +10,14 @@ import { type Locale, localePath } from "@/i18n/locales";
 import { externalLinks } from "@/lib/external-ids";
 import { personPath } from "@/lib/routes";
 
-/** Latin eyebrows are locale-neutral; zh pairs them with a zh title, en drops them. */
+/**
+ * Latin eyebrows are locale-neutral; zh pairs them with a zh title, en
+ * drops them. Only the prose sections get a title card — the short
+ * reference sections below them take the lighter SectionHeading.
+ */
 const EYEBROWS = {
   introduction: "Introduction",
   editorialNote: "Editorial Note",
-  titles: "Titles",
-  cast: "Cast",
-  watch: "Where to Watch",
-  relatedLists: "Curated Lists",
 };
 
 /**
@@ -103,9 +103,9 @@ export function FilmPage({
       )}
 
       <header className="mt-10 text-center">
-        <h1 className="font-bold text-4xl tracking-[0.15em]">{displayTitle}</h1>
+        <h1 className="font-bold text-4xl tracking-title">{displayTitle}</h1>
         {subtitle && <p className="mt-3 font-display text-ink-muted text-lg">{subtitle}</p>}
-        <p className="mt-4 text-ink-muted text-sm tracking-[0.2em]">{facts.join(" · ")}</p>
+        <p className="mt-4 text-ink-muted text-sm tracking-label">{facts.join(" · ")}</p>
         {directorNames.length > 0 && (
           <p className="mt-2 text-ink-muted text-sm">
             {dict.directedBy}
@@ -129,7 +129,7 @@ export function FilmPage({
               <Link
                 key={t.slug}
                 href={localePath(locale, `/films?tag=${t.slug}`)}
-                className="border border-line px-2 py-0.5 text-ink-muted text-xs tracking-[0.15em] transition-colors hover:border-brand hover:text-brand"
+                className="border border-line px-2 py-0.5 text-ink-muted text-xs tracking-title transition-colors hover:border-brand hover:text-brand"
               >
                 {t.label}
               </Link>
@@ -147,9 +147,7 @@ export function FilmPage({
       {introduction && (
         <section className="mt-14">
           <TitleCard eyebrow={eyebrow("introduction")} title={dict.introduction} />
-          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
-            {introduction}
-          </p>
+          <p className="mx-auto mt-8 max-w-measure text-prose tracking-body">{introduction}</p>
         </section>
       )}
 
@@ -162,32 +160,30 @@ export function FilmPage({
       {editorialNote && (
         <section className="mt-14">
           <TitleCard eyebrow={eyebrow("editorialNote")} title={dict.editorialNote} />
-          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
-            {editorialNote}
-          </p>
+          <p className="mx-auto mt-8 max-w-measure text-prose tracking-body">{editorialNote}</p>
         </section>
       )}
 
       {essay && (
         <section className="mt-14">
-          <TiptapContent doc={essay} className="mx-auto max-w-[70ch]" />
+          <TiptapContent doc={essay} className="mx-auto max-w-measure" />
         </section>
       )}
 
       {translations.length > 1 && (
         <section className="mt-14">
-          <TitleCard eyebrow={eyebrow("titles")} title={dict.titles} />
+          <SectionHeading title={dict.titles} />
           <dl className="mx-auto mt-8 max-w-md">
             {translations.map((t) => (
               <div
                 key={t.label}
-                className="flex justify-between border-line border-b py-2.5 text-[15px]"
+                className="flex justify-between border-line border-b py-2.5 text-ui"
               >
                 <dt className="text-ink-muted">{t.label}</dt>
                 <dd>{t.value}</dd>
               </div>
             ))}
-            <div className="flex justify-between py-2.5 text-[15px]">
+            <div className="flex justify-between py-2.5 text-ui">
               <dt className="text-ink-muted">{dict.titleLabels.original}</dt>
               <dd className="font-display">{film.titleOriginal}</dd>
             </div>
@@ -197,8 +193,8 @@ export function FilmPage({
 
       {film.cast.length > 0 && (
         <section className="mt-14">
-          <TitleCard eyebrow={eyebrow("cast")} title={dict.cast} />
-          <ul className="mx-auto mt-8 max-w-md space-y-2 text-[15px]">
+          <SectionHeading title={dict.cast} />
+          <ul className="mx-auto mt-8 max-w-md space-y-2 text-ui">
             {film.cast.slice(0, 10).map((member) => {
               // Same gate as the directedBy line: zh-published links even
               // on /en, where an en-pending person resolves to the
@@ -236,11 +232,11 @@ export function FilmPage({
 
       {watchByRegion.length > 0 && (
         <section className="mt-14">
-          <TitleCard eyebrow={eyebrow("watch")} title={dict.watch} />
+          <SectionHeading title={dict.watch} />
           <div className="mx-auto mt-8 max-w-md space-y-4">
             {watchByRegion.map(([region, links]) => (
               <div key={region}>
-                <p className="text-ink-muted text-sm tracking-[0.2em]">
+                <p className="text-ink-muted text-sm tracking-label">
                   {dict.regions[region as keyof typeof dict.regions] ?? region}
                 </p>
                 <ul className="mt-1 space-y-1">
@@ -249,7 +245,7 @@ export function FilmPage({
                     return (
                       <li
                         key={link.id}
-                        className="flex justify-between border-line border-b py-1.5 text-[15px]"
+                        className="flex justify-between border-line border-b py-1.5 text-ui"
                       >
                         {link.url ? (
                           <a
@@ -306,7 +302,7 @@ export function FilmPage({
 
       {film.relatedLists.length > 0 && (
         <section className="mt-14 pb-4">
-          <TitleCard eyebrow={eyebrow("relatedLists")} title={dict.relatedLists} />
+          <SectionHeading title={dict.relatedLists} />
           <ul className="mx-auto mt-8 max-w-md space-y-2">
             {film.relatedLists.map((list) => {
               const listTitle = en ? (list.titleEn ?? list.title) : list.title;

@@ -60,7 +60,7 @@ export default async function FilmsIndexPage({ params }: { params: Promise<{ lan
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow={t.eyebrow} title={t.title} />
+      <TitleCard as="h1" eyebrow={t.eyebrow} title={t.title} />
       <p className="mx-auto mt-6 max-w-[60ch] text-center text-ink-muted">{t.intro}</p>
 
       {/* The fallback is the full catalogue, not a spinner: it is what

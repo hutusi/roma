@@ -46,7 +46,7 @@ export default async function ListsIndexPage({ params }: { params: Promise<{ lan
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow={t.eyebrow} title={t.title} />
+      <TitleCard as="h1" eyebrow={t.eyebrow} title={t.title} />
       <p className="mx-auto mt-6 max-w-[60ch] text-center text-ink-muted">{t.intro}</p>
       <div className="mt-12 space-y-8 pb-4">
         {lists.map((list) => {
@@ -70,11 +70,11 @@ export default async function ListsIndexPage({ params }: { params: Promise<{ lan
                 </div>
               )}
               <div className="p-6 text-center">
-                <h2 className="font-bold text-xl tracking-[0.1em] transition-colors group-hover:text-brand">
+                <h2 className="font-bold text-xl tracking-title transition-colors group-hover:text-brand">
                   {title}
                 </h2>
                 {theme && <p className="mt-2 text-ink-muted text-sm">{theme}</p>}
-                <p className="mt-3 font-display text-ink-muted text-xs tracking-[0.3em]">
+                <p className="mt-3 font-display text-ink-muted text-xs tracking-eyebrow">
                   {list.items.length} FILMS
                 </p>
               </div>

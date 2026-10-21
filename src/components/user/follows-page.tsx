@@ -42,7 +42,7 @@ export async function FollowsPage({ locale = "zh" }: { locale?: Locale }) {
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow="Following" title={t.title} />
+      <TitleCard as="h1" eyebrow="Following" title={t.title} />
       <div className="mt-10 space-y-6 pb-8">
         {lists.map((list) => {
           const listTitle = en ? (list.titleEn ?? list.title) : list.title;
@@ -66,11 +66,11 @@ export async function FollowsPage({ locale = "zh" }: { locale?: Locale }) {
                 </div>
               )}
               <div className="p-5 text-center">
-                <h2 className="font-bold tracking-[0.1em] transition-colors group-hover:text-brand">
+                <h2 className="font-bold tracking-title transition-colors group-hover:text-brand">
                   {listTitle}
                 </h2>
                 {listTheme && <p className="mt-1.5 text-ink-muted text-sm">{listTheme}</p>}
-                <p className="mt-2 font-display text-ink-muted text-xs tracking-[0.3em]">
+                <p className="mt-2 font-display text-ink-muted text-xs tracking-eyebrow">
                   {list.items.length} FILMS
                 </p>
               </div>

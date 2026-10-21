@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ButtonLink } from "@/components/site/button-link";
 import { localePath } from "@/i18n/locales";
 
 /**
@@ -22,10 +23,10 @@ export function TranslationPending({
 }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-6 py-24 text-center">
-      <p className="font-display text-ink-muted text-sm uppercase tracking-[0.4em]">
+      <p className="font-display text-ink-muted text-sm uppercase tracking-eyebrow">
         Translation Pending
       </p>
-      <h1 className="mt-4 font-bold text-3xl tracking-[0.1em]">{title}</h1>
+      <h1 className="mt-4 font-bold text-3xl tracking-title">{title}</h1>
       {(subtitle || year) && (
         <p className="mt-3 font-display text-ink-muted">
           {subtitle}
@@ -37,15 +38,12 @@ export function TranslationPending({
         The English edition of this entry hasn&rsquo;t been written yet — Babuban translates its
         catalogue one essay at a time.
       </p>
-      <Link
-        href={zhHref}
-        className="mt-8 border border-ink px-8 py-3 text-sm tracking-[0.3em] transition-colors hover:border-brand hover:text-brand"
-      >
+      <ButtonLink href={zhHref} className="mt-8">
         Read the Chinese edition →
-      </Link>
+      </ButtonLink>
       <Link
         href={localePath("en", "/")}
-        className="mt-6 text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
+        className="mt-6 text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
       >
         Back to the home page
       </Link>

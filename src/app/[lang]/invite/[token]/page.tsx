@@ -34,7 +34,7 @@ export default async function InvitePage({
 
   return (
     <div className="mx-auto max-w-sm animate-fade-up px-6 pt-20">
-      <TitleCard eyebrow="Invitation" title="加入编辑部" />
+      <TitleCard as="h1" eyebrow="Invitation" title="加入编辑部" />
       {!invite || problem ? (
         <p className="mt-8 text-center text-ink-muted">{problem}</p>
       ) : (
