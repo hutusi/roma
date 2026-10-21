@@ -47,20 +47,43 @@ export function AdminIndexHeader({
   );
 }
 
+/** Builds an index URL from its params, dropping the empty ones. */
+export function indexHref(basePath: string, params: Record<string, string | undefined>): string {
+  const search = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) if (value) search.set(key, value);
+  const query = search.toString();
+  return query ? `${basePath}?${query}` : basePath;
+}
+
 export function AdminSearch({
   action,
   q,
   placeholder,
+  keep = {},
 }: {
   action: string;
   q?: string;
   placeholder: string;
+  /** Other filters a search should keep (a GET form sends only its fields). */
+  keep?: Record<string, string | undefined>;
 }) {
   return (
     <form className="mt-4 flex max-w-sm items-center gap-2" action={action}>
-      <Input name="q" placeholder={placeholder} defaultValue={q} aria-label={placeholder} />
+      <Input
+        name="q"
+        type="search"
+        placeholder={placeholder}
+        defaultValue={q}
+        aria-label={placeholder}
+      />
+      {Object.entries(keep).map(
+        ([name, value]) => value && <input key={name} type="hidden" name={name} value={value} />,
+      )}
       {q && (
-        <Link href={action} className="shrink-0 text-ink-muted text-sm hover:text-brand">
+        <Link
+          href={indexHref(action, keep)}
+          className="shrink-0 text-ink-muted text-sm hover:text-brand"
+        >
           清除
         </Link>
       )}
@@ -73,21 +96,19 @@ export function AdminPagination({
   page,
   total,
   q,
+  keep = {},
 }: {
   basePath: string;
   page: number;
   total: number;
   q?: string;
+  /** Other filters the page links should keep. */
+  keep?: Record<string, string | undefined>;
 }) {
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   if (pages === 1) return null;
-  const href = (p: number) => {
-    const params = new URLSearchParams();
-    if (q) params.set("q", q);
-    if (p > 1) params.set("page", String(p));
-    const query = params.toString();
-    return query ? `${basePath}?${query}` : basePath;
-  };
+  const href = (p: number) =>
+    indexHref(basePath, { ...keep, q, page: p > 1 ? String(p) : undefined });
   return (
     <nav aria-label="分页" className="mt-6 flex items-center gap-4 text-sm">
       {page > 1 ? (
