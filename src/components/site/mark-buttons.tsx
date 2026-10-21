@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTransition } from "react";
 import { setMark } from "@/actions/marks";
 import { notifyError } from "@/components/site/notify";
-import { type MarkStatus, setMeMark, useMe } from "@/components/site/use-me";
+import { invalidateMe, type MarkStatus, setMeMark, useMe } from "@/components/site/use-me";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { cn } from "@/lib/utils";
 
@@ -61,7 +61,10 @@ export function MarkButtons({
       const result = await setMark(filmId, next).catch(() => null);
       if (!result?.ok) {
         setMeMark(filmId, prev);
-        notifyError(labels.failed);
+        // An expired session re-reads the store, which swaps these
+        // buttons for the sign-in prompt — that is the feedback.
+        if (result?.error === "sessionExpired") invalidateMe();
+        else notifyError(labels.failed);
       }
     });
   };

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTransition } from "react";
 import { setFollow } from "@/actions/follows";
 import { notifyError } from "@/components/site/notify";
-import { setMeFollow, useMe } from "@/components/site/use-me";
+import { invalidateMe, setMeFollow, useMe } from "@/components/site/use-me";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { cn } from "@/lib/utils";
 
@@ -70,7 +70,8 @@ export function FollowButton({
           const result = await setFollow(listId, next).catch(() => null);
           if (!result?.ok) {
             setMeFollow(listId, !next);
-            notifyError(labels.failed);
+            if (result?.error === "sessionExpired") invalidateMe();
+            else notifyError(labels.failed);
           }
         });
       }}

@@ -1,56 +1,89 @@
 "use server";
 
-import { and, eq, max, sql } from "drizzle-orm";
+import { and, count, eq, max, sql } from "drizzle-orm";
+import { z } from "zod";
 import { db } from "@/db";
 import { type DbTransaction, lockFilm, lockUserList } from "@/db/locks";
 import { userListItems, userLists } from "@/db/schema";
-import type { Locale } from "@/i18n/locales";
-import { requireUser } from "@/lib/auth-guards";
+import { requireUserResult } from "@/lib/auth-guards";
+import { rowId, userListText } from "@/lib/validators/action-input";
 import { permutationProblem } from "@/lib/validators/ordering";
-import { type ActionResult, fail, isUniqueViolation, ok } from "./result";
+import {
+  type ActionResult,
+  fail,
+  failWith,
+  isForeignKeyViolation,
+  isUniqueViolation,
+  ok,
+} from "./result";
+
+/*
+ * Errors are codes the UI maps to its own copy (userList.errors in the
+ * dictionaries). The guards return "sessionExpired" instead of
+ * redirecting, so an owner mid-edit keeps what they typed.
+ */
 
 const TITLE_MAX = 60;
 const DESCRIPTION_MAX = 140;
+/** Generous for a reader's own lists; it bounds abuse, not use. */
+const LISTS_PER_USER_MAX = 100;
+const ITEMS_PER_LIST_MAX = 500;
 
-function validatedText(values: {
-  title: string;
-  description?: string;
-}): { title: string; description: string | null } | { error: string } {
-  const title = values.title.trim();
-  const description = values.description?.trim() || null;
+function validatedText(
+  values: unknown,
+): { title: string; description: string | null } | { error: string } {
+  const parsed = userListText.safeParse(values);
+  if (!parsed.success) return { error: "invalid" };
+  const title = parsed.data.title.trim();
+  const description = parsed.data.description?.trim() || null;
   if (!title) return { error: "titleRequired" };
   if (title.length > TITLE_MAX) return { error: "titleTooLong" };
   if (description && description.length > DESCRIPTION_MAX) return { error: "descriptionTooLong" };
   return { title, description };
 }
 
+const validId = (id: unknown) => rowId.safeParse(id).success;
+
 async function lockedOwnedList(tx: DbTransaction, listId: string, userId: string) {
   const list = await lockUserList(tx, listId);
   return list?.userId === userId ? list : null;
 }
 
-export async function createUserList(
-  values: { title: string; description?: string },
-  locale: Locale = "zh",
-): Promise<ActionResult<{ id: string }>> {
-  const session = await requireUser(locale);
+export async function createUserList(values: {
+  title: string;
+  description?: string;
+}): Promise<ActionResult<{ id: string }>> {
+  const guarded = await requireUserResult();
+  if (!guarded.ok) return fail(guarded.error);
   const parsed = validatedText(values);
   if ("error" in parsed) return fail(parsed.error);
-  const [created] = await db
-    .insert(userLists)
-    .values({ userId: session.user.id, ...parsed })
-    .returning({ id: userLists.id });
-  return ok({ id: created.id });
+  const userId = guarded.session.user.id;
+  try {
+    const [{ lists }] = await db
+      .select({ lists: count() })
+      .from(userLists)
+      .where(eq(userLists.userId, userId));
+    if (lists >= LISTS_PER_USER_MAX) return fail("tooManyLists");
+    const [created] = await db
+      .insert(userLists)
+      .values({ userId, ...parsed })
+      .returning({ id: userLists.id });
+    return ok({ id: created.id });
+  } catch (error) {
+    return failWith("unknown", error, "createUserList");
+  }
 }
 
 export async function updateUserList(
   listId: string,
   values: { title: string; description?: string },
-  locale: Locale = "zh",
 ): Promise<ActionResult> {
-  const session = await requireUser(locale);
+  const guarded = await requireUserResult();
+  if (!guarded.ok) return fail(guarded.error);
+  if (!validId(listId)) return fail("notFound");
   const parsed = validatedText(values);
   if ("error" in parsed) return fail(parsed.error);
+  const session = guarded.session;
   const updated = await db.transaction(async (tx) => {
     const list = await lockedOwnedList(tx, listId, session.user.id);
     if (!list) return false;
@@ -60,8 +93,11 @@ export async function updateUserList(
   return updated ? ok() : fail("notFound");
 }
 
-export async function deleteUserList(listId: string, locale: Locale = "zh"): Promise<ActionResult> {
-  const session = await requireUser(locale);
+export async function deleteUserList(listId: string): Promise<ActionResult> {
+  const guarded = await requireUserResult();
+  if (!guarded.ok) return fail(guarded.error);
+  if (!validId(listId)) return fail("notFound");
+  const session = guarded.session;
   const deleted = await db.transaction(async (tx) => {
     const list = await lockedOwnedList(tx, listId, session.user.id);
     if (!list) return false;
@@ -71,22 +107,23 @@ export async function deleteUserList(listId: string, locale: Locale = "zh"): Pro
   return deleted ? ok() : fail("notFound");
 }
 
-export async function addFilmToUserList(
-  listId: string,
-  filmId: string,
-  locale: Locale = "zh",
-): Promise<ActionResult> {
-  const session = await requireUser(locale);
+export async function addFilmToUserList(listId: string, filmId: string): Promise<ActionResult> {
+  const guarded = await requireUserResult();
+  if (!guarded.ok) return fail(guarded.error);
+  if (!validId(listId) || !validId(filmId)) return fail("notFound");
+  const session = guarded.session;
   try {
     const outcome = await db.transaction(async (tx) => {
+      // Only published films: a draft id is as good as unknown to a reader.
       const film = await lockFilm(tx, filmId);
-      if (!film) return "notFound";
+      if (film?.status !== "published") return "notFound";
       const list = await lockedOwnedList(tx, listId, session.user.id);
       if (!list) return "notFound";
-      const [{ maxPos }] = await tx
-        .select({ maxPos: max(userListItems.position) })
+      const [{ maxPos, items }] = await tx
+        .select({ maxPos: max(userListItems.position), items: count() })
         .from(userListItems)
         .where(eq(userListItems.listId, listId));
+      if (items >= ITEMS_PER_LIST_MAX) return "listFull";
       await tx.insert(userListItems).values({
         listId,
         filmId,
@@ -97,16 +134,16 @@ export async function addFilmToUserList(
     return outcome ? fail(outcome) : ok();
   } catch (error) {
     if (isUniqueViolation(error)) return fail("alreadyInList");
-    throw error;
+    if (isForeignKeyViolation(error)) return fail("notFound");
+    return failWith("unknown", error, "addFilmToUserList");
   }
 }
 
-export async function removeUserListItem(
-  listId: string,
-  itemId: string,
-  locale: Locale = "zh",
-): Promise<ActionResult> {
-  const session = await requireUser(locale);
+export async function removeUserListItem(listId: string, itemId: string): Promise<ActionResult> {
+  const guarded = await requireUserResult();
+  if (!guarded.ok) return fail(guarded.error);
+  if (!validId(listId) || !validId(itemId)) return fail("notFound");
+  const session = guarded.session;
   const outcome = await db.transaction(async (tx) => {
     const list = await lockedOwnedList(tx, listId, session.user.id);
     if (!list) return "notFound";
@@ -134,9 +171,14 @@ async function movePositionsOutOfRange(
 export async function reorderUserListItems(
   listId: string,
   orderedItemIds: string[],
-  locale: Locale = "zh",
 ): Promise<ActionResult> {
-  const session = await requireUser(locale);
+  const guarded = await requireUserResult();
+  if (!guarded.ok) return fail(guarded.error);
+  if (!validId(listId)) return fail("notFound");
+  if (!z.array(rowId).max(ITEMS_PER_LIST_MAX).safeParse(orderedItemIds).success) {
+    return fail("reorderInvalid");
+  }
+  const session = guarded.session;
   const outcome = await db.transaction(async (tx) => {
     const list = await lockedOwnedList(tx, listId, session.user.id);
     if (!list) return "notFound";

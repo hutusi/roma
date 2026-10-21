@@ -10,6 +10,7 @@ import {
   reorderUserListItems,
   updateUserList,
 } from "@/actions/user-lists";
+import { invalidateMe } from "@/components/site/use-me";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -61,7 +62,11 @@ export function OwnerPanel({
 }) {
   const router = useRouter();
   const en = locale === "en";
-  const msg = (code: string) => labels.errors[code as keyof typeof labels.errors] ?? code;
+  const msg = (code: string) => {
+    // The header still shows the reader as signed in; let it catch up.
+    if (code === "sessionExpired") invalidateMe();
+    return labels.errors[code as keyof typeof labels.errors] ?? labels.errors.unknown;
+  };
   const [items, setItems] = useState(initialItems);
   const [selectedFilm, setSelectedFilm] = useState("");
   const [editing, setEditing] = useState(false);
@@ -86,7 +91,7 @@ export function OwnerPanel({
   const remove = (item: Item) => {
     setRemoving(item.id);
     startTransition(async () => {
-      const result = await run(() => removeUserListItem(listId, item.id, locale));
+      const result = await run(() => removeUserListItem(listId, item.id));
       setRemoving(null);
       if (!result.ok) {
         toast.error(msg(result.error));
@@ -156,7 +161,7 @@ export function OwnerPanel({
                 <AlertDialogAction
                   onClick={() =>
                     startTransition(async () => {
-                      const result = await run(() => deleteUserList(listId, locale));
+                      const result = await run(() => deleteUserList(listId));
                       if (!result.ok) {
                         toast.error(msg(result.error));
                         return;
@@ -182,14 +187,10 @@ export function OwnerPanel({
             const form = new FormData(e.currentTarget);
             startTransition(async () => {
               const result = await run(() =>
-                updateUserList(
-                  listId,
-                  {
-                    title: String(form.get("title")),
-                    description: String(form.get("description") || ""),
-                  },
-                  locale,
-                ),
+                updateUserList(listId, {
+                  title: String(form.get("title")),
+                  description: String(form.get("description") || ""),
+                }),
               );
               if (!result.ok) {
                 toast.error(msg(result.error));
@@ -244,7 +245,7 @@ export function OwnerPanel({
           disabled={!selectedFilm || pending}
           onClick={() =>
             startTransition(async () => {
-              const result = await run(() => addFilmToUserList(listId, selectedFilm, locale));
+              const result = await run(() => addFilmToUserList(listId, selectedFilm));
               if (!result.ok) {
                 toast.error(msg(result.error));
                 return;
@@ -286,7 +287,6 @@ export function OwnerPanel({
                     reorderUserListItems(
                       listId,
                       next.map((item) => item.id),
-                      locale,
                     ),
                   );
                   if (!result.ok) {
