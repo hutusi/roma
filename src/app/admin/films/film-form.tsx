@@ -9,6 +9,7 @@ import { saveFilm } from "@/actions/films";
 import { importFromTmdb } from "@/actions/tmdb";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { useDirtyGuard } from "@/components/admin/dirty-guard";
+import { SaveBar } from "@/components/admin/save-bar";
 import {
   CeilingCounter,
   IntroCounter,
@@ -62,6 +63,7 @@ export function FilmForm({
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
   const {
     register,
     control,
@@ -96,6 +98,7 @@ export function FilmForm({
       revisionRef.current = result.data.revision;
       // Saved values become the new baseline, so the form reads clean.
       reset(values);
+      setSavedAt(new Date());
       toast.success("已保存");
       if (!filmId) router.push(`/admin/films/${result.data.id}`);
       router.refresh();
@@ -109,7 +112,7 @@ export function FilmForm({
     message ? <p className="text-destructive text-xs">{message}</p> : null;
 
   return (
-    <form onSubmit={onSubmit} className="max-w-3xl space-y-6 pb-24">
+    <form id="film-form" onSubmit={onSubmit} className="max-w-3xl space-y-6">
       {tmdbEnabled && !filmId && (
         <div className="border border-line bg-card p-3">
           <Button
@@ -494,13 +497,7 @@ export function FilmForm({
         </Button>
       </Section>
 
-      <div className="fixed inset-x-0 bottom-0 border-line border-t bg-paper/95 py-3 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-end gap-3 px-8">
-          <Button type="submit" disabled={submitting} className="tracking-label">
-            {submitting ? "保存中…" : "保存"}
-          </Button>
-        </div>
-      </div>
+      <SaveBar formId="film-form" dirty={isDirty} submitting={submitting} savedAt={savedAt} />
     </form>
   );
 }

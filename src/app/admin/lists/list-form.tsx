@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { saveListMeta } from "@/actions/lists";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { useDirtyGuard } from "@/components/admin/dirty-guard";
+import { SaveBar } from "@/components/admin/save-bar";
 import { type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { type ListFormValues, listFormSchema } from "@/lib/validators/list";
@@ -28,6 +28,7 @@ export function ListForm({
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
   const {
     register,
     control,
@@ -53,13 +54,14 @@ export function ListForm({
     revisionRef.current = result.data.revision;
     // Saved values become the new baseline, so the form reads clean.
     reset(values);
+    setSavedAt(new Date());
     toast.success("已保存");
     if (!listId) router.push(`/admin/lists/${result.data.id}`);
     router.refresh();
   });
 
   return (
-    <form onSubmit={onSubmit} className="max-w-3xl space-y-5">
+    <form id="list-form" onSubmit={onSubmit} className="max-w-3xl space-y-5">
       <div className="grid grid-cols-[2fr_1fr_auto] gap-4">
         <div className="space-y-1.5">
           <Label htmlFor="title">标题 *</Label>
@@ -126,9 +128,7 @@ export function ListForm({
           />
         </div>
       </section>
-      <Button type="submit" disabled={submitting} className="tracking-label">
-        {submitting ? "保存中…" : "保存"}
-      </Button>
+      <SaveBar formId="list-form" dirty={isDirty} submitting={submitting} savedAt={savedAt} />
     </form>
   );
 }

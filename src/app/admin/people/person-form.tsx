@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { savePerson } from "@/actions/people";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { useDirtyGuard } from "@/components/admin/dirty-guard";
+import { SaveBar } from "@/components/admin/save-bar";
 import { CeilingCounter, type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,6 +29,7 @@ export function PersonForm({
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
   const {
     register,
     control,
@@ -57,13 +58,14 @@ export function PersonForm({
     revisionRef.current = result.data.revision;
     // Saved values become the new baseline, so the form reads clean.
     reset(values);
+    setSavedAt(new Date());
     toast.success("已保存");
     if (!personId) router.push(`/admin/people/${result.data.id}`);
     router.refresh();
   });
 
   return (
-    <form onSubmit={onSubmit} className="max-w-3xl space-y-5">
+    <form id="person-form" onSubmit={onSubmit} className="max-w-3xl space-y-5">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <Label htmlFor="name">姓名（原文）*</Label>
@@ -161,9 +163,7 @@ export function PersonForm({
           />
         </div>
       </section>
-      <Button type="submit" disabled={submitting} className="tracking-label">
-        {submitting ? "保存中…" : "保存"}
-      </Button>
+      <SaveBar formId="person-form" dirty={isDirty} submitting={submitting} savedAt={savedAt} />
     </form>
   );
 }
