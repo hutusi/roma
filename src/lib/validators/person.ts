@@ -2,6 +2,13 @@ import { z } from "zod";
 import { codePointLength, EDITORIAL_NOTE_EN_MAX, EDITORIAL_NOTE_MAX, wordCount } from "./film";
 import { tiptapDocSchema } from "./prose";
 
+/**
+ * How much of 人物介绍 / bioEn becomes the page's meta description. The
+ * editor's counter marks the same line, so what an editor sees as "the
+ * part that shows in search results" is exactly what's emitted.
+ */
+export const BIO_SUMMARY_MAX = { zh: 120, en: 160 } as const;
+
 export const personFormSchema = z.object({
   slug: z
     .string()

@@ -43,26 +43,30 @@ export function ListForm({
   // Unsaved edits ask before navigation; a save in flight doesn't count.
   useDirtyGuard("list-form", isDirty && !submitting);
 
-  const onSubmit = handleSubmit(async (values) => {
-    setSubmitting(true);
-    const result = await callAction(() => saveListMeta(listId, values, revisionRef.current));
-    setSubmitting(false);
-    if (!result.ok) {
-      notifyActionError(result.error);
-      return;
-    }
-    revisionRef.current = result.data.revision;
-    // Saved values become the new baseline, so the form reads clean.
-    reset(values);
-    setSavedAt(new Date());
-    toast.success("已保存");
-    if (!listId) router.push(`/admin/lists/${result.data.id}`);
-    router.refresh();
-  });
+  const onSubmit = handleSubmit(
+    async (values) => {
+      setSubmitting(true);
+      const result = await callAction(() => saveListMeta(listId, values, revisionRef.current));
+      setSubmitting(false);
+      if (!result.ok) {
+        notifyActionError(result.error);
+        return;
+      }
+      revisionRef.current = result.data.revision;
+      // Saved values become the new baseline, so the form reads clean.
+      reset(values);
+      setSavedAt(new Date());
+      toast.success("已保存");
+      if (!listId) router.push(`/admin/lists/${result.data.id}`);
+      router.refresh();
+    },
+    // Same as the film form: a blocked submit must say so, not do nothing.
+    () => toast.error("表单有未通过校验的字段，请检查标红项"),
+  );
 
   return (
     <form id="list-form" onSubmit={onSubmit} className="max-w-3xl space-y-5">
-      <div className="grid grid-cols-[2fr_1fr_auto] gap-4">
+      <div className="grid gap-4 sm:grid-cols-[2fr_1fr_auto]">
         <div className="space-y-1.5">
           <Label htmlFor="title">标题 *</Label>
           <Input id="title" {...register("title")} />
@@ -103,7 +107,7 @@ export function ListForm({
         <p className="text-ink-muted text-xs">
           发布英文版需要英文标题；未翻译的影片在英文页链接到翻译占位页，并省略入选理由。
         </p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="titleEn">英文标题 · Title</Label>
             <Input id="titleEn" {...register("titleEn")} />

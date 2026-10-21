@@ -549,9 +549,10 @@ export function IntroCounter({ text }: { text: string }) {
   // introduction.trim(), so counting raw text let 200 leading spaces read as
   // in-range right up until submission rejected them.
   const len = codePointLength(text.trim());
-  const inRange = len >= INTRODUCTION_MIN && len <= INTRODUCTION_MAX;
+  // Empty is "not started", not an error: a new draft opened in red.
+  const ok = len === 0 || (len >= INTRODUCTION_MIN && len <= INTRODUCTION_MAX);
   return (
-    <p className={cn("text-right text-xs", inRange ? "text-ink-muted" : "text-destructive")}>
+    <p className={cn("text-right text-xs", ok ? "text-ink-muted" : "text-destructive")}>
       {len} / {INTRODUCTION_MIN}–{INTRODUCTION_MAX} 字
     </p>
   );
@@ -560,9 +561,9 @@ export function IntroCounter({ text }: { text: string }) {
 /** English introductions measure in words, not code points. */
 export function IntroCounterEn({ text }: { text: string }) {
   const words = wordCount(text.trim());
-  const inRange = words >= INTRODUCTION_EN_MIN && words <= INTRODUCTION_EN_MAX;
+  const ok = words === 0 || (words >= INTRODUCTION_EN_MIN && words <= INTRODUCTION_EN_MAX);
   return (
-    <p className={cn("text-right text-xs", inRange ? "text-ink-muted" : "text-destructive")}>
+    <p className={cn("text-right text-xs", ok ? "text-ink-muted" : "text-destructive")}>
       {words} / {INTRODUCTION_EN_MIN}–{INTRODUCTION_EN_MAX} 词
     </p>
   );
@@ -581,6 +582,24 @@ export function CeilingCounter({ text, en = false }: { text: string; en?: boolea
   return (
     <p className={cn("text-right text-xs", used <= max ? "text-ink-muted" : "text-destructive")}>
       {used > max ? `超出 ${used - max} ${unit}` : `${used} / ${max} ${unit}（选填）`}
+    </p>
+  );
+}
+
+/**
+ * 人物介绍 / bioEn — required, no hard cap, but its opening doubles as the
+ * meta description, so the counter marks where that cut falls instead of
+ * implying a limit. Counts what the slice counts (UTF-16 units).
+ */
+export function SummaryCounter({ text, max }: { text: string; max: number }) {
+  const len = text.trim().length;
+  return (
+    <p className="text-right text-ink-muted text-xs">
+      {len === 0
+        ? "发布前需填写"
+        : len <= max
+          ? `${len} 字符 · 全部用作摘要`
+          : `${len} 字符 · 摘要只取前 ${max} 字符`}
     </p>
   );
 }

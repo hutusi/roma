@@ -9,11 +9,16 @@ import { savePerson } from "@/actions/people";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
 import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { SaveBar } from "@/components/admin/save-bar";
-import { CeilingCounter, type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
+import {
+  CeilingCounter,
+  type MediaOption,
+  SummaryCounter,
+  TiptapEditor,
+} from "@/components/tiptap/editor";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { type PersonFormValues, personFormSchema } from "@/lib/validators/person";
+import { BIO_SUMMARY_MAX, type PersonFormValues, personFormSchema } from "@/lib/validators/person";
 
 export function PersonForm({
   personId,
@@ -46,27 +51,33 @@ export function PersonForm({
   useDirtyGuard("person-form", isDirty && !submitting);
   const note = watch("editorialNote") ?? "";
   const noteEn = watch("editorialNoteEn") ?? "";
+  const bio = watch("bio") ?? "";
+  const bioEn = watch("bioEn") ?? "";
 
-  const onSubmit = handleSubmit(async (values) => {
-    setSubmitting(true);
-    const result = await callAction(() => savePerson(personId, values, revisionRef.current));
-    setSubmitting(false);
-    if (!result.ok) {
-      notifyActionError(result.error);
-      return;
-    }
-    revisionRef.current = result.data.revision;
-    // Saved values become the new baseline, so the form reads clean.
-    reset(values);
-    setSavedAt(new Date());
-    toast.success("已保存");
-    if (!personId) router.push(`/admin/people/${result.data.id}`);
-    router.refresh();
-  });
+  const onSubmit = handleSubmit(
+    async (values) => {
+      setSubmitting(true);
+      const result = await callAction(() => savePerson(personId, values, revisionRef.current));
+      setSubmitting(false);
+      if (!result.ok) {
+        notifyActionError(result.error);
+        return;
+      }
+      revisionRef.current = result.data.revision;
+      // Saved values become the new baseline, so the form reads clean.
+      reset(values);
+      setSavedAt(new Date());
+      toast.success("已保存");
+      if (!personId) router.push(`/admin/people/${result.data.id}`);
+      router.refresh();
+    },
+    // Same as the film form: a blocked submit must say so, not do nothing.
+    () => toast.error("表单有未通过校验的字段，请检查标红项"),
+  );
 
   return (
     <form id="person-form" onSubmit={onSubmit} className="max-w-3xl space-y-5">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="name">姓名（原文）*</Label>
           <Input id="name" {...register("name")} />
@@ -102,6 +113,7 @@ export function PersonForm({
           字），所以不要写长——篇幅放在创作历程里。
         </p>
         <Textarea id="bio" rows={4} {...register("bio")} className="font-body" />
+        <SummaryCounter text={bio} max={BIO_SUMMARY_MAX.zh} />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="editorialNote">编辑札记（选填，至多 400 字）</Label>
@@ -139,6 +151,7 @@ export function PersonForm({
         <div className="space-y-1.5">
           <Label htmlFor="bioEn">英文介绍 · Introduction</Label>
           <Textarea id="bioEn" rows={4} {...register("bioEn")} />
+          <SummaryCounter text={bioEn} max={BIO_SUMMARY_MAX.en} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="editorialNoteEn">英文札记 · Editorial note（选填）</Label>

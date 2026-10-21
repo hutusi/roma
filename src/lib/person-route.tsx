@@ -14,6 +14,7 @@ import { parseLocale } from "@/i18n/params";
 import { type PersonUrlRole, personPath } from "@/lib/routes";
 import { seoMetadata } from "@/lib/seo";
 import { personJsonLd } from "@/lib/structured-data";
+import { BIO_SUMMARY_MAX } from "@/lib/validators/person";
 
 /**
  * Shared logic for the two person segments (/director, /actor). Each
@@ -49,8 +50,8 @@ export async function personPageMetadata(role: PersonUrlRole, params: Params): P
   return {
     title: en ? person.name : (person.nameZh ?? person.name),
     description: en
-      ? (person.bioEn?.slice(0, 160) ?? person.name)
-      : (person.bio?.slice(0, 120) ?? person.name),
+      ? (person.bioEn?.slice(0, BIO_SUMMARY_MAX.en) ?? person.name)
+      : (person.bio?.slice(0, BIO_SUMMARY_MAX.zh) ?? person.name),
     ...seoMetadata(locale, personPath(person), {
       en: en || person.statusEn === "published",
       ogType: "profile",

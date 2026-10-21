@@ -159,7 +159,7 @@ export function FilmForm({
         </div>
       )}
       <Section title="译名与原名">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="titleZh">大陆译名 *</Label>
             <Input id="titleZh" {...register("titleZh")} />
@@ -191,7 +191,7 @@ export function FilmForm({
       </Section>
 
       <Section title="基本信息">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-1.5">
             <Label htmlFor="year">年份 *</Label>
             <Input id="year" type="number" {...register("year")} />
@@ -217,7 +217,7 @@ export function FilmForm({
             </datalist>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="countries">国家/地区（顿号或逗号分隔）</Label>
             <Input id="countries" placeholder="意大利、法国" {...register("countries")} />
@@ -233,7 +233,7 @@ export function FilmForm({
             </label>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="restorationNote">修复版本（可选）</Label>
             <Input
@@ -318,7 +318,7 @@ export function FilmForm({
           只填 ID 本身，不贴链接。豆瓣与 IMDb 会显示在影片页；TMDB 用于唯一标识，Wikidata
           仅供搜索引擎。
         </p>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="space-y-1.5">
             <Label htmlFor="tmdbId">TMDB</Label>
             <Input id="tmdbId" placeholder="8329" {...register("tmdbId")} />
@@ -427,13 +427,26 @@ export function FilmForm({
       <Section title="演员表">
         {castArray.fields.map((field, i) => (
           <div key={field.id}>
-            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-2">
-              <Input placeholder="姓名（原文）" {...register(`cast.${i}.name`)} />
-              <Input placeholder="中文名" {...register(`cast.${i}.nameZh`)} />
-              <Input placeholder="角色（原文）" {...register(`cast.${i}.character`)} />
-              <Input placeholder="中文角色" {...register(`cast.${i}.characterZh`)} />
+            <div className="grid grid-cols-2 gap-2 border-line border-b pb-3 md:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] md:border-0 md:pb-0">
+              <Input
+                placeholder="姓名（原文）"
+                aria-label="姓名（原文）"
+                {...register(`cast.${i}.name`)}
+              />
+              <Input placeholder="中文名" aria-label="中文名" {...register(`cast.${i}.nameZh`)} />
+              <Input
+                placeholder="角色（原文）"
+                aria-label="角色（原文）"
+                {...register(`cast.${i}.character`)}
+              />
+              <Input
+                placeholder="中文角色"
+                aria-label="中文角色"
+                {...register(`cast.${i}.characterZh`)}
+              />
               <select
-                className="h-9 border border-input bg-transparent px-2 text-sm"
+                aria-label="关联人物"
+                className="h-9 border border-line-strong bg-transparent px-2 text-sm"
                 {...register(`cast.${i}.personId`)}
               >
                 <option value="">（不关联人物）</option>
@@ -464,10 +477,15 @@ export function FilmForm({
       <Section title="哪里能看">
         {linksArray.fields.map((field, i) => (
           <div key={field.id}>
-            <div className="grid grid-cols-[1fr_auto_2fr_1fr_1fr_auto] gap-2">
-              <Input placeholder="平台" {...register(`watchLinks.${i}.platform`)} />
+            <div className="grid grid-cols-2 gap-2 border-line border-b pb-3 md:grid-cols-[1fr_auto_2fr_1fr_1fr_auto] md:border-0 md:pb-0">
+              <Input
+                placeholder="平台"
+                aria-label="平台"
+                {...register(`watchLinks.${i}.platform`)}
+              />
               <select
-                className="h-9 border border-input bg-transparent px-2 text-sm"
+                aria-label="地区"
+                className="h-9 border border-line-strong bg-transparent px-2 text-sm"
                 {...register(`watchLinks.${i}.region`)}
               >
                 {REGIONS.map((r) => (
@@ -476,9 +494,17 @@ export function FilmForm({
                   </option>
                 ))}
               </select>
-              <Input placeholder="链接（可选）" {...register(`watchLinks.${i}.url`)} />
-              <Input placeholder="备注" {...register(`watchLinks.${i}.note`)} />
-              <Input placeholder="英文备注" {...register(`watchLinks.${i}.noteEn`)} />
+              <Input
+                placeholder="链接（可选）"
+                aria-label="链接（可选）"
+                {...register(`watchLinks.${i}.url`)}
+              />
+              <Input placeholder="备注" aria-label="备注" {...register(`watchLinks.${i}.note`)} />
+              <Input
+                placeholder="英文备注"
+                aria-label="英文备注"
+                {...register(`watchLinks.${i}.noteEn`)}
+              />
               <Button type="button" variant="ghost" onClick={() => linksArray.remove(i)}>
                 删除
               </Button>
