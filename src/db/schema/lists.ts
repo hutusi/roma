@@ -12,7 +12,7 @@ import {
 import { users } from "./auth";
 import { contentStatus } from "./enums";
 import { films } from "./films";
-import { createdAt, primaryId, updatedAt } from "./helpers";
+import { createdAt, primaryId, revision, updatedAt } from "./helpers";
 import { media } from "./media";
 import type { TiptapDoc } from "./types";
 
@@ -42,6 +42,7 @@ export const curatedLists = pgTable("curated_lists", {
   createdBy: text().references(() => users.id, { onDelete: "set null" }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
+  revision: revision(),
 });
 
 export const curatedListItems = pgTable(

@@ -1,6 +1,6 @@
 import { jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { contentStatus, personRole } from "./enums";
-import { createdAt, primaryId, updatedAt } from "./helpers";
+import { createdAt, primaryId, revision, updatedAt } from "./helpers";
 import type { TiptapDoc } from "./types";
 
 /** Curated people — directors and actors alike; one row per human. */
@@ -44,4 +44,5 @@ export const people = pgTable("people", {
   publishedEnAt: timestamp({ withTimezone: true }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
+  revision: revision(),
 });

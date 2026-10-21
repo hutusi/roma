@@ -10,7 +10,7 @@ import {
   unique,
 } from "drizzle-orm/pg-core";
 import { contentStatus } from "./enums";
-import { createdAt, primaryId, updatedAt } from "./helpers";
+import { createdAt, primaryId, revision, updatedAt } from "./helpers";
 import { people } from "./people";
 import type { TiptapDoc } from "./types";
 
@@ -85,6 +85,7 @@ export const films = pgTable(
     publishedEnAt: timestamp({ withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
+    revision: revision(),
   },
   (t) => [
     index("films_status_idx").on(t.status),
