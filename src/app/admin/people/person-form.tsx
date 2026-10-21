@@ -128,6 +128,7 @@ export function PersonForm({
               onChange={field.onChange}
               media={media}
               placeholder="从早期作品谈起…"
+              aria-label="创作历程"
             />
           )}
         />
@@ -158,6 +159,7 @@ export function PersonForm({
                 onChange={field.onChange}
                 media={media}
                 placeholder="Starting from the early work…"
+                aria-label="英文创作历程"
               />
             )}
           />

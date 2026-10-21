@@ -1,6 +1,4 @@
-import { desc } from "drizzle-orm";
-import { db } from "@/db";
-import { media } from "@/db/schema";
+import { getEditorMedia } from "@/db/queries/admin";
 import { requireEditor } from "@/lib/auth-guards";
 import { ListForm } from "../list-form";
 
@@ -8,11 +6,7 @@ export const metadata = { title: "新建片单" };
 
 export default async function NewListPage() {
   await requireEditor();
-  const mediaRows = await db
-    .select({ id: media.id, url: media.url, alt: media.alt })
-    .from(media)
-    .orderBy(desc(media.createdAt))
-    .limit(200);
+  const mediaRows = await getEditorMedia();
 
   return (
     <div>

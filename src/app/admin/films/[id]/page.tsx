@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
@@ -12,7 +12,8 @@ import { GuardedLink } from "@/components/admin/dirty-guard";
 import { EditorLinks } from "@/components/admin/editor-links";
 import { PublishReadiness } from "@/components/admin/publish-readiness";
 import { db } from "@/db";
-import { films, media, people, tags } from "@/db/schema";
+import { getEditorMedia } from "@/db/queries/admin";
+import { films, people, tags } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { publishEnProblems, publishProblems } from "@/lib/validators/film";
 import { FilmForm } from "../film-form";
@@ -52,11 +53,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
       .from(people)
       .orderBy(asc(people.name)),
     db.select({ id: tags.id, nameZh: tags.nameZh }).from(tags).orderBy(asc(tags.slug)),
-    db
-      .select({ id: media.id, url: media.url, alt: media.alt })
-      .from(media)
-      .orderBy(desc(media.createdAt))
-      .limit(200),
+    getEditorMedia(),
   ]);
 
   return (

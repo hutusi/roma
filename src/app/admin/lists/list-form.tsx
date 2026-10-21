@@ -93,6 +93,7 @@ export function ListForm({
               onChange={field.onChange}
               media={media}
               placeholder="这份片单为什么存在…"
+              aria-label="引言"
             />
           )}
         />
@@ -123,6 +124,7 @@ export function ListForm({
                 onChange={field.onChange}
                 media={media}
                 placeholder="Why this list exists…"
+                aria-label="英文引言"
               />
             )}
           />

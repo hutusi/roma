@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import {
   deleteList,
@@ -9,7 +9,8 @@ import {
 } from "@/actions/lists";
 import { EditorLinks } from "@/components/admin/editor-links";
 import { db } from "@/db";
-import { curatedLists, films, media } from "@/db/schema";
+import { getEditorMedia } from "@/db/queries/admin";
+import { curatedLists, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { PublishControls } from "../../films/publish-controls";
 import { ItemsPanel } from "../items-panel";
@@ -36,11 +37,7 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
       .select({ id: films.id, title: films.titleZh, year: films.year })
       .from(films)
       .orderBy(asc(films.year)),
-    db
-      .select({ id: media.id, url: media.url, alt: media.alt })
-      .from(media)
-      .orderBy(desc(media.createdAt))
-      .limit(200),
+    getEditorMedia(),
   ]);
 
   return (

@@ -382,6 +382,7 @@ export function FilmForm({
               onChange={field.onChange}
               media={media}
               placeholder="关于这部影片，还有更多想说的…"
+              aria-label="长文"
             />
           )}
         />
@@ -416,6 +417,7 @@ export function FilmForm({
                 onChange={field.onChange}
                 media={media}
                 placeholder="More to say about this film…"
+                aria-label="英文长文"
               />
             )}
           />

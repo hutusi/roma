@@ -176,6 +176,7 @@ export function ItemsPanel({
                     value={drafts[item.id] ?? item.reasoning}
                     onChange={(doc) => setDrafts((d) => ({ ...d, [item.id]: doc }))}
                     placeholder="这部影片为什么在这份片单里，为什么在这个位置…"
+                    aria-label="入选理由"
                   />
                   <Button
                     size="sm"
@@ -208,6 +209,7 @@ export function ItemsPanel({
                     value={draftsEn[item.id] ?? item.reasoningEn}
                     onChange={(doc) => setDraftsEn((d) => ({ ...d, [item.id]: doc }))}
                     placeholder="Why this film belongs here, in this position…"
+                    aria-label="英文入选理由"
                   />
                   <Button
                     size="sm"

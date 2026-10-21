@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import {
   deletePerson,
@@ -10,7 +10,8 @@ import {
 import { EditorLinks } from "@/components/admin/editor-links";
 import { PublishReadiness } from "@/components/admin/publish-readiness";
 import { db } from "@/db";
-import { films, media, people } from "@/db/schema";
+import { getEditorMedia } from "@/db/queries/admin";
+import { films, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { personPath } from "@/lib/routes";
 import { publishEnProblems, publishProblems } from "@/lib/validators/person";
@@ -44,11 +45,7 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
       .select({ id: films.id, title: films.titleZh, year: films.year })
       .from(films)
       .orderBy(asc(films.year)),
-    db
-      .select({ id: media.id, url: media.url, alt: media.alt })
-      .from(media)
-      .orderBy(desc(media.createdAt))
-      .limit(200),
+    getEditorMedia(),
   ]);
 
   return (
