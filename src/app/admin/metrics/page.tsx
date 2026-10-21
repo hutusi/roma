@@ -1,4 +1,4 @@
-import { getRumSummary } from "@/db/queries/rum";
+import { getRumByRoute, getRumSummary } from "@/db/queries/rum";
 import { requireAdmin } from "@/lib/auth-guards";
 
 export const metadata = { title: "性能监测" };
@@ -17,7 +17,10 @@ function formatValue(metric: string, value: number) {
 
 export default async function AdminMetricsPage() {
   await requireAdmin();
-  const summary = await getRumSummary(WINDOW_DAYS);
+  const [summary, byRoute] = await Promise.all([
+    getRumSummary(WINDOW_DAYS),
+    getRumByRoute(WINDOW_DAYS),
+  ]);
 
   // China segment first within each metric, ordered by Web Vital.
   const rows = summary.slice().sort((a, b) => {
@@ -67,6 +70,45 @@ export default async function AdminMetricsPage() {
             </tbody>
           </table>
         </div>
+      )}
+
+      {byRoute.length > 0 && (
+        <>
+          <h2 className="mt-10 font-bold">按页面类型（p75，所有地区）</h2>
+          <p className="mt-1 text-ink-muted text-sm">
+            同类页面合并为一行（如所有影片页为 /zh/film/[slug]），按 LCP 从慢到快排列。
+          </p>
+          <div className="mt-4 max-w-3xl overflow-x-auto">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="border-line border-b text-left text-ink-muted">
+                  <th className="py-2 pr-4 font-medium">页面</th>
+                  <th className="py-2 pr-4 text-right font-medium">样本</th>
+                  <th className="py-2 pr-4 text-right font-medium">LCP</th>
+                  <th className="py-2 pr-4 text-right font-medium">INP</th>
+                  <th className="py-2 text-right font-medium">CLS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {byRoute.map((r) => (
+                  <tr key={r.route} className="border-line/60 border-b">
+                    <td className="py-2 pr-4 font-mono text-xs">{r.route}</td>
+                    <td className="py-2 pr-4 text-right tabular-nums">{r.samples}</td>
+                    <td className="py-2 pr-4 text-right tabular-nums">
+                      {r.lcpP75 === null ? "—" : formatValue("LCP", r.lcpP75)}
+                    </td>
+                    <td className="py-2 pr-4 text-right tabular-nums">
+                      {r.inpP75 === null ? "—" : formatValue("INP", r.inpP75)}
+                    </td>
+                    <td className="py-2 text-right tabular-nums">
+                      {r.clsP75 === null ? "—" : formatValue("CLS", r.clsP75)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );
