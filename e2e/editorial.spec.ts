@@ -7,7 +7,7 @@ const INTRO_200 = "字".repeat(220);
 
 test.use({ storageState: "e2e/.auth/admin.json" });
 
-test("publish gate: short 介绍 blocked with count, then publish goes live without redeploy", async ({
+test("publish gate: short 介绍 holds publish with the reason, then publish goes live without redeploy", async ({
   page,
 }) => {
   await page.goto("/admin/films/new");
@@ -20,8 +20,9 @@ test("publish gate: short 介绍 blocked with count, then publish goes live with
   await page.click("button[type=submit]");
   await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
 
-  await page.getByRole("button", { name: "发布", exact: true }).click();
-  await expect(page.locator("[data-sonner-toast]", { hasText: "影片介绍需 200" })).toBeVisible();
+  // The gate shows before the click: publish waits, and says why.
+  await expect(page.getByRole("button", { name: "发布", exact: true })).toBeDisabled();
+  await expect(page.getByRole("listitem").filter({ hasText: "影片介绍需 200" })).toBeVisible();
 
   await page.locator('textarea[name="introduction"]').fill(INTRO_200);
   await page.getByRole("button", { name: /^保存/ }).click();

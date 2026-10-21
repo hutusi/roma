@@ -24,6 +24,7 @@ export function PublishControls({
   deleteConfirmText,
   unpublishConfirmText,
   afterDeleteHref,
+  problems = [],
 }: {
   status: "draft" | "published";
   label?: string;
@@ -34,6 +35,8 @@ export function PublishControls({
   /** Said before unpublishing — what readers lose, and any knock-on effect. */
   unpublishConfirmText?: string;
   afterDeleteHref?: string;
+  /** Unmet publish requirements (saved state); publishing waits until there are none. */
+  problems?: string[];
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -56,7 +59,12 @@ export function PublishControls({
         {status === "published" ? "已发布" : "草稿"}
       </Badge>
       {status === "draft" ? (
-        <Button size="sm" disabled={pending} onClick={() => run(onPublish, "已发布")}>
+        <Button
+          size="sm"
+          disabled={pending || problems.length > 0}
+          title={problems.length > 0 ? `尚不能发布：${problems.join("；")}` : undefined}
+          onClick={() => run(onPublish, "已发布")}
+        >
           {label ? `发布${label}` : "发布"}
         </Button>
       ) : (

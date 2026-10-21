@@ -9,9 +9,11 @@ import {
   unpublishFilmEn,
 } from "@/actions/films";
 import { GuardedLink } from "@/components/admin/dirty-guard";
+import { PublishReadiness } from "@/components/admin/publish-readiness";
 import { db } from "@/db";
 import { films, media, people, tags } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
+import { publishEnProblems, publishProblems } from "@/lib/validators/film";
 import { FilmForm } from "../film-form";
 import { PublishControls } from "../publish-controls";
 
@@ -31,6 +33,17 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
     },
   });
   if (!film) notFound();
+  // The publish gates, run on the saved row exactly as the actions run them.
+  const problems = publishProblems({
+    introduction: film.introduction,
+    editorialNote: film.editorialNote,
+    directorCount: film.filmDirectors.length,
+  });
+  const problemsEn = publishEnProblems({
+    titleEn: film.titleEn,
+    introductionEn: film.introductionEn,
+    editorialNoteEn: film.editorialNoteEn,
+  });
 
   const [personRows, tagRows, mediaRows] = await Promise.all([
     db
@@ -67,6 +80,7 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
           <PublishControls
             status={film.status}
             onPublish={publishFilm.bind(null, film.id)}
+            problems={problems}
             onUnpublish={unpublishFilm.bind(null, film.id)}
             onDelete={deleteFilm.bind(null, film.id)}
             deleteConfirmText={`《${film.titleZh}》将被永久删除，不可恢复。已发布的影片需先撤回。`}
@@ -77,10 +91,18 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
             status={film.statusEn}
             label="英文版"
             onPublish={publishFilmEn.bind(null, film.id)}
+            problems={problemsEn}
             onUnpublish={unpublishFilmEn.bind(null, film.id)}
           />
         </div>
       </div>
+
+      <PublishReadiness
+        editions={[
+          { label: "中文版", published: film.status === "published", problems },
+          { label: "英文版", published: film.statusEn === "published", problems: problemsEn },
+        ]}
+      />
 
       {film.media.length > 0 && (
         <div className="mt-4 flex gap-2">
