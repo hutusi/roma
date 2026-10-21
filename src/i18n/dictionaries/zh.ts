@@ -10,6 +10,9 @@ export const zh = {
     skipToContent: "跳到正文",
   },
   nav: {
+    label: "主导航",
+    menu: "菜单",
+    closeMenu: "关闭菜单",
     lists: "片单",
     films: "影片",
     about: "关于",

@@ -4,40 +4,60 @@ import { type Locale, localePath } from "@/i18n/locales";
 import { AuthMenu } from "./auth-menu";
 import { BrandMark } from "./brand-mark";
 import { LangToggle } from "./lang-toggle";
+import { MobileMenu, type NavItem } from "./mobile-menu";
+import { NavLink } from "./nav-link";
 import { SearchDialog } from "./search-dialog";
 
+/**
+ * One row at every width. From `sm` up it carries the sections, search,
+ * account and language inline; below that, sections, account and
+ * language fold into MobileMenu and only the brand and search stay —
+ * CJK labels must never wrap a character per line. Search is a single
+ * instance across breakpoints, so its ⌘K listener can't open two dialogs.
+ */
 export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
   const dict = getDict(locale);
-  const nav = [
-    { href: localePath(locale, "/lists"), label: dict.nav.lists },
-    { href: localePath(locale, "/films"), label: dict.nav.films },
-    { href: localePath(locale, "/about"), label: dict.nav.about },
+  const path = (p: string) => localePath(locale, p);
+  const nav: NavItem[] = [
+    { href: path("/lists"), label: dict.nav.lists, sections: [path("/lists"), path("/list")] },
+    { href: path("/films"), label: dict.nav.films, sections: [path("/films"), path("/film")] },
+    { href: path("/about"), label: dict.nav.about, sections: [path("/about")] },
   ];
 
   return (
-    <header className="border-line border-b">
-      <div className="mx-auto flex max-w-5xl items-baseline justify-between px-6 py-5">
-        <Link href={localePath(locale, "/")} className="group flex items-baseline gap-3">
-          <BrandMark className="h-7 w-7 shrink-0 self-center" />
-          <span className="font-bold text-xl tracking-label">八部半</span>
-          <span className="hidden font-display text-ink-muted text-xs uppercase tracking-eyebrow transition-colors group-hover:text-brand sm:inline">
+    <header className="relative border-line border-b">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5">
+        <Link href={path("/")} className="group flex min-w-0 items-center gap-3">
+          <BrandMark className="h-7 w-7 shrink-0" />
+          <span className="whitespace-nowrap font-bold text-xl tracking-label">八部半</span>
+          <span className="hidden whitespace-nowrap font-display text-ink-muted text-xs uppercase tracking-eyebrow transition-colors group-hover:text-brand md:inline">
             Babuban · 8½
           </span>
         </Link>
-        <nav className="flex items-baseline gap-6 text-sm">
-          {nav.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="tracking-label transition-colors hover:text-brand"
-            >
-              {label}
-            </Link>
-          ))}
+        <div className="flex shrink-0 items-center gap-5 text-sm sm:gap-6">
+          <nav aria-label={dict.nav.label} className="hidden items-center gap-6 sm:flex">
+            {nav.map((item) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                sections={item.sections}
+                className="whitespace-nowrap tracking-label transition-colors hover:text-brand aria-[current=page]:text-brand"
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
           <SearchDialog locale={locale} labels={dict.search} />
-          <AuthMenu locale={locale} labels={dict.authMenu} />
-          <LangToggle />
-        </nav>
+          <div className="hidden sm:block">
+            <AuthMenu locale={locale} labels={dict.authMenu} />
+          </div>
+          <div className="hidden sm:block">
+            <LangToggle />
+          </div>
+          <div className="flex sm:hidden">
+            <MobileMenu locale={locale} nav={nav} labels={dict.nav} authLabels={dict.authMenu} />
+          </div>
+        </div>
       </div>
     </header>
   );

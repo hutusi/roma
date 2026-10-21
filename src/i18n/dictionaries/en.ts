@@ -5,6 +5,9 @@ export const en = {
     skipToContent: "Skip to content",
   },
   nav: {
+    label: "Main",
+    menu: "Menu",
+    closeMenu: "Close menu",
     lists: "Lists",
     films: "Films",
     about: "About",
