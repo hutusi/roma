@@ -62,10 +62,30 @@ export function isQueryLongEnough(rawQuery: string): boolean {
 
 const TYPE_WEIGHT: Record<SearchDocType, number> = { film: 4, person: 3, list: 2, tag: 1 };
 
+/**
+ * Each doc's names and prose, normalized once. The index is loaded once
+ * per session and its doc objects never change, so keying on the object
+ * turns per-keystroke NFKC+NFD over the whole corpus (prose included)
+ * into a one-off cost.
+ */
+const normalized = new WeakMap<SearchDoc, { names: string[]; prose: string | null }>();
+
+function normalizedOf(doc: SearchDoc) {
+  let n = normalized.get(doc);
+  if (!n) {
+    n = {
+      names: doc.names.map(normalizeForSearch),
+      prose: doc.prose ? normalizeForSearch(doc.prose) : null,
+    };
+    normalized.set(doc, n);
+  }
+  return n;
+}
+
 function scoreDoc(doc: SearchDoc, q: string): number {
+  const { names, prose } = normalizedOf(doc);
   let best = 0;
-  for (const name of doc.names) {
-    const n = normalizeForSearch(name);
+  for (const n of names) {
     if (n === q) return 4;
     if (n.startsWith(q)) best = Math.max(best, 3);
     else if (n.includes(q)) best = Math.max(best, 2);
@@ -73,7 +93,7 @@ function scoreDoc(doc: SearchDoc, q: string): number {
   // Exact year only — "196" tier-matching every 1960s film would drown
   // the name tiers in noise. q is normalized, so full-width digits fold.
   if (best < 2 && doc.year !== undefined && q === String(doc.year)) best = 2;
-  if (best < 1 && doc.prose && normalizeForSearch(doc.prose).includes(q)) best = 1;
+  if (best < 1 && prose?.includes(q)) best = 1;
   return best;
 }
 
