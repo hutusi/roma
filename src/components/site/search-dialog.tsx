@@ -1,16 +1,12 @@
 "use client";
 
 import { SearchIcon } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { SearchResults } from "@/components/site/search-results";
-import { useSearchIndex } from "@/components/site/use-search-index";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
-import { type Locale, localePath } from "@/i18n/locales";
-import { matchDocs } from "@/lib/search-match";
+import type { Locale } from "@/i18n/locales";
+
+const loadPanel = () => import("./search-panel");
+const SearchPanel = lazy(() => loadPanel().then((m) => ({ default: m.SearchPanel })));
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -22,22 +18,21 @@ function isTypingTarget(target: EventTarget | null): boolean {
 }
 
 /**
- * Header search overlay — the AuthMenu convention: a client island fed
- * translated labels as props from the server header. The index loads
- * on first open and is cached per session (shared with /search).
+ * Header search: just the trigger and the keyboard shortcuts. The
+ * overlay (Radix Dialog, matcher, results) is SearchPanel, fetched on
+ * first intent — hover or focus warms it, a click or ⌘K opens it — so
+ * it stays out of the layout chunk every page loads. Labels arrive as
+ * props from the server header.
  */
 export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dictionary["search"] }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const { docs, status, retry } = useSearchIndex(locale, open);
-  const results = useMemo(() => matchDocs(docs, query), [docs, query]);
+  // Mounted once opened, then kept, so reopening is instant.
+  const [mounted, setMounted] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
-  // Every close path clears the query — radix only fires onOpenChange
-  // for its own triggers (ESC, overlay), not for external setOpen calls.
-  const close = () => {
-    setOpen(false);
-    setQuery("");
+  const show = () => {
+    setMounted(true);
+    setOpen(true);
   };
 
   // ⌘K / Ctrl+K anywhere; "/" when not typing. The admin tree has its
@@ -48,6 +43,7 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
       const slash = event.key === "/" && !isTypingTarget(event.target);
       if (cmdK || slash) {
         event.preventDefault();
+        setMounted(true);
         setOpen(true);
       }
     };
@@ -55,62 +51,32 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const allResultsHref = localePath(
-    locale,
-    query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : "/search",
-  );
-
   return (
-    <Dialog open={open} onOpenChange={(next) => (next ? setOpen(true) : close())}>
-      <DialogTrigger asChild>
-        <button
-          type="button"
-          className="self-center text-ink transition-colors hover:text-brand"
-          aria-label={labels.open}
-        >
-          <SearchIcon className="h-4 w-4" aria-hidden />
-        </button>
-      </DialogTrigger>
-      <DialogContent className="top-24 translate-y-0 gap-0 p-4 sm:max-w-lg">
-        <DialogTitle className="sr-only">{labels.title}</DialogTitle>
-        <Input
-          type="search"
-          placeholder={labels.placeholder}
-          aria-label={labels.title}
-          value={query}
-          onChange={(e) => {
-            // Typing after a transient index failure retries the fetch.
-            if (status === "failed") retry();
-            setQuery(e.target.value);
-          }}
-          onKeyDown={(e) => {
-            // Enter goes to the top-ranked result; with nothing matched
-            // yet it falls through to the full page.
-            if (e.key !== "Enter") return;
-            e.preventDefault();
-            close();
-            router.push(results[0]?.href ?? allResultsHref);
-          }}
-        />
-        <div className="max-h-[50vh] overflow-y-auto">
-          <SearchResults
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        className="self-center text-ink transition-colors hover:text-brand"
+        aria-label={labels.open}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        onPointerEnter={() => void loadPanel()}
+        onFocus={() => void loadPanel()}
+        onClick={show}
+      >
+        <SearchIcon className="h-4 w-4" aria-hidden />
+      </button>
+      {mounted && (
+        <Suspense fallback={null}>
+          <SearchPanel
+            locale={locale}
             labels={labels}
-            query={query}
-            results={results}
-            status={status}
-            onNavigate={close}
+            open={open}
+            onClose={() => setOpen(false)}
+            triggerRef={triggerRef}
           />
-        </div>
-        <p className="mt-4 border-line border-t pt-3 text-center">
-          <Link
-            href={allResultsHref}
-            onClick={close}
-            className="text-brand text-sm hover:underline"
-          >
-            {labels.allResults}
-          </Link>
-        </p>
-      </DialogContent>
-    </Dialog>
+        </Suspense>
+      )}
+    </>
   );
 }
