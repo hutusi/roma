@@ -106,6 +106,13 @@
       "when": 1785021648822,
       "tag": "0014_nosy_black_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1792599944259,
+      "tag": "0015_thick_cannonball",
+      "breakpoints": true
     }
   ]
 }

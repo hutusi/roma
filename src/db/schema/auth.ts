@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
@@ -85,6 +85,19 @@ export const verifications = pgTable(
   },
   (table) => [index("verifications_identifier_idx").on(table.identifier)],
 );
+
+/**
+ * better-auth's rate-limit counters (rateLimit.storage = "database").
+ * The default in-memory store is per serverless instance, so every cold
+ * start reset the sign-in throttle; in Postgres the limit holds across
+ * instances. `key` is IP + path; `lastRequest` is epoch milliseconds.
+ */
+export const rateLimits = pgTable("rate_limits", {
+  id: text("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  count: integer("count").notNull(),
+  lastRequest: bigint("last_request", { mode: "number" }).notNull(),
+});
 
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
