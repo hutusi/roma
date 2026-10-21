@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { IntentLink } from "./intent-link";
 
 /**
  * Compact film reference used on index pages, list pages, and home: a
@@ -36,7 +36,8 @@ export function FilmCard({
   // Dedupe here so no caller can render the title twice.
   const secondary = subtitle && subtitle !== title ? subtitle : null;
   return (
-    <Link
+    // Cards come in long grids: prefetch on intent, not on sight.
+    <IntentLink
       href={href}
       className="group flex gap-4 border border-line bg-card p-3 transition-colors hover:border-brand sm:p-4"
     >
@@ -77,6 +78,6 @@ export function FilmCard({
         </p>
         {directorsLabel && <p className="mt-1 truncate text-ink-muted text-sm">{directorsLabel}</p>}
       </div>
-    </Link>
+    </IntentLink>
   );
 }
