@@ -6,6 +6,9 @@
  * enforced by the type checker, not a runtime test.
  */
 export const zh = {
+  a11y: {
+    skipToContent: "跳到正文",
+  },
   nav: {
     lists: "片单",
     films: "影片",
@@ -16,6 +19,7 @@ export const zh = {
     aboutLink: "关于本站",
   },
   search: {
+    close: "关闭",
     open: "搜索",
     title: "搜索",
     placeholder: "片名、导演、片单…",

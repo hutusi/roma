@@ -5,6 +5,7 @@ import { LazyToaster } from "@/components/site/lazy-toaster";
 import { RumBeacon } from "@/components/site/rum-beacon";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { getDict } from "@/i18n/dict";
 import { HTML_LANG, LOCALES, type Locale, localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { SITE_URL } from "@/lib/site";
@@ -93,10 +94,19 @@ export default async function LangRootLayout({
         title={RSS_TITLE[locale]}
         href={localePath(locale, "/rss.xml")}
       />
+      {/* First focusable element: keyboard readers skip the header. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-paper focus:px-4 focus:py-2 focus:text-sm focus:ring-1 focus:ring-ink"
+      >
+        {getDict(locale).a11y.skipToContent}
+      </a>
       <RumBeacon />
       <LangHintBanner locale={locale} />
       <SiteHeader locale={locale} />
-      <main className="flex-1">{children}</main>
+      <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
+        {children}
+      </main>
       <SiteFooter locale={locale} />
       <LazyToaster />
     </DocumentShell>

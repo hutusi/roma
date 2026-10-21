@@ -4,13 +4,15 @@
 // renders and bucketed by how many pages share each glyph (ADR 0018,
 // `bun run fonts:generate`); the full Fontsource Noto Serif SC follows
 // lazily as the fallback for newer characters. Source Serif 4 is the
-// Latin body serif — the html:lang(en) override in globals.css switches
+// Latin body serif — the :lang(en) override in globals.css switches
 // --font-body, so its files only load on English pages even though the
-// CSS ships everywhere.
+// CSS ships everywhere. Its italic is real, not synthesized: English
+// essays set titles and terms in <em>.
 import "@/assets/fonts/babuban-serif-sc.css";
 import "@fontsource/playfair-display/400.css";
 import "@fontsource/playfair-display/700.css";
 import "@fontsource/source-serif-4/400.css";
+import "@fontsource/source-serif-4/400-italic.css";
 import "@fontsource/source-serif-4/700.css";
 import "@/app/globals.css";
 import { preload } from "react-dom";

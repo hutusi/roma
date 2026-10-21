@@ -1,6 +1,9 @@
 import type { Dictionary } from "./zh";
 
 export const en = {
+  a11y: {
+    skipToContent: "Skip to content",
+  },
   nav: {
     lists: "Lists",
     films: "Films",
@@ -11,6 +14,7 @@ export const en = {
     aboutLink: "About",
   },
   search: {
+    close: "Close",
     open: "Search",
     title: "Search",
     placeholder: "Films, directors, lists…",
