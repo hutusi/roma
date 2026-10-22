@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPublishedListFilmCount, getPublishedListSlugs } from "@/db/queries/public";
 import { parseLocale } from "@/i18n/params";
-import { OG_SIZE, ogCard } from "@/lib/og";
+import { everyLocale, OG_SIZE, ogCard } from "@/lib/og";
 
 export const alt = "Babuban curated list";
 export const size = OG_SIZE;
@@ -9,8 +9,7 @@ export const contentType = "image/png";
 
 // Prerendered with the page (see the film card).
 export async function generateStaticParams() {
-  const slugs = await getPublishedListSlugs();
-  return slugs.map(({ slug }) => ({ slug }));
+  return everyLocale(await getPublishedListSlugs());
 }
 
 export default async function Image({

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPersonStubBySlug } from "@/db/queries/public";
 import { parseLocale } from "@/i18n/params";
-import { OG_SIZE, ogCard } from "@/lib/og";
+import { everyLocale, OG_SIZE, ogCard } from "@/lib/og";
 import { personStaticParams } from "@/lib/person-route";
 
 export const alt = "Babuban actor page";
@@ -9,8 +9,8 @@ export const size = OG_SIZE;
 export const contentType = "image/png";
 
 // Prerendered with the page (see the film card).
-export function generateStaticParams() {
-  return personStaticParams("actor");
+export async function generateStaticParams() {
+  return everyLocale(await personStaticParams("actor"));
 }
 
 export default async function Image({

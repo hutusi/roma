@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
+import { LOCALES } from "@/i18n/locales";
 
 /**
  * OG-card factory. Self-contained fonts: two Noto Serif SC slices that
@@ -122,3 +123,12 @@ export async function ogCard({
     },
   );
 }
+
+/**
+ * generateStaticParams for a detail page's social image: every slug in
+ * every edition. An image route under [lang] doesn't inherit the layout's
+ * lang params the way the page does, so returning slugs alone prerendered
+ * nothing; the cards rendered per request after all.
+ */
+export const everyLocale = (slugs: { slug: string }[]) =>
+  LOCALES.flatMap((lang) => slugs.map(({ slug }) => ({ lang, slug })));

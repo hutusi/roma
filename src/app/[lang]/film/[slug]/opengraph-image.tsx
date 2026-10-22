@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getFilmStubBySlug, getPublishedFilmSlugs } from "@/db/queries/public";
 import { parseLocale } from "@/i18n/params";
-import { OG_SIZE, ogCard } from "@/lib/og";
+import { everyLocale, OG_SIZE, ogCard } from "@/lib/og";
 
 // A static alt can't vary by lang, so it stays a Latin brand string on
 // both locales (invisible metadata; ADR 0012 accepts this).
@@ -13,8 +13,7 @@ export const contentType = "image/png";
 // on every request (Next serves ImageResponse with max-age=0), running a
 // query per crawler hit.
 export async function generateStaticParams() {
-  const slugs = await getPublishedFilmSlugs();
-  return slugs.map(({ slug }) => ({ slug }));
+  return everyLocale(await getPublishedFilmSlugs());
 }
 
 export default async function Image({
