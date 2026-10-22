@@ -3,7 +3,7 @@
 import { and, count, eq, max, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
-import { type DbTransaction, lockFilm, lockUserList } from "@/db/locks";
+import { type DbTransaction, lockFilm, lockUser, lockUserList } from "@/db/locks";
 import { userListItems, userLists } from "@/db/schema";
 import { requireUserResult } from "@/lib/auth-guards";
 import { rowId, userListText } from "@/lib/validators/action-input";
@@ -59,15 +59,25 @@ export async function createUserList(values: {
   if ("error" in parsed) return fail(parsed.error);
   const userId = guarded.session.user.id;
   try {
-    const [{ lists }] = await db
-      .select({ lists: count() })
-      .from(userLists)
-      .where(eq(userLists.userId, userId));
-    if (lists >= LISTS_PER_USER_MAX) return fail("tooManyLists");
-    const [created] = await db
-      .insert(userLists)
-      .values({ userId, ...parsed })
-      .returning({ id: userLists.id });
+    const created = await db.transaction(async (tx) => {
+      // Count and insert under the reader's row lock: done apart, parallel
+      // requests each counted 99 and all inserted, so the cap could be
+      // raced well past 100. The users row is the lock admin-users and
+      // invites already take for per-user invariants.
+      if (!(await lockUser(tx, userId))) return null;
+      const [{ lists }] = await tx
+        .select({ lists: count() })
+        .from(userLists)
+        .where(eq(userLists.userId, userId));
+      if (lists >= LISTS_PER_USER_MAX) return "tooMany" as const;
+      const [row] = await tx
+        .insert(userLists)
+        .values({ userId, ...parsed })
+        .returning({ id: userLists.id });
+      return row;
+    });
+    if (created === null) return fail("sessionExpired");
+    if (created === "tooMany") return fail("tooManyLists");
     return ok({ id: created.id });
   } catch (error) {
     return failWith("unknown", error, "createUserList");

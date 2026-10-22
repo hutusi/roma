@@ -302,3 +302,48 @@ test("publishing a list cannot race a member film's unpublish into an empty live
     await queryOne("delete from films where id = $1 returning id", [filmId]);
   }
 });
+
+test("creating a reader list waits on the reader's row, so the 100-list cap holds", async ({
+  browser,
+}) => {
+  const reader = "select id from users where username = 'e2euser'";
+  const context = await browser.newContext({ storageState: "e2e/.auth/user.json" });
+  const page = await context.newPage();
+  const openCreate = async (title: string) => {
+    await page.goto("/zh/u/e2euser?tab=lists");
+    await page.getByRole("button", { name: "新建片单" }).click();
+    await page.fill("#title", title);
+  };
+
+  // Cleanup must run even if an assertion fails: left at the cap, every
+  // later spec that creates a list as e2euser would fail with it.
+  try {
+    // Count and insert run under the reader's row lock: held elsewhere, the
+    // create must wait instead of counting alongside another request. NO KEY
+    // UPDATE conflicts with that lock (FOR UPDATE) but not with the FK check
+    // on user_lists.user_id (FOR KEY SHARE), so an unlocked create would
+    // sail through and this would fail.
+    await openCreate("并发上限测试");
+    const release = await holdDatabaseLock(`${reader} for no key update`);
+    try {
+      await page.getByRole("button", { name: "创建", exact: true }).click();
+      await expect.poll(blockedTransactionCount).toBeGreaterThanOrEqual(1);
+    } finally {
+      await release();
+    }
+    await page.waitForURL(/\/u\/e2euser\/list\/[^/]+$/);
+
+    // And at the cap, a create is refused.
+    await queryOne(
+      `insert into user_lists (id, user_id, title) select gen_random_uuid()::text, (${reader}), '上限填充' from generate_series(1, 100 - (select count(*)::int from user_lists where user_id = (${reader}))) returning id`,
+    );
+    await openCreate("超出上限");
+    await page.getByRole("button", { name: "创建", exact: true }).click();
+    await expect(page.getByText("片单数量已达上限（100 份）。")).toBeVisible();
+  } finally {
+    await queryOne(
+      `delete from user_lists where user_id = (${reader}) and title in ('上限填充', '并发上限测试', '超出上限') returning id`,
+    );
+    await context.close();
+  }
+});
