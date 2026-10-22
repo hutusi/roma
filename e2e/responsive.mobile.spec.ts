@@ -90,3 +90,42 @@ test("signing in from the phone menu on an auth page carries no next", async ({ 
     "/zh/sign-in",
   );
 });
+
+test.describe("tablet header with a long reader name", () => {
+  // The brand box used to shrink to make room, and its unwrapping text
+  // then ran under the nav: overlap, which an overflow check can't see.
+  for (const width of [640, 768, 1024]) {
+    test(`brand and nav don't overlap at ${width}px`, async ({ page }) => {
+      await page.route("**/api/me/state**", (route) =>
+        route.fulfill({
+          json: {
+            user: {
+              id: "long-name",
+              name: "A Rather Long Display Name",
+              username: "longname",
+              role: "user",
+              locale: "en",
+            },
+            mark: null,
+            following: false,
+          },
+        }),
+      );
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/en/about");
+      const header = page.getByRole("banner");
+      await expect(header.getByText("A Rather Long Display Name")).toBeVisible();
+      // The brand's text, not its link box: the box shrank while the text
+      // ran on past it, so the box alone never touched the nav.
+      const brandRight = await header
+        .getByRole("link")
+        .first()
+        .evaluate((link) =>
+          Math.max(...[...link.children].map((child) => child.getBoundingClientRect().right)),
+        );
+      const nav = await header.getByRole("navigation").boundingBox();
+      expect(nav && brandRight <= nav.x).toBe(true);
+      await expectNoHorizontalOverflow(page);
+    });
+  }
+});

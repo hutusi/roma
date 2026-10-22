@@ -46,7 +46,11 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
 
   return (
     <Suspense
-      fallback={<span className="max-w-[10rem] truncate text-sm tracking-title">{user.name}</span>}
+      fallback={
+        <span className="max-w-[7rem] truncate text-sm tracking-title lg:max-w-[10rem]">
+          {user.name}
+        </span>
+      }
     >
       <AuthMenuDropdown locale={locale} labels={labels} user={user} />
     </Suspense>

@@ -27,10 +27,13 @@ export function SiteHeader({ locale = "zh" }: { locale?: Locale }) {
   return (
     <header className="relative border-line border-b">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5">
-        <Link href={path("/")} className="group flex min-w-0 items-center gap-3">
+        {/* shrink-0: as min-w-0 it let a long reader name squeeze the brand
+            box at tablet widths, and its unwrapping text then ran under the
+            nav. The Latin wordmark waits for lg, where there's room. */}
+        <Link href={path("/")} className="group flex shrink-0 items-center gap-3">
           <BrandMark className="h-7 w-7 shrink-0" />
           <span className="whitespace-nowrap font-bold text-xl tracking-label">八部半</span>
-          <span className="hidden whitespace-nowrap font-display text-ink-muted text-xs uppercase tracking-eyebrow transition-colors group-hover:text-brand md:inline">
+          <span className="hidden whitespace-nowrap font-display text-ink-muted text-xs uppercase tracking-eyebrow transition-colors group-hover:text-brand lg:inline">
             Babuban · 8½
           </span>
         </Link>
