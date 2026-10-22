@@ -1,5 +1,6 @@
 "use client";
 
+import { XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -43,7 +44,12 @@ export function LangHintBanner({ locale }: { locale: Locale }) {
 
   const en = counterpart.target === "en";
   return (
-    <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 border border-line bg-paper px-4 py-2 text-sm shadow-md">
+    // Inside the viewport at any width (it wraps rather than overflowing
+    // a 320px screen) and clear of the iPhone home indicator.
+    <div
+      role="status"
+      className="fixed inset-x-4 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 mx-auto flex w-fit max-w-[calc(100%-2rem)] flex-wrap items-center justify-center gap-x-3 gap-y-1 border border-line bg-paper px-4 py-2 text-sm shadow-md"
+    >
       <span className="text-ink-muted">
         {en ? "This page is available in English." : "本页有中文版。"}
       </span>
@@ -53,13 +59,13 @@ export function LangHintBanner({ locale }: { locale: Locale }) {
       <button
         type="button"
         aria-label={en ? "Dismiss" : "关闭"}
-        className="ml-1 text-ink-muted transition-colors hover:text-brand"
+        className="-mr-1 p-1 text-ink-muted transition-colors hover:text-brand"
         onClick={() => {
           safeStorage.set(DISMISS_KEY, "1");
           setDismissed(true);
         }}
       >
-        ×
+        <XIcon className="size-4" aria-hidden />
       </button>
     </div>
   );

@@ -1,9 +1,11 @@
 import { AcademyFrame } from "@/components/site/academy-frame";
+import { EmptyState } from "@/components/site/empty-state";
 import { FilmCard } from "@/components/site/film-card";
 import { LocaleSwitch } from "@/components/site/locale-switch";
 import { TitleCard } from "@/components/site/title-card";
 import { TiptapContent } from "@/components/tiptap/render";
 import { type PublicList, posterOf } from "@/db/queries/public";
+import { getDict } from "@/i18n/dict";
 import { type Locale, localePath } from "@/i18n/locales";
 
 /**
@@ -29,8 +31,8 @@ export function ListPage({
 
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
-      <TitleCard eyebrow="Curated List" title={title} />
-      {theme && <p className="mt-4 text-center text-ink-muted text-sm tracking-[0.2em]">{theme}</p>}
+      <TitleCard as="h1" eyebrow="Curated List" title={title} />
+      {theme && <p className="mt-4 text-center text-ink-muted text-sm tracking-label">{theme}</p>}
       {list.status === "published" && (
         <p className="mt-3 text-center">
           <LocaleSwitch locale={locale} path={`/list/${list.slug}`} />
@@ -44,13 +46,25 @@ export function ListPage({
             src={list.cover.url}
             alt={list.cover.alt ?? title}
             credit={list.cover.credit}
+            color={list.cover.dominantColor}
             locale={locale}
-            priority
+            preload
           />
         </div>
       )}
 
-      {intro && <TiptapContent doc={intro} className="mx-auto mt-10 max-w-[70ch]" />}
+      {intro && <TiptapContent doc={intro} className="mx-auto mt-10 max-w-measure" />}
+
+      {list.items.length === 0 && (
+        <EmptyState
+          action={{
+            href: localePath(locale, "/lists"),
+            label: getDict(locale).curatedList.allLists,
+          }}
+        >
+          {getDict(locale).curatedList.empty}
+        </EmptyState>
+      )}
 
       <ol className="mt-14 space-y-12 pb-4">
         {list.items.map((item, index) => {
@@ -79,8 +93,9 @@ export function ListPage({
                   .join(en ? ", " : "、")}
                 imageUrl={poster?.url}
                 imageAlt={poster?.alt}
+                imageColor={poster?.dominantColor}
               />
-              {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-[16px]" />}
+              {reasoning && <TiptapContent doc={reasoning} className="mt-4 pl-2 text-base" />}
             </li>
           );
         })}

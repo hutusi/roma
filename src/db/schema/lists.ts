@@ -1,5 +1,14 @@
 import { sql } from "drizzle-orm";
-import { check, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import {
+  check,
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+} from "drizzle-orm/pg-core";
 import { users } from "./auth";
 import { contentStatus } from "./enums";
 import { films } from "./films";
@@ -53,6 +62,9 @@ export const curatedListItems = pgTable(
   (t) => [
     unique("curated_list_items_unique").on(t.listId, t.filmId),
     unique("curated_list_items_position_unique").on(t.listId, t.position),
+    // The film page looks up "lists containing this film"; the unique
+    // index above leads with list_id and can't serve it.
+    index("curated_list_items_film_idx").on(t.filmId),
     check("curated_list_items_position_nonnegative", sql`${t.position} >= 0`),
   ],
 );

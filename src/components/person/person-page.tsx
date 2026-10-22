@@ -29,7 +29,9 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
   return (
     <article className="mx-auto max-w-3xl animate-fade-up px-6 pt-12">
       <header className="text-center">
-        <h1 className="font-bold text-4xl tracking-[0.15em]">{displayName}</h1>
+        <h1 className="text-balance break-words font-bold text-3xl tracking-title sm:text-4xl">
+          {displayName}
+        </h1>
         {subName && subName !== displayName && (
           <p className="mt-3 font-display text-ink-muted text-lg">{subName}</p>
         )}
@@ -46,15 +48,16 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
             src={portrait.url}
             alt={portrait.alt ?? person.name}
             credit={portrait.credit}
+            color={portrait.dominantColor}
+            // The frame is max-w-md (28rem), not the full measure.
+            sizes="(min-width: 480px) 448px, 100vw"
             locale={locale}
           />
         </div>
       )}
 
       {bio && (
-        <p className="mx-auto mt-10 max-w-[70ch] text-[17px] text-ink-muted leading-[1.9] tracking-[0.02em]">
-          {bio}
-        </p>
+        <p className="mx-auto mt-10 max-w-measure text-ink-muted text-prose tracking-body">{bio}</p>
       )}
 
       {/* Its own section, matching the film page: the heading marks the
@@ -62,16 +65,14 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
       {editorialNote && (
         <section className="mt-14">
           <TitleCard eyebrow={en ? undefined : "Editorial Note"} title={dict.editorialNote} />
-          <p className="mx-auto mt-8 max-w-[70ch] text-[17px] leading-[1.9] tracking-[0.02em]">
-            {editorialNote}
-          </p>
+          <p className="mx-auto mt-8 max-w-measure text-prose tracking-body">{editorialNote}</p>
         </section>
       )}
 
       {careerEssay && (
         <section className="mt-14">
           <TitleCard eyebrow={en ? undefined : "Career"} title={dict.career} />
-          <TiptapContent doc={careerEssay} className="mx-auto mt-8 max-w-[70ch]" />
+          <TiptapContent doc={careerEssay} className="mx-auto mt-8 max-w-measure" />
         </section>
       )}
 
@@ -103,9 +104,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
                     ) : (
                       <span className="font-bold">{filmTitle}</span>
                     )}
-                    {note && (
-                      <p className="mt-1.5 text-[15px] text-ink-muted leading-[1.8]">{note}</p>
-                    )}
+                    {note && <p className="mt-1.5 text-ink-muted text-ui leading-[1.8]">{note}</p>}
                   </div>
                 </li>
               );
@@ -117,7 +116,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
       {person.films.length > 0 && (
         <section className="mt-14 pb-4">
           <TitleCard eyebrow={en ? undefined : "Films"} title={dict.films} />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {person.films.map((film) => {
               const poster = posterOf(film.media);
               const title = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
@@ -131,6 +130,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
                   year={film.year}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
+                  imageColor={poster?.dominantColor}
                 />
               );
             })}
@@ -143,7 +143,7 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
           <TitleCard eyebrow={en ? undefined : "As Actor"} title={dict.actedIn} />
           {/* A film the person also directed repeats here on purpose: this
               row carries the character, which the directed grid can't. */}
-          <ul className="mx-auto mt-8 max-w-xl space-y-2 text-[15px]">
+          <ul className="mx-auto mt-8 max-w-xl space-y-2 text-ui">
             {person.actedIn.map((credit) => {
               const filmTitle = en
                 ? (credit.film.titleEn ?? credit.film.titleOriginal)
@@ -151,7 +151,10 @@ export function PersonPage({ person, locale = "zh" }: { person: PublicPerson; lo
               // Same split as names: /en shows the Latin/original role only.
               const role = en ? credit.character : (credit.characterZh ?? credit.character);
               return (
-                <li key={credit.id} className="flex justify-between border-line border-b py-2">
+                <li
+                  key={credit.id}
+                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-line border-b py-2"
+                >
                   <span>
                     {credit.film.status === "published" ? (
                       <Link

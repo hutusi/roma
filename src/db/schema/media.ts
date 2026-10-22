@@ -23,6 +23,13 @@ export const media = pgTable(
     credit: text().notNull(),
     width: integer(),
     height: integer(),
+    /**
+     * The image's dominant colour (#rrggbb), measured at upload. Frames
+     * paint it while the image loads, so a grid of lazy posters reads as
+     * muted colour fields instead of black slabs. NULL for rows uploaded
+     * before it existed until `bun run backfill:colors` fills them.
+     */
+    dominantColor: text(),
     kind: mediaKind().notNull().default("still"),
     filmId: text().references(() => films.id, { onDelete: "set null" }),
     /** Image of this person (portrait etc.) — a person link, not a credit. */
@@ -34,5 +41,6 @@ export const media = pgTable(
     index("media_film_idx").on(t.filmId),
     index("media_person_idx").on(t.personId),
     check("media_credit_nonblank", sql`length(btrim(${t.credit})) > 0`),
+    check("media_dominant_color_hex", sql`${t.dominantColor} ~ '^#[0-9a-f]{6}$'`),
   ],
 );

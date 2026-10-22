@@ -1,17 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SearchResults } from "@/components/site/search-results";
 import { useSearchIndex } from "@/components/site/use-search-index";
 import { Input } from "@/components/ui/input";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
-import type { Locale } from "@/i18n/locales";
-import { matchDocs } from "@/lib/search-match";
+import { type Locale, localePath } from "@/i18n/locales";
+import { isQueryLongEnough, matchDocs } from "@/lib/search-match";
 
 /**
  * The stateful search UI without useSearchParams, so it can double as
- * the Suspense fallback (the films-view arrangement): the fallback
+ * the Suspense fallback (a page-and-island arrangement): the fallback
  * prerenders the empty-query shell into static HTML, and the island
  * below swaps in with the ?q-seeded state on hydration.
  */
@@ -74,6 +75,22 @@ export function SearchPageBody({
         autoFocus
       />
       <SearchResults labels={labels} query={query} results={results} status={status} />
+      {/* Nothing typed, or nothing found: say what can be searched and
+          offer the catalogue instead of a blank page. */}
+      {(!isQueryLongEnough(query) || (status === "ready" && results.length === 0)) && (
+        <div className="mt-8 text-center text-ink-muted text-sm">
+          {!isQueryLongEnough(query) && <p>{labels.emptyQuery}</p>}
+          <p className="mt-3">
+            <Link href={localePath(locale, "/films")} className="text-brand hover:underline">
+              {labels.browseFilms}
+            </Link>
+            <span className="mx-2">·</span>
+            <Link href={localePath(locale, "/lists")} className="text-brand hover:underline">
+              {labels.browseLists}
+            </Link>
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { localePath } from "@/i18n/locales";
+import { signInHrefFor } from "@/lib/safe-next";
 
 export function AcceptInviteForm({ token }: { token: string }) {
   const router = useRouter();
@@ -45,7 +46,8 @@ export function AcceptInviteForm({ token }: { token: string }) {
           description: "请用原有密码登录。",
           duration: 8000,
         });
-        router.push(localePath("zh", "/sign-in"));
+        // Back to the desk once they have signed in with their old password.
+        router.push(signInHrefFor(localePath("zh", "/sign-in"), "/admin"));
       }
     } catch {
       setError("出了点问题，请稍后再试。");
@@ -82,7 +84,7 @@ export function AcceptInviteForm({ token }: { token: string }) {
         />
       </div>
       {error && <p className="text-destructive text-sm">{error}</p>}
-      <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
+      <Button type="submit" className="w-full tracking-eyebrow" disabled={pending}>
         {pending ? "创建账号中…" : "接受邀请"}
       </Button>
     </form>

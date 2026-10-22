@@ -5,17 +5,18 @@ import { LazyToaster } from "@/components/site/lazy-toaster";
 import { RumBeacon } from "@/components/site/rum-beacon";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { HTML_LANG, LOCALES, type Locale, localePath } from "@/i18n/locales";
-import { parseLocale } from "@/i18n/params";
+import { getDict } from "@/i18n/dict";
+import { HTML_LANG, isLocale, LOCALES, type Locale, localePath } from "@/i18n/locales";
 import { SITE_URL } from "@/lib/site";
 
 // Both locales prerender at build time. Deliberately NOT
 // dynamicParams=false: that config cascades to every child segment,
 // which would 404 newly published slugs until a redeploy and skip the
-// styled catch-all 404. Invalid locales are rejected at render time by
-// parseLocale() below instead. No proxy or Accept-Language detection
-// sits in the serving path (ADR 0012 keeps ADR 0005/0008's
-// fully-static posture).
+// styled catch-all 404. Invalid locales are rejected by the pages, each
+// of which calls parseLocale(); the layout itself renders zh chrome for
+// them (see chromeLocale) so that 404 has a frame to render in. No proxy
+// or Accept-Language detection sits in the serving path (ADR 0012 keeps
+// ADR 0005/0008's fully-static posture).
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
@@ -66,12 +67,20 @@ function verification(): Metadata["verification"] {
   };
 }
 
+/**
+ * The layout never 404s itself: /foo matches [lang], and a notFound()
+ * thrown here has no boundary above the root layout, so it came out as
+ * Next's bare, unstyled 404. Rendering zh chrome lets the page's own
+ * parseLocale() 404 land in [lang]/not-found.tsx like any other.
+ */
+const chromeLocale = (lang: string): Locale => (isLocale(lang) ? lang : "zh");
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  const locale = parseLocale((await params).lang);
+  const locale = chromeLocale((await params).lang);
   return { metadataBase: new URL(SITE_URL), verification: verification(), ...META[locale] };
 }
 
@@ -82,7 +91,7 @@ export default async function LangRootLayout({
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
 }>) {
-  const locale = parseLocale((await params).lang);
+  const locale = chromeLocale((await params).lang);
   return (
     <DocumentShell lang={HTML_LANG[locale]} preloadFonts={locale === "zh"}>
       {/* Hoisted to <head> by React; here (not layout metadata) so it survives
@@ -93,10 +102,19 @@ export default async function LangRootLayout({
         title={RSS_TITLE[locale]}
         href={localePath(locale, "/rss.xml")}
       />
+      {/* First focusable element: keyboard readers skip the header. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-paper focus:px-4 focus:py-2 focus:text-sm focus:ring-1 focus:ring-ink"
+      >
+        {getDict(locale).a11y.skipToContent}
+      </a>
       <RumBeacon />
       <LangHintBanner locale={locale} />
       <SiteHeader locale={locale} />
-      <main className="flex-1">{children}</main>
+      <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
+        {children}
+      </main>
       <SiteFooter locale={locale} />
       <LazyToaster />
     </DocumentShell>

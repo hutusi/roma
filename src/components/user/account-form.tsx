@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { isLocale, type Locale, localePath } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
+import { authErrorMessage } from "../auth/auth-errors";
 
 export function AccountForm({
   name,
@@ -18,6 +19,7 @@ export function AccountForm({
   locale,
   storedLocale,
   labels,
+  errorLabels,
 }: {
   name: string;
   username: string;
@@ -27,6 +29,8 @@ export function AccountForm({
   /** The user's saved preference; null until they (or sign-up) set one. */
   storedLocale: Locale | null;
   labels: Dictionary["account"];
+  /** better-auth failures in the page's language (never its English message). */
+  errorLabels: Dictionary["auth"]["errors"];
 }) {
   const router = useRouter();
   const [savingProfile, setSavingProfile] = useState(false);
@@ -44,15 +48,21 @@ export function AccountForm({
           const newUsername = String(form.get("username"));
           const rawLocale = String(form.get("locale"));
           const newLocale = isLocale(rawLocale) ? rawLocale : locale;
-          const { error } = await authClient.updateUser({
-            name: newName,
-            locale: newLocale,
-            ...(newUsername !== username && { username: newUsername }),
-          });
-          setSavingProfile(false);
-          if (error) {
-            toast.error(error.message ?? labels.saveFailed);
+          try {
+            const { error } = await authClient.updateUser({
+              name: newName,
+              locale: newLocale,
+              ...(newUsername !== username && { username: newUsername }),
+            });
+            if (error) {
+              toast.error(authErrorMessage(error, errorLabels));
+              return;
+            }
+          } catch {
+            toast.error(errorLabels.network);
             return;
+          } finally {
+            setSavingProfile(false);
           }
           toast.success(labels.profileSaved);
           // The header shows the name, and the hint banner reads the locale.
@@ -112,15 +122,21 @@ export function AccountForm({
           const form = e.currentTarget;
           const data = new FormData(form);
           setSavingPassword(true);
-          const { error } = await authClient.changePassword({
-            currentPassword: String(data.get("currentPassword")),
-            newPassword: String(data.get("newPassword")),
-            revokeOtherSessions: true,
-          });
-          setSavingPassword(false);
-          if (error) {
-            toast.error(error.message ?? labels.wrongPassword);
+          try {
+            const { error } = await authClient.changePassword({
+              currentPassword: String(data.get("currentPassword")),
+              newPassword: String(data.get("newPassword")),
+              revokeOtherSessions: true,
+            });
+            if (error) {
+              toast.error(authErrorMessage(error, errorLabels));
+              return;
+            }
+          } catch {
+            toast.error(errorLabels.network);
             return;
+          } finally {
+            setSavingPassword(false);
           }
           toast.success(labels.passwordChanged);
           form.reset();

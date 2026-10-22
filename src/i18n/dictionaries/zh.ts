@@ -6,7 +6,15 @@
  * enforced by the type checker, not a runtime test.
  */
 export const zh = {
+  /** A film count, e.g. "8 部影片". */
+  filmCount: (n: number) => `${n} 部影片`,
+  a11y: {
+    skipToContent: "跳到正文",
+  },
   nav: {
+    label: "主导航",
+    menu: "菜单",
+    closeMenu: "关闭菜单",
     lists: "片单",
     films: "影片",
     about: "关于",
@@ -16,6 +24,10 @@ export const zh = {
     aboutLink: "关于本站",
   },
   search: {
+    emptyQuery: "可以搜片名、导演、演员或片单。",
+    browseFilms: "全部影片",
+    browseLists: "全部片单",
+    close: "关闭",
     open: "搜索",
     title: "搜索",
     placeholder: "片名、导演、片单…",
@@ -50,6 +62,8 @@ export const zh = {
     failed: "关注没有更新，请重试。",
   },
   film: {
+    moreByDirector: "同导演作品",
+    allFilms: "全部影片",
     directedBy: "导演：",
     nameSeparator: "、",
     runtime: (minutes: number) => `${minutes} 分钟`,
@@ -89,6 +103,22 @@ export const zh = {
     actedIn: "出演作品",
   },
   auth: {
+    errors: {
+      invalidCredentials: "邮箱或密码不正确。",
+      emailTaken: "这个邮箱已经注册过了，可以直接登录。",
+      usernameTaken: "这个用户名已被占用，换一个试试。",
+      usernameInvalid: "用户名需为 3–30 位字母、数字或 _ . -。",
+      passwordTooShort: "密码至少 8 位。",
+      passwordTooLong: "密码太长了。",
+      wrongPassword: "当前密码不正确。",
+      invalidEmail: "请输入有效的邮箱地址。",
+      tokenExpired: "链接已失效，请重新申请。",
+      banned: "该账号已被停用。",
+      rateLimited: "尝试太频繁了，请稍等一会儿再试。",
+      network: "网络连接失败，请检查网络后重试。",
+      unknown: "出了点问题，请稍后再试。",
+      required: "请填写此项。",
+    },
     email: "邮箱",
     password: "密码",
     signIn: {
@@ -99,6 +129,7 @@ export const zh = {
       noAccount: "还没有账号？",
       signUpLink: "注册",
       forgotLink: "忘记密码",
+      resetDone: "密码已重置，请用新密码登录。",
     },
     signUp: {
       title: "注册",
@@ -118,6 +149,7 @@ export const zh = {
       emailLabel: "注册邮箱",
       submit: "发送重置邮件",
       submitting: "发送中…",
+      backToSignIn: "返回登录",
     },
     reset: {
       title: "重置密码",
@@ -130,13 +162,20 @@ export const zh = {
       error: "重置失败：链接可能已过期，请重新申请。",
     },
   },
+  curatedList: {
+    empty: "这份片单还在整理中。",
+    allLists: "看看其他片单",
+  },
   profile: {
+    browseFilms: "去影片库看看",
+    emptyOwnerLists: "还没有片单。新建一份，把你想推荐的影片排个顺序。",
     tabs: { watched: "看过", want: "想看", lists: "片单" },
     emptyWatched: "还没有标记看过的影片。",
     emptyWant: "还没有想看的影片。",
     emptyLists: "还没有创建片单。",
   },
   userList: {
+    backToProfile: "回到主页",
     newList: "新建片单",
     listSuffix: " 的片单",
     titleLabel: "标题",

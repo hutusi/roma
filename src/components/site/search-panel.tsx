@@ -50,6 +50,7 @@ export function SearchPanel({
   return (
     <Dialog open={open} onOpenChange={(next) => (next ? undefined : close())}>
       <DialogContent
+        closeLabel={labels.close}
         className="top-24 translate-y-0 gap-0 p-4 sm:max-w-lg"
         onCloseAutoFocus={(event) => {
           event.preventDefault();
@@ -57,25 +58,28 @@ export function SearchPanel({
         }}
       >
         <DialogTitle className="sr-only">{labels.title}</DialogTitle>
-        <Input
-          type="search"
-          placeholder={labels.placeholder}
-          aria-label={labels.title}
-          value={query}
-          onChange={(e) => {
-            // Typing after a transient index failure retries the fetch.
-            if (status === "failed") retry();
-            setQuery(e.target.value);
-          }}
-          onKeyDown={(e) => {
-            // Enter goes to the top-ranked result; with nothing matched
-            // yet it falls through to the full page.
-            if (e.key !== "Enter") return;
-            e.preventDefault();
-            close();
-            router.push(results[0]?.href ?? allResultsHref);
-          }}
-        />
+        {/* Clear of the close button in the top-right corner. */}
+        <div className="pr-10">
+          <Input
+            type="search"
+            placeholder={labels.placeholder}
+            aria-label={labels.title}
+            value={query}
+            onChange={(e) => {
+              // Typing after a transient index failure retries the fetch.
+              if (status === "failed") retry();
+              setQuery(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              // Enter goes to the top-ranked result; with nothing matched
+              // yet it falls through to the full page.
+              if (e.key !== "Enter") return;
+              e.preventDefault();
+              close();
+              router.push(results[0]?.href ?? allResultsHref);
+            }}
+          />
+        </div>
         <div className="max-h-[50vh] overflow-y-auto">
           <SearchResults
             labels={labels}

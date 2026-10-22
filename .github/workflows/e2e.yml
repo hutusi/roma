@@ -68,6 +68,10 @@ jobs:
           E2E_DATABASE_URL: postgres://postgres:postgres@localhost:5432/roma_test
         run: bunx playwright test
 
+      # The suite just ran against a production build; check its weight.
+      - name: First-load JS budget
+        run: bun run perf:budget
+
       - uses: actions/upload-artifact@v6
         if: failure()
         with:

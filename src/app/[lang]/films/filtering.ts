@@ -21,6 +21,7 @@ export type FilmCardData = {
   directorsLabel: string;
   imageUrl: string | null;
   imageAlt: string | null;
+  imageColor: string | null;
   countries: string[];
   isBlackAndWhite: boolean;
   /** `label` is already localized; `slug` matches the ?tag param in both editions. */
@@ -31,6 +32,37 @@ export type FilmCardData = {
 export type Palette = "bw" | "color";
 
 export type Selection = { decade?: number; country?: string; palette?: Palette; tag?: string };
+
+/** Parses the filter out of a query string; anything malformed is ignored. */
+export function parseSelection(params: URLSearchParams): Selection {
+  const decadeParam = params.get("decade");
+  const parsed = Number(decadeParam);
+  const palette = params.get("palette");
+  return {
+    decade: decadeParam && Number.isInteger(parsed) ? parsed : undefined,
+    country: params.get("country") || undefined,
+    palette: palette === "bw" || palette === "color" ? palette : undefined,
+    tag: params.get("tag") || undefined,
+  };
+}
+
+/** The selection as query parameters (empty values dropped), for the URL. */
+export function selectionParams(selection: Selection): URLSearchParams {
+  const params = new URLSearchParams();
+  if (selection.decade !== undefined) params.set("decade", String(selection.decade));
+  if (selection.country) params.set("country", selection.country);
+  if (selection.palette) params.set("palette", selection.palette);
+  if (selection.tag) params.set("tag", selection.tag);
+  return params;
+}
+
+export const isFiltered = (s: Selection) =>
+  s.decade !== undefined || Boolean(s.country || s.palette || s.tag);
+
+/** The decades the catalogue actually spans — never an option that matches nothing. */
+export function decadesOf(films: FilmCardData[]): number[] {
+  return [...new Set(films.map((f) => Math.floor(f.year / 10) * 10))].sort((a, b) => a - b);
+}
 
 export function filterFilms(films: FilmCardData[], { decade, country, palette, tag }: Selection) {
   return films.filter(

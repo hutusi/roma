@@ -12,6 +12,7 @@ import {
 import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { signInHrefFor } from "@/lib/safe-next";
 import { seoMetadata } from "@/lib/seo";
 import { listJsonLd } from "@/lib/structured-data";
 
@@ -83,7 +84,10 @@ export default async function PublicListPage({
           <FollowButton
             listId={list.id}
             labels={getDict(locale).followButton}
-            signInHref={localePath(locale, "/sign-in")}
+            signInHref={signInHrefFor(
+              localePath(locale, "/sign-in"),
+              localePath(locale, `/list/${slug}`),
+            )}
           />
         }
       />

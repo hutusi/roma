@@ -1,5 +1,7 @@
 import { asc, eq } from "drizzle-orm";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { EmptyState } from "@/components/site/empty-state";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
@@ -86,7 +88,15 @@ export async function UserListPage({
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow={`@${username}${t.listSuffix}`} title={list.title} />
+      <p className="mb-4 text-center text-sm">
+        <Link
+          href={localePath(locale, `/u/${username}?tab=lists`)}
+          className="text-ink-muted transition-colors hover:text-brand"
+        >
+          ← @{username} · {t.backToProfile}
+        </Link>
+      </p>
+      <TitleCard as="h1" eyebrow={`@${username}${t.listSuffix}`} title={list.title} />
       {list.description && (
         <p className="mt-4 text-center text-ink-muted text-sm">{list.description}</p>
       )}
@@ -136,16 +146,26 @@ export async function UserListPage({
                     .join(en ? ", " : "、")}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
+                  imageColor={poster?.dominantColor}
                 />
               </div>
             </div>
           );
         })}
-        {items.length === 0 && (
-          <p className="py-8 text-center text-ink-muted">
-            {isOwner ? t.emptyOwner : t.emptyViewer}
-          </p>
-        )}
+        {items.length === 0 &&
+          (isOwner ? (
+            <EmptyState className="mt-4">{t.emptyOwner}</EmptyState>
+          ) : (
+            <EmptyState
+              className="mt-4"
+              action={{
+                href: localePath(locale, `/u/${username}?tab=lists`),
+                label: t.backToProfile,
+              }}
+            >
+              {t.emptyViewer}
+            </EmptyState>
+          ))}
       </div>
     </div>
   );

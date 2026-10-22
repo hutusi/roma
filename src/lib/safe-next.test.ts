@@ -30,4 +30,18 @@ describe("signInHrefFor", () => {
   test("drops an unsafe current path", () => {
     expect(signInHrefFor("/zh/sign-in", "//evil.example")).toBe("/zh/sign-in");
   });
+  test("carries no next from the auth pages themselves", () => {
+    for (const page of [
+      "/zh/sign-in",
+      "/zh/sign-up",
+      "/en/forgot-password",
+      "/en/reset-password?token=abc",
+    ]) {
+      expect(signInHrefFor("/zh/sign-in", page)).toBe("/zh/sign-in");
+    }
+    // Only whole segments: a page merely named like one keeps its next.
+    expect(signInHrefFor("/zh/sign-in", "/zh/list/sign-in-tips")).toBe(
+      "/zh/sign-in?next=%2Fzh%2Flist%2Fsign-in-tips",
+    );
+  });
 });

@@ -32,7 +32,16 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
       dependencies: ["setup"],
-      testIgnore: /.*\.setup\.ts/,
+      testIgnore: [/.*\.setup\.ts/, /.*\.mobile\.spec\.ts/],
+    },
+    {
+      // Phone layout checks (*.mobile.spec.ts). Chromium with a touch
+      // device profile, narrowed to 375px — smaller than most phones, so
+      // overflow shows up here before it does in readers' hands.
+      name: "mobile",
+      use: { ...devices["Pixel 7"], viewport: { width: 375, height: 740 } },
+      dependencies: ["setup"],
+      testMatch: /.*\.mobile\.spec\.ts/,
     },
   ],
   webServer: {

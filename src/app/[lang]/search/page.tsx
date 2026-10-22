@@ -46,7 +46,7 @@ export default async function SearchPage({ params }: { params: Promise<{ lang: s
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow={t.eyebrow} title={t.title} />
+      <TitleCard as="h1" eyebrow={t.eyebrow} title={t.title} />
       {/* The fallback is the empty-query shell — what prerenders into
           static HTML; the child reads ?q on hydration (films pattern). */}
       <Suspense fallback={<SearchPageBody locale={locale} labels={labels} initialQuery="" />}>

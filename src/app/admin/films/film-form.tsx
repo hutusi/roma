@@ -485,7 +485,7 @@ export function FilmForm({
 
       <div className="fixed inset-x-0 bottom-0 border-line border-t bg-paper/95 py-3 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-end gap-3 px-8">
-          <Button type="submit" disabled={submitting} className="tracking-[0.2em]">
+          <Button type="submit" disabled={submitting} className="tracking-label">
             {submitting ? "保存中…" : "保存"}
           </Button>
         </div>

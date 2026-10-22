@@ -6,12 +6,14 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { MarkButtons } from "@/components/site/mark-buttons";
 import {
   getFilmStubBySlug,
+  getMoreByDirectors,
   getPublishedFilmBySlug,
   getPublishedFilmSlugs,
 } from "@/db/queries/public";
 import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
+import { signInHrefFor } from "@/lib/safe-next";
 import { seoMetadata } from "@/lib/seo";
 import { filmJsonLd } from "@/lib/structured-data";
 
@@ -86,17 +88,26 @@ export default async function PublicFilmPage({
     }
     notFound();
   }
+  const moreFilms = await getMoreByDirectors(
+    film.id,
+    film.filmDirectors.map((fd) => fd.director.id),
+    locale,
+  );
   return (
     <>
       <JsonLd data={filmJsonLd(film, locale)} />
       <FilmPage
         film={film}
         locale={locale}
+        moreFilms={moreFilms}
         actions={
           <MarkButtons
             filmId={film.id}
             labels={getDict(locale).markButtons}
-            signInHref={localePath(locale, "/sign-in")}
+            signInHref={signInHrefFor(
+              localePath(locale, "/sign-in"),
+              localePath(locale, `/film/${slug}`),
+            )}
           />
         }
       />

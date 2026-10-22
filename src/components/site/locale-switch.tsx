@@ -23,7 +23,7 @@ export function LocaleSwitch({
     <Link
       href={localePath(toEn ? "en" : "zh", path)}
       className={
-        className ?? "text-ink-muted text-xs tracking-[0.2em] transition-colors hover:text-brand"
+        className ?? "text-ink-muted text-xs tracking-label transition-colors hover:text-brand"
       }
     >
       {toEn ? "English Edition" : "中文版"}

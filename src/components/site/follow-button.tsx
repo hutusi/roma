@@ -34,7 +34,7 @@ export function FollowButton({
       <button
         type="button"
         onClick={retry}
-        className="text-ink-muted text-sm tracking-[0.1em] transition-colors hover:text-brand"
+        className="text-ink-muted text-sm tracking-title transition-colors hover:text-brand"
       >
         {labels.unavailable}
       </button>
@@ -45,7 +45,7 @@ export function FollowButton({
     return (
       <Link
         href={signInHref}
-        className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
+        className="text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
       >
         {labels.signInPrompt}
       </Link>
@@ -58,7 +58,7 @@ export function FollowButton({
       aria-pressed={following}
       disabled={pending}
       className={cn(
-        "border px-6 py-2 text-sm tracking-[0.25em] transition-colors disabled:cursor-wait disabled:opacity-60",
+        "border px-6 py-2 text-sm tracking-label transition-colors disabled:cursor-wait disabled:opacity-60",
         following
           ? "border-brand bg-brand text-paper"
           : "border-line text-ink-muted hover:border-brand hover:text-brand",

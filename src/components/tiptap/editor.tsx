@@ -67,7 +67,7 @@ function ImagePicker({ editor, media }: { editor: Editor; media: MediaOption[] }
           图
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl" closeLabel="关闭">
         <DialogHeader>
           <DialogTitle>从媒体库插入图片</DialogTitle>
         </DialogHeader>

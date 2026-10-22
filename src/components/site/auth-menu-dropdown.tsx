@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { notifyError } from "@/components/site/notify";
-import { invalidateMe, type MeUser } from "@/components/site/use-me";
+import { signOut } from "@/components/site/sign-out";
+import type { MeUser } from "@/components/site/use-me";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,24 +32,17 @@ export function AuthMenuDropdown({
 }) {
   const router = useRouter();
 
-  const signOut = async () => {
-    try {
-      // The better-auth client is only needed here; keep it out of the
-      // layout chunk every page loads.
-      const { authClient } = await import("@/lib/auth-client");
-      const { error } = await authClient.signOut();
-      if (error) throw error;
-    } catch {
+  const onSignOut = async () => {
+    if (!(await signOut())) {
       notifyError(labels.signOutFailed);
       return;
     }
-    invalidateMe();
     router.refresh();
   };
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="max-w-[10rem] truncate text-sm tracking-[0.1em] transition-colors hover:text-brand">
+      <DropdownMenuTrigger className="max-w-[7rem] truncate text-sm tracking-title transition-colors hover:text-brand lg:max-w-[10rem]">
         {user.name}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="font-sans">
@@ -72,7 +66,7 @@ export function AuthMenuDropdown({
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => void signOut()}>{labels.signOut}</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void onSignOut()}>{labels.signOut}</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

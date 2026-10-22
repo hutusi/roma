@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/seo/json-ld";
+import { ButtonLink } from "@/components/site/button-link";
 import { FilmCard } from "@/components/site/film-card";
 import { Grain } from "@/components/site/grain";
 import { TitleCard } from "@/components/site/title-card";
 import { getHomeData, posterOf } from "@/db/queries/public";
+import { getDict } from "@/i18n/dict";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
@@ -70,17 +72,14 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <section className="relative overflow-hidden border-line border-b bg-paper">
         <Grain />
         <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 py-24 text-center sm:py-32">
-          <p className="font-display text-ink-muted text-sm uppercase tracking-[0.4em]">
+          <p className="font-display text-ink-muted text-sm uppercase tracking-eyebrow">
             Babuban · 8½
           </p>
-          <h1 className="font-bold text-5xl tracking-[0.25em] sm:text-6xl">八部半</h1>
+          <h1 className="font-bold text-5xl tracking-label sm:text-6xl">八部半</h1>
           <p className={`${t.taglineWidth} text-ink-muted text-lg leading-[1.9]`}>{t.tagline}</p>
-          <Link
-            href={localePath(locale, "/lists")}
-            className="mt-4 border border-ink px-8 py-3 text-sm tracking-[0.3em] transition-colors hover:border-brand hover:text-brand"
-          >
+          <ButtonLink href={localePath(locale, "/lists")} className="mt-4">
             {t.browseCta}
-          </Link>
+          </ButtonLink>
         </div>
       </section>
 
@@ -92,23 +91,33 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             className="group mt-8 block border border-line bg-card transition-colors hover:border-brand"
           >
             {featured.cover && (
-              <div className="relative aspect-[137/60] overflow-hidden bg-ink">
+              <div
+                className="relative aspect-[137/60] overflow-hidden bg-ink"
+                style={
+                  featured.cover.dominantColor
+                    ? { backgroundColor: featured.cover.dominantColor }
+                    : undefined
+                }
+              >
                 <Image
                   src={featured.cover.url}
                   alt={featured.cover.alt ?? featuredTitle}
                   fill
                   sizes="(min-width: 768px) 768px, 100vw"
+                  // Above the fold on most screens: don't wait for layout.
+                  loading="eager"
+                  fetchPriority="high"
                   className="object-cover grayscale transition-transform duration-500 group-hover:scale-[1.02]"
                 />
               </div>
             )}
             <div className="p-6 text-center">
-              <h2 className="font-bold text-xl tracking-[0.1em] transition-colors group-hover:text-brand">
+              <h2 className="font-bold text-xl tracking-title transition-colors group-hover:text-brand">
                 {featuredTitle}
               </h2>
               {featuredTheme && <p className="mt-2 text-ink-muted text-sm">{featuredTheme}</p>}
-              <p className="mt-3 font-display text-ink-muted text-xs tracking-[0.3em]">
-                {featured.items.length} FILMS
+              <p className="mt-3 font-display text-ink-muted text-xs uppercase tracking-eyebrow">
+                {getDict(locale).filmCount(featured.items.length)}
               </p>
             </div>
           </Link>
@@ -116,7 +125,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             <p className="mt-4 text-center">
               <Link
                 href={localePath(locale, "/lists")}
-                className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
+                className="text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
               >
                 {t.allListsCta}
               </Link>
@@ -128,7 +137,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <section className="mx-auto max-w-3xl px-6 pt-20 pb-4">
         <TitleCard eyebrow={t.recentEyebrow} title={t.recentTitle} />
         {recentFilms.length > 0 ? (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {recentFilms.map((film) => {
               const poster = posterOf(film.media);
               const title = en ? (film.titleEn ?? film.titleOriginal) : film.titleZh;
@@ -144,6 +153,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                     .join(en ? ", " : "、")}
                   imageUrl={poster?.url}
                   imageAlt={poster?.alt}
+                  imageColor={poster?.dominantColor}
                 />
               );
             })}

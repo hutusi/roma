@@ -67,6 +67,7 @@ export async function uploadMedia(
         credit,
         width: image.width,
         height: image.height,
+        dominantColor: image.dominantColor,
         kind: kind as (typeof mediaKind.enumValues)[number],
         filmId,
         personId,

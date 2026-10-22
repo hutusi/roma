@@ -44,9 +44,9 @@ export default async function AdminLayout({
 
   return (
     <DocumentShell lang="zh-CN">
-      <div className="flex min-h-full flex-1 font-sans text-[15px]">
+      <div className="flex min-h-full flex-1 font-sans text-ui">
         <aside className="flex w-52 shrink-0 flex-col border-line border-r bg-secondary/40 px-4 py-6">
-          <Link href="/admin" className="px-2 font-bold tracking-[0.2em]">
+          <Link href="/admin" className="px-2 font-bold tracking-label">
             八部半 · 编辑部
           </Link>
           <nav className="mt-8 flex flex-1 flex-col gap-1">

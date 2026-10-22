@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { TitleCard } from "@/components/site/title-card";
 import { getPublishedFilms, posterOf } from "@/db/queries/public";
 import { countryToEn } from "@/i18n/countries";
 import { localePath } from "@/i18n/locales";
 import { parseLocale } from "@/i18n/params";
 import { seoMetadata } from "@/lib/seo";
-import { FilmsFilter } from "./films-filter";
-import { COPY, FilmsView } from "./films-view";
+import { COPY } from "./copy";
+import { FilmsBrowser } from "./films-browser";
 import type { FilmCardData } from "./filtering";
 
 export async function generateMetadata({
@@ -47,6 +46,7 @@ export default async function FilmsIndexPage({ params }: { params: Promise<{ lan
         .join(en ? ", " : "、"),
       imageUrl: poster?.url ?? null,
       imageAlt: poster?.alt ?? null,
+      imageColor: poster?.dominantColor ?? null,
       // Countries are stored in Chinese; the ?country param speaks the
       // display language, so translate once here rather than per compare.
       countries: en ? film.countries.map(countryToEn) : film.countries,
@@ -60,16 +60,12 @@ export default async function FilmsIndexPage({ params }: { params: Promise<{ lan
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow={t.eyebrow} title={t.title} />
+      <TitleCard as="h1" eyebrow={t.eyebrow} title={t.title} />
       <p className="mx-auto mt-6 max-w-[60ch] text-center text-ink-muted">{t.intro}</p>
 
-      {/* The fallback is the full catalogue, not a spinner: it is what
-          gets prerendered into the static HTML, so readers without JS and
-          crawlers still get every film and every link. The island swaps in
-          the filtered view once it can read the query on hydration. */}
-      <Suspense fallback={<FilmsView locale={locale} films={films} />}>
-        <FilmsFilter locale={locale} films={films} />
-      </Suspense>
+      {/* Prerenders the full catalogue — what crawlers and no-JS readers
+          get — and filters on the client after hydration. */}
+      <FilmsBrowser locale={locale} films={films} />
     </div>
   );
 }

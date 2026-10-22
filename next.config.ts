@@ -12,8 +12,8 @@ const nextConfig: NextConfig = {
   // both locales to symmetric prefixes. Enumerated on purpose — a
   // catch-all regex funnel would run before the filesystem and silently
   // capture every future top-level route or metadata file. /en, /admin,
-  // and /api are unchanged; true garbage gets Next's bare 404 until
-  // global-not-found stabilizes.
+  // and /api are unchanged. Any other first segment lands in [lang],
+  // whose layout falls back to zh chrome so the styled 404 renders.
   async redirects() {
     return [
       { source: "/", destination: "/zh", permanent: true },

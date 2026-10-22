@@ -1,7 +1,14 @@
 import type { Dictionary } from "./zh";
 
 export const en = {
+  filmCount: (n: number) => (n === 1 ? "1 film" : `${n} films`),
+  a11y: {
+    skipToContent: "Skip to content",
+  },
   nav: {
+    label: "Main",
+    menu: "Menu",
+    closeMenu: "Close menu",
     lists: "Lists",
     films: "Films",
     about: "About",
@@ -11,6 +18,10 @@ export const en = {
     aboutLink: "About",
   },
   search: {
+    emptyQuery: "Search for films, directors, actors or lists.",
+    browseFilms: "All films",
+    browseLists: "All lists",
+    close: "Close",
     open: "Search",
     title: "Search",
     placeholder: "Films, directors, lists…",
@@ -45,6 +56,8 @@ export const en = {
     failed: "The follow wasn't updated. Please try again.",
   },
   film: {
+    moreByDirector: "More by the same director",
+    allFilms: "All films",
     directedBy: "Directed by ",
     nameSeparator: ", ",
     runtime: (minutes: number) => `${minutes} min`,
@@ -85,6 +98,22 @@ export const en = {
     actedIn: "Films as Actor",
   },
   auth: {
+    errors: {
+      invalidCredentials: "That email and password don't match.",
+      emailTaken: "That email is already registered. You can sign in instead.",
+      usernameTaken: "That username is taken. Try another.",
+      usernameInvalid: "Usernames are 3–30 letters, digits or _ . -.",
+      passwordTooShort: "Passwords need at least 8 characters.",
+      passwordTooLong: "That password is too long.",
+      wrongPassword: "Your current password isn't right.",
+      invalidEmail: "Enter a valid email address.",
+      tokenExpired: "This link has expired. Please request a new one.",
+      banned: "This account has been suspended.",
+      rateLimited: "Too many attempts. Please wait a moment and try again.",
+      network: "Couldn't reach the server. Check your connection and try again.",
+      unknown: "Something went wrong. Please try again later.",
+      required: "Please fill this in.",
+    },
     email: "Email",
     password: "Password",
     signIn: {
@@ -95,6 +124,7 @@ export const en = {
       noAccount: "No account yet?",
       signUpLink: "Sign up",
       forgotLink: "Forgot password",
+      resetDone: "Your password has been reset. Sign in with the new one.",
     },
     signUp: {
       title: "Sign up",
@@ -115,6 +145,7 @@ export const en = {
       emailLabel: "Registered email",
       submit: "Send reset email",
       submitting: "Sending…",
+      backToSignIn: "Back to sign in",
     },
     reset: {
       title: "Reset password",
@@ -127,13 +158,20 @@ export const en = {
       error: "Reset failed: the link may have expired. Please request a new one.",
     },
   },
+  curatedList: {
+    empty: "This list is still being put together.",
+    allLists: "See the other lists",
+  },
   profile: {
+    browseFilms: "Browse the films",
+    emptyOwnerLists: "No lists yet. Start one, and put the films you'd recommend in order.",
     tabs: { watched: "Watched", want: "Want to see", lists: "Lists" },
     emptyWatched: "No films marked as watched yet.",
     emptyWant: "No films marked as want-to-see yet.",
     emptyLists: "No lists created yet.",
   },
   userList: {
+    backToProfile: "Back to profile",
     newList: "New list",
     listSuffix: "'s list",
     titleLabel: "Title",

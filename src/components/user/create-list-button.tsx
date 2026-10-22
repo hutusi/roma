@@ -33,11 +33,11 @@ export function CreateListButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full tracking-[0.2em]">
+        <Button variant="outline" className="w-full tracking-label">
           {labels.newList}
         </Button>
       </DialogTrigger>
-      <DialogContent className="font-sans">
+      <DialogContent className="font-sans" closeLabel={labels.cancel}>
         <DialogHeader>
           <DialogTitle>{labels.newList}</DialogTitle>
         </DialogHeader>

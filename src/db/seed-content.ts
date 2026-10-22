@@ -92,6 +92,7 @@ async function downloadAndStoreImage(url: string, name: string) {
     ...(await storeImage(image, "seed")),
     width: image.width,
     height: image.height,
+    dominantColor: image.dominantColor,
   };
 }
 

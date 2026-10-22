@@ -16,12 +16,6 @@
  * buttons and hover states.
  */
 @theme {
-  --color-paper: #faf8f4;
-  --color-ink: #1a1a18;
-  --color-ink-muted: #6b6b66;
-  --color-line: #d9d5cc;
-  --color-brand: #8b2e2e;
-
   --font-sans:
     ui-sans-serif, system-ui, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   /* "Babuban Serif SC" is the generated corpus subset of Noto Serif SC
@@ -29,7 +23,24 @@
   --font-body: "Babuban Serif SC", "Noto Serif SC", "Songti SC", "SimSun", serif;
   --font-display: "Playfair Display", "Babuban Serif SC", "Noto Serif SC", "Songti SC", serif;
 
-  --animate-fade-up: fade-up 0.7s ease-out both;
+  /*
+   * Type and rhythm. One vocabulary instead of per-page bracket values:
+   * - tracking: eyebrow (Latin small caps), label (CJK UI: nav, buttons,
+   *   meta lines), title (CJK headings), body (running prose).
+   * - text-prose is the reading size with its 1.9 leading; text-ui the
+   *   size of lists, tables and form chrome.
+   * - max-w-measure is the reading measure for prose.
+   */
+  --tracking-eyebrow: 0.35em;
+  --tracking-label: 0.2em;
+  --tracking-title: 0.15em;
+  --tracking-body: 0.02em;
+  --text-prose: 1.0625rem;
+  --text-prose--line-height: 1.9;
+  --text-ui: 0.9375rem;
+  --container-measure: 70ch;
+
+  --animate-fade-up: fade-up 0.4s ease-out both;
 
   /* Starts partially visible: content that begins at opacity 0 does not
      count as painted, wrecking FCP/LCP on throttled connections. */
@@ -46,6 +57,15 @@
 }
 
 @theme inline {
+  /* The house palette, as variables so a dark theme can redefine them
+     in one place (none ships yet). */
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  /* Hairlines are decorative at 1.4:1; controls need 3:1 (WCAG 1.4.11). */
+  --color-line-strong: var(--line-strong);
+  --color-brand: var(--brand);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-heading: var(--font-display);
@@ -88,6 +108,12 @@
 }
 
 :root {
+  --paper: #faf8f4;
+  --ink: #1a1a18;
+  --ink-muted: #6b6b66;
+  --line: #d9d5cc;
+  --line-strong: #948e82;
+  --brand: #8b2e2e;
   --background: #faf8f4;
   --foreground: #1a1a18;
   --card: #fffefb;
@@ -164,8 +190,10 @@
     @apply font-body;
   }
   /* English body text gets a Latin text serif (Playfair is display-only);
-     CJK glyphs on /en still fall through to the Noto Serif SC subset. */
-  html:lang(en) {
+     CJK glyphs on /en still fall through to the Noto Serif SC subset.
+     Any lang="en" subtree, not just <html>, so an EN preview inside the
+     zh admin gets it too (with font-body re-applied on the wrapper). */
+  :lang(en) {
     --font-body:
       "Source Serif 4", "Babuban Serif SC", "Noto Serif SC", "Songti SC", "SimSun", serif;
   }
@@ -173,12 +201,29 @@
     @apply bg-paper text-ink;
   }
   ::selection {
-    background-color: color-mix(in srgb, #8b2e2e 18%, transparent);
+    background-color: color-mix(in srgb, var(--brand) 18%, transparent);
+  }
+  /* One visible focus style for hand-built links and buttons (shadcn
+     controls bring their own ring). Keyboard only — :focus-visible. */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
   }
 }
 
+/* Reduced motion means all of it: entrances, dialog zooms, hover
+   scales. Unlayered on purpose — that already outranks every utility in
+   Tailwind's layers, no !important needed. */
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-up {
-    animation: none;
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
   }
 }

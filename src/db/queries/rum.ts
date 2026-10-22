@@ -32,3 +32,44 @@ export async function getRumSummary(days = 7): Promise<RumMetricSummary[]> {
     .where(sql`${rumEvents.createdAt} >= now() - make_interval(days => ${days})`)
     .groupBy(rumEvents.metric, rumEvents.isChina);
 }
+
+export type RumRouteSummary = {
+  route: string;
+  samples: number;
+  lcpP75: number | null;
+  inpP75: number | null;
+  clsP75: number | null;
+};
+
+/**
+ * p75 of the three Core Web Vitals per kind of page — slugs and
+ * usernames collapse to [slug] / [name], so 74 film pages read as one
+ * row. Answers "which pages are slow", which the per-metric summary
+ * can't. Rows with fewer than `minSamples` beacons are dropped as noise.
+ */
+export async function getRumByRoute(days = 7, minSamples = 5): Promise<RumRouteSummary[]> {
+  const route = sql<string>`regexp_replace(
+    regexp_replace(${rumEvents.path}, '^/(zh|en)/(film|list|director|actor)/[^/]+', '/\\1/\\2/[slug]'),
+    '^/(zh|en)/u/[^/]+', '/\\1/u/[name]')`;
+  const p75 = (metric: string) =>
+    sql<
+      number | null
+    >`percentile_cont(0.75) within group (order by ${rumEvents.value}) filter (where ${rumEvents.metric} = ${metric})`;
+  return (
+    db
+      .select({
+        route,
+        samples: sql<number>`count(*)::int`,
+        lcpP75: p75("LCP"),
+        inpP75: p75("INP"),
+        clsP75: p75("CLS"),
+      })
+      .from(rumEvents)
+      .where(sql`${rumEvents.createdAt} >= now() - make_interval(days => ${days})`)
+      .groupBy(route)
+      .having(sql`count(*) >= ${minSamples}`)
+      // Slowest LCP first, as the page says. By expression, not position:
+      // `4` was inpP75, so the table sorted by the wrong metric.
+      .orderBy(sql`${p75("LCP")} desc nulls last`)
+  );
+}

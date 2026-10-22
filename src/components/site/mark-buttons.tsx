@@ -35,7 +35,7 @@ export function MarkButtons({
       <button
         type="button"
         onClick={retry}
-        className="text-ink-muted text-sm tracking-[0.1em] transition-colors hover:text-brand"
+        className="text-ink-muted text-sm tracking-title transition-colors hover:text-brand"
       >
         {labels.unavailable}
       </button>
@@ -46,7 +46,7 @@ export function MarkButtons({
     return (
       <Link
         href={signInHref}
-        className="text-ink-muted text-sm tracking-[0.2em] transition-colors hover:text-brand"
+        className="text-ink-muted text-sm tracking-label transition-colors hover:text-brand"
       >
         {labels.signInPrompt}
       </Link>
@@ -71,7 +71,7 @@ export function MarkButtons({
 
   const buttonClass = (active: boolean) =>
     cn(
-      "border px-5 py-2 text-sm tracking-[0.25em] transition-colors disabled:cursor-wait disabled:opacity-60",
+      "border px-5 py-2 text-sm tracking-label transition-colors disabled:cursor-wait disabled:opacity-60",
       active
         ? "border-brand bg-brand text-paper"
         : "border-line text-ink-muted hover:border-brand hover:text-brand",

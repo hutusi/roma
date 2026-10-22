@@ -1300,7 +1300,27 @@
   unicode-range: U+9a91,U+9a9a,U+9aa8,U+9b45,U+9c9c,U+9e21,U+9e26,U+9e93,U+9f20,U+9f7f,U+9f84;
 }
 
-/* 400 · bucket 130 · 1 glyphs · 856 B */
+/* 400 · bucket 130 · 1 glyphs · 1000 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/babuban-serif-sc/400-e5e3915808.woff2") format("woff2");
+  unicode-range: U+83dc;
+}
+
+/* 400 · bucket 131 · 4 glyphs · 1900 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/babuban-serif-sc/400-958114292e.woff2") format("woff2");
+  unicode-range: U+586b,U+5c1d,U+7f51,U+8f93;
+}
+
+/* 400 · bucket 132 · 1 glyphs · 856 B */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1310,7 +1330,7 @@
   unicode-range: U+f2;
 }
 
-/* 400 · bucket 131 · 1 glyphs · 760 B · from noto-serif-sc-109-400-normal.woff2 */
+/* 400 · bucket 133 · 1 glyphs · 760 B · from noto-serif-sc-109-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1320,7 +1340,7 @@
   unicode-range: U+2192;
 }
 
-/* 400 · bucket 132 · 2 glyphs · 928 B · from noto-serif-sc-119-400-normal.woff2 */
+/* 400 · bucket 134 · 2 glyphs · 928 B · from noto-serif-sc-119-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1330,7 +1350,7 @@
   unicode-range: U+14d,U+16b;
 }
 
-/* 400 · bucket 133 · 1 glyphs · 1324 B · from noto-serif-sc-25-400-normal.woff2 */
+/* 400 · bucket 135 · 1 glyphs · 1324 B · from noto-serif-sc-25-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1340,7 +1360,7 @@
   unicode-range: U+9a62;
 }
 
-/* 400 · bucket 134 · 1 glyphs · 1136 B · from noto-serif-sc-30-400-normal.woff2 */
+/* 400 · bucket 136 · 1 glyphs · 1136 B · from noto-serif-sc-30-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1350,7 +1370,7 @@
   unicode-range: U+93e2;
 }
 
-/* 400 · bucket 135 · 1 glyphs · 1084 B · from noto-serif-sc-38-400-normal.woff2 */
+/* 400 · bucket 137 · 1 glyphs · 1084 B · from noto-serif-sc-38-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1360,7 +1380,7 @@
   unicode-range: U+8755;
 }
 
-/* 400 · bucket 136 · 1 glyphs · 1336 B · from noto-serif-sc-49-400-normal.woff2 */
+/* 400 · bucket 138 · 1 glyphs · 1336 B · from noto-serif-sc-49-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1370,7 +1390,7 @@
   unicode-range: U+7aca;
 }
 
-/* 400 · bucket 137 · 1 glyphs · 1028 B · from noto-serif-sc-61-400-normal.woff2 */
+/* 400 · bucket 139 · 1 glyphs · 1028 B · from noto-serif-sc-61-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1380,7 +1400,7 @@
   unicode-range: U+6bad;
 }
 
-/* 400 · bucket 138 · 1 glyphs · 1000 B · from noto-serif-sc-64-400-normal.woff2 */
+/* 400 · bucket 140 · 1 glyphs · 1000 B · from noto-serif-sc-64-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1390,7 +1410,7 @@
   unicode-range: U+689f;
 }
 
-/* 400 · bucket 139 · 24 glyphs · 3288 B · from noto-serif-sc-cyrillic-400-normal.woff2 */
+/* 400 · bucket 141 · 24 glyphs · 3288 B · from noto-serif-sc-cyrillic-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1398,6 +1418,16 @@
   font-weight: 400;
   src: url("/fonts/babuban-serif-sc/400-ce0d998dc5.woff2") format("woff2");
   unicode-range: U+410-411,U+417-418,U+41f-420,U+430-432,U+434-435,U+438-43e,U+440-443,U+446,U+451;
+}
+
+/* 400 · bucket 142 · 1 glyphs · 756 B · from noto-serif-sc-105-400-normal.woff2 */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/babuban-serif-sc/400-e80f8cd933.woff2") format("woff2");
+  unicode-range: U+2190;
 }
 
 /* 700 · bucket 0 · 10 glyphs · 1848 B */
@@ -1760,7 +1790,47 @@
   unicode-range: U+35,U+4ea4,U+6ee1,U+91cf;
 }
 
-/* 700 · bucket 36 · 1 glyphs · 764 B · from noto-serif-sc-109-700-normal.woff2 */
+/* 700 · bucket 36 · 2 glyphs · 1360 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/babuban-serif-sc/700-eb3f06eb05.woff2") format("woff2");
+  unicode-range: U+822a,U+83dc;
+}
+
+/* 700 · bucket 37 · 6 glyphs · 2196 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/babuban-serif-sc/700-42f422d5cf.woff2") format("woff2");
+  unicode-range: U+5171,U+6362,U+6e05,U+8005,U+8bef,U+9519;
+}
+
+/* 700 · bucket 38 · 18 glyphs · 5156 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/babuban-serif-sc/700-de72c43165.woff2") format("woff2");
+  unicode-range: U+38,U+513f,U+5360,U+586b,U+5c1d,U+76f4,U+7b49,U+7e41,U+7edc,U+7f51,U+81f3,U+8f93,U+8fd4,U+8fde,U+957f,U+9700,U+9879,U+9891;
+}
+
+/* 700 · bucket 39 · 2 glyphs · 1296 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/babuban-serif-sc/700-f91c45dcd6.woff2") format("woff2");
+  unicode-range: U+628a,U+6574;
+}
+
+/* 700 · bucket 40 · 1 glyphs · 764 B · from noto-serif-sc-109-700-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1768,4 +1838,14 @@
   font-weight: 700;
   src: url("/fonts/babuban-serif-sc/700-9522778fd3.woff2") format("woff2");
   unicode-range: U+2192;
+}
+
+/* 700 · bucket 41 · 1 glyphs · 760 B · from noto-serif-sc-105-700-normal.woff2 */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/babuban-serif-sc/700-5c615f77be.woff2") format("woff2");
+  unicode-range: U+2190;
 }

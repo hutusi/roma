@@ -1,70 +1,97 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { invalidateMe } from "@/components/site/use-me";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { type Locale, localePath } from "@/i18n/locales";
-import { authClient } from "@/lib/auth-client";
 import { safeNextPath } from "@/lib/safe-next";
+import { authErrorMessage } from "./auth-errors";
+import { FormField, fieldErrors } from "./form-field";
+import { useQueryParam } from "./use-query-param";
 
 export function SignInForm({ locale, labels }: { locale: Locale; labels: Dictionary["auth"] }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const next = useQueryParam("next");
+  const justReset = useQueryParam("reset") === "1";
   const [error, setError] = useState<string | null>(null);
+  const [fields, setFields] = useState<Record<string, string>>({});
   const [pending, setPending] = useState(false);
   const t = labels.signIn;
+  // Sign-up keeps the destination, so a new reader also lands back where they were.
+  const signUpHref = next
+    ? `${localePath(locale, "/sign-up")}?next=${encodeURIComponent(next)}`
+    : localePath(locale, "/sign-up");
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setPending(true);
+    const invalid = fieldErrors(event.currentTarget, labels.errors);
+    setFields(invalid);
+    if (Object.keys(invalid).length) return;
     const form = new FormData(event.currentTarget);
-    const { error } = await authClient.signIn.email({
-      email: String(form.get("email")),
-      password: String(form.get("password")),
-    });
-    setPending(false);
-    if (error) {
-      setError(t.error);
+    setPending(true);
+    try {
+      const { authClient } = await import("@/lib/auth-client");
+      const { error } = await authClient.signIn.email({
+        email: String(form.get("email")),
+        password: String(form.get("password")),
+      });
+      if (error) {
+        setError(authErrorMessage(error, labels.errors));
+        return;
+      }
+    } catch {
+      setError(labels.errors.network);
       return;
+    } finally {
+      setPending(false);
     }
     // The header and islands read the session from a shared store.
     invalidateMe();
-    router.push(safeNextPath(searchParams.get("next"), localePath(locale, "/")));
+    router.push(safeNextPath(next, localePath(locale, "/")));
     router.refresh();
   }
 
   return (
     <div className="border-line border-y py-10">
-      <h1 className="text-center font-bold text-2xl tracking-[0.2em]">{t.title}</h1>
-      <form onSubmit={onSubmit} className="mt-8 space-y-5">
-        <div className="space-y-2">
-          <Label htmlFor="email">{labels.email}</Label>
-          <Input id="email" name="email" type="email" required autoComplete="email" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">{labels.password}</Label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            required
-            autoComplete="current-password"
-          />
-        </div>
-        {error && <p className="text-destructive text-sm">{error}</p>}
-        <Button type="submit" className="w-full tracking-[0.3em]" disabled={pending}>
+      <h1 className="text-center font-bold text-2xl tracking-label">{t.title}</h1>
+      {justReset && (
+        <p role="status" className="mt-6 border border-line bg-card px-4 py-3 text-center text-sm">
+          {t.resetDone}
+        </p>
+      )}
+      <form onSubmit={onSubmit} noValidate className="mt-8 space-y-5">
+        <FormField
+          id="email"
+          label={labels.email}
+          type="email"
+          required
+          autoComplete="email"
+          error={fields.email}
+        />
+        <FormField
+          id="password"
+          label={labels.password}
+          type="password"
+          required
+          autoComplete="current-password"
+          error={fields.password}
+        />
+        {error && (
+          <p role="alert" className="text-destructive text-sm">
+            {error}
+          </p>
+        )}
+        <Button type="submit" className="w-full tracking-eyebrow" disabled={pending}>
           {pending ? t.submitting : t.submit}
         </Button>
       </form>
       <p className="mt-6 text-center text-ink-muted text-sm">
         {t.noAccount}
-        <Link href={localePath(locale, "/sign-up")} className="ml-1 text-brand hover:underline">
+        <Link href={signUpHref} className="ml-1 text-brand hover:underline">
           {t.signUpLink}
         </Link>
         <span className="mx-2">·</span>

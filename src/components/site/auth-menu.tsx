@@ -34,14 +34,10 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
   if (!user) {
     return (
       <Link
-        // Back to this page afterwards, not the home page. The sign-in
-        // pages themselves carry no next (it would point at sign-in).
-        href={
-          /\/(sign-in|sign-up|forgot-password|reset-password)$/.test(pathname)
-            ? localePath(locale, "/sign-in")
-            : signInHrefFor(localePath(locale, "/sign-in"), pathname)
-        }
-        className="whitespace-nowrap text-sm tracking-[0.2em] transition-colors hover:text-brand"
+        // Back to this page afterwards, not the home page (and from an
+        // auth page, no next at all: see signInHrefFor).
+        href={signInHrefFor(localePath(locale, "/sign-in"), pathname)}
+        className="whitespace-nowrap text-sm tracking-label transition-colors hover:text-brand"
       >
         {labels.signIn}
       </Link>
@@ -51,7 +47,9 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
   return (
     <Suspense
       fallback={
-        <span className="max-w-[10rem] truncate text-sm tracking-[0.1em]">{user.name}</span>
+        <span className="max-w-[7rem] truncate text-sm tracking-title lg:max-w-[10rem]">
+          {user.name}
+        </span>
       }
     >
       <AuthMenuDropdown locale={locale} labels={labels} user={user} />

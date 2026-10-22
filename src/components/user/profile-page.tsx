@@ -1,6 +1,7 @@
 import { asc, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { EmptyState } from "@/components/site/empty-state";
 import { FilmCard } from "@/components/site/film-card";
 import { TitleCard } from "@/components/site/title-card";
 import { db } from "@/db";
@@ -75,7 +76,7 @@ export async function ProfilePage({
 
   return (
     <div className="mx-auto max-w-3xl animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow="Profile" title={user.name} />
+      <TitleCard as="h1" eyebrow="Profile" title={user.name} />
       <p className="mt-3 text-center font-display text-ink-muted text-sm">@{user.username}</p>
 
       <nav className="mt-10 flex justify-center gap-6 border-line border-b pb-3 text-sm">
@@ -85,8 +86,8 @@ export async function ProfilePage({
             href={localePath(locale, `/u/${username}?tab=${key}`)}
             className={
               tab === key
-                ? "text-brand tracking-[0.2em]"
-                : "text-ink-muted tracking-[0.2em] transition-colors hover:text-brand"
+                ? "text-brand tracking-label"
+                : "text-ink-muted tracking-label transition-colors hover:text-brand"
             }
           >
             {t.tabs[key]}
@@ -98,7 +99,7 @@ export async function ProfilePage({
       </nav>
 
       {tab !== "lists" && (
-        <div className="mt-8 grid gap-4 pb-8 sm:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-4 pb-8 sm:grid-cols-2">
           {visibleMarks.map((mark) => {
             const poster = posterOf(mark.film.media);
             return (
@@ -113,13 +114,17 @@ export async function ProfilePage({
                   .join(en ? ", " : "、")}
                 imageUrl={poster?.url}
                 imageAlt={poster?.alt}
+                imageColor={poster?.dominantColor}
               />
             );
           })}
           {visibleMarks.length === 0 && (
-            <p className="col-span-full py-8 text-center text-ink-muted">
+            <EmptyState
+              className="col-span-full mt-4"
+              action={{ href: localePath(locale, "/films"), label: t.browseFilms }}
+            >
               {tab === "watched" ? t.emptyWatched : t.emptyWant}
-            </p>
+            </EmptyState>
           )}
         </div>
       )}
@@ -133,23 +138,23 @@ export async function ProfilePage({
             <Link
               key={list.id}
               href={localePath(locale, `/u/${username}/list/${list.id}`)}
-              className="group flex items-baseline justify-between border border-line bg-card p-5 transition-colors hover:border-brand"
+              className="group flex items-start justify-between gap-4 border border-line bg-card p-5 transition-colors hover:border-brand"
             >
-              <span>
-                <span className="font-bold transition-colors group-hover:text-brand">
+              <span className="min-w-0">
+                <span className="block break-words font-bold transition-colors group-hover:text-brand">
                   {list.title}
                 </span>
                 {list.description && (
-                  <span className="ml-3 text-ink-muted text-sm">{list.description}</span>
+                  <span className="mt-1 block text-ink-muted text-sm">{list.description}</span>
                 )}
               </span>
-              <span className="font-display text-ink-muted text-xs tracking-[0.3em]">
-                {list.items.filter((i) => i.film.status === "published").length} FILMS
+              <span className="shrink-0 pt-1 font-display text-ink-muted text-xs uppercase tracking-eyebrow">
+                {dict.filmCount(list.items.filter((i) => i.film.status === "published").length)}
               </span>
             </Link>
           ))}
-          {lists.length === 0 && !isOwner && (
-            <p className="py-8 text-center text-ink-muted">{t.emptyLists}</p>
+          {lists.length === 0 && (
+            <EmptyState className="mt-6">{isOwner ? t.emptyOwnerLists : t.emptyLists}</EmptyState>
           )}
         </div>
       )}

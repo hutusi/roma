@@ -11,7 +11,7 @@ export async function AccountPage({ locale = "zh" }: { locale?: Locale }) {
   const rawLocale = (session.user as { locale?: string | null }).locale;
   return (
     <div className="mx-auto max-w-md animate-fade-up px-6 pt-16">
-      <TitleCard eyebrow="Account" title={dict.account.settings} />
+      <TitleCard as="h1" eyebrow="Account" title={dict.account.settings} />
       <AccountForm
         name={session.user.name}
         username={(session.user as { username?: string | null }).username ?? ""}
@@ -19,6 +19,7 @@ export async function AccountPage({ locale = "zh" }: { locale?: Locale }) {
         locale={locale}
         storedLocale={rawLocale != null && isLocale(rawLocale) ? rawLocale : null}
         labels={dict.account}
+        errorLabels={dict.auth.errors}
       />
     </div>
   );
