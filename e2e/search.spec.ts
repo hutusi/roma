@@ -128,3 +128,12 @@ test("Enter in the dialog jumps to the top result", async ({ page }) => {
   await input.press("Enter");
   await expect(page).toHaveURL("/zh/film/le-notti-di-cabiria");
 });
+
+test("search still goes somewhere when its panel can't load", async ({ page }) => {
+  await page.goto("/zh/about");
+  // As after a deploy: the panel's chunk, fetched on first intent, is gone.
+  await page.route("**/_next/static/chunks/**", (route) => route.abort());
+  await page.getByRole("banner").getByRole("button", { name: "搜索" }).click();
+  // The full search page instead of the route's error page.
+  await expect(page).toHaveURL(/\/zh\/search$/);
+});

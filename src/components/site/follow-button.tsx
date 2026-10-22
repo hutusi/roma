@@ -1,14 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { useTransition } from "react";
 import { setFollow } from "@/actions/follows";
+import { notifyError } from "@/components/site/notify";
+import { invalidateMe, setMeFollow, useMe } from "@/components/site/use-me";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { cn } from "@/lib/utils";
 
 /**
- * Client island on the (SSG-cached) list page — fetches its own state.
- * Labels arrive as props (dictionaries are server-only).
+ * Client island on the (SSG-cached) list page — reads the follow through
+ * the shared useMe store. Labels arrive as props (dictionaries are
+ * server-only).
  */
 export function FollowButton({
   listId,
@@ -20,28 +23,25 @@ export function FollowButton({
   /** Locale-prefixed sign-in URL — pages pass localePath(locale, "/sign-in"). */
   signInHref: string;
 }) {
-  const [signedIn, setSignedIn] = useState<boolean | null>(null);
-  const [following, setFollowing] = useState(false);
+  const { status, user, following, retry } = useMe({ listId });
   const [pending, startTransition] = useTransition();
 
-  useEffect(() => {
-    let cancelled = false;
-    fetch(`/api/me/state?listId=${listId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (cancelled) return;
-        setSignedIn(data.signedIn);
-        setFollowing(data.following);
-      })
-      .catch(() => setSignedIn(false));
-    return () => {
-      cancelled = true;
-    };
-  }, [listId]);
+  if (status === "loading") return <div className="h-9 w-28" aria-hidden />;
 
-  if (signedIn === null) return <div className="h-9 w-28" aria-hidden />;
+  // Unknown is not signed out (see MarkButtons).
+  if (status === "error") {
+    return (
+      <button
+        type="button"
+        onClick={retry}
+        className="text-ink-muted text-sm tracking-[0.1em] transition-colors hover:text-brand"
+      >
+        {labels.unavailable}
+      </button>
+    );
+  }
 
-  if (!signedIn) {
+  if (!user) {
     return (
       <Link
         href={signInHref}
@@ -55,19 +55,24 @@ export function FollowButton({
   return (
     <button
       type="button"
+      aria-pressed={following}
       disabled={pending}
       className={cn(
-        "border px-6 py-2 text-sm tracking-[0.25em] transition-colors",
+        "border px-6 py-2 text-sm tracking-[0.25em] transition-colors disabled:cursor-wait disabled:opacity-60",
         following
           ? "border-brand bg-brand text-paper"
           : "border-line text-ink-muted hover:border-brand hover:text-brand",
       )}
       onClick={() => {
         const next = !following;
-        setFollowing(next);
+        setMeFollow(listId, next);
         startTransition(async () => {
-          const result = await setFollow(listId, next);
-          if (!result.ok) setFollowing(!next);
+          const result = await setFollow(listId, next).catch(() => null);
+          if (!result?.ok) {
+            setMeFollow(listId, !next);
+            if (result?.error === "sessionExpired") invalidateMe();
+            else notifyError(labels.failed);
+          }
         });
       }}
     >

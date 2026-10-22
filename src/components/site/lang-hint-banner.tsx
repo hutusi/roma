@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { counterpartPath, isLocale, type Locale } from "@/i18n/locales";
-import { authClient } from "@/lib/auth-client";
+import { useMe } from "@/components/site/use-me";
+import { counterpartPath, type Locale } from "@/i18n/locales";
+import { safeStorage } from "@/lib/safe-storage";
 
 const DISMISS_KEY = "babuban.langHintDismissed";
 
@@ -20,23 +21,22 @@ const DISMISS_KEY = "babuban.langHintDismissed";
  */
 export function LangHintBanner({ locale }: { locale: Locale }) {
   const pathname = usePathname();
-  const { data: session, isPending } = authClient.useSession();
+  const { status, user } = useMe();
   const [dismissed, setDismissed] = useState(true);
   const [browserPrefersOther, setBrowserPrefersOther] = useState(false);
 
   useEffect(() => {
-    setDismissed(localStorage.getItem(DISMISS_KEY) === "1");
+    setDismissed(safeStorage.get(DISMISS_KEY) === "1");
     const primary = (navigator.languages?.[0] ?? navigator.language ?? "").toLowerCase();
     const other = locale === "zh" ? "en" : "zh";
     setBrowserPrefersOther(primary.startsWith(other));
   }, [locale]);
 
-  if (dismissed || !browserPrefersOther || isPending) return null;
+  if (dismissed || !browserPrefersOther || status === "loading") return null;
 
   // A stored preference equal to the current edition wins over the
   // browser language — the reader already chose this language.
-  const stored = (session?.user as { locale?: string | null } | undefined)?.locale;
-  if (stored != null && isLocale(stored) && stored === locale) return null;
+  if (user?.locale === locale) return null;
 
   const counterpart = counterpartPath(pathname);
   if (!counterpart) return null;
@@ -55,7 +55,7 @@ export function LangHintBanner({ locale }: { locale: Locale }) {
         aria-label={en ? "Dismiss" : "关闭"}
         className="ml-1 text-ink-muted transition-colors hover:text-brand"
         onClick={() => {
-          localStorage.setItem(DISMISS_KEY, "1");
+          safeStorage.set(DISMISS_KEY, "1");
           setDismissed(true);
         }}
       >

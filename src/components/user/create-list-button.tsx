@@ -47,15 +47,15 @@ export function CreateListButton({
             e.preventDefault();
             const form = new FormData(e.currentTarget);
             startTransition(async () => {
-              const result = await createUserList(
-                {
-                  title: String(form.get("title")),
-                  description: String(form.get("description") || ""),
-                },
-                locale,
-              );
+              const result = await createUserList({
+                title: String(form.get("title")),
+                description: String(form.get("description") || ""),
+              });
               if (!result.ok) {
-                setError(labels.errors[result.error as keyof typeof labels.errors] ?? result.error);
+                setError(
+                  labels.errors[result.error as keyof typeof labels.errors] ??
+                    labels.errors.unknown,
+                );
                 return;
               }
               setOpen(false);

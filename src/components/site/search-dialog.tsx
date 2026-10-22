@@ -1,16 +1,31 @@
 "use client";
 
 import { SearchIcon } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { SearchResults } from "@/components/site/search-results";
-import { useSearchIndex } from "@/components/site/use-search-index";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { type Locale, localePath } from "@/i18n/locales";
-import { matchDocs } from "@/lib/search-match";
+import type { SearchPanel as SearchPanelType } from "./search-panel";
+
+type Panel = typeof SearchPanelType;
+
+// Not React.lazy: a lazy() that rejects stays rejected and rethrows on
+// every render, taking the page down to the route error boundary, which
+// is what a long-open tab got after a deploy replaced the chunk. A failed
+// load is forgotten here, so the next intent retries it.
+let panelLoad: Promise<Panel> | null = null;
+function loadPanel(): Promise<Panel> {
+  panelLoad ??= import("./search-panel").then(
+    (m) => m.SearchPanel,
+    (error) => {
+      panelLoad = null;
+      throw error;
+    },
+  );
+  return panelLoad;
+}
+const warmPanel = () => {
+  loadPanel().catch(() => {});
+};
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -22,23 +37,27 @@ function isTypingTarget(target: EventTarget | null): boolean {
 }
 
 /**
- * Header search overlay — the AuthMenu convention: a client island fed
- * translated labels as props from the server header. The index loads
- * on first open and is cached per session (shared with /search).
+ * Header search: just the trigger and the keyboard shortcuts. The
+ * overlay (Radix Dialog, matcher, results) is SearchPanel, fetched on
+ * first intent — hover or focus warms it, a click or ⌘K opens it — so
+ * it stays out of the layout chunk every page loads. Labels arrive as
+ * props from the server header.
  */
 export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dictionary["search"] }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const { docs, status, retry } = useSearchIndex(locale, open);
-  const results = useMemo(() => matchDocs(docs, query), [docs, query]);
+  // Set once loaded, then kept, so reopening is instant.
+  const [Panel, setPanel] = useState<Panel | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
-  // Every close path clears the query — radix only fires onOpenChange
-  // for its own triggers (ESC, overlay), not for external setOpen calls.
-  const close = () => {
-    setOpen(false);
-    setQuery("");
-  };
+  // If the panel can't load (offline, or a deploy retired its chunk), the
+  // full search page still works: go there rather than do nothing.
+  const show = useCallback(() => {
+    setOpen(true);
+    loadPanel().then(
+      (loaded) => setPanel(() => loaded),
+      () => window.location.assign(localePath(locale, "/search")),
+    );
+  }, [locale]);
 
   // ⌘K / Ctrl+K anywhere; "/" when not typing. The admin tree has its
   // own root layout without this header, so no conflict with its forms.
@@ -48,69 +67,37 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
       const slash = event.key === "/" && !isTypingTarget(event.target);
       if (cmdK || slash) {
         event.preventDefault();
-        setOpen(true);
+        show();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
-
-  const allResultsHref = localePath(
-    locale,
-    query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : "/search",
-  );
+  }, [show]);
 
   return (
-    <Dialog open={open} onOpenChange={(next) => (next ? setOpen(true) : close())}>
-      <DialogTrigger asChild>
-        <button
-          type="button"
-          className="self-center text-ink transition-colors hover:text-brand"
-          aria-label={labels.open}
-        >
-          <SearchIcon className="h-4 w-4" aria-hidden />
-        </button>
-      </DialogTrigger>
-      <DialogContent className="top-24 translate-y-0 gap-0 p-4 sm:max-w-lg">
-        <DialogTitle className="sr-only">{labels.title}</DialogTitle>
-        <Input
-          type="search"
-          placeholder={labels.placeholder}
-          aria-label={labels.title}
-          value={query}
-          onChange={(e) => {
-            // Typing after a transient index failure retries the fetch.
-            if (status === "failed") retry();
-            setQuery(e.target.value);
-          }}
-          onKeyDown={(e) => {
-            // Enter goes to the top-ranked result; with nothing matched
-            // yet it falls through to the full page.
-            if (e.key !== "Enter") return;
-            e.preventDefault();
-            close();
-            router.push(results[0]?.href ?? allResultsHref);
-          }}
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        className="self-center text-ink transition-colors hover:text-brand"
+        aria-label={labels.open}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        onPointerEnter={warmPanel}
+        onFocus={warmPanel}
+        onClick={show}
+      >
+        <SearchIcon className="h-4 w-4" aria-hidden />
+      </button>
+      {Panel && (
+        <Panel
+          locale={locale}
+          labels={labels}
+          open={open}
+          onClose={() => setOpen(false)}
+          triggerRef={triggerRef}
         />
-        <div className="max-h-[50vh] overflow-y-auto">
-          <SearchResults
-            labels={labels}
-            query={query}
-            results={results}
-            status={status}
-            onNavigate={close}
-          />
-        </div>
-        <p className="mt-4 border-line border-t pt-3 text-center">
-          <Link
-            href={allResultsHref}
-            onClick={close}
-            className="text-brand text-sm hover:underline"
-          >
-            {labels.allResults}
-          </Link>
-        </p>
-      </DialogContent>
-    </Dialog>
+      )}
+    </>
   );
 }

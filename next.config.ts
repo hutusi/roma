@@ -35,6 +35,16 @@ const nextConfig: NextConfig = {
       toZh("/rss.xml"),
     ];
   },
+  async headers() {
+    return [
+      {
+        // Generated font subsets carry a content hash in their file name
+        // (scripts/generate-fonts.ts), so they never change in place.
+        source: "/fonts/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
+  },
   experimental: {
     serverActions: {
       // Image uploads go through a server action. App-level file cap is

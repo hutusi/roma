@@ -11,6 +11,16 @@ export const ok = <T>(data?: T) => ({ ok: true as const, data: data as T });
 export const fail = (error: string) => ({ ok: false as const, error });
 
 /**
+ * fail() for the unexpected: the reader gets the short message, the
+ * server log gets the cause. Without this, a caught error turned into a
+ * result vanishes — Next only logs what is thrown.
+ */
+export function failWith(error: string, cause: unknown, where: string) {
+  console.error(`[action:${where}] ${error}`, cause);
+  return fail(error);
+}
+
+/**
  * The first value of `key` along an error's cause chain. Drizzle wraps
  * every failed query in a DrizzleQueryError and keeps node-postgres's
  * error, the one carrying the SQLSTATE and constraint name, on `cause`;

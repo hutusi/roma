@@ -82,6 +82,11 @@ export const auth = betterAuth({
       }
     },
   },
+  // Counters live in Postgres (rate_limits) so the throttle on sign-in,
+  // sign-up and password reset holds across serverless instances; the
+  // default memory store reset with every cold start. Limits are
+  // better-auth's defaults, enforced in production only.
+  rateLimit: { storage: "database" },
   plugins: [
     admin({ defaultRole: "user", adminRoles: ["admin"] }),
     username(),

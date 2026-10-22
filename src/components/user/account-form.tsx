@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { invalidateMe } from "@/components/site/use-me";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Toaster } from "@/components/ui/sonner";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
 import { isLocale, type Locale, localePath } from "@/i18n/locales";
 import { authClient } from "@/lib/auth-client";
@@ -55,6 +55,8 @@ export function AccountForm({
             return;
           }
           toast.success(labels.profileSaved);
+          // The header shows the name, and the hint banner reads the locale.
+          invalidateMe();
           // Choosing the other language moves the reader there right away.
           if (newLocale !== locale) {
             router.push(localePath(newLocale, "/account"));
@@ -150,7 +152,6 @@ export function AccountForm({
           {savingPassword ? labels.savingPassword : labels.changePassword}
         </Button>
       </form>
-      <Toaster position="top-center" />
     </div>
   );
 }

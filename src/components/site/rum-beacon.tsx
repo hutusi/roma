@@ -21,25 +21,31 @@ const TRACKED = new Set(["TTFB", "FCP", "LCP", "CLS", "INP"]);
 // signal doesn't need every page load. Tune here if the sample is thin.
 const SAMPLE_RATE = 0.2;
 
+// Both decided once per page load (module scope runs once per document).
+// Sampling per load keeps a sampled load's vitals together instead of a
+// random 20% of each metric. And every vital belongs to the hard
+// navigation that loaded the page: LCP, CLS and INP are often reported
+// only when the tab is hidden, by which time location.pathname may be
+// a page the reader soft-navigated to later.
+const sampled = typeof window !== "undefined" && Math.random() < SAMPLE_RATE;
+const landingPath = typeof window !== "undefined" ? window.location.pathname : "";
+
 export function RumBeacon() {
   useReportWebVitals((metric) => {
-    if (!TRACKED.has(metric.name)) return;
-    if (Math.random() >= SAMPLE_RATE) return;
+    if (!sampled || !TRACKED.has(metric.name)) return;
 
     const body = JSON.stringify({
       name: metric.name,
       value: metric.value,
       rating: metric.rating,
-      path: window.location.pathname,
+      path: landingPath,
     });
 
-    // sendBeacon survives page unload (LCP/CLS finalize on hide); fall
-    // back to a keepalive fetch where it's unavailable.
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon("/api/rum", body);
-    } else {
-      void fetch("/api/rum", { method: "POST", body, keepalive: true });
-    }
+    // sendBeacon survives page unload (LCP/CLS finalize on hide). Where
+    // it is missing or refuses the payload, a keepalive fetch is the best
+    // effort — and a lost sample is not worth an unhandled rejection.
+    if (navigator.sendBeacon?.("/api/rum", body)) return;
+    fetch("/api/rum", { method: "POST", body, keepalive: true }).catch(() => {});
   });
 
   return null;

@@ -9,7 +9,7 @@ import {
   reorderListItems,
   updateItemReasoning,
 } from "@/actions/lists";
-import { SortableList } from "@/components/admin/sortable-list";
+import { SortableList } from "@/components/list/sortable-list";
 import { TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
 
@@ -98,6 +98,7 @@ export function ItemsPanel({
       <div className="mt-4">
         <SortableList
           items={items}
+          handleLabel="拖动排序"
           onReorder={(next) => {
             const previous = items;
             setItems(next);

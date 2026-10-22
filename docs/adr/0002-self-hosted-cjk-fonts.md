@@ -1,6 +1,6 @@
 # 0002 — Self-hosted sliced CJK fonts; no Google CDN ever
 
-Status: accepted (2026-07-06)
+Status: accepted (2026-07-06); sizing and slicing superseded by [ADR 0018](./0018-corpus-subset-cjk-serif.md) — the sourcing rule stands.
 
 ## Context
 

@@ -83,3 +83,26 @@ test("successful ingest opportunistically removes RUM older than 90 days", async
     await queryOne<{ id: string }>("select id from rum_events where id = $1", ["rum-recent-e2e"]),
   ).not.toBeNull();
 });
+
+test("the daily pass also drops rate-limit counters idle for a day", async ({ request }) => {
+  await queryOne("delete from maintenance_runs where job = 'rate-limit-retention' returning job");
+  await queryOne(
+    "delete from rate_limits where id in ('rl-stale-e2e', 'rl-live-e2e') returning id",
+  );
+  const msAgo = (ms: number) => Date.now() - ms;
+  await queryOne(
+    "insert into rate_limits (id, key, count, last_request) values ('rl-stale-e2e', 'e2e-stale/sign-in', 1, $1), ('rl-live-e2e', 'e2e-live/sign-in', 1, $2) returning id",
+    [msAgo(25 * 60 * 60 * 1000), msAgo(60 * 1000)],
+  );
+
+  const res = await request.post("/api/rum", {
+    data: beacon({ path: "/e2e/rate-limit-retention-trigger" }),
+  });
+  expect(res.status()).toBe(204);
+
+  await expect
+    .poll(async () => queryOne("select id from rate_limits where id = 'rl-stale-e2e'"))
+    .toBeNull();
+  expect(await queryOne("select id from rate_limits where id = 'rl-live-e2e'")).not.toBeNull();
+  await queryOne("delete from rate_limits where id = 'rl-live-e2e' returning id");
+});

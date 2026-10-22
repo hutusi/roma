@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { invalidateMe } from "@/components/site/use-me";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,7 @@ export function SignUpForm({ locale, labels }: { locale: Locale; labels: Diction
       setError(error.message ?? t.fallbackError);
       return;
     }
+    invalidateMe();
     router.push(localePath(locale, "/"));
     router.refresh();
   }

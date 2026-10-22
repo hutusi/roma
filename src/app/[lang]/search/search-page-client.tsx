@@ -45,7 +45,13 @@ export function SearchPageBody({
   useEffect(() => {
     const id = setTimeout(() => {
       const url = new URL(window.location.href);
-      if (query.trim()) url.searchParams.set("q", query);
+      const next = query.trim() ? query : "";
+      // Only write when the query actually changed. An unconditional
+      // write on mount raced same-route navigations: fired while the
+      // dialog's "view all results" push was in flight, it put the old
+      // ?q back and the router followed it.
+      if ((url.searchParams.get("q") ?? "") === next) return;
+      if (next) url.searchParams.set("q", next);
       else url.searchParams.delete("q");
       window.history.replaceState(null, "", url);
     }, 300);

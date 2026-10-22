@@ -16,7 +16,7 @@ import { requireUser } from "@/lib/auth-guards";
 export async function FollowsPage({ locale = "zh" }: { locale?: Locale }) {
   const en = locale === "en";
   const t = getDict(locale).follows;
-  const session = await requireUser(locale);
+  const session = await requireUser(locale, localePath(locale, "/me/follows"));
   const follows = await db.query.listFollows.findMany({
     where: eq(listFollows.userId, session.user.id),
     orderBy: desc(listFollows.createdAt),
