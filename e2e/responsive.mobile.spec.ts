@@ -91,6 +91,19 @@ test("signing in from the phone menu on an auth page carries no next", async ({ 
   );
 });
 
+test("the translation-pending call to action fits a 320px screen", async ({ page }) => {
+  // "Read the Chinese edition →", letter-spaced and unbroken, measured
+  // ~376px and ran off both edges.
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto("/en/film/la-strada");
+  const cta = page.getByRole("link", { name: /Read the Chinese edition/ });
+  await expect(cta).toBeVisible();
+  // Its own box: centered, it spilled past both edges evenly, which
+  // barely moves scrollWidth (nothing left of 0 is scrollable).
+  const box = await cta.boundingBox();
+  expect(box && box.x >= 0 && box.x + box.width <= 320).toBe(true);
+});
+
 test.describe("tablet header with a long reader name", () => {
   // The brand box used to shrink to make room, and its unwrapping text
   // then ran under the nav: overlap, which an overflow check can't see.
