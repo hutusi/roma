@@ -1,12 +1,31 @@
 "use client";
 
 import { SearchIcon } from "lucide-react";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries/zh";
-import type { Locale } from "@/i18n/locales";
+import { type Locale, localePath } from "@/i18n/locales";
+import type { SearchPanel as SearchPanelType } from "./search-panel";
 
-const loadPanel = () => import("./search-panel");
-const SearchPanel = lazy(() => loadPanel().then((m) => ({ default: m.SearchPanel })));
+type Panel = typeof SearchPanelType;
+
+// Not React.lazy: a lazy() that rejects stays rejected and rethrows on
+// every render, taking the page down to the route error boundary, which
+// is what a long-open tab got after a deploy replaced the chunk. A failed
+// load is forgotten here, so the next intent retries it.
+let panelLoad: Promise<Panel> | null = null;
+function loadPanel(): Promise<Panel> {
+  panelLoad ??= import("./search-panel").then(
+    (m) => m.SearchPanel,
+    (error) => {
+      panelLoad = null;
+      throw error;
+    },
+  );
+  return panelLoad;
+}
+const warmPanel = () => {
+  loadPanel().catch(() => {});
+};
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -26,14 +45,19 @@ function isTypingTarget(target: EventTarget | null): boolean {
  */
 export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dictionary["search"] }) {
   const [open, setOpen] = useState(false);
-  // Mounted once opened, then kept, so reopening is instant.
-  const [mounted, setMounted] = useState(false);
+  // Set once loaded, then kept, so reopening is instant.
+  const [Panel, setPanel] = useState<Panel | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  const show = () => {
-    setMounted(true);
+  // If the panel can't load (offline, or a deploy retired its chunk), the
+  // full search page still works: go there rather than do nothing.
+  const show = useCallback(() => {
     setOpen(true);
-  };
+    loadPanel().then(
+      (loaded) => setPanel(() => loaded),
+      () => window.location.assign(localePath(locale, "/search")),
+    );
+  }, [locale]);
 
   // ⌘K / Ctrl+K anywhere; "/" when not typing. The admin tree has its
   // own root layout without this header, so no conflict with its forms.
@@ -43,13 +67,12 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
       const slash = event.key === "/" && !isTypingTarget(event.target);
       if (cmdK || slash) {
         event.preventDefault();
-        setMounted(true);
-        setOpen(true);
+        show();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [show]);
 
   return (
     <>
@@ -60,22 +83,20 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Dicti
         aria-label={labels.open}
         aria-haspopup="dialog"
         aria-expanded={open}
-        onPointerEnter={() => void loadPanel()}
-        onFocus={() => void loadPanel()}
+        onPointerEnter={warmPanel}
+        onFocus={warmPanel}
         onClick={show}
       >
         <SearchIcon className="h-4 w-4" aria-hidden />
       </button>
-      {mounted && (
-        <Suspense fallback={null}>
-          <SearchPanel
-            locale={locale}
-            labels={labels}
-            open={open}
-            onClose={() => setOpen(false)}
-            triggerRef={triggerRef}
-          />
-        </Suspense>
+      {Panel && (
+        <Panel
+          locale={locale}
+          labels={labels}
+          open={open}
+          onClose={() => setOpen(false)}
+          triggerRef={triggerRef}
+        />
       )}
     </>
   );

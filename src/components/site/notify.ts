@@ -1,14 +1,24 @@
 "use client";
 
+import { toasterReady } from "./toaster-ready";
+
 /**
- * Error toasts for public islands. sonner loads on first use instead of
- * shipping in every page's initial chunk; the <Toaster> it reports to is
- * mounted once per root layout (LazyToaster).
+ * Toasts for public islands. sonner loads on first use instead of
+ * shipping in every page's initial chunk, and each toast waits until the
+ * <Toaster> it reports to (LazyToaster, once per root layout) is mounted:
+ * sonner drops a toast published before then. Best effort: if sonner
+ * itself fails to load, the toast is skipped rather than thrown.
  */
+const whenReady = () => Promise.all([import("sonner"), toasterReady]).then(([{ toast }]) => toast);
+
 export function notifyError(message: string) {
-  void import("sonner").then(({ toast }) => toast.error(message));
+  whenReady()
+    .then((toast) => toast.error(message))
+    .catch(() => {});
 }
 
 export function notifySuccess(message: string) {
-  void import("sonner").then(({ toast }) => toast.success(message));
+  whenReady()
+    .then((toast) => toast.success(message))
+    .catch(() => {});
 }
