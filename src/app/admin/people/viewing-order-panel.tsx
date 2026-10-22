@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { setViewingOrder } from "@/actions/people";
 import { callAction, notifyActionError } from "@/components/admin/action-client";
@@ -37,9 +37,13 @@ export function ViewingOrderPanel({
   const [selectedFilm, setSelectedFilm] = useState("");
   const [pending, startTransition] = useTransition();
   const [dirty, setDirty] = useState(false);
-  useDirtyGuard("viewing-order", dirty && !pending);
+  // Through a save in flight too: until it succeeds the order is only here.
+  useDirtyGuard("viewing-order", dirty);
+  // The latest order, for a save to compare with what it sent once it lands.
+  const latest = useRef(items);
 
   const update = (next: ViewingItem[]) => {
+    latest.current = next;
     setItems(next);
     setDirty(true);
   };
@@ -48,6 +52,7 @@ export function ViewingOrderPanel({
 
   const save = () =>
     startTransition(async () => {
+      const sent = items;
       const result = await callAction(() =>
         setViewingOrder(
           personId,
@@ -63,7 +68,9 @@ export function ViewingOrderPanel({
         return;
       }
       toast.success("观看顺序已保存");
-      setDirty(false);
+      // Clean only if nothing changed while the save was in flight; an
+      // edit made meanwhile isn't in it, so it stays unsaved.
+      setDirty(latest.current !== sent);
     });
 
   return (

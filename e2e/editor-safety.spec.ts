@@ -109,3 +109,66 @@ test("leaving a dirty form asks first", async ({ page }) => {
 
   await queryOne("delete from films where id = $1 returning id", [id]);
 });
+
+/** Holds the page's save in flight until `release()`, then `finish`es it. */
+async function holdSave(page: Page, id: string, finish: "continue" | "fail") {
+  let release = () => {};
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route(`**/admin/films/${id}`, async (route) => {
+    if (route.request().method() !== "POST") return route.continue();
+    await held;
+    return finish === "continue" ? route.continue() : route.abort("failed");
+  });
+  return release;
+}
+
+test("an edit made while a save is in flight stays, and stays unsaved", async ({ page }) => {
+  const id = await draftFilm();
+  await openForm(page, id);
+  await page.fill("#titleOriginal", "Sent");
+  const release = await holdSave(page, id, "continue");
+  await page.getByRole("button", { name: /^保存/ }).click();
+  await expect(page.getByRole("button", { name: "保存中…" })).toBeVisible();
+
+  // The inputs stay live during a save; this edit isn't in it.
+  await page.fill("#titleOriginal", "Typed while saving");
+  release();
+  await expect(toast(page, "已保存")).toBeVisible();
+  // It used to be replaced by the sent snapshot when the save landed.
+  await expect(page.locator("#titleOriginal")).toHaveValue("Typed while saving");
+  await expect(page.getByText("有未保存的修改")).toBeVisible();
+  const row = await queryOne<{ title_original: string }>(
+    "select title_original from films where id = $1",
+    [id],
+  );
+  expect(row?.title_original).toBe("Sent");
+
+  await page.unroute(`**/admin/films/${id}`);
+  await queryOne("delete from films where id = $1 returning id", [id]);
+});
+
+test("leaving mid-save still asks, and a failed save keeps the form", async ({ page }) => {
+  const id = await draftFilm();
+  await openForm(page, id);
+  await page.fill("#titleOriginal", "Not saved yet");
+  const release = await holdSave(page, id, "fail");
+  await page.getByRole("button", { name: /^保存/ }).click();
+  await expect(page.getByRole("button", { name: "保存中…" })).toBeVisible();
+
+  // The guard used to stand down for the whole save, so this navigated
+  // away, and when the save then failed the edits were gone.
+  await page.getByRole("link", { name: "影片", exact: true }).click();
+  const dialog = page.getByRole("alertdialog");
+  await expect(dialog).toContainText("有未保存的修改");
+  await dialog.getByRole("button", { name: "继续编辑" }).click();
+
+  release();
+  await expect(toast(page, "操作没有完成")).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`/admin/films/${id}$`));
+  await expect(page.locator("#titleOriginal")).toHaveValue("Not saved yet");
+
+  await page.unroute(`**/admin/films/${id}`);
+  await queryOne("delete from films where id = $1 returning id", [id]);
+});

@@ -83,8 +83,9 @@ export function FilmForm({
     defaultValues,
   });
   const revisionRef = useRef(revision);
-  // Unsaved edits ask before navigation; a save in flight doesn't count.
-  useDirtyGuard("film-form", isDirty && !submitting);
+  // Unsaved edits ask before navigation, through a save in flight too:
+  // until it succeeds they are still only on this page.
+  useDirtyGuard("film-form", isDirty);
   const castArray = useFieldArray({ control, name: "cast" });
   const linksArray = useFieldArray({ control, name: "watchLinks" });
   const intro = watch("introduction") ?? "";
@@ -103,6 +104,9 @@ export function FilmForm({
 
   const onSubmit = handleSubmit(
     async (values) => {
+      // What this save sends, as the form holds it (raw, not the schema's
+      // parsed output), and so what becomes the baseline when it lands.
+      const sent = structuredClone(getValues());
       setSubmitting(true);
       const result = await callAction(() => saveFilm(filmId, values, revisionRef.current));
       setSubmitting(false);
@@ -111,8 +115,11 @@ export function FilmForm({
         return;
       }
       revisionRef.current = result.data.revision;
-      // Saved values become the new baseline, so the form reads clean.
-      reset(values);
+      // The save is the new baseline. keepValues leaves anything typed
+      // while it was in flight on screen, and still dirty against it;
+      // reset(values) wrote the sent snapshot back over those edits (and
+      // a rich-text editor went on showing text the form no longer held).
+      reset(sent, { keepValues: true });
       setSavedAt(new Date());
       toast.success("已保存");
       if (!filmId) router.push(`/admin/films/${result.data.id}`);
