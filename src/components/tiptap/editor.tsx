@@ -119,7 +119,12 @@ export function TiptapEditor({
     ],
     content: value ?? undefined,
     immediatelyRender: false,
-    onUpdate: ({ editor }) => onChange(editor.getJSON()),
+    // A JSON round trip, not getJSON() as is: ProseMirror builds node and
+    // mark attrs with Object.create(null), a server action accepts only
+    // plain objects, and React sent each attrs object as an opaque
+    // temporary reference that the save validator's structuredClone threw
+    // on. So any essay with a heading, list, link or image failed to save.
+    onUpdate: ({ editor }) => onChange(JSON.parse(JSON.stringify(editor.getJSON()))),
     editorProps: {
       attributes: {
         class: "prose prose-sm max-w-none min-h-32 px-3 py-2 focus:outline-none font-body",
