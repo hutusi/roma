@@ -3,6 +3,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 
 export type MeUser = {
+  id: string;
   name: string;
   username: string | null;
   role: "admin" | "editor" | "user";
@@ -38,13 +39,28 @@ const wantedLists = new Map<string, number>();
 let scheduled = false;
 let inflight: AbortController | null = null;
 let lastFetched = 0;
+// Whom the cached marks and follows belong to: undefined before the
+// first answer, null when that answer was "signed out".
+let cachedFor: string | null | undefined;
 
 function emit(next: Partial<Snapshot>) {
   snapshot = { ...snapshot, ...next };
   for (const listener of listeners) listener();
 }
 
-const lastKey = (m: Map<string, number>) => [...m.keys()].at(-1);
+/**
+ * The id a request should ask about: the newest wanted one that has no
+ * answer yet, else simply the newest. Asking for unanswered ids first is
+ * what lets the follow-up requests in load() run out.
+ */
+function toAsk(wanted: Map<string, number>, answered: Readonly<Record<string, unknown>>) {
+  const ids = [...wanted.keys()];
+  for (let i = ids.length - 1; i >= 0; i--) if (!(ids[i] in answered)) return ids[i];
+  return ids.at(-1);
+}
+
+const unanswered = (wanted: Map<string, number>, answered: Readonly<Record<string, unknown>>) =>
+  [...wanted.keys()].some((id) => !(id in answered));
 
 async function load() {
   scheduled = false;
@@ -52,8 +68,8 @@ async function load() {
   const controller = new AbortController();
   inflight = controller;
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  const filmId = lastKey(wantedFilms);
-  const listId = lastKey(wantedLists);
+  const filmId = toAsk(wantedFilms, snapshot.marks);
+  const listId = toAsk(wantedLists, snapshot.follows);
   const params = new URLSearchParams();
   if (filmId) params.set("filmId", filmId);
   if (listId) params.set("listId", listId);
@@ -70,12 +86,28 @@ async function load() {
     };
     if (inflight !== controller) return;
     lastFetched = Date.now();
+    // A refresh can answer for someone else: the account changed in
+    // another tab or on a shared machine, which this tab never saw. What
+    // was cached for the last reader must not carry over, or a film
+    // already visited shows their mark (it isn't re-read once cached).
+    const reader = data.user?.id ?? null;
+    const sameReader = reader === cachedFor;
+    cachedFor = reader;
+    const marks = sameReader ? snapshot.marks : {};
+    const follows = sameReader ? snapshot.follows : {};
     emit({
       status: "ready",
       user: data.user,
-      marks: filmId ? { ...snapshot.marks, [filmId]: data.mark } : snapshot.marks,
-      follows: listId ? { ...snapshot.follows, [listId]: data.following } : snapshot.follows,
+      marks: filmId ? { ...marks, [filmId]: data.mark } : marks,
+      follows: listId ? { ...follows, [listId]: data.following } : follows,
     });
+    // An island that mounted while this was in flight (soft navigation
+    // back to a visited film) found its answer cached and asked for
+    // nothing, and a new reader's answer just dropped that cache, leaving
+    // it on its placeholder. Ask again for whatever is still unanswered.
+    if (unanswered(wantedFilms, snapshot.marks) || unanswered(wantedLists, snapshot.follows)) {
+      schedule();
+    }
   } catch {
     if (inflight === controller) emit({ status: "error" });
   } finally {

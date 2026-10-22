@@ -1,4 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { type Browser, expect, type Page, test } from "@playwright/test";
+import { queryOne } from "./utils/db";
 
 const activeClass = /bg-brand/;
 
@@ -137,6 +139,85 @@ test.describe("reader", () => {
     await expect(page.locator('a[href="/zh/film/la-strada"]')).toBeVisible();
     await admin.close();
   });
+});
+
+// The session store caches marks per film and doesn't re-read a film it
+// has answered for. When a refresh found a different reader (the account
+// changed in another tab, or on a shared machine), the last reader's
+// marks used to carry over to them.
+const SWITCH_FILM = "le-notti-di-cabiria";
+
+/**
+ * The reader has 看过 on SWITCH_FILM and the page open; then the account
+ * changes behind the tab's back and the reader soft-navigates to /zh/films.
+ */
+async function switchAccountsAway(browser: Browser) {
+  await queryOne(
+    "insert into user_marks (user_id, film_id, status) select u.id, f.id, 'watched' from users u, films f where u.username = 'e2euser' and f.slug = $1 on conflict do nothing returning status",
+    [SWITCH_FILM],
+  );
+  const context = await browser.newContext({ storageState: "e2e/.auth/user.json" });
+  const page = await context.newPage();
+  await page.clock.install();
+  await page.goto(`/zh/film/${SWITCH_FILM}`);
+  await expect(page.getByRole("button", { name: "看过" })).toHaveAttribute("aria-pressed", "true");
+
+  const admin = JSON.parse(readFileSync("e2e/.auth/admin.json", "utf8"));
+  await context.clearCookies();
+  await context.addCookies(admin.cookies);
+  await page.getByRole("banner").getByRole("link", { name: "影片", exact: true }).click();
+  await expect(page).toHaveURL(/\/zh\/films$/);
+  return { context, page };
+}
+
+/** Past the 30s refresh window, the tab comes back into view. */
+async function refreshSession(page: Page) {
+  await page.clock.fastForward(31_000);
+  await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+}
+
+const dropSwitchMark = () =>
+  queryOne(
+    "delete from user_marks where user_id = (select id from users where username = 'e2euser') and film_id = (select id from films where slug = $1) returning status",
+    [SWITCH_FILM],
+  );
+
+test("a different reader in the same browser never sees the last one's marks", async ({
+  browser,
+}) => {
+  const { context, page } = await switchAccountsAway(browser);
+  await refreshSession(page);
+  await expect(page.getByRole("banner")).toContainText("站长");
+
+  await page.goBack();
+  await expect(page).toHaveURL(new RegExp(`/zh/film/${SWITCH_FILM}$`));
+  await expect(page.getByRole("button", { name: "看过" })).toHaveAttribute("aria-pressed", "false");
+
+  await context.close();
+  await dropSwitchMark();
+});
+
+// The refresh may still be in flight when the reader returns to a visited
+// film: its island finds the answer cached and asks for nothing, then the
+// new reader's answer drops that cache. Without a follow-up request the
+// mark buttons stayed on their placeholder for good.
+test("a reader change landing mid-navigation still answers for the film on screen", async ({
+  browser,
+}) => {
+  const { context, page } = await switchAccountsAway(browser);
+  await page.route("**/api/me/state**", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1_500));
+    await route.continue();
+  });
+  await refreshSession(page);
+  await page.goBack();
+  await expect(page).toHaveURL(new RegExp(`/zh/film/${SWITCH_FILM}$`));
+
+  await expect(page.getByRole("banner")).toContainText("站长");
+  await expect(page.getByRole("button", { name: "看过" })).toHaveAttribute("aria-pressed", "false");
+
+  await context.close();
+  await dropSwitchMark();
 });
 
 test.describe("guest", () => {

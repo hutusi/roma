@@ -46,6 +46,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         user: {
+          // Identity, so the client store can tell one reader from the next.
+          id: user.id,
           name: user.name,
           username: user.username ?? null,
           role: roleOf(session),
