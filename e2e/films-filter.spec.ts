@@ -95,3 +95,17 @@ test("the prerendered HTML carries every film, so crawlers see them unfiltered",
   expect(html).toContain('href="/zh/film/otto-e-mezzo"');
   expect(html).toContain('href="/zh/film/la-strada"');
 });
+
+// Same-page navigation keeps the island mounted: the filter used to read
+// the query only on mount and back/forward, so a search result for a tag
+// opened from /films changed the URL and left the catalogue unfiltered.
+test("a tag link followed from /films itself filters the catalogue", async ({ page }) => {
+  await page.goto("/zh/films");
+  await expect(card(page, "la-strada")).toBeVisible();
+  await page.getByRole("banner").getByRole("button", { name: "搜索" }).click();
+  await page.getByRole("searchbox", { name: "搜索" }).fill("现代主义");
+  await page.getByRole("dialog").locator('a[href="/zh/films?tag=modernism"]').click();
+  await expect(page).toHaveURL(/\/zh\/films\?tag=modernism$/);
+  await expect(card(page, "otto-e-mezzo")).toBeVisible();
+  await expect(card(page, "la-strada")).toHaveCount(0);
+});

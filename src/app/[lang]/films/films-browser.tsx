@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { EmptyState } from "@/components/site/empty-state";
 import { FilmCard } from "@/components/site/film-card";
 import { HOUSE_BUTTON } from "@/components/site/house-button";
@@ -18,28 +19,33 @@ import {
 } from "./filtering";
 
 /**
+ * Reports the query to the catalogue whenever Next navigates: on mount,
+ * back/forward, and same-page links such as a search result for a tag
+ * (/films → /films?tag=…), which keep the page mounted. It renders
+ * nothing, and sits in its own Suspense boundary: useSearchParams makes a
+ * prerendered page client-render up to the nearest boundary, and around
+ * the whole catalogue that used to replace its DOM on hydration and
+ * serialise the film data twice.
+ */
+function QuerySync({ onChange }: { onChange: (selection: Selection) => void }) {
+  const params = useSearchParams();
+  useEffect(() => onChange(parseSelection(params)), [params, onChange]);
+  return null;
+}
+
+/**
  * The /films catalogue and its filters, as one island. It renders the
  * whole catalogue on the server (that is the prerendered HTML crawlers
  * and no-JS readers get) and applies ?decade/?country/?palette/?tag only
- * after mount, from location.search. There is deliberately no
- * useSearchParams: it bails a static page out to client rendering up to
- * the nearest Suspense boundary, which used to replace the catalogue's DOM
- * on hydration and serialise the film data twice.
+ * on the client, from the URL (QuerySync).
  *
  * Filters apply as they change; the URL follows (replaceState, so the
- * back button isn't a filter history) and back/forward between filtered
- * URLs is honoured. The GET form still works without JS.
+ * back button isn't a filter history, and Next syncs it into
+ * useSearchParams). The GET form still works without JS.
  */
 export function FilmsBrowser({ locale, films }: { locale: Locale; films: FilmCardData[] }) {
   const t = COPY[locale];
   const [selection, setSelection] = useState<Selection>({});
-
-  useEffect(() => {
-    const read = () => setSelection(parseSelection(new URLSearchParams(window.location.search)));
-    read();
-    window.addEventListener("popstate", read);
-    return () => window.removeEventListener("popstate", read);
-  }, []);
 
   const update = (next: Selection) => {
     setSelection(next);
@@ -59,6 +65,9 @@ export function FilmsBrowser({ locale, films }: { locale: Locale; films: FilmCar
 
   return (
     <>
+      <Suspense fallback={null}>
+        <QuerySync onChange={setSelection} />
+      </Suspense>
       <form
         className="mt-10 flex flex-wrap justify-center gap-3"
         action={localePath(locale, "/films")}
