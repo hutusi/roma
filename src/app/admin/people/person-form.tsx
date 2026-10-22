@@ -2,57 +2,90 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { savePerson } from "@/actions/people";
-import { CeilingCounter, type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
-import { Button } from "@/components/ui/button";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
+import { SaveBar } from "@/components/admin/save-bar";
+import {
+  CeilingCounter,
+  type MediaOption,
+  SummaryCounter,
+  TiptapEditor,
+} from "@/components/tiptap/editor";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { type PersonFormValues, personFormSchema } from "@/lib/validators/person";
+import { BIO_SUMMARY_MAX, type PersonFormValues, personFormSchema } from "@/lib/validators/person";
 
 export function PersonForm({
   personId,
+  revision = 0,
   defaultValues,
   media,
 }: {
   personId: string | null;
+  /** The revision this form loaded; a stale save is refused (optimistic concurrency). */
+  revision?: number;
   defaultValues: PersonFormValues;
   media: MediaOption[];
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
   const {
     register,
     control,
     handleSubmit,
     watch,
-    formState: { errors },
+    reset,
+    getValues,
+    formState: { errors, isDirty },
   } = useForm<PersonFormValues>({
     resolver: zodResolver(personFormSchema),
     defaultValues,
   });
+  const revisionRef = useRef(revision);
+  // Unsaved edits ask before navigation, through a save in flight too:
+  // until it succeeds they are still only on this page.
+  useDirtyGuard("person-form", isDirty);
   const note = watch("editorialNote") ?? "";
   const noteEn = watch("editorialNoteEn") ?? "";
+  const bio = watch("bio") ?? "";
+  const bioEn = watch("bioEn") ?? "";
 
-  const onSubmit = handleSubmit(async (values) => {
-    setSubmitting(true);
-    const result = await savePerson(personId, values);
-    setSubmitting(false);
-    if (!result.ok) {
-      toast.error(result.error);
-      return;
-    }
-    toast.success("已保存");
-    if (!personId) router.push(`/admin/people/${result.data.id}`);
-    router.refresh();
-  });
+  const onSubmit = handleSubmit(
+    async (values) => {
+      // What this save sends, as the form holds it (raw, not the schema's
+      // parsed output), and so what becomes the baseline when it lands.
+      const sent = structuredClone(getValues());
+      setSubmitting(true);
+      const result = await callAction(() => savePerson(personId, values, revisionRef.current));
+      setSubmitting(false);
+      if (!result.ok) {
+        notifyActionError(result.error);
+        return;
+      }
+      revisionRef.current = result.data.revision;
+      // The save is the new baseline. keepValues leaves anything typed
+      // while it was in flight on screen, and still dirty against it;
+      // reset(values) wrote the sent snapshot back over those edits (and
+      // a rich-text editor went on showing text the form no longer held).
+      reset(sent, { keepValues: true });
+      setSavedAt(new Date());
+      toast.success("已保存");
+      if (!personId) router.push(`/admin/people/${result.data.id}`);
+      router.refresh();
+    },
+    // Same as the film form: a blocked submit must say so, not do nothing.
+    () => toast.error("表单有未通过校验的字段，请检查标红项"),
+  );
 
   return (
-    <form onSubmit={onSubmit} className="max-w-3xl space-y-5">
-      <div className="grid grid-cols-2 gap-4">
+    <form id="person-form" onSubmit={onSubmit} className="max-w-3xl space-y-5">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="name">姓名（原文）*</Label>
           <Input id="name" {...register("name")} />
@@ -88,6 +121,7 @@ export function PersonForm({
           字），所以不要写长——篇幅放在创作历程里。
         </p>
         <Textarea id="bio" rows={4} {...register("bio")} className="font-body" />
+        <SummaryCounter text={bio} max={BIO_SUMMARY_MAX.zh} />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="editorialNote">编辑札记（选填，至多 400 字）</Label>
@@ -114,6 +148,7 @@ export function PersonForm({
               onChange={field.onChange}
               media={media}
               placeholder="从早期作品谈起…"
+              aria-label="创作历程"
             />
           )}
         />
@@ -124,6 +159,7 @@ export function PersonForm({
         <div className="space-y-1.5">
           <Label htmlFor="bioEn">英文介绍 · Introduction</Label>
           <Textarea id="bioEn" rows={4} {...register("bioEn")} />
+          <SummaryCounter text={bioEn} max={BIO_SUMMARY_MAX.en} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="editorialNoteEn">英文札记 · Editorial note（选填）</Label>
@@ -144,14 +180,13 @@ export function PersonForm({
                 onChange={field.onChange}
                 media={media}
                 placeholder="Starting from the early work…"
+                aria-label="英文创作历程"
               />
             )}
           />
         </div>
       </section>
-      <Button type="submit" disabled={submitting} className="tracking-label">
-        {submitting ? "保存中…" : "保存"}
-      </Button>
+      <SaveBar formId="person-form" dirty={isDirty} submitting={submitting} savedAt={savedAt} />
     </form>
   );
 }

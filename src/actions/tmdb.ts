@@ -1,6 +1,6 @@
 "use server";
 
-import { requireEditor } from "@/lib/auth-guards";
+import { requireEditorResult } from "@/lib/auth-guards";
 import { type ActionResult, fail, failWith, ok } from "./result";
 
 /**
@@ -24,7 +24,8 @@ export type TmdbPrefill = {
 const TMDB = "https://api.themoviedb.org/3";
 
 export async function importFromTmdb(tmdbId: string): Promise<ActionResult<TmdbPrefill>> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const token = process.env.TMDB_API_TOKEN;
   if (!token) return fail("未配置 TMDB_API_TOKEN");
   if (!/^\d+$/.test(tmdbId.trim())) return fail("请输入 TMDB 数字 ID");

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { hasProse, tiptapDocSchema, validateTiptapDoc } from "./prose";
+import { collectImageSrcs, hasProse, tiptapDocSchema, validateTiptapDoc } from "./prose";
 
 const doc = (...content: unknown[]) => ({ type: "doc", content });
 const para = (text: string) => ({ type: "paragraph", content: [{ type: "text", text }] });
@@ -147,5 +147,27 @@ describe("hasProse", () => {
     const value = doc({ type: "paragraph" });
     expect(validateTiptapDoc(value).success).toBe(true);
     expect(hasProse(value)).toBe(false);
+  });
+});
+
+describe("collectImageSrcs", () => {
+  const image = (src: string) => ({ type: "image", attrs: { src, alt: "" } });
+
+  test("finds drawable images at any depth, in order, once each", () => {
+    const a = "/uploads/a.jpg";
+    const b = "https://abc-1.public.blob.vercel-storage.com/b.jpg";
+    const value = doc(
+      image(a),
+      { type: "blockquote", content: [image(b)] },
+      image(a),
+      image("https://evil.example/x.jpg"),
+    );
+    expect(collectImageSrcs(value)).toEqual([a, b]);
+  });
+
+  test("tolerates empty and malformed documents", () => {
+    expect(collectImageSrcs(null)).toEqual([]);
+    expect(collectImageSrcs({ type: "doc", content: "nope" })).toEqual([]);
+    expect(collectImageSrcs({ type: "image" })).toEqual([]);
   });
 });

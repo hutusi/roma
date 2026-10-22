@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { queryOne } from "./utils/db";
 
 /**
  * Phone layout, run by the `mobile` project at 375px. The live site once
@@ -48,6 +49,51 @@ test.describe("signed in", () => {
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       await expectNoHorizontalOverflow(page);
     }
+  });
+});
+
+test.describe("the editorial desk", () => {
+  test.use({ storageState: "e2e/.auth/admin.json" });
+
+  // The edit pages once ran 12px wide here: their publish row never
+  // wrapped, and "英文版" broke a character per line.
+  test("its indexes, editors and previews fit a 375px screen", async ({ page }) => {
+    const id = async (table: string, slug: string) =>
+      (await queryOne<{ id: string }>(`select id from ${table} where slug = $1`, [slug]))?.id;
+    const film = await id("films", "otto-e-mezzo");
+    const person = await id("people", "federico-fellini");
+    const list = await id("curated_lists", "fellini-primer");
+    const editors = [`/admin/films/${film}`, `/admin/people/${person}`, `/admin/lists/${list}`];
+    for (const path of [
+      "/admin",
+      "/admin/films",
+      "/admin/films/new",
+      ...editors,
+      "/admin/people",
+      "/admin/lists",
+      "/admin/media",
+      "/admin/users",
+      "/admin/invites",
+      `/admin/preview/film/${film}?locale=en`,
+    ]) {
+      await page.goto(path);
+      await expect(page.locator("h1").first()).toBeVisible();
+      // Editors mount their toolbars after hydration; measure once they have.
+      if (editors.includes(path)) await expect(page.getByRole("toolbar").first()).toBeVisible();
+      await expectNoHorizontalOverflow(page);
+    }
+  });
+
+  test("the desk's sections sit behind a menu", async ({ page }) => {
+    await page.goto("/admin/films");
+    const menu = page.getByRole("button", { name: "菜单" });
+    await menu.click();
+    const nav = page.getByRole("navigation", { name: "编辑部导航" });
+    await expect(nav.getByRole("link", { name: "影片" })).toHaveAttribute("aria-current", "page");
+    await nav.getByRole("link", { name: "人物" }).click();
+    await expect(page).toHaveURL(/\/admin\/people$/);
+    // Navigating closes the drawer.
+    await expect(page.getByRole("navigation", { name: "编辑部导航" })).toBeHidden();
   });
 });
 

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { confirm } from "./utils/confirm";
 import { queryOne } from "./utils/db";
 
 /** Clears the introduction's 200-code-point publish floor. */
@@ -6,7 +7,7 @@ const INTRO_200 = "字".repeat(220);
 
 test.use({ storageState: "e2e/.auth/admin.json" });
 
-test("publish gate: short 介绍 blocked with count, then publish goes live without redeploy", async ({
+test("publish gate: short 介绍 holds publish with the reason, then publish goes live without redeploy", async ({
   page,
 }) => {
   await page.goto("/admin/films/new");
@@ -19,8 +20,9 @@ test("publish gate: short 介绍 blocked with count, then publish goes live with
   await page.click("button[type=submit]");
   await page.waitForURL(/\/admin\/films\/(?!new)[^/]+$/);
 
-  await page.getByRole("button", { name: "发布", exact: true }).click();
-  await expect(page.locator("[data-sonner-toast]", { hasText: "影片介绍需 200" })).toBeVisible();
+  // The gate shows before the click: publish waits, and says why.
+  await expect(page.getByRole("button", { name: "发布", exact: true })).toBeDisabled();
+  await expect(page.getByRole("listitem").filter({ hasText: "影片介绍需 200" })).toBeVisible();
 
   await page.locator('textarea[name="introduction"]').fill(INTRO_200);
   await page.getByRole("button", { name: /^保存/ }).click();
@@ -121,9 +123,9 @@ test("delete guard: a referenced draft film cannot be hard-deleted", async ({ pa
   await expect(page.locator("[data-sonner-toast]", { hasText: "已加入" })).toBeVisible();
 
   // Deletion is refused while the list references it.
-  page.once("dialog", (d) => d.accept());
   await page.goto(`/admin/films/${await filmId("referenced-draft-delete")}`);
   await page.getByRole("button", { name: "删除", exact: true }).click();
+  await confirm(page, "删除");
   await expect(page.locator("[data-sonner-toast]", { hasText: "片单引用" })).toBeVisible();
 
   // Still there.
@@ -172,9 +174,9 @@ test("empty-list invariant: last published member is protected", async ({ page }
   await expect(page.locator("[data-sonner-toast]", { hasText: "已发布" })).toBeVisible();
 
   // (a) Removing the sole published member is refused.
-  page.once("dialog", (d) => d.accept());
   // exact: the row itself is a role="button" whose name includes "移除".
   await page.getByRole("button", { name: "移除", exact: true }).click();
+  await confirm(page, "移出");
   await expect(
     page.locator("[data-sonner-toast]", { hasText: "最后一部已发布影片" }),
   ).toBeVisible();
@@ -182,6 +184,7 @@ test("empty-list invariant: last published member is protected", async ({ page }
   // (b) Unpublishing the film auto-unpublishes the now-empty list.
   await page.goto(filmUrl);
   await page.getByRole("button", { name: "撤回", exact: true }).click();
+  await confirm(page, "撤回");
   await expect(page.locator("[data-sonner-toast]").last()).toBeVisible();
   const listStatus = await queryOne<{ status: string }>(
     "select status from curated_lists where slug = $1",

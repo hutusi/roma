@@ -9,6 +9,9 @@ import {
   reorderListItems,
   updateItemReasoning,
 } from "@/actions/lists";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { ConfirmButton } from "@/components/admin/confirm-button";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
 import { SortableList } from "@/components/list/sortable-list";
 import { TiptapEditor } from "@/components/tiptap/editor";
 import { Button } from "@/components/ui/button";
@@ -43,6 +46,7 @@ export function ItemsPanel({
   const [expanded, setExpanded] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, Record<string, unknown>>>({});
   const [draftsEn, setDraftsEn] = useState<Record<string, Record<string, unknown>>>({});
+  useDirtyGuard("list-reasoning", Object.keys(drafts).length + Object.keys(draftsEn).length > 0);
   const [pending, startTransition] = useTransition();
 
   // router.refresh() re-renders the server parent with fresh
@@ -80,9 +84,9 @@ export function ItemsPanel({
           disabled={!selectedFilm || pending}
           onClick={() =>
             startTransition(async () => {
-              const result = await addFilmToList(listId, selectedFilm);
+              const result = await callAction(() => addFilmToList(listId, selectedFilm));
               if (!result.ok) {
-                toast.error(result.error);
+                notifyActionError(result.error);
                 return;
               }
               setSelectedFilm("");
@@ -103,13 +107,15 @@ export function ItemsPanel({
             const previous = items;
             setItems(next);
             startTransition(async () => {
-              const result = await reorderListItems(
-                listId,
-                next.map((item) => item.id),
+              const result = await callAction(() =>
+                reorderListItems(
+                  listId,
+                  next.map((item) => item.id),
+                ),
               );
               if (!result.ok) {
                 setItems(previous);
-                toast.error(result.error);
+                notifyActionError(result.error);
               }
             });
           }}
@@ -137,24 +143,32 @@ export function ItemsPanel({
                   {item.reasoning || drafts[item.id] ? "已有理由" : "缺入选理由"}
                   {expanded === item.id ? " ▲" : " ▼"}
                 </span>
-                <button
-                  type="button"
-                  className="text-ink-muted text-sm hover:text-destructive"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!window.confirm(`把《${item.title}》移出片单？`)) return;
-                    startTransition(async () => {
-                      const result = await removeListItem(item.id);
-                      if (!result.ok) {
-                        toast.error(result.error);
-                        return;
-                      }
-                      setItems(items.filter((it) => it.id !== item.id));
-                    });
-                  }}
-                >
-                  移除
-                </button>
+                {/* The row toggles its editor on click; keep this out of it. */}
+                {/* biome-ignore lint/a11y/noStaticElementInteractions: only stops the bubble into the clickable row; the button inside is the control. */}
+                {/* biome-ignore lint/a11y/useKeyWithClickEvents: as above — keyboard activation happens on the button. */}
+                <span onClick={(e) => e.stopPropagation()}>
+                  <ConfirmButton
+                    size="sm"
+                    variant="ghost"
+                    className="text-ink-muted hover:text-destructive"
+                    title="移出片单？"
+                    description={`《${item.title}》和它的入选理由会从这份片单里移除。`}
+                    confirmLabel="移出"
+                    onConfirm={() =>
+                      startTransition(async () => {
+                        const result = await callAction(() => removeListItem(item.id));
+                        if (!result.ok) {
+                          notifyActionError(result.error);
+                          return;
+                        }
+                        setItems(items.filter((it) => it.id !== item.id));
+                        toast.success("已移出片单");
+                      })
+                    }
+                  >
+                    移除
+                  </ConfirmButton>
+                </span>
               </div>
               {expanded === item.id && (
                 <div className="mt-3 space-y-2">
@@ -162,15 +176,18 @@ export function ItemsPanel({
                     value={drafts[item.id] ?? item.reasoning}
                     onChange={(doc) => setDrafts((d) => ({ ...d, [item.id]: doc }))}
                     placeholder="这部影片为什么在这份片单里，为什么在这个位置…"
+                    aria-label="入选理由"
                   />
                   <Button
                     size="sm"
                     disabled={pending || !drafts[item.id]}
                     onClick={() =>
                       startTransition(async () => {
-                        const result = await updateItemReasoning(item.id, drafts[item.id]);
+                        const result = await callAction(() =>
+                          updateItemReasoning(item.id, drafts[item.id]),
+                        );
                         if (!result.ok) {
-                          toast.error(result.error);
+                          notifyActionError(result.error);
                           return;
                         }
                         setItems(
@@ -178,6 +195,9 @@ export function ItemsPanel({
                             it.id === item.id ? { ...it, reasoning: drafts[item.id] } : it,
                           ),
                         );
+                        // Saved: the draft is the record now, so it stops
+                        // counting as unsaved (and the button settles).
+                        setDrafts(({ [item.id]: _saved, ...rest }) => rest);
                         toast.success("入选理由已保存");
                       })
                     }
@@ -189,6 +209,7 @@ export function ItemsPanel({
                     value={draftsEn[item.id] ?? item.reasoningEn}
                     onChange={(doc) => setDraftsEn((d) => ({ ...d, [item.id]: doc }))}
                     placeholder="Why this film belongs here, in this position…"
+                    aria-label="英文入选理由"
                   />
                   <Button
                     size="sm"
@@ -196,9 +217,11 @@ export function ItemsPanel({
                     disabled={pending || !draftsEn[item.id]}
                     onClick={() =>
                       startTransition(async () => {
-                        const result = await updateItemReasoning(item.id, draftsEn[item.id], "en");
+                        const result = await callAction(() =>
+                          updateItemReasoning(item.id, draftsEn[item.id], "en"),
+                        );
                         if (!result.ok) {
-                          toast.error(result.error);
+                          notifyActionError(result.error);
                           return;
                         }
                         setItems(
@@ -206,6 +229,7 @@ export function ItemsPanel({
                             it.id === item.id ? { ...it, reasoningEn: draftsEn[item.id] } : it,
                           ),
                         );
+                        setDraftsEn(({ [item.id]: _saved, ...rest }) => rest);
                         toast.success("英文理由已保存");
                       })
                     }

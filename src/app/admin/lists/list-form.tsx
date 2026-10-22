@@ -2,53 +2,79 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { saveListMeta } from "@/actions/lists";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
+import { SaveBar } from "@/components/admin/save-bar";
 import { type MediaOption, TiptapEditor } from "@/components/tiptap/editor";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { type ListFormValues, listFormSchema } from "@/lib/validators/list";
 
 export function ListForm({
   listId,
+  revision = 0,
   defaultValues,
   media,
 }: {
   listId: string | null;
+  /** The revision this form loaded; a stale save is refused (optimistic concurrency). */
+  revision?: number;
   defaultValues: ListFormValues;
   media: MediaOption[];
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
   const {
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    reset,
+    getValues,
+    formState: { errors, isDirty },
   } = useForm<ListFormValues>({
     resolver: zodResolver(listFormSchema),
     defaultValues,
   });
+  const revisionRef = useRef(revision);
+  // Unsaved edits ask before navigation, through a save in flight too:
+  // until it succeeds they are still only on this page.
+  useDirtyGuard("list-form", isDirty);
 
-  const onSubmit = handleSubmit(async (values) => {
-    setSubmitting(true);
-    const result = await saveListMeta(listId, values);
-    setSubmitting(false);
-    if (!result.ok) {
-      toast.error(result.error);
-      return;
-    }
-    toast.success("已保存");
-    if (!listId) router.push(`/admin/lists/${result.data.id}`);
-    router.refresh();
-  });
+  const onSubmit = handleSubmit(
+    async (values) => {
+      // What this save sends, as the form holds it (raw, not the schema's
+      // parsed output), and so what becomes the baseline when it lands.
+      const sent = structuredClone(getValues());
+      setSubmitting(true);
+      const result = await callAction(() => saveListMeta(listId, values, revisionRef.current));
+      setSubmitting(false);
+      if (!result.ok) {
+        notifyActionError(result.error);
+        return;
+      }
+      revisionRef.current = result.data.revision;
+      // The save is the new baseline. keepValues leaves anything typed
+      // while it was in flight on screen, and still dirty against it;
+      // reset(values) wrote the sent snapshot back over those edits (and
+      // a rich-text editor went on showing text the form no longer held).
+      reset(sent, { keepValues: true });
+      setSavedAt(new Date());
+      toast.success("已保存");
+      if (!listId) router.push(`/admin/lists/${result.data.id}`);
+      router.refresh();
+    },
+    // Same as the film form: a blocked submit must say so, not do nothing.
+    () => toast.error("表单有未通过校验的字段，请检查标红项"),
+  );
 
   return (
-    <form onSubmit={onSubmit} className="max-w-3xl space-y-5">
-      <div className="grid grid-cols-[2fr_1fr_auto] gap-4">
+    <form id="list-form" onSubmit={onSubmit} className="max-w-3xl space-y-5">
+      <div className="grid gap-4 sm:grid-cols-[2fr_1fr_auto]">
         <div className="space-y-1.5">
           <Label htmlFor="title">标题 *</Label>
           <Input id="title" {...register("title")} />
@@ -79,6 +105,7 @@ export function ListForm({
               onChange={field.onChange}
               media={media}
               placeholder="这份片单为什么存在…"
+              aria-label="引言"
             />
           )}
         />
@@ -88,7 +115,7 @@ export function ListForm({
         <p className="text-ink-muted text-xs">
           发布英文版需要英文标题；未翻译的影片在英文页链接到翻译占位页，并省略入选理由。
         </p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="titleEn">英文标题 · Title</Label>
             <Input id="titleEn" {...register("titleEn")} />
@@ -109,14 +136,13 @@ export function ListForm({
                 onChange={field.onChange}
                 media={media}
                 placeholder="Why this list exists…"
+                aria-label="英文引言"
               />
             )}
           />
         </div>
       </section>
-      <Button type="submit" disabled={submitting} className="tracking-label">
-        {submitting ? "保存中…" : "保存"}
-      </Button>
+      <SaveBar formId="list-form" dirty={isDirty} submitting={submitting} savedAt={savedAt} />
     </form>
   );
 }

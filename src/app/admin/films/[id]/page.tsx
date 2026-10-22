@@ -1,6 +1,5 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   deleteFilm,
@@ -9,9 +8,14 @@ import {
   unpublishFilm,
   unpublishFilmEn,
 } from "@/actions/films";
+import { GuardedLink } from "@/components/admin/dirty-guard";
+import { EditorLinks } from "@/components/admin/editor-links";
+import { PublishReadiness } from "@/components/admin/publish-readiness";
 import { db } from "@/db";
-import { films, media, people, tags } from "@/db/schema";
+import { getEditorMedia } from "@/db/queries/admin";
+import { films, people, tags } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
+import { publishEnProblems, publishProblems } from "@/lib/validators/film";
 import { FilmForm } from "../film-form";
 import { PublishControls } from "../publish-controls";
 
@@ -31,55 +35,71 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
     },
   });
   if (!film) notFound();
+  // The publish gates, run on the saved row exactly as the actions run them.
+  const problems = publishProblems({
+    introduction: film.introduction,
+    editorialNote: film.editorialNote,
+    directorCount: film.filmDirectors.length,
+  });
+  const problemsEn = publishEnProblems({
+    titleEn: film.titleEn,
+    introductionEn: film.introductionEn,
+    editorialNoteEn: film.editorialNoteEn,
+  });
 
   const [personRows, tagRows, mediaRows] = await Promise.all([
     db
-      .select({ id: people.id, name: people.name, nameZh: people.nameZh })
+      .select({
+        id: people.id,
+        name: people.name,
+        nameZh: people.nameZh,
+        primaryRole: people.primaryRole,
+      })
       .from(people)
       .orderBy(asc(people.name)),
     db.select({ id: tags.id, nameZh: tags.nameZh }).from(tags).orderBy(asc(tags.slug)),
-    db
-      .select({ id: media.id, url: media.url, alt: media.alt })
-      .from(media)
-      .orderBy(desc(media.createdAt))
-      .limit(200),
+    getEditorMedia(),
   ]);
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">
-          编辑影片 · {film.titleZh}
-          <Link
-            href={`/admin/preview/film/${film.id}`}
-            className="ml-3 font-normal text-brand text-sm hover:underline"
-          >
-            预览
-          </Link>
-          <Link
-            href={`/admin/preview/film/${film.id}?locale=en`}
-            className="ml-2 font-normal text-brand text-sm hover:underline"
-          >
-            EN 预览
-          </Link>
-        </h1>
-        <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+        <div className="min-w-0 space-y-1">
+          <h1 className="font-bold text-xl">编辑影片 · {film.titleZh}</h1>
+          <EditorLinks
+            previewHref={`/admin/preview/film/${film.id}`}
+            publicPath={`/film/${film.slug}`}
+            published={film.status === "published"}
+            publishedEn={film.statusEn === "published"}
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <PublishControls
             status={film.status}
             onPublish={publishFilm.bind(null, film.id)}
+            problems={problems}
             onUnpublish={unpublishFilm.bind(null, film.id)}
             onDelete={deleteFilm.bind(null, film.id)}
-            deleteConfirmText={`确定删除《${film.titleZh}》？该操作不可撤销。`}
+            deleteConfirmText={`《${film.titleZh}》将被永久删除，不可恢复。已发布的影片需先撤回。`}
+            unpublishConfirmText="撤回后读者将无法访问这部影片。若某份片单因此没有已发布的影片，它也会一并撤回。"
             afterDeleteHref="/admin/films"
           />
           <PublishControls
             status={film.statusEn}
             label="英文版"
             onPublish={publishFilmEn.bind(null, film.id)}
+            problems={problemsEn}
             onUnpublish={unpublishFilmEn.bind(null, film.id)}
           />
         </div>
       </div>
+
+      <PublishReadiness
+        editions={[
+          { label: "中文版", published: film.status === "published", problems },
+          { label: "英文版", published: film.statusEn === "published", problems: problemsEn },
+        ]}
+      />
 
       {film.media.length > 0 && (
         <div className="mt-4 flex gap-2">
@@ -88,18 +108,19 @@ export default async function EditFilmPage({ params }: { params: Promise<{ id: s
               <Image src={m.url} alt={m.alt ?? ""} fill sizes="96px" className="object-contain" />
             </div>
           ))}
-          <Link
+          <GuardedLink
             href={`/admin/media?filmId=${film.id}`}
             className="self-center text-brand text-sm hover:underline"
           >
             管理图片 →
-          </Link>
+          </GuardedLink>
         </div>
       )}
 
       <div className="mt-6">
         <FilmForm
           filmId={film.id}
+          revision={film.revision}
           people={personRows}
           tags={tagRows}
           media={mediaRows}

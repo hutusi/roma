@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { serverActionDone } from "./utils/actions";
 import { queryOne } from "./utils/db";
 
 test.use({ storageState: "e2e/.auth/admin.json" });
@@ -28,13 +29,18 @@ test("keyboard drag-reorder persists across reload", async ({ page }) => {
   const firstRowBefore = await page.getByTitle("拖动排序").first().locator("..").textContent();
 
   const secondHandle = page.getByTitle("拖动排序").nth(1);
+  const secondRow = secondHandle.locator("..");
+  // The handle is server-rendered; dnd-kit attaches its keyboard sensor
+  // on hydration and marks the handle when it has. A Space pressed before
+  // that started nothing.
+  await expect(secondHandle).toHaveAttribute("aria-roledescription", /.+/);
   await secondHandle.focus();
+  // dnd-kit marks the row while it is being dragged; wait on that rather
+  // than on guessed delays, then on the reorder action's response.
   await page.keyboard.press("Space");
-  await page.waitForTimeout(300);
+  await expect(secondRow).toHaveClass(/opacity-60/);
   await page.keyboard.press("ArrowUp");
-  await page.waitForTimeout(300);
-  await page.keyboard.press("Space");
-  await page.waitForTimeout(1500);
+  await Promise.all([serverActionDone(page), page.keyboard.press("Space")]);
 
   await page.reload();
   const firstRowAfter = await page.getByTitle("拖动排序").first().locator("..").textContent();

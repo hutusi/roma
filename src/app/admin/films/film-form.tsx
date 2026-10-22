@@ -2,11 +2,15 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { saveFilm } from "@/actions/films";
 import { importFromTmdb } from "@/actions/tmdb";
+import { callAction, notifyActionError } from "@/components/admin/action-client";
+import { CheckboxPicker } from "@/components/admin/checkbox-picker";
+import { useDirtyGuard } from "@/components/admin/dirty-guard";
+import { SaveBar } from "@/components/admin/save-bar";
 import {
   CeilingCounter,
   IntroCounter,
@@ -18,9 +22,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { type FilmFormValues, filmFormSchema } from "@/lib/validators/film";
+import { type FilmFormValues, filmFormSchema, parseTmdbId } from "@/lib/validators/film";
 
-export type PersonOption = { id: string; name: string; nameZh: string | null };
+export type PersonOption = {
+  id: string;
+  name: string;
+  nameZh: string | null;
+  primaryRole: "director" | "actor";
+};
 export type TagOption = { id: string; nameZh: string };
 
 const ASPECT_RATIOS = ["1.37:1", "1.33:1", "1.66:1", "1.85:1", "2.35:1"];
@@ -42,6 +51,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function FilmForm({
   filmId,
+  revision = 0,
   defaultValues,
   people,
   tags,
@@ -49,6 +59,8 @@ export function FilmForm({
   tmdbEnabled = false,
 }: {
   filmId: string | null;
+  /** The revision this form loaded; a stale save is refused (optimistic concurrency). */
+  revision?: number;
   defaultValues: FilmFormValues;
   people: PersonOption[];
   tags: TagOption[];
@@ -57,6 +69,7 @@ export function FilmForm({
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
   const {
     register,
     control,
@@ -64,11 +77,15 @@ export function FilmForm({
     watch,
     reset,
     getValues,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FilmFormValues>({
     resolver: zodResolver(filmFormSchema),
     defaultValues,
   });
+  const revisionRef = useRef(revision);
+  // Unsaved edits ask before navigation, through a save in flight too:
+  // until it succeeds they are still only on this page.
+  useDirtyGuard("film-form", isDirty);
   const castArray = useFieldArray({ control, name: "cast" });
   const linksArray = useFieldArray({ control, name: "watchLinks" });
   const intro = watch("introduction") ?? "";
@@ -76,15 +93,34 @@ export function FilmForm({
   const note = watch("editorialNote") ?? "";
   const noteEn = watch("editorialNoteEn") ?? "";
 
+  // Directors first; actors stay pickable (some also directed) but say so.
+  const directorOptions = [...people]
+    .sort((a, b) => Number(a.primaryRole === "actor") - Number(b.primaryRole === "actor"))
+    .map((p) => ({
+      id: p.id,
+      label: p.nameZh ?? p.name,
+      hint: p.primaryRole === "actor" ? "演员" : undefined,
+    }));
+
   const onSubmit = handleSubmit(
     async (values) => {
+      // What this save sends, as the form holds it (raw, not the schema's
+      // parsed output), and so what becomes the baseline when it lands.
+      const sent = structuredClone(getValues());
       setSubmitting(true);
-      const result = await saveFilm(filmId, values);
+      const result = await callAction(() => saveFilm(filmId, values, revisionRef.current));
       setSubmitting(false);
       if (!result.ok) {
-        toast.error(result.error);
+        notifyActionError(result.error);
         return;
       }
+      revisionRef.current = result.data.revision;
+      // The save is the new baseline. keepValues leaves anything typed
+      // while it was in flight on screen, and still dirty against it;
+      // reset(values) wrote the sent snapshot back over those edits (and
+      // a rich-text editor went on showing text the form no longer held).
+      reset(sent, { keepValues: true });
+      setSavedAt(new Date());
       toast.success("已保存");
       if (!filmId) router.push(`/admin/films/${result.data.id}`);
       router.refresh();
@@ -98,54 +134,42 @@ export function FilmForm({
     message ? <p className="text-destructive text-xs">{message}</p> : null;
 
   return (
-    <form onSubmit={onSubmit} className="max-w-3xl space-y-6 pb-24">
+    <form id="film-form" onSubmit={onSubmit} className="max-w-3xl space-y-6">
       {tmdbEnabled && !filmId && (
-        <div className="border border-line bg-card p-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={async () => {
-              const id = window.prompt("TMDB 影片 ID（数字）");
-              if (!id) return;
-              const result = await importFromTmdb(id);
-              if (!result.ok) {
-                toast.error(result.error);
-                return;
-              }
-              const d = result.data;
-              reset({
-                ...getValues(),
-                titleZh: d.titleZh ?? getValues("titleZh"),
-                titleZhHk: d.titleZhHk ?? "",
-                titleZhTw: d.titleZhTw ?? "",
-                titleOriginal: d.titleOriginal,
-                titleEn: d.titleEn ?? "",
-                year: d.year ?? getValues("year"),
-                runtimeMinutes: d.runtimeMinutes ?? "",
-                countries: d.countries,
-                tmdbId: id.trim(),
-                imdbId: d.imdbId ?? "",
-                cast: d.cast.map((m) => ({
-                  name: m.name,
-                  nameZh: "",
-                  character: m.character ?? "",
-                  characterZh: m.characterZh ?? "",
-                  personId: "",
-                })),
-              });
-              toast.success("已从 TMDB 预填，请核对并补写影片介绍");
-            }}
-          >
-            从 TMDB 导入元数据
-          </Button>
-          <span className="ml-3 text-ink-muted text-xs">
-            仅预填资料，不导入图片；介绍与札记始终手写。
-          </span>
-        </div>
+        <TmdbImport
+          onImport={async (id) => {
+            const result = await callAction(() => importFromTmdb(id));
+            if (!result.ok) {
+              notifyActionError(result.error);
+              return;
+            }
+            const d = result.data;
+            reset({
+              ...getValues(),
+              titleZh: d.titleZh ?? getValues("titleZh"),
+              titleZhHk: d.titleZhHk ?? "",
+              titleZhTw: d.titleZhTw ?? "",
+              titleOriginal: d.titleOriginal,
+              titleEn: d.titleEn ?? "",
+              year: d.year ?? getValues("year"),
+              runtimeMinutes: d.runtimeMinutes ?? "",
+              countries: d.countries,
+              tmdbId: id,
+              imdbId: d.imdbId ?? "",
+              cast: d.cast.map((m) => ({
+                name: m.name,
+                nameZh: "",
+                character: m.character ?? "",
+                characterZh: m.characterZh ?? "",
+                personId: "",
+              })),
+            });
+            toast.success("已从 TMDB 预填，请核对并补写影片介绍");
+          }}
+        />
       )}
       <Section title="译名与原名">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="titleZh">大陆译名 *</Label>
             <Input id="titleZh" {...register("titleZh")} />
@@ -177,7 +201,7 @@ export function FilmForm({
       </Section>
 
       <Section title="基本信息">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-1.5">
             <Label htmlFor="year">年份 *</Label>
             <Input id="year" type="number" {...register("year")} />
@@ -203,7 +227,7 @@ export function FilmForm({
             </datalist>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="countries">国家/地区（顿号或逗号分隔）</Label>
             <Input id="countries" placeholder="意大利、法国" {...register("countries")} />
@@ -219,7 +243,7 @@ export function FilmForm({
             </label>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="restorationNote">修复版本（可选）</Label>
             <Input
@@ -243,27 +267,13 @@ export function FilmForm({
             control={control}
             name="directorIds"
             render={({ field }) => (
-              <div className="flex flex-wrap gap-3 border border-line bg-card p-3">
-                {people.length === 0 && (
-                  <p className="text-ink-muted text-sm">还没有人物条目——请先在「人物」中创建。</p>
-                )}
-                {people.map((d) => (
-                  <label key={d.id} className="flex items-center gap-1.5 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={field.value.includes(d.id)}
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.checked
-                            ? [...field.value, d.id]
-                            : field.value.filter((id) => id !== d.id),
-                        )
-                      }
-                    />
-                    {d.nameZh ?? d.name}
-                  </label>
-                ))}
-              </div>
+              <CheckboxPicker
+                options={directorOptions}
+                value={field.value}
+                onChange={field.onChange}
+                filterLabel="筛选人物"
+                empty="还没有人物条目——请先在「人物」中创建。"
+              />
             )}
           />
         </div>
@@ -273,27 +283,13 @@ export function FilmForm({
             control={control}
             name="tagIds"
             render={({ field }) => (
-              <div className="flex flex-wrap gap-3 border border-line bg-card p-3">
-                {tags.length === 0 && (
-                  <p className="text-ink-muted text-sm">还没有标签——请先在「标签」中创建。</p>
-                )}
-                {tags.map((t) => (
-                  <label key={t.id} className="flex items-center gap-1.5 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={field.value.includes(t.id)}
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.checked
-                            ? [...field.value, t.id]
-                            : field.value.filter((id) => id !== t.id),
-                        )
-                      }
-                    />
-                    {t.nameZh}
-                  </label>
-                ))}
-              </div>
+              <CheckboxPicker
+                options={tags.map((t) => ({ id: t.id, label: t.nameZh }))}
+                value={field.value}
+                onChange={field.onChange}
+                filterLabel="筛选标签"
+                empty="还没有标签——请先在「标签」中创建。"
+              />
             )}
           />
         </div>
@@ -304,7 +300,7 @@ export function FilmForm({
           只填 ID 本身，不贴链接。豆瓣与 IMDb 会显示在影片页；TMDB 用于唯一标识，Wikidata
           仅供搜索引擎。
         </p>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="space-y-1.5">
             <Label htmlFor="tmdbId">TMDB</Label>
             <Input id="tmdbId" placeholder="8329" {...register("tmdbId")} />
@@ -368,6 +364,7 @@ export function FilmForm({
               onChange={field.onChange}
               media={media}
               placeholder="关于这部影片，还有更多想说的…"
+              aria-label="长文"
             />
           )}
         />
@@ -402,6 +399,7 @@ export function FilmForm({
                 onChange={field.onChange}
                 media={media}
                 placeholder="More to say about this film…"
+                aria-label="英文长文"
               />
             )}
           />
@@ -411,13 +409,26 @@ export function FilmForm({
       <Section title="演员表">
         {castArray.fields.map((field, i) => (
           <div key={field.id}>
-            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-2">
-              <Input placeholder="姓名（原文）" {...register(`cast.${i}.name`)} />
-              <Input placeholder="中文名" {...register(`cast.${i}.nameZh`)} />
-              <Input placeholder="角色（原文）" {...register(`cast.${i}.character`)} />
-              <Input placeholder="中文角色" {...register(`cast.${i}.characterZh`)} />
+            <div className="grid grid-cols-2 gap-2 border-line border-b pb-3 md:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] md:border-0 md:pb-0">
+              <Input
+                placeholder="姓名（原文）"
+                aria-label="姓名（原文）"
+                {...register(`cast.${i}.name`)}
+              />
+              <Input placeholder="中文名" aria-label="中文名" {...register(`cast.${i}.nameZh`)} />
+              <Input
+                placeholder="角色（原文）"
+                aria-label="角色（原文）"
+                {...register(`cast.${i}.character`)}
+              />
+              <Input
+                placeholder="中文角色"
+                aria-label="中文角色"
+                {...register(`cast.${i}.characterZh`)}
+              />
               <select
-                className="h-9 border border-input bg-transparent px-2 text-sm"
+                aria-label="关联人物"
+                className="h-9 border border-line-strong bg-transparent px-2 text-sm"
                 {...register(`cast.${i}.personId`)}
               >
                 <option value="">（不关联人物）</option>
@@ -448,10 +459,15 @@ export function FilmForm({
       <Section title="哪里能看">
         {linksArray.fields.map((field, i) => (
           <div key={field.id}>
-            <div className="grid grid-cols-[1fr_auto_2fr_1fr_1fr_auto] gap-2">
-              <Input placeholder="平台" {...register(`watchLinks.${i}.platform`)} />
+            <div className="grid grid-cols-2 gap-2 border-line border-b pb-3 md:grid-cols-[1fr_auto_2fr_1fr_1fr_auto] md:border-0 md:pb-0">
+              <Input
+                placeholder="平台"
+                aria-label="平台"
+                {...register(`watchLinks.${i}.platform`)}
+              />
               <select
-                className="h-9 border border-input bg-transparent px-2 text-sm"
+                aria-label="地区"
+                className="h-9 border border-line-strong bg-transparent px-2 text-sm"
                 {...register(`watchLinks.${i}.region`)}
               >
                 {REGIONS.map((r) => (
@@ -460,9 +476,17 @@ export function FilmForm({
                   </option>
                 ))}
               </select>
-              <Input placeholder="链接（可选）" {...register(`watchLinks.${i}.url`)} />
-              <Input placeholder="备注" {...register(`watchLinks.${i}.note`)} />
-              <Input placeholder="英文备注" {...register(`watchLinks.${i}.noteEn`)} />
+              <Input
+                placeholder="链接（可选）"
+                aria-label="链接（可选）"
+                {...register(`watchLinks.${i}.url`)}
+              />
+              <Input placeholder="备注" aria-label="备注" {...register(`watchLinks.${i}.note`)} />
+              <Input
+                placeholder="英文备注"
+                aria-label="英文备注"
+                {...register(`watchLinks.${i}.noteEn`)}
+              />
               <Button type="button" variant="ghost" onClick={() => linksArray.remove(i)}>
                 删除
               </Button>
@@ -483,13 +507,64 @@ export function FilmForm({
         </Button>
       </Section>
 
-      <div className="fixed inset-x-0 bottom-0 border-line border-t bg-paper/95 py-3 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-end gap-3 px-8">
-          <Button type="submit" disabled={submitting} className="tracking-label">
-            {submitting ? "保存中…" : "保存"}
-          </Button>
-        </div>
-      </div>
+      <SaveBar formId="film-form" dirty={isDirty} submitting={submitting} savedAt={savedAt} />
     </form>
+  );
+}
+
+/**
+ * Prefill from TMDB, inline. It was a window.prompt with no room to say
+ * what it wanted, no pending state while the lookup ran, and nothing
+ * when the id was wrong.
+ */
+function TmdbImport({ onImport }: { onImport: (id: string) => Promise<void> }) {
+  const [input, setInput] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const run = async () => {
+    const id = parseTmdbId(input);
+    if (!id) {
+      setError("填 TMDB 影片 ID（数字），或直接粘贴影片页链接");
+      return;
+    }
+    setPending(true);
+    try {
+      await onImport(id);
+    } finally {
+      setPending(false);
+    }
+  };
+  return (
+    <div className="space-y-2 border border-line bg-card p-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <Input
+          aria-label="TMDB 影片 ID 或链接"
+          placeholder="TMDB 影片 ID 或链接"
+          className="h-8 w-56"
+          value={input}
+          aria-invalid={error ? true : undefined}
+          onChange={(e) => {
+            setInput(e.target.value);
+            setError(null);
+          }}
+          // Enter imports; it must not submit the film form around it.
+          onKeyDown={(e) => {
+            if (e.key !== "Enter") return;
+            e.preventDefault();
+            void run();
+          }}
+        />
+        <Button type="button" variant="outline" size="sm" disabled={pending} onClick={run}>
+          {pending ? "导入中…" : "从 TMDB 导入元数据"}
+        </Button>
+      </div>
+      {error ? (
+        <p role="alert" className="text-destructive text-xs">
+          {error}
+        </p>
+      ) : (
+        <p className="text-ink-muted text-xs">仅预填资料，不导入图片；介绍与札记始终手写。</p>
+      )}
+    </div>
   );
 }

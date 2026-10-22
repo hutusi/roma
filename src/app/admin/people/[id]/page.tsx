@@ -1,5 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
-import Link from "next/link";
+import { asc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import {
   deletePerson,
@@ -8,9 +7,14 @@ import {
   unpublishPerson,
   unpublishPersonEn,
 } from "@/actions/people";
+import { EditorLinks } from "@/components/admin/editor-links";
+import { PublishReadiness } from "@/components/admin/publish-readiness";
 import { db } from "@/db";
-import { films, media, people } from "@/db/schema";
+import { getEditorMedia } from "@/db/queries/admin";
+import { films, people } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
+import { personPath } from "@/lib/routes";
+import { publishEnProblems, publishProblems } from "@/lib/validators/person";
 import { PublishControls } from "../../films/publish-controls";
 import { PersonForm } from "../person-form";
 import { ViewingOrderPanel } from "../viewing-order-panel";
@@ -24,6 +28,12 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
     where: eq(people.id, id),
   });
   if (!person) notFound();
+  // The publish gates, run on the saved row exactly as the actions run them.
+  const problems = publishProblems({ bio: person.bio, editorialNote: person.editorialNote });
+  const problemsEn = publishEnProblems({
+    bioEn: person.bioEn,
+    editorialNoteEn: person.editorialNoteEn,
+  });
 
   const [viewingItems, filmRows, mediaRows] = await Promise.all([
     db.query.directorViewingItems.findMany({
@@ -35,35 +45,26 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
       .select({ id: films.id, title: films.titleZh, year: films.year })
       .from(films)
       .orderBy(asc(films.year)),
-    db
-      .select({ id: media.id, url: media.url, alt: media.alt })
-      .from(media)
-      .orderBy(desc(media.createdAt))
-      .limit(200),
+    getEditorMedia(),
   ]);
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">
-          编辑人物 · {person.nameZh ?? person.name}
-          <Link
-            href={`/admin/preview/person/${person.id}`}
-            className="ml-3 font-normal text-brand text-sm hover:underline"
-          >
-            预览
-          </Link>
-          <Link
-            href={`/admin/preview/person/${person.id}?locale=en`}
-            className="ml-2 font-normal text-brand text-sm hover:underline"
-          >
-            EN 预览
-          </Link>
-        </h1>
-        <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+        <div className="min-w-0 space-y-1">
+          <h1 className="font-bold text-xl">编辑人物 · {person.nameZh ?? person.name}</h1>
+          <EditorLinks
+            previewHref={`/admin/preview/person/${person.id}`}
+            publicPath={personPath(person)}
+            published={person.status === "published"}
+            publishedEn={person.statusEn === "published"}
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <PublishControls
             status={person.status}
             onPublish={publishPerson.bind(null, person.id)}
+            problems={problems}
             onUnpublish={unpublishPerson.bind(null, person.id)}
             onDelete={deletePerson.bind(null, person.id)}
             deleteConfirmText={`确定删除「${person.nameZh ?? person.name}」？该操作不可撤销。`}
@@ -73,13 +74,21 @@ export default async function EditPersonPage({ params }: { params: Promise<{ id:
             status={person.statusEn}
             label="英文版"
             onPublish={publishPersonEn.bind(null, person.id)}
+            problems={problemsEn}
             onUnpublish={unpublishPersonEn.bind(null, person.id)}
           />
         </div>
       </div>
+      <PublishReadiness
+        editions={[
+          { label: "中文版", published: person.status === "published", problems },
+          { label: "英文版", published: person.statusEn === "published", problems: problemsEn },
+        ]}
+      />
       <div className="mt-6">
         <PersonForm
           personId={person.id}
+          revision={person.revision}
           media={mediaRows}
           defaultValues={{
             slug: person.slug,

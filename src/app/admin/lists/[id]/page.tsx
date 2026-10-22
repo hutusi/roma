@@ -1,5 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
-import Link from "next/link";
+import { asc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import {
   deleteList,
@@ -8,8 +7,10 @@ import {
   unpublishList,
   unpublishListEn,
 } from "@/actions/lists";
+import { EditorLinks } from "@/components/admin/editor-links";
 import { db } from "@/db";
-import { curatedLists, films, media } from "@/db/schema";
+import { getEditorMedia } from "@/db/queries/admin";
+import { curatedLists, films } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { PublishControls } from "../../films/publish-controls";
 import { ItemsPanel } from "../items-panel";
@@ -36,32 +37,22 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
       .select({ id: films.id, title: films.titleZh, year: films.year })
       .from(films)
       .orderBy(asc(films.year)),
-    db
-      .select({ id: media.id, url: media.url, alt: media.alt })
-      .from(media)
-      .orderBy(desc(media.createdAt))
-      .limit(200),
+    getEditorMedia(),
   ]);
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-xl">
-          编辑片单 · {list.title}
-          <Link
-            href={`/admin/preview/list/${list.id}`}
-            className="ml-3 font-normal text-brand text-sm hover:underline"
-          >
-            预览
-          </Link>
-          <Link
-            href={`/admin/preview/list/${list.id}?locale=en`}
-            className="ml-2 font-normal text-brand text-sm hover:underline"
-          >
-            EN 预览
-          </Link>
-        </h1>
-        <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+        <div className="min-w-0 space-y-1">
+          <h1 className="font-bold text-xl">编辑片单 · {list.title}</h1>
+          <EditorLinks
+            previewHref={`/admin/preview/list/${list.id}`}
+            publicPath={`/list/${list.slug}`}
+            published={list.status === "published"}
+            publishedEn={list.statusEn === "published"}
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <PublishControls
             status={list.status}
             onPublish={publishList.bind(null, list.id)}
@@ -81,6 +72,7 @@ export default async function EditListPage({ params }: { params: Promise<{ id: s
       <div className="mt-6">
         <ListForm
           listId={list.id}
+          revision={list.revision}
           media={mediaRows}
           defaultValues={{
             slug: list.slug,

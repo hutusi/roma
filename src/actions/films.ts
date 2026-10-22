@@ -15,7 +15,7 @@ import {
   userListItems,
   userMarks,
 } from "@/db/schema";
-import { requireEditor } from "@/lib/auth-guards";
+import { requireEditorResult } from "@/lib/auth-guards";
 import { unpublishEmptiedLists } from "@/lib/list-invariants";
 import { revalidateFilm, revalidateList } from "@/lib/revalidate";
 import {
@@ -51,11 +51,23 @@ function uniqueViolationMessage(error: unknown, slug: string): string {
   return `slug「${slug}」已被使用`;
 }
 
+/** What a stale save is told — its edits are still in the form. */
+const CONFLICT =
+  "这部影片在你打开之后已被其他编辑保存过。你的修改还在页面上：先复制要保留的内容，刷新页面后再合并保存。";
+
+/**
+ * `expectedRevision` is the revision the form loaded. Under the row lock
+ * a mismatch means someone saved in between: the save is refused rather
+ * than silently overwriting their work. Omitted (scripts, old clients),
+ * the check is skipped. Returns the new revision for the next save.
+ */
 export async function saveFilm(
   id: string | null,
   values: FilmFormValues,
-): Promise<ActionResult<{ id: string }>> {
-  await requireEditor();
+  expectedRevision?: number,
+): Promise<ActionResult<{ id: string; revision: number }>> {
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const parsed = filmFormSchema.safeParse(values);
   if (!parsed.success) {
     return fail(parsed.error.issues.map((i) => i.message).join("；"));
@@ -117,6 +129,10 @@ export async function saveFilm(
       let targetId = id;
       const existing = targetId ? await lockFilm(tx, targetId) : undefined;
       if (targetId && !existing) return { error: "影片不存在，可能已被删除" } as const;
+      if (existing && expectedRevision !== undefined && existing.revision !== expectedRevision) {
+        return { error: CONFLICT } as const;
+      }
+      const revision = existing ? existing.revision + 1 : 0;
       const previousSlug = existing?.slug;
       const isPublic = existing?.status === "published";
 
@@ -146,7 +162,10 @@ export async function saveFilm(
       }
 
       if (targetId) {
-        await tx.update(films).set(row).where(eq(films.id, targetId));
+        await tx
+          .update(films)
+          .set({ ...row, revision })
+          .where(eq(films.id, targetId));
         await tx.delete(filmWatchLinks).where(eq(filmWatchLinks.filmId, targetId));
         await tx.delete(filmDirectors).where(eq(filmDirectors.filmId, targetId));
         await tx.delete(filmCast).where(eq(filmCast.filmId, targetId));
@@ -193,15 +212,15 @@ export async function saveFilm(
       if (v.tagIds.length) {
         await tx.insert(filmTags).values(v.tagIds.map((tagId) => ({ filmId: targetId, tagId })));
       }
-      return { id: targetId, previousSlug, isPublic } as const;
+      return { id: targetId, previousSlug, isPublic, revision } as const;
     });
     if ("error" in outcome && outcome.error) return fail(outcome.error);
-    const { id: filmId, previousSlug, isPublic } = outcome;
+    const { id: filmId, previousSlug, isPublic, revision } = outcome;
     revalidateFilm(v.slug, { notify: isPublic });
     if (isPublic && previousSlug && previousSlug !== v.slug) {
       revalidateFilm(previousSlug, { notify: true });
     }
-    return ok({ id: filmId });
+    return ok({ id: filmId, revision });
   } catch (error) {
     if (isUniqueViolation(error)) return fail(uniqueViolationMessage(error, v.slug));
     if (isForeignKeyViolation(error)) return fail("关联的人物或标签不存在，可能已被删除");
@@ -210,7 +229,8 @@ export async function saveFilm(
 }
 
 export async function publishFilm(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const film = await lockFilm(tx, id);
     if (!film) return { error: "影片不存在" } as const;
@@ -236,7 +256,8 @@ export async function publishFilm(id: string): Promise<ActionResult> {
 }
 
 export async function publishFilmEn(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const film = await lockFilm(tx, id);
     if (!film) return { error: "影片不存在" } as const;
@@ -258,7 +279,8 @@ export async function publishFilmEn(id: string): Promise<ActionResult> {
 }
 
 export async function unpublishFilmEn(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const film = await lockFilm(tx, id);
     if (!film) return null;
@@ -271,7 +293,8 @@ export async function unpublishFilmEn(id: string): Promise<ActionResult> {
 }
 
 export async function unpublishFilm(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   const outcome = await db.transaction(async (tx) => {
     const film = await lockFilm(tx, id);
     if (!film) return null;
@@ -288,7 +311,8 @@ export async function unpublishFilm(id: string): Promise<ActionResult> {
 }
 
 export async function deleteFilm(id: string): Promise<ActionResult> {
-  await requireEditor();
+  const guarded = await requireEditorResult();
+  if (!guarded.ok) return fail(guarded.error);
   try {
     const outcome = await db.transaction(async (tx) => {
       const film = await lockFilm(tx, id);

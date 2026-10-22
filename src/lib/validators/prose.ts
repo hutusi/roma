@@ -126,3 +126,26 @@ export function hasProse(doc: Record<string, unknown> | null | undefined): boole
   });
   return visible;
 }
+
+/**
+ * The images a stored document will draw, in order, each once. Lets the
+ * read layer look up their credits by URL, so an essay image is credited
+ * like a hero still without the editor storing (and going stale on) a
+ * copy of the credit in the document. A walk over the raw JSON rather
+ * than a schema parse: it runs on every public essay read, and the
+ * renderer draws the same allowlisted srcs whatever else is malformed.
+ */
+export function collectImageSrcs(doc: unknown): string[] {
+  const srcs = new Set<string>();
+  const walk = (node: unknown) => {
+    if (!node || typeof node !== "object") return;
+    const { type, attrs, content } = node as { type?: unknown; attrs?: unknown; content?: unknown };
+    if (type === "image" && attrs && typeof attrs === "object") {
+      const src = (attrs as { src?: unknown }).src;
+      if (isAllowedImageSrc(src)) srcs.add(src);
+    }
+    if (Array.isArray(content)) content.forEach(walk);
+  };
+  walk(doc);
+  return [...srcs];
+}
