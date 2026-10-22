@@ -362,6 +362,18 @@ function ImagePicker({
   );
 }
 
+/**
+ * The document as plain JSON. ProseMirror builds node and mark attrs with
+ * Object.create(null) and getJSON() hands them through, but a server
+ * action only accepts plain objects: React passes a null-prototype object
+ * as an opaque temporary reference, and the save validator's
+ * structuredClone then threw on it. So any essay with a heading, list,
+ * link or image failed to save from the admin ("操作没有完成"), while
+ * plain paragraphs (no attrs) went through.
+ */
+const plainJson = (doc: Record<string, unknown>): Record<string, unknown> =>
+  JSON.parse(JSON.stringify(doc));
+
 const INACTIVE = {
   bold: false,
   italic: false,
@@ -401,12 +413,7 @@ export function TiptapEditor({
     ],
     content: value ?? undefined,
     immediatelyRender: false,
-    // A JSON round trip, not getJSON() as is: ProseMirror builds node and
-    // mark attrs with Object.create(null), a server action accepts only
-    // plain objects, and React sent each attrs object as an opaque
-    // temporary reference that the save validator's structuredClone threw
-    // on. So any essay with a heading, list, link or image failed to save.
-    onUpdate: ({ editor }) => onChange(JSON.parse(JSON.stringify(editor.getJSON()))),
+    onUpdate: ({ editor }) => onChange(plainJson(editor.getJSON())),
     editorProps: {
       attributes: {
         class: "prose prose-sm max-w-none min-h-32 px-3 py-2 focus:outline-none font-body",
