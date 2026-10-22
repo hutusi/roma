@@ -11,7 +11,7 @@ import { revalidateList } from "@/lib/revalidate";
 import { type ListFormValues, listFormSchema, publishEnProblems } from "@/lib/validators/list";
 import { permutationProblem } from "@/lib/validators/ordering";
 import { tiptapDocSchema } from "@/lib/validators/prose";
-import { type ActionResult, fail, ok } from "./result";
+import { type ActionResult, fail, isUniqueViolation, ok } from "./result";
 
 type ListMeta = { slug: string; status: string };
 
@@ -25,15 +25,6 @@ function isListMeta<T extends { slug?: string; status?: string }>(value: T): val
 
 function hasSlug<T extends { slug?: string }>(value: T): value is T & { slug: string } {
   return typeof value.slug === "string";
-}
-
-function isUniqueViolation(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    (error as { code?: string }).code === "23505"
-  );
 }
 
 export async function saveListMeta(

@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { userMarks } from "@/db/schema";
 import { requireUser } from "@/lib/auth-guards";
-import { type ActionResult, fail, ok } from "./result";
+import { type ActionResult, fail, isForeignKeyViolation, ok } from "./result";
 
 /**
  * One mark per user+film: setting watched overwrites want and vice
@@ -36,12 +36,7 @@ export async function setMark(
     // user_marks.film_id is ON DELETE RESTRICT now, so marking a film in
     // the instant it is deleted surfaces as an FK violation rather than a
     // silently vanishing row — return a result instead of a masked throw.
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "code" in error &&
-      (error as { code?: string }).code === "23503"
-    ) {
+    if (isForeignKeyViolation(error)) {
       return fail("影片不存在，可能已被删除");
     }
     throw error;

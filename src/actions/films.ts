@@ -25,19 +25,17 @@ import {
   publishEnProblems,
   publishProblems,
 } from "@/lib/validators/film";
-import { type ActionResult, fail, ok } from "./result";
+import {
+  type ActionResult,
+  fail,
+  isForeignKeyViolation,
+  isUniqueViolation,
+  ok,
+  pgConstraint,
+} from "./result";
 
 function hasSlug<T extends { slug?: string }>(value: T): value is T & { slug: string } {
   return typeof value.slug === "string";
-}
-
-function isUniqueViolation(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    (error as { code?: string }).code === "23505"
-  );
 }
 
 /**
@@ -45,24 +43,12 @@ function isUniqueViolation(error: unknown): boolean {
  * 23505 must name the one that collided instead of blaming the slug.
  */
 function uniqueViolationMessage(error: unknown, slug: string): string {
-  const constraint =
-    typeof error === "object" && error !== null && "constraint" in error
-      ? ((error as { constraint?: string }).constraint ?? "")
-      : "";
+  const constraint = pgConstraint(error);
   if (constraint.includes("tmdbId")) return "该 TMDB ID 已被其他影片使用";
   if (constraint.includes("imdbId")) return "该 IMDb ID 已被其他影片使用";
   if (constraint.includes("doubanId")) return "该豆瓣 ID 已被其他影片使用";
   if (constraint.includes("wikidataId")) return "该 Wikidata ID 已被其他影片使用";
   return `slug「${slug}」已被使用`;
-}
-
-function isForeignKeyViolation(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    (error as { code?: string }).code === "23503"
-  );
 }
 
 export async function saveFilm(

@@ -7,16 +7,7 @@ import { films, filmTags, tags } from "@/db/schema";
 import { requireEditor } from "@/lib/auth-guards";
 import { revalidateTags } from "@/lib/revalidate";
 import { type TagFormValues, tagFormSchema } from "@/lib/validators/tag";
-import { type ActionResult, fail, ok } from "./result";
-
-function isUniqueViolation(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    (error as { code?: string }).code === "23505"
-  );
-}
+import { type ActionResult, fail, isUniqueViolation, ok } from "./result";
 
 export async function saveTag(
   id: string | null,

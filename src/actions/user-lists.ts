@@ -7,7 +7,7 @@ import { userListItems, userLists } from "@/db/schema";
 import type { Locale } from "@/i18n/locales";
 import { requireUser } from "@/lib/auth-guards";
 import { permutationProblem } from "@/lib/validators/ordering";
-import { type ActionResult, fail, ok } from "./result";
+import { type ActionResult, fail, isUniqueViolation, ok } from "./result";
 
 const TITLE_MAX = 60;
 const DESCRIPTION_MAX = 140;
@@ -27,15 +27,6 @@ function validatedText(values: {
 async function lockedOwnedList(tx: DbTransaction, listId: string, userId: string) {
   const list = await lockUserList(tx, listId);
   return list?.userId === userId ? list : null;
-}
-
-function isUniqueViolation(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    (error as { code?: string }).code === "23505"
-  );
 }
 
 export async function createUserList(

@@ -14,7 +14,7 @@ import {
   publishProblems,
   viewingOrderSchema,
 } from "@/lib/validators/person";
-import { type ActionResult, fail, ok } from "./result";
+import { type ActionResult, fail, isUniqueViolation, ok } from "./result";
 
 function hasSlug<T extends { slug?: string }>(value: T): value is T & { slug: string } {
   return typeof value.slug === "string";
@@ -99,12 +99,7 @@ export async function savePerson(
     }
     return ok({ id: targetId });
   } catch (error) {
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "code" in error &&
-      (error as { code?: string }).code === "23505"
-    ) {
+    if (isUniqueViolation(error)) {
       return fail(`slug「${v.slug}」已被使用`);
     }
     throw error;
