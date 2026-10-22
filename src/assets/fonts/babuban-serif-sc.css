@@ -1300,7 +1300,17 @@
   unicode-range: U+9a91,U+9a9a,U+9aa8,U+9b45,U+9c9c,U+9e21,U+9e26,U+9e93,U+9f20,U+9f7f,U+9f84;
 }
 
-/* 400 · bucket 130 · 1 glyphs · 760 B · from noto-serif-sc-109-400-normal.woff2 */
+/* 400 · bucket 130 · 1 glyphs · 856 B */
+@font-face {
+  font-family: "Babuban Serif SC";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/babuban-serif-sc/400-8fa19078f7.woff2") format("woff2");
+  unicode-range: U+f2;
+}
+
+/* 400 · bucket 131 · 1 glyphs · 760 B · from noto-serif-sc-109-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1310,7 +1320,7 @@
   unicode-range: U+2192;
 }
 
-/* 400 · bucket 131 · 2 glyphs · 928 B · from noto-serif-sc-119-400-normal.woff2 */
+/* 400 · bucket 132 · 2 glyphs · 928 B · from noto-serif-sc-119-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1320,7 +1330,7 @@
   unicode-range: U+14d,U+16b;
 }
 
-/* 400 · bucket 132 · 1 glyphs · 1324 B · from noto-serif-sc-25-400-normal.woff2 */
+/* 400 · bucket 133 · 1 glyphs · 1324 B · from noto-serif-sc-25-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1330,7 +1340,7 @@
   unicode-range: U+9a62;
 }
 
-/* 400 · bucket 133 · 1 glyphs · 1136 B · from noto-serif-sc-30-400-normal.woff2 */
+/* 400 · bucket 134 · 1 glyphs · 1136 B · from noto-serif-sc-30-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1340,7 +1350,7 @@
   unicode-range: U+93e2;
 }
 
-/* 400 · bucket 134 · 1 glyphs · 1084 B · from noto-serif-sc-38-400-normal.woff2 */
+/* 400 · bucket 135 · 1 glyphs · 1084 B · from noto-serif-sc-38-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1350,7 +1360,7 @@
   unicode-range: U+8755;
 }
 
-/* 400 · bucket 135 · 1 glyphs · 1336 B · from noto-serif-sc-49-400-normal.woff2 */
+/* 400 · bucket 136 · 1 glyphs · 1336 B · from noto-serif-sc-49-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1360,7 +1370,7 @@
   unicode-range: U+7aca;
 }
 
-/* 400 · bucket 136 · 1 glyphs · 1028 B · from noto-serif-sc-61-400-normal.woff2 */
+/* 400 · bucket 137 · 1 glyphs · 1028 B · from noto-serif-sc-61-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1370,7 +1380,7 @@
   unicode-range: U+6bad;
 }
 
-/* 400 · bucket 137 · 1 glyphs · 1000 B · from noto-serif-sc-64-400-normal.woff2 */
+/* 400 · bucket 138 · 1 glyphs · 1000 B · from noto-serif-sc-64-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;
@@ -1380,7 +1390,7 @@
   unicode-range: U+689f;
 }
 
-/* 400 · bucket 138 · 24 glyphs · 3288 B · from noto-serif-sc-cyrillic-400-normal.woff2 */
+/* 400 · bucket 139 · 24 glyphs · 3288 B · from noto-serif-sc-cyrillic-400-normal.woff2 */
 @font-face {
   font-family: "Babuban Serif SC";
   font-style: normal;

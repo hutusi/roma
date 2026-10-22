@@ -243,7 +243,10 @@ export function fontPages(root: string): FontPage[] {
           f.countries.join(" "),
           directorNames(f.directorSlugs),
           (f.tagSlugs ?? []).map((s) => tagBySlug.get(s)?.nameZh).join(" "),
-          (f.cast ?? []).map((c) => join_(c.zhName, c.name, c.characterZh)).join(" "),
+          // The zh cast table shows characterZh ?? character.
+          (f.cast ?? [])
+            .map((c) => join_(c.zhName, c.name, c.characterZh ?? c.character))
+            .join(" "),
           (f.watchLinks ?? []).map((w) => join_(w.platform, w.note)).join(" "),
           lists.map((l) => l.theme).join(" "),
           essay.regular,
