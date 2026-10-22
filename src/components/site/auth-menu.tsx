@@ -34,13 +34,9 @@ export function AuthMenu({ locale, labels }: { locale: Locale; labels: Dictionar
   if (!user) {
     return (
       <Link
-        // Back to this page afterwards, not the home page. The sign-in
-        // pages themselves carry no next (it would point at sign-in).
-        href={
-          /\/(sign-in|sign-up|forgot-password|reset-password)$/.test(pathname)
-            ? localePath(locale, "/sign-in")
-            : signInHrefFor(localePath(locale, "/sign-in"), pathname)
-        }
+        // Back to this page afterwards, not the home page (and from an
+        // auth page, no next at all: see signInHrefFor).
+        href={signInHrefFor(localePath(locale, "/sign-in"), pathname)}
         className="whitespace-nowrap text-sm tracking-label transition-colors hover:text-brand"
       >
         {labels.signIn}

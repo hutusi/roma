@@ -79,3 +79,14 @@ test("the header stays one row, with the sections behind a menu", async ({ page 
   await header.getByRole("button", { name: "菜单" }).click();
   await expect(panel.getByRole("link", { name: "影片" })).toHaveAttribute("aria-current", "page");
 });
+
+test("signing in from the phone menu on an auth page carries no next", async ({ page }) => {
+  // It used to carry the auth page itself, so a successful sign-in
+  // landed back on the sign-up (or password) form.
+  await page.goto("/zh/sign-up");
+  await page.getByRole("banner").getByRole("button", { name: "菜单" }).click();
+  await expect(page.locator("#mobile-menu").getByRole("link", { name: "登录" })).toHaveAttribute(
+    "href",
+    "/zh/sign-in",
+  );
+});
