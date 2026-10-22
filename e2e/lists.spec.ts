@@ -30,6 +30,10 @@ test("keyboard drag-reorder persists across reload", async ({ page }) => {
 
   const secondHandle = page.getByTitle("拖动排序").nth(1);
   const secondRow = secondHandle.locator("..");
+  // The handle is server-rendered; dnd-kit attaches its keyboard sensor
+  // on hydration and marks the handle when it has. A Space pressed before
+  // that started nothing.
+  await expect(secondHandle).toHaveAttribute("aria-roledescription", /.+/);
   await secondHandle.focus();
   // dnd-kit marks the row while it is being dragged; wait on that rather
   // than on guessed delays, then on the reorder action's response.
