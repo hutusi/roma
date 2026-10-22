@@ -55,17 +55,21 @@ export async function getRumByRoute(days = 7, minSamples = 5): Promise<RumRouteS
     sql<
       number | null
     >`percentile_cont(0.75) within group (order by ${rumEvents.value}) filter (where ${rumEvents.metric} = ${metric})`;
-  return db
-    .select({
-      route,
-      samples: sql<number>`count(*)::int`,
-      lcpP75: p75("LCP"),
-      inpP75: p75("INP"),
-      clsP75: p75("CLS"),
-    })
-    .from(rumEvents)
-    .where(sql`${rumEvents.createdAt} >= now() - make_interval(days => ${days})`)
-    .groupBy(route)
-    .having(sql`count(*) >= ${minSamples}`)
-    .orderBy(sql`4 desc nulls last`);
+  return (
+    db
+      .select({
+        route,
+        samples: sql<number>`count(*)::int`,
+        lcpP75: p75("LCP"),
+        inpP75: p75("INP"),
+        clsP75: p75("CLS"),
+      })
+      .from(rumEvents)
+      .where(sql`${rumEvents.createdAt} >= now() - make_interval(days => ${days})`)
+      .groupBy(route)
+      .having(sql`count(*) >= ${minSamples}`)
+      // Slowest LCP first, as the page says. By expression, not position:
+      // `4` was inpP75, so the table sorted by the wrong metric.
+      .orderBy(sql`${p75("LCP")} desc nulls last`)
+  );
 }

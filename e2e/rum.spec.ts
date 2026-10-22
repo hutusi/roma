@@ -106,3 +106,36 @@ test("the daily pass also drops rate-limit counters idle for a day", async ({ re
   expect(await queryOne("select id from rate_limits where id = 'rl-live-e2e'")).not.toBeNull();
   await queryOne("delete from rate_limits where id = 'rl-live-e2e' returning id");
 });
+
+test.describe("by page type", () => {
+  test.use({ storageState: "e2e/.auth/admin.json" });
+
+  // The table promised slowest LCP first but sorted by INP (ORDER BY 4).
+  // Two synthetic routes, slow on opposite metrics, tell them apart.
+  test("the slowest LCP is listed first", async ({ page }) => {
+    const seed = async (path: string, lcp: number, inp: number) => {
+      for (let i = 0; i < 5; i++) {
+        await queryOne(
+          "insert into rum_events (id, metric, value, path, is_china) values (gen_random_uuid()::text, 'LCP', $1, $3, false), (gen_random_uuid()::text, 'INP', $2, $3, false) returning id",
+          [lcp, inp, path],
+        );
+      }
+    };
+    const slowPaint = "/e2e/rum-slow-lcp";
+    const slowInput = "/e2e/rum-slow-inp";
+    try {
+      await seed(slowPaint, 9_000, 50);
+      await seed(slowInput, 300, 900);
+      await page.goto("/admin/metrics");
+      const rows = await page.locator("tbody tr").allTextContents();
+      const at = (path: string) => rows.findIndex((row) => row.includes(path));
+      expect(at(slowPaint)).toBeGreaterThanOrEqual(0);
+      expect(at(slowPaint)).toBeLessThan(at(slowInput));
+    } finally {
+      await queryOne("delete from rum_events where path in ($1, $2) returning id", [
+        slowPaint,
+        slowInput,
+      ]);
+    }
+  });
+});
