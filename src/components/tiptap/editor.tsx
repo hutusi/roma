@@ -220,11 +220,13 @@ const matches = (m: MediaOption, q: string) =>
 function ImagePicker({
   editor,
   media,
+  lang,
   open,
   onOpenChange,
 }: {
   editor: Editor;
   media: MediaOption[];
+  lang: "zh" | "en";
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -280,7 +282,11 @@ function ImagePicker({
                   id={`${id}-alt`}
                   value={alt}
                   autoFocus
-                  placeholder="例：吉尔索米娜在海边回头"
+                  placeholder={
+                    lang === "en"
+                      ? "e.g. Gelsomina looks back at the sea"
+                      : "例：吉尔索米娜在海边回头"
+                  }
                   onChange={(e) => setAlt(e.target.value)}
                 />
                 <p className="text-ink-muted text-xs">来源：{chosen.credit}</p>
@@ -332,7 +338,9 @@ function ImagePicker({
                     className="relative aspect-[137/100] cursor-pointer bg-ink transition-opacity hover:opacity-75 focus-visible:ring-2 focus-visible:ring-brand"
                     onClick={() => {
                       setChosen(m);
-                      setAlt(m.alt ?? "");
+                      // The library's alt is written in Chinese; an English essay
+                      // gets its own, or that text would render on /en.
+                      setAlt(lang === "en" ? "" : (m.alt ?? ""));
                     }}
                   >
                     <Image
@@ -396,6 +404,7 @@ export function TiptapEditor({
   media,
   className,
   "aria-label": ariaLabel,
+  lang = "zh",
 }: {
   value: Record<string, unknown> | null | undefined;
   onChange: (doc: Record<string, unknown>) => void;
@@ -405,6 +414,8 @@ export function TiptapEditor({
   className?: string;
   /** Names the editable region (it has no <label> of its own). */
   "aria-label"?: string;
+  /** The edition this essay belongs to (its alt text renders there). */
+  lang?: "zh" | "en";
 }) {
   const [linkOpen, setLinkOpen] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
@@ -551,7 +562,13 @@ export function TiptapEditor({
       <EditorContent editor={editor} />
       <LinkDialog editor={editor} open={linkOpen} onOpenChange={setLinkOpen} />
       {media && (
-        <ImagePicker editor={editor} media={media} open={imageOpen} onOpenChange={setImageOpen} />
+        <ImagePicker
+          editor={editor}
+          media={media}
+          lang={lang}
+          open={imageOpen}
+          onOpenChange={setImageOpen}
+        />
       )}
     </div>
   );

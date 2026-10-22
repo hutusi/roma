@@ -310,7 +310,7 @@ function MediaCard({
           disabled={pending}
           className="text-ink-muted hover:text-destructive"
           title="删除这张图片？"
-          description="文件会从存储中移除；用到它的页面将不再显示它。"
+          description="文件会从存储中移除，用它作海报、剧照或肖像的页面将不再显示它。仍在长文中使用的图片不能删除。"
           confirmLabel="删除"
           onConfirm={() =>
             startTransition(async () => {

@@ -7,11 +7,19 @@ import {
   OctagonXIcon,
   TriangleAlertIcon,
 } from "lucide-react";
+import { useEffect } from "react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
+import { markToasterReady } from "@/components/site/toaster-ready";
 
 // Pinned light: the site has no dark mode yet, and following the OS
 // rendered dark toasts on the paper UI for dark-mode readers.
 const Toaster = ({ ...props }: ToasterProps) => {
+  // notify.ts holds each toast until a Toaster can show it (sonner drops
+  // one published before it subscribes). Signalled here, in the one
+  // Toaster both roots use, so it holds in the admin too: the public
+  // header it renders in previews reports through notify. A parent's
+  // effect runs after its children's, so sonner has subscribed by now.
+  useEffect(markToasterReady, []);
   return (
     <Sonner
       theme="light"

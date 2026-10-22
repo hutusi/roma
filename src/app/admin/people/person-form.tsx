@@ -181,6 +181,7 @@ export function PersonForm({
                 media={media}
                 placeholder="Starting from the early work…"
                 aria-label="英文创作历程"
+                lang="en"
               />
             )}
           />

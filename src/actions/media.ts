@@ -1,8 +1,8 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { type AnyColumn, eq, or, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { media, mediaKind } from "@/db/schema";
+import { curatedListItems, curatedLists, films, media, mediaKind, people } from "@/db/schema";
 import { requireEditorResult } from "@/lib/auth-guards";
 import { ImageValidationError, type ValidatedImage, validateImageUpload } from "@/lib/image-upload";
 import { revalidateMedia } from "@/lib/revalidate";
@@ -139,12 +139,51 @@ export async function updateMedia(
   return ok();
 }
 
+/**
+ * Every essay, in either edition and drafts included, that embeds this
+ * image, named for the editor. Essays store an image by its URL, so a
+ * deleted library row left them drawing it uncredited (their credit is
+ * looked up from the row at render time) or, once the blob was gone, a
+ * broken frame on a published page.
+ */
+async function essaysUsing(url: string): Promise<string[]> {
+  const embeds = (column: AnyColumn) => sql`strpos(${column}::text, ${url}) > 0`;
+  const [filmRows, personRows, listRows, itemRows] = await Promise.all([
+    db
+      .select({ title: films.titleZh })
+      .from(films)
+      .where(or(embeds(films.essay), embeds(films.essayEn))),
+    db
+      .select({ name: people.name, nameZh: people.nameZh })
+      .from(people)
+      .where(or(embeds(people.careerEssay), embeds(people.careerEssayEn))),
+    db
+      .select({ title: curatedLists.title })
+      .from(curatedLists)
+      .where(or(embeds(curatedLists.intro), embeds(curatedLists.introEn))),
+    db
+      .selectDistinct({ title: curatedLists.title })
+      .from(curatedListItems)
+      .innerJoin(curatedLists, eq(curatedListItems.listId, curatedLists.id))
+      .where(or(embeds(curatedListItems.reasoning), embeds(curatedListItems.reasoningEn))),
+  ]);
+  return [
+    ...filmRows.map((f) => `《${f.title}》`),
+    ...personRows.map((p) => p.nameZh ?? p.name),
+    ...[...listRows, ...itemRows].map((l) => `片单「${l.title}」`),
+  ];
+}
+
 export async function deleteMedia(id: string): Promise<ActionResult> {
   const guarded = await requireEditorResult();
   if (!guarded.ok) return fail(guarded.error);
   if (!rowId.safeParse(id).success) return fail("图片不存在");
   const row = await db.query.media.findFirst({ where: eq(media.id, id) });
   if (!row) return fail("图片不存在");
+  const usedBy = [...new Set(await essaysUsing(row.url))];
+  if (usedBy.length) {
+    return fail(`这张图片仍在长文中使用：${usedBy.join("、")}。请先从长文中移除，再删除。`);
+  }
   // Row first, blob second: an orphaned blob is invisible garbage, but
   // a surviving row pointing at a deleted blob renders broken images.
   await db.delete(media).where(eq(media.id, id));

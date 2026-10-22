@@ -217,6 +217,8 @@ async function main() {
           essayEn: f.essayEn ?? null,
           statusEn: "published",
           publishedEnAt: publishedEnAt(films.publishedAt),
+          // Content changed under any open editor: their save must conflict.
+          revision: sql`${films.revision} + 1`,
         })
         .where(
           and(eq(films.slug, f.slug), eq(films.statusEn, "draft"), isNull(films.introductionEn)),
@@ -235,6 +237,8 @@ async function main() {
           editorialNoteEn: d.editorialNoteEn ?? null,
           statusEn: "published",
           publishedEnAt: publishedEnAt(people.publishedAt),
+          // Content changed under any open editor: their save must conflict.
+          revision: sql`${people.revision} + 1`,
         })
         .where(and(eq(people.slug, d.slug), eq(people.statusEn, "draft"), isNull(people.bioEn)))
         .returning({ slug: people.slug });
@@ -251,6 +255,8 @@ async function main() {
           introEn: l.introEn ?? null,
           statusEn: "published",
           publishedEnAt: publishedEnAt(curatedLists.publishedAt),
+          // Content changed under any open editor: their save must conflict.
+          revision: sql`${curatedLists.revision} + 1`,
         })
         .where(
           and(

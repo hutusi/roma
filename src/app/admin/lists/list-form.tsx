@@ -137,6 +137,7 @@ export function ListForm({
                 media={media}
                 placeholder="Why this list exists…"
                 aria-label="英文引言"
+                lang="en"
               />
             )}
           />

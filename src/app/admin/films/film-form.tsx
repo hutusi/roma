@@ -400,6 +400,7 @@ export function FilmForm({
                 media={media}
                 placeholder="More to say about this film…"
                 aria-label="英文长文"
+                lang="en"
               />
             )}
           />

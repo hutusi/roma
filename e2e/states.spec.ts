@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 import { asFreshClient } from "./utils/client-ip";
 
@@ -99,4 +100,31 @@ test.describe("failed reads", () => {
       page.getByRole("dialog").locator('a[href="/zh/director/federico-fellini"]'),
     ).toBeVisible();
   });
+});
+
+// The account menu's dropdown loads only once someone is signed in. It
+// came from React.lazy in the root layout's header, so a chunk that failed
+// (a tab left open across a deploy) rethrew on every render and replaced
+// the whole page with the global error screen.
+test("signing in when the account menu's code can't load keeps the page", async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.clock.install();
+  await page.goto("/zh/about");
+  await expect(page.getByRole("banner").getByRole("link", { name: "登录" })).toBeVisible();
+
+  // As after a deploy: chunks fetched from now on are gone.
+  await page.route("**/_next/static/chunks/**", (route) => route.abort());
+  // Signed in elsewhere; the tab notices on its next session read.
+  const reader = JSON.parse(readFileSync("e2e/.auth/user.json", "utf8"));
+  await context.addCookies(reader.cookies);
+  await page.clock.fastForward(31_000);
+  await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+
+  await expect(page.getByRole("banner").getByRole("link", { name: "读者甲" })).toHaveAttribute(
+    "href",
+    "/zh/account",
+  );
+  await expect(page.getByText("放映中断")).toHaveCount(0);
+  await context.close();
 });

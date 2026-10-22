@@ -138,3 +138,43 @@ test("the media library shows its film filter, and a refused change rolls back",
   await expect(page).toHaveURL(/\/admin\/media$/);
   await expect(page.getByText(/^仅显示/)).toHaveCount(0);
 });
+
+// An essay stores an image by URL and looks its credit up from the library
+// row at render time, so deleting a row an essay still used left the
+// published essay drawing the image uncredited, or broken once the blob
+// went too.
+test("an image an essay still uses can't be deleted from the library", async ({ page }) => {
+  const id = await draftFilm();
+  const image = await queryOne<{ url: string }>("select url from media where alt = '8½ still'");
+  await queryOne("update films set essay = $2::jsonb where id = $1 returning id", [
+    id,
+    JSON.stringify({ type: "doc", content: [{ type: "image", attrs: { src: image?.url } }] }),
+  ]);
+  try {
+    const film = await queryOne<{ id: string }>("select id from films where slug = 'otto-e-mezzo'");
+    await page.goto(`/admin/media?filmId=${film?.id}`);
+    const card = page.getByRole("article", { name: "8½ still" });
+    await card.getByRole("button", { name: "删除" }).click();
+    await page.getByRole("alertdialog").getByRole("button", { name: "删除" }).click();
+    await expect(toast(page, "这张图片仍在长文中使用：《编辑体验》")).toBeVisible();
+    await expect(card).toBeVisible();
+  } finally {
+    await dropFilm(id);
+  }
+});
+
+test("an English essay's image alt starts empty, not in Chinese", async ({ page }) => {
+  const id = await draftFilm();
+  await page.goto(`/admin/films/${id}`);
+  await page.locator('.ProseMirror[aria-label="英文长文"]').click();
+  await page
+    .getByRole("toolbar", { name: "英文长文 · 格式", exact: true })
+    .getByRole("button", { name: "插入图片" })
+    .click();
+  await page.getByRole("dialog").getByRole("button", { name: "8½ still" }).click();
+  // The library's alt is written for the zh edition.
+  await expect(page.getByRole("dialog", { name: "图片说明" }).getByLabel("替代文字")).toHaveValue(
+    "",
+  );
+  await dropFilm(id);
+});

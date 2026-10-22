@@ -210,6 +210,7 @@ export function ItemsPanel({
                     onChange={(doc) => setDraftsEn((d) => ({ ...d, [item.id]: doc }))}
                     placeholder="Why this film belongs here, in this position…"
                     aria-label="英文入选理由"
+                    lang="en"
                   />
                   <Button
                     size="sm"

@@ -37,13 +37,21 @@
  *   bun run src/db/resync-content.ts --all --apply
  *   # prod: DATABASE_URL="$DATABASE_URL_UNPOOLED" bun run … --apply
  */
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
+import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import { db } from "./index";
 import { curatedListItems, curatedLists, films, people } from "./schema";
 import { seedActors } from "./seed-data/actors";
 import { seedDirectors } from "./seed-data/directors";
 import { seedFilms } from "./seed-data/films";
 import { seedLists } from "./seed-data/lists";
+
+/**
+ * Rewriting a row's prose is an edit like any other: bump the revision an
+ * open editor form compares on save, so that save conflicts instead of
+ * silently overwriting what this script just wrote.
+ */
+const bump = (column: AnyPgColumn) => sql`${column} + 1`;
 
 const argv = process.argv.slice(2);
 const APPLY = argv.includes("--apply");
@@ -270,7 +278,11 @@ async function main() {
       report(`film ${slug}`, plan, cur as Record<string, unknown>);
       if (plan.differing.length) {
         changed++;
-        if (APPLY) await tx.update(films).set(plan.next).where(eq(films.slug, slug));
+        if (APPLY)
+          await tx
+            .update(films)
+            .set({ ...plan.next, revision: bump(films.revision) })
+            .where(eq(films.slug, slug));
       }
     }
 
@@ -286,7 +298,11 @@ async function main() {
       report(`person ${slug}`, plan, cur as Record<string, unknown>);
       if (plan.differing.length) {
         changed++;
-        if (APPLY) await tx.update(people).set(plan.next).where(eq(people.slug, slug));
+        if (APPLY)
+          await tx
+            .update(people)
+            .set({ ...plan.next, revision: bump(people.revision) })
+            .where(eq(people.slug, slug));
       }
     }
 
@@ -308,7 +324,11 @@ async function main() {
       report(`list ${slug}`, plan, cur as Record<string, unknown>);
       if (plan.differing.length) {
         changed++;
-        if (APPLY) await tx.update(curatedLists).set(plan.next).where(eq(curatedLists.slug, slug));
+        if (APPLY)
+          await tx
+            .update(curatedLists)
+            .set({ ...plan.next, revision: bump(curatedLists.revision) })
+            .where(eq(curatedLists.slug, slug));
       }
 
       // Items are matched on (listId, filmId) exactly as backfill-en does.
