@@ -2,7 +2,7 @@ import { after, type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/db";
 import { rumEvents } from "@/db/schema";
-import { runRumRetention } from "@/lib/rum-retention";
+import { runRateLimitRetention, runRumRetention } from "@/lib/maintenance";
 
 /**
  * Ingest for the real-user Web Vitals beacon (see RumBeacon). Anonymous
@@ -71,9 +71,13 @@ export async function POST(request: NextRequest) {
     return new NextResponse(null, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
 
+  // The site's daily maintenance rides on ingest: there is no scheduler.
   after(async () => {
     await runRumRetention().catch((error) => {
       console.error("rum retention cleanup failed:", error);
+    });
+    await runRateLimitRetention().catch((error) => {
+      console.error("rate-limit retention cleanup failed:", error);
     });
   });
 
